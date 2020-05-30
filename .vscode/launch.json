@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-EvalApplication<evalme>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.advsdc.evalme.EvalApplication",
+            "projectName": "evalme",
+            "args": ""
+        }
+    ]
+}
