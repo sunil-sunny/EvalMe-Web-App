@@ -8,10 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.group18.asdc.database.DbConnector;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.util.GroupFormationToolUtil;
 
@@ -19,18 +20,23 @@ import com.group18.asdc.util.GroupFormationToolUtil;
 public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Autowired
-	private DbConnector connector;
+	private DataSource dataSource;
+
+	public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
 	@Override
 	public List<Course> getAllCourses() {
 
-		Connection con = connector.connect();
+		Connection con = null;
 		Statement getCourses = null;
 		PreparedStatement getCourseRoles = null;
 		ResultSet resultSetAllCourses = null;
 		ResultSet resultSetAllCourseRoles = null;
 		List<Course> allCourses = new ArrayList<Course>();
 		try {
+			con = dataSource.getConnection();
 			getCourses = con.createStatement();
 			resultSetAllCourses = getCourses.executeQuery(GroupFormationToolUtil.getAllCourses);
 			getCourseRoles = con.prepareStatement(GroupFormationToolUtil.getCourseDetailsbyId);
@@ -73,9 +79,10 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Override
 	public boolean allocateTa(String courseId, String bannerId) {
 
-		Connection connection = connector.connect();
+		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
+			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(
 					"insert into CSCI5308_18_DEVINT.courserole (roleid,courseid,bannerid) values (2,?,?);");
 			statement.setInt(1, Integer.parseInt(courseId));
@@ -106,10 +113,11 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public boolean isUserExists(String bannerId) {
-		Connection connection = connector.connect();
+		Connection connection = null;
 		ResultSet resultSet = null;
 		Statement checkUser = null;
 		try {
+			connection = dataSource.getConnection();
 			String userSql = "select * from CSCI5308_18_DEVINT.user where bannerid='" + bannerId + "';";
 			checkUser = connection.createStatement();
 			resultSet = checkUser.executeQuery(userSql);
