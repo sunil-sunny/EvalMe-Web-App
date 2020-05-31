@@ -1,6 +1,7 @@
 package com.group18.asdc.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -8,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@Service
+@Repository
 public class SQLMethods {
 
     @Autowired
