@@ -13,6 +13,8 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.group18.asdc.database.DataSourceConnection;
+import com.group18.asdc.database.DbConnector;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.GroupFormationToolUtil;
@@ -23,9 +25,9 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Autowired
 	private DataSource dataSource;
 
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
+	@Autowired
+	private DbConnector connect;
+	
 
 	@Override
 	public List<Course> getAllCourses() {
@@ -92,7 +94,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
-			connection = dataSource.getConnection();
+			connection =dataSource.getConnection();
 			statement = connection.prepareStatement(
 					"insert into CSCI5308_18_DEVINT.courserole (roleid,courseid,bannerid) values (2,?,?);");
 			statement.setInt(1, Integer.parseInt(courseId));
@@ -125,7 +127,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		ResultSet resultSet = null;
 		Statement checkUser = null;
 		try {
-			connection = dataSource.getConnection();
+			connection =dataSource.getConnection();
 			String userSql = "select * from CSCI5308_18_DEVINT.user where bannerid='" + bannerId + "';";
 			checkUser = connection.createStatement();
 			resultSet = checkUser.executeQuery(userSql);
