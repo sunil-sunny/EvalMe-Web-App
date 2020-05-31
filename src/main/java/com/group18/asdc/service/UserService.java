@@ -1,4 +1,4 @@
-package com.advsdc.evalme.service;
+package com.group18.asdc.service;
 
 public interface UserService {
 

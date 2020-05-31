@@ -1,11 +1,11 @@
-package com.advsdc.evalme.service.impl;
+package com.group18.asdc.service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.advsdc.evalme.dao.UserDao;
-import com.advsdc.evalme.service.UserService;
-import com.advsdc.evalme.util.CommonUtil;
+import com.group18.asdc.dao.UserDao;
+import com.group18.asdc.service.UserService;
+import com.group18.asdc.util.CommonUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

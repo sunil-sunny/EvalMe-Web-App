@@ -1,4 +1,4 @@
-package com.advsdc.evalme.dao;
+package com.group18.asdc.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

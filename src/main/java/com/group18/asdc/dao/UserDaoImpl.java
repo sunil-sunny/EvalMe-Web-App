@@ -1,14 +1,16 @@
-package com.advsdc.evalme.dao.impl;
+package com.group18.asdc.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.advsdc.evalme.dao.UserDao;
-import com.advsdc.evalme.dbconnection.SQLMethods;
-import com.advsdc.evalme.dbconnection.SQLQueries;
+import com.group18.asdc.dao.UserDao;
+import com.group18.asdc.database.SQLMethods;
+import com.group18.asdc.database.SQLQueries;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class UserDaoImpl implements UserDao {
 
     @Autowired
