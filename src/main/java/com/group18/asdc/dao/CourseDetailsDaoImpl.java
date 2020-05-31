@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.group18.asdc.entities.Course;
+import com.group18.asdc.entities.User;
 import com.group18.asdc.util.GroupFormationToolUtil;
 
 @Repository
@@ -23,8 +24,8 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	private DataSource dataSource;
 
 	public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+		this.dataSource = dataSource;
+	}
 
 	@Override
 	public List<Course> getAllCourses() {
@@ -39,24 +40,33 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			con = dataSource.getConnection();
 			getCourses = con.createStatement();
 			resultSetAllCourses = getCourses.executeQuery(GroupFormationToolUtil.getAllCourses);
-			getCourseRoles = con.prepareStatement(GroupFormationToolUtil.getCourseDetailsbyId);
+			getCourseRoles = con.prepareStatement(GroupFormationToolUtil.getCourseDetails);
 			Course course = null;
 			while (resultSetAllCourses.next()) {
 				course = new Course();
+				List<User> students = new ArrayList<User>();
+				List<User> taList = new ArrayList<User>();
 				course.setCourseId(resultSetAllCourses.getInt("courseid"));
 				course.setCourseName(resultSetAllCourses.getString("coursename"));
 				getCourseRoles.setInt(1, resultSetAllCourses.getInt("courseid"));
 				resultSetAllCourseRoles = getCourseRoles.executeQuery();
 				while (resultSetAllCourseRoles.next()) {
 
-					if (resultSetAllCourseRoles.getString("rolename").equalsIgnoreCase("INSTRUCTOR")) {
-						course.setInstructorName(resultSetAllCourseRoles.getString("instructorname"));
-					} else if (resultSetAllCourseRoles.getString("rolename").equalsIgnoreCase("TA")) {
-						course.setTaName(resultSetAllCourseRoles.getString("instructorname"));
+					String role = resultSetAllCourseRoles.getString("rolename");
+					String bannerId = resultSetAllCourseRoles.getString("bannerid");
+					if (role.equalsIgnoreCase("INSTRUCTOR")) {
+
+						course.setInstructorName(this.getUserById(bannerId));
+					} else if (role.equalsIgnoreCase("STUDENT")) {
+						
+						students.add(this.getUserById(bannerId));
+					} else if (role.equalsIgnoreCase("TA")) {
+						
+						taList.add(this.getUserById(bannerId));
 					}
-
 				}
-
+				course.setTaList(taList);
+				course.setStudentList(students);
 				resultSetAllCourseRoles.close();
 				allCourses.add(course);
 			}
@@ -145,25 +155,26 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Override
 	public User getUserById(String bannerId) {
 
-		Connection connection = connector.connect();
+		Connection connection = null;
 		ResultSet resultSet = null;
 		PreparedStatement getUser = null;
-		User user=new User();
+		User user = new User();
 		try {
+			connection = dataSource.getConnection();
 			String userSql = GroupFormationToolUtil.getUserById;
-			getUser=connection.prepareStatement(userSql);
+			getUser = connection.prepareStatement(userSql);
 			getUser.setString(1, bannerId);
 			resultSet = getUser.executeQuery();
-			
-			while(resultSet.next()) {
-				
+
+			while (resultSet.next()) {
+
 				user.setBannerId(resultSet.getString("bannerid"));
 				user.setEmail(resultSet.getString("emailid"));
 				user.setFirstName(resultSet.getString("firstname"));
 				user.setLastName(resultSet.getString("lastname"));
-				
+
 			}
-	
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -176,7 +187,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return user;
 	}
 
