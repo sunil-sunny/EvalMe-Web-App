@@ -36,9 +36,19 @@ public class CourseController {
 		String courseName = request.getParameter("name");
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
-		return "student" + "coursehome";
+		return "studentcoursehome";
 	}
 
+	@RequestMapping(value = "/coursepageInstrcutor", method = RequestMethod.GET)
+	public String getCoursePageForInstrcutorOrTA(Model theModel, HttpServletRequest request) {
+
+		String courseId = request.getParameter("id");
+		String courseName = request.getParameter("name");
+		theModel.addAttribute("courseId", courseId);
+		theModel.addAttribute("coursename", courseName);
+		//System.out.println("in controller");
+		return "instrcutorcoursehome";
+	}
 	@RequestMapping(value = "/enrolledcourses")
 	public String getEnrolledCourses(Model theModel) {
 
@@ -48,26 +58,37 @@ public class CourseController {
 	}
 
 	@RequestMapping(value = "/allocateTA", method = RequestMethod.POST)
-	public String allocateTA(HttpServletRequest request) {
+	public String allocateTA(HttpServletRequest request,Model theModel) {
 
 		String bannerId = request.getParameter("TA");
+		String courseId=request.getParameter("courseid");
+		String courseName=request.getParameter("coursename");
+		theModel.addAttribute("courseId", courseId);
+		theModel.addAttribute("coursename", courseName);
 		boolean userExists = courseDetailsService.isUserExists(bannerId);
 		if (userExists) {
-			String courseId = request.getParameter("courseid");
 			courseDetailsService.allocateTa(courseId, bannerId);
-			return "TaSuccess";
+			theModel.addAttribute("result", "TA Allocated");
+			return "instrcutorcoursehome";
 		} else {
 
-			return "usernotexists";
+			theModel.addAttribute("result", "user not exists");
+			return "instrcutorcoursehome";
 		}
 
 	}
 	
-	@RequestMapping(value = "/instructedcourses")
+	@RequestMapping(value = "/instructedcourses",method= RequestMethod.GET)
 	public String getInstructedCourses(Model theModel) {
 		List<Course> coursesList = courseDetailsService.getAllCourses();
 		theModel.addAttribute("coursesList", coursesList);
 		return "teachingcourses";
+	}
+	
+	@RequestMapping(value="/uploadstudents", method= RequestMethod.POST)
+	public String uploadStudentsToCourse() {
+		System.out.println("in uploaad");
+		return "home";
 	}
 
 }
