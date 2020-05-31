@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Home Page</title>
+<link rel="stylesheet" type="text/css" href="mystyle.css">
+<style>
+table, th, td {
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+</style>
+</head>
+<body>
+
+	<div class="topnav">
+		<a th:href="@{/home}">Course List</a> <a th:href="@{/enrolledcourses}">Courses
+			as student</a> <a th:href="@{/instructedcourses}">Courses as
+			Instructor</a> <a th:href="@{/tacourses}">Courses as Instructor</a> <a
+			href="@{/logout}">Logout</a>
+	</div>
+	<center>
+		<h1>Group Formation Tool</h1>
+		<table style="width: 50%">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>course home page</th>
+					<th>Instrcutor</th>
+					<th>TA</th>
+				</tr>
+			</thead>
+			<tbody>
+				<form th:each="prod: ${coursesList}" th:action="@{/coursepage}"
+					method="get">
+
+					<tr>
+						<td th:text="${prod.CourseId}" />
+						<td th:text="${prod.CourseName}" />
+						<td th:text="${prod.instructorName}" />
+						<td th:text="${prod.taName}" />
+					</tr>
+				</form>
+			</tbody>
+		</table>
+
+	</center>
+</body>
+</html>
