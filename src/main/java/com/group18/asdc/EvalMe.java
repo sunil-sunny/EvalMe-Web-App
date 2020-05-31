@@ -8,10 +8,10 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class,DataSourceAutoConfiguration.class})
-public class EvalMeTests {
+public class EvalMeMain {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EvalMe.class, args);
+		SpringApplication.run(EvalMeMain.class, args);
 		
 	
 	}
