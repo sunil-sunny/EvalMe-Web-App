@@ -8,66 +8,56 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.group18.asdc.database.DbConnector;
 import com.group18.asdc.entities.Course;
-import com.group18.asdc.entities.User;
 import com.group18.asdc.util.GroupFormationToolUtil;
 
 @Repository
 public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Autowired
-	private DbConnector connector;
+	private DataSource dataSource;
+
+	public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
 	@Override
 	public List<Course> getAllCourses() {
 
-		Connection con = connector.connect();
+		Connection con = null;
 		Statement getCourses = null;
 		PreparedStatement getCourseRoles = null;
 		ResultSet resultSetAllCourses = null;
-		ResultSet resultSetCourseRoles = null;
+		ResultSet resultSetAllCourseRoles = null;
 		List<Course> allCourses = new ArrayList<Course>();
 		try {
+			con = dataSource.getConnection();
 			getCourses = con.createStatement();
 			resultSetAllCourses = getCourses.executeQuery(GroupFormationToolUtil.getAllCourses);
-			getCourseRoles = con.prepareStatement(GroupFormationToolUtil.getCourseDetails);
+			getCourseRoles = con.prepareStatement(GroupFormationToolUtil.getCourseDetailsbyId);
 			Course course = null;
-			List<User> taList;
-			List<User> studentList;
 			while (resultSetAllCourses.next()) {
 				course = new Course();
-				taList = new ArrayList<User>();
-				studentList = new ArrayList<User>();
 				course.setCourseId(resultSetAllCourses.getInt("courseid"));
 				course.setCourseName(resultSetAllCourses.getString("coursename"));
 				getCourseRoles.setInt(1, resultSetAllCourses.getInt("courseid"));
-				resultSetCourseRoles = getCourseRoles.executeQuery();
-				while (resultSetCourseRoles.next()) {
+				resultSetAllCourseRoles = getCourseRoles.executeQuery();
+				while (resultSetAllCourseRoles.next()) {
 
-					String role = resultSetCourseRoles.getString("rolename");
-					String bannerId=resultSetCourseRoles.getString("bannerid");
-
-					if (role.equalsIgnoreCase("INSTRUCTOR")) {
-
-						course.setInstructorName(this.getUserById(bannerId));
-					}
-					else if(role.equalsIgnoreCase("STUDENT")) {
-						
-						studentList.add(this.getUserById(bannerId));
-						
-					}
-					else if(role.equalsIgnoreCase("TA")) {
-						studentList.add(this.getUserById(bannerId));
+					if (resultSetAllCourseRoles.getString("rolename").equalsIgnoreCase("INSTRUCTOR")) {
+						course.setInstructorName(resultSetAllCourseRoles.getString("instructorname"));
+					} else if (resultSetAllCourseRoles.getString("rolename").equalsIgnoreCase("TA")) {
+						course.setTaName(resultSetAllCourseRoles.getString("instructorname"));
 					}
 
 				}
-				course.setStudentList(studentList);
-				course.setTaList(taList);
-				resultSetCourseRoles.close();
+
+				resultSetAllCourseRoles.close();
 				allCourses.add(course);
 			}
 		} catch (SQLException e) {
@@ -89,9 +79,10 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Override
 	public boolean allocateTa(String courseId, String bannerId) {
 
-		Connection connection = connector.connect();
+		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
+			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(
 					"insert into CSCI5308_18_DEVINT.courserole (roleid,courseid,bannerid) values (2,?,?);");
 			statement.setInt(1, Integer.parseInt(courseId));
@@ -120,10 +111,11 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public boolean isUserExists(String bannerId) {
-		Connection connection = connector.connect();
+		Connection connection = null;
 		ResultSet resultSet = null;
 		Statement checkUser = null;
 		try {
+			connection = dataSource.getConnection();
 			String userSql = "select * from CSCI5308_18_DEVINT.user where bannerid='" + bannerId + "';";
 			checkUser = connection.createStatement();
 			resultSet = checkUser.executeQuery(userSql);
@@ -141,7 +133,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		} finally {
 			try {
 				resultSet.close();
-				connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
