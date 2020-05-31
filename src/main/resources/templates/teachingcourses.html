@@ -48,7 +48,7 @@ body {
 	    <a href="@{/logout}">Logout</a>
 	</div>
 	<center>
-		<h1>Group Formation Tool</h1>
+		<h1>Course you are Instructor</h1>
 		<table style="width: 50%">
 			<thead>
 				<tr>
@@ -60,14 +60,13 @@ body {
 				</tr>
 			</thead>
 			<tbody>
-				<form th:each="prod: ${coursesList}" th:action="@{/coursepage}"
+				<form th:each="prod: ${coursesList}" th:action="@{/coursepageInstrcutor}"
 					method="get">
 
 					<tr>
 						<td th:text="${prod.CourseId}" />
 						<td th:text="${prod.CourseName}" />
-						<td th:text="${prod.instructorName}" />
-						<td th:text="${prod.taName}" />
+						<td th:text="${prod.instructorName.firstName}" />
 						<input type="hidden" th:value="${prod.courseId}" name="id" />
 						<input type="hidden" th:value="${prod.CourseName}" name="name" />
 						<td><input type="Submit" value="view course"></td>

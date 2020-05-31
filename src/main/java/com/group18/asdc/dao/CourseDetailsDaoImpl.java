@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.group18.asdc.database.DbConnector;
 import com.group18.asdc.entities.Course;
+import com.group18.asdc.entities.User;
 import com.group18.asdc.util.GroupFormationToolUtil;
 
 @Repository
@@ -28,30 +29,45 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		Statement getCourses = null;
 		PreparedStatement getCourseRoles = null;
 		ResultSet resultSetAllCourses = null;
-		ResultSet resultSetAllCourseRoles = null;
+		ResultSet resultSetCourseRoles = null;
 		List<Course> allCourses = new ArrayList<Course>();
 		try {
 			getCourses = con.createStatement();
 			resultSetAllCourses = getCourses.executeQuery(GroupFormationToolUtil.getAllCourses);
-			getCourseRoles = con.prepareStatement(GroupFormationToolUtil.getCourseDetailsbyId);
+			getCourseRoles = con.prepareStatement(GroupFormationToolUtil.getCourseDetails);
 			Course course = null;
+			List<User> taList;
+			List<User> studentList;
 			while (resultSetAllCourses.next()) {
 				course = new Course();
+				taList = new ArrayList<User>();
+				studentList = new ArrayList<User>();
 				course.setCourseId(resultSetAllCourses.getInt("courseid"));
 				course.setCourseName(resultSetAllCourses.getString("coursename"));
 				getCourseRoles.setInt(1, resultSetAllCourses.getInt("courseid"));
-				resultSetAllCourseRoles = getCourseRoles.executeQuery();
-				while (resultSetAllCourseRoles.next()) {
+				resultSetCourseRoles = getCourseRoles.executeQuery();
+				while (resultSetCourseRoles.next()) {
 
-					if (resultSetAllCourseRoles.getString("rolename").equalsIgnoreCase("INSTRUCTOR")) {
-						course.setInstructorName(resultSetAllCourseRoles.getString("instructorname"));
-					} else if (resultSetAllCourseRoles.getString("rolename").equalsIgnoreCase("TA")) {
-						course.setTaName(resultSetAllCourseRoles.getString("instructorname"));
+					String role = resultSetCourseRoles.getString("rolename");
+					String bannerId=resultSetCourseRoles.getString("bannerid");
+
+					if (role.equalsIgnoreCase("INSTRUCTOR")) {
+
+						course.setInstructorName(this.getUserById(bannerId));
+					}
+					else if(role.equalsIgnoreCase("STUDENT")) {
+						
+						studentList.add(this.getUserById(bannerId));
+						
+					}
+					else if(role.equalsIgnoreCase("TA")) {
+						studentList.add(this.getUserById(bannerId));
 					}
 
 				}
-
-				resultSetAllCourseRoles.close();
+				course.setStudentList(studentList);
+				course.setTaList(taList);
+				resultSetCourseRoles.close();
 				allCourses.add(course);
 			}
 		} catch (SQLException e) {
@@ -81,17 +97,15 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			statement.setInt(1, Integer.parseInt(courseId));
 			statement.setString(2, bannerId);
 			int taAllocated = statement.executeUpdate();
-			if(taAllocated>0) {
+			if (taAllocated > 0) {
 				return true;
-			}
-			else {
+			} else {
 				return false;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
@@ -127,6 +141,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		} finally {
 			try {
 				resultSet.close();
+				connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -134,6 +149,44 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		}
 		return false;
 
+	}
+
+	@Override
+	public User getUserById(String bannerId) {
+
+		Connection connection = connector.connect();
+		ResultSet resultSet = null;
+		PreparedStatement getUser = null;
+		User user=new User();
+		try {
+			String userSql = GroupFormationToolUtil.getUserById;
+			getUser=connection.prepareStatement(userSql);
+			getUser.setString(1, bannerId);
+			resultSet = getUser.executeQuery();
+			
+			while(resultSet.next()) {
+				
+				user.setBannerId(resultSet.getString("bannerid"));
+				user.setEmail(resultSet.getString("emailid"));
+				user.setFirstName(resultSet.getString("firstname"));
+				user.setLastName(resultSet.getString("lastname"));
+				
+			}
+	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				resultSet.close();
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return user;
 	}
 
 }
