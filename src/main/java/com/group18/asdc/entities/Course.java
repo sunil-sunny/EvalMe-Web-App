@@ -1,60 +1,53 @@
 package com.group18.asdc.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Course {
 
 	private int courseId;
 	private String CourseName;
-	private String instructorName="NA";
-	private String taName="NA";
-
-	public Course(int courseId, String courseName,String instructorName,String taName) {
-		super();
-		this.courseId = courseId;
-		this.CourseName = courseName;
-		this.instructorName=instructorName;
-		this.taName=taName;
-	}
-
-	public Course() {
-		super();
-	}
-
+	private User instructorName=new User();
+	private List<User> taList=new ArrayList<User>();
+	private List<User> studentList=new ArrayList<User>();
+	
 	public int getCourseId() {
 		return courseId;
 	}
-
 	public void setCourseId(int courseId) {
 		this.courseId = courseId;
 	}
-
 	public String getCourseName() {
 		return CourseName;
 	}
-
 	public void setCourseName(String courseName) {
 		CourseName = courseName;
 	}
-
-	public String getInstructorName() {
+	public User getInstructorName() {
 		return instructorName;
 	}
-
-	public void setInstructorName(String instructorName) {
+	public void setInstructorName(User instructorName) {
 		this.instructorName = instructorName;
 	}
-
-	public String getTaName() {
-		return taName;
+	public List<User> getTaName() {
+		return taList;
+	}
+	public void setTaName(List<User> taList) {
+		this.taList = taList;
+	}
+	public List<User> getTaList() {
+		return taList;
+	}
+	public void setTaList(List<User> taList) {
+		this.taList = taList;
+	}
+	public List<User> getStudentList() {
+		return studentList;
+	}
+	public void setStudentList(List<User> studentList) {
+		this.studentList = studentList;
 	}
 
-	public void setTaName(String taName) {
-		this.taName = taName;
-	}
 
-	@Override
-	public String toString() {
-		return "Course [courseId=" + courseId + ", CourseName=" + CourseName + ", instructorName=" + instructorName
-				+ ", taName=" + taName + "]";
-	}
-
+	
 }

@@ -88,17 +88,15 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			statement.setInt(1, Integer.parseInt(courseId));
 			statement.setString(2, bannerId);
 			int taAllocated = statement.executeUpdate();
-			if(taAllocated>0) {
+			if (taAllocated > 0) {
 				return true;
-			}
-			else {
+			} else {
 				return false;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
@@ -142,6 +140,44 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		}
 		return false;
 
+	}
+
+	@Override
+	public User getUserById(String bannerId) {
+
+		Connection connection = connector.connect();
+		ResultSet resultSet = null;
+		PreparedStatement getUser = null;
+		User user=new User();
+		try {
+			String userSql = GroupFormationToolUtil.getUserById;
+			getUser=connection.prepareStatement(userSql);
+			getUser.setString(1, bannerId);
+			resultSet = getUser.executeQuery();
+			
+			while(resultSet.next()) {
+				
+				user.setBannerId(resultSet.getString("bannerid"));
+				user.setEmail(resultSet.getString("emailid"));
+				user.setFirstName(resultSet.getString("firstname"));
+				user.setLastName(resultSet.getString("lastname"));
+				
+			}
+	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				resultSet.close();
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return user;
 	}
 
 }
