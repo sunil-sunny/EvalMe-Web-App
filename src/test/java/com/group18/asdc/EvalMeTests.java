@@ -1,10 +1,10 @@
-package com.groupformationtool.GroupFormationTool;
+package com.group18.asdc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GroupFormationToolApplicationTests {
+class EvalMeTests {
 
 	@Test
 	void contextLoads() {
