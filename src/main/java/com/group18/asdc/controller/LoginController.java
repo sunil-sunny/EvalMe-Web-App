@@ -2,18 +2,16 @@ package com.group18.asdc.controller;
 
 import javax.servlet.http.HttpSession;
 
-import com.group18.asdc.service.EmailService;
-import com.group18.asdc.util.CommonUtil;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
+
+import com.group18.asdc.service.EmailService;
+import com.group18.asdc.util.CommonUtil;
 
 @Controller
 public class LoginController {
