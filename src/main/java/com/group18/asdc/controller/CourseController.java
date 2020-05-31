@@ -123,8 +123,6 @@ public class CourseController {
 
 	}
 	
-	
-	
 	/*
 	 * Below endpoint uploads the student csv file and enroll them in particular course
 	 */

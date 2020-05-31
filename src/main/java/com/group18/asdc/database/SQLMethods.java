@@ -79,6 +79,7 @@ public class SQLMethods {
                 return rs.getObject(1);
 
         }
+        conn.close();
         return null;
     }
 
@@ -115,6 +116,7 @@ public class SQLMethods {
             resultRowList.add(rowObjectMap);   
         }
         //
+        conn.close();
         return resultRowList;
     }
 
@@ -132,6 +134,7 @@ public class SQLMethods {
         updateValueList.addAll(criteriaValueList);
         PreparedStatement preparedStatement = constructPreparedStmt(conn, sqlQuery, updateValueList);
         //
+        conn.close();
         return preparedStatement.executeUpdate();
     }
 
@@ -146,6 +149,7 @@ public class SQLMethods {
         Connection conn = dataSource.getConnection();
         PreparedStatement preparedStatement = constructPreparedStmt(conn, sqlQuery, criteriaList);
         //
+        conn.close();
         return preparedStatement.executeUpdate();
     }
 
@@ -163,6 +167,7 @@ public class SQLMethods {
         //
         preparedStatement = constructBatchInsertQuery(preparedStatement, valuesList);
         //
+        conn.close();
         return preparedStatement.executeBatch().length;
     }
 
