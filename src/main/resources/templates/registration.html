@@ -161,9 +161,19 @@ div {
 					
 					
 					
-						<center><input type="submit" value="Join us Now!">
+						<center><input type="submit" value="Join us Now!" onclick="return Validate()">
 						
-					
+					<script type="text/javascript">
+    function Validate() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmpassword").value;
+        if (password != confirmPassword) {
+            alert("Passwords do not match.");
+            return false;
+        }
+        return true;
+    }
+</script>
 
 				</form>
 			</div>
