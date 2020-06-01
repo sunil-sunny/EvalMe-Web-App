@@ -37,3 +37,6 @@ deploy:
  - dpl --provider=heroku --app=$SERVER_TEST --api-key=$HEROKU_API_KEY
  tags:
  - dalfcs_gitlab_docker_ci
+ only:
+    refs:
+        - development
