@@ -12,9 +12,6 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.group18.asdc.database.DataSourceConnection;
-import com.group18.asdc.database.DbConnector;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.GroupFormationToolUtil;
@@ -25,8 +22,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Autowired
 	private DataSource dataSource;
 
-	@Autowired
-	private DbConnector connect;
 	
 
 	@Override
