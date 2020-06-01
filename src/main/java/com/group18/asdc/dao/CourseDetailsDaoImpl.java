@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.group18.asdc.entities.Course;
@@ -21,8 +19,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Autowired
 	private DataSource dataSource;
-
-	
 
 	@Override
 	public List<Course> getAllCourses() {
@@ -186,6 +182,20 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		}
 
 		return user;
+	}
+
+	@Override
+	public List<Course> getCourseWhereUserIsInstrcutor(String bannerid) {
+		
+		
+		
+		return null;
+	}
+
+	@Override
+	public List<Course> getCourseWhereUserIsTA(String bannerid) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
