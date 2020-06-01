@@ -11,5 +11,7 @@ public interface CourseDetailsDao {
 	public boolean allocateTa(String courseId,String bannerId);
 	public boolean isUserExists(String bannerId);
 	public User getUserById(String bannerId);
+	public List<Course> getCourseWhereUserIsInstrcutor(String bannerid);
+	public List<Course> getCourseWhereUserIsTA(String bannerid);
 
 }
