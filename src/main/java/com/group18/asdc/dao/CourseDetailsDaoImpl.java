@@ -19,6 +19,9 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Autowired
 	private DataSource dataSource;
+	
+	@Autowired
+	private UserDao userDao;
 
 	@Override
 	public List<Course> getAllCourses() {
@@ -49,13 +52,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 					String bannerId = resultSetAllCourseRoles.getString("bannerid");
 					if (role.equalsIgnoreCase("INSTRUCTOR")) {
 
-						course.setInstructorName(this.getUserById(bannerId));
+						course.setInstructorName(userDao.getUserById(bannerId));
 					} else if (role.equalsIgnoreCase("STUDENT")) {
 
-						students.add(this.getUserById(bannerId));
+						students.add(userDao.getUserById(bannerId));
 					} else if (role.equalsIgnoreCase("TA")) {
 
-						taList.add(this.getUserById(bannerId));
+						taList.add(userDao.getUserById(bannerId));
 					}
 				}
 				course.setTaList(taList);
@@ -131,92 +134,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	}
 
-	@Override
-	public boolean isUserExists(User user) {
-		Connection connection = null;
-		ResultSet resultSet = null;
-		Statement checkUser = null;
-		try {
-			connection = dataSource.getConnection();
-			String userSql = "select * from CSCI5308_18_DEVINT.user where bannerid='" + user.getBannerId() + "';";
-			checkUser = connection.createStatement();
-			resultSet = checkUser.executeQuery(userSql);
-			if (resultSet.next()) {
-				return true;
-			} else {
 
-				return false;
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-				if (checkUser != null) {
-					checkUser.close();
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return false;
-
-	}
-
-	@Override
-	public User getUserById(String bannerId) {
-
-		Connection connection = null;
-		ResultSet resultSet = null;
-		PreparedStatement getUser = null;
-		User user = null;
-		try {
-			connection = dataSource.getConnection();
-			String userSql = GroupFormationToolUtil.getUserById;
-			getUser = connection.prepareStatement(userSql);
-			getUser.setString(1, bannerId);
-			resultSet = getUser.executeQuery();
-
-			while (resultSet.next()) {
-
-				user = new User();
-				user.setBannerId(resultSet.getString("bannerid"));
-				user.setEmail(resultSet.getString("emailid"));
-				user.setFirstName(resultSet.getString("firstname"));
-				user.setLastName(resultSet.getString("lastname"));
-
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-				if (getUser != null) {
-					getUser.close();
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return user;
-	}
 
 	@Override
 	public List<Course> getCourseWhereUserIsInstrcutor(String bannerid) {

@@ -9,8 +9,7 @@ public interface CourseDetailsDao {
 	
 	public List<Course> getAllCourses();
 	public boolean allocateTa(String courseId,String bannerId);
-	public boolean isUserExists(User user);
-	public User getUserById(String bannerId);
+	
 	public List<Course> getCourseWhereUserIsInstrcutor(String bannerid);
 	//public List<Course> getCourseWhereUserIsTA(String bannerid);
 	public List<User> filterEligibleStudentsForCourse(List<User> studentList,String courseId);

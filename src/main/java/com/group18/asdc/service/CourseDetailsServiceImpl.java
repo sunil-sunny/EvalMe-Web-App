@@ -18,6 +18,9 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	
 	@Autowired
 	private Registerservice Registerservice;
+	
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public List<Course> getAllCourses() {
@@ -31,11 +34,7 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 		return courseDetailsDao.allocateTa(courseId, bannerId);
 	}
 
-	@Override
-	public boolean isUserExists(User user) {
-		// TODO Auto-generated method stub
-		return courseDetailsDao.isUserExists(user);
-	}
+	
 
 	@Override
 	public boolean enrollStuentsIntoCourse(List<User> studentList,String courseId) {
@@ -53,7 +52,7 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	
 		for(User user:studentList) {
 			
-			if(!this.isUserExists(user)) {
+			if(!userService.isUserExists(user)) {
 	
 				String result=Registerservice.registeruser(new Registerbean(user));
 				
@@ -67,11 +66,7 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 		}
 	}
 
-	@Override
-	public User getUserById(String bannerId) {
-		
-		return courseDetailsDao.getUserById(bannerId);
-	}
+	
 
 	@Override
 	public List<User> filterEligibleStudentsForCourse(List<User> studentList, String courseId) {
