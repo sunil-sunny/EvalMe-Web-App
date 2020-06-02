@@ -2,10 +2,17 @@ package com.group18.asdc.controller;
 
 import javax.servlet.http.HttpSession;
 
+import com.group18.asdc.handlingformsubmission.ResetPassword;
+import com.group18.asdc.service.EmailService;
+import com.group18.asdc.util.CommonUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
@@ -60,8 +67,8 @@ public class LoginController {
 
   }
 
-  @RequestMapping("/sendResetRequest")
-  public String sendResetRequest(@RequestParam(name = "name", required = true) String booNumber, HttpSession session) {
+  @GetMapping("/resetPassword")
+  public String sendResetRequest(@RequestParam(name = "username", required = true) String booNumber, Model model,HttpSession session) {
     //
     // get User object with BOO number value and send an email
     //
@@ -69,14 +76,35 @@ public class LoginController {
     /*
     * 
     */
-    String generatedPassword = CommonUtil.getInstance().generateResetPassword();
-    session.setAttribute("RESET_PASSWORD", generatedPassword);
-    //
-    // set generated password in
-    //
-
+    String genPassword = CommonUtil.getInstance().generateResetPassword();
+    session.setAttribute("RESET_PASSWORD", genPassword);
+    model.addAttribute("resetForm", new ResetPassword());
     // emailService.sendSimpleMessage(to, subject, text);
-    return null;
+    return "resetPassword.html";
   }
+
+  @PostMapping("/resetPassword")
+  public String resetPassword(@ModelAttribute ResetPassword resetForm,Model model, HttpSession session){
+
+    String redirectURL = "login-success";
+    //
+    if( !resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD")) )
+    {
+      model.addAttribute("genPasswordError", Boolean.TRUE);
+      return "resetPassword.html";
+    }
+    else if( !resetForm.getnewPassword().equals(resetForm.getconfirmNewPassword()) )
+    {
+      model.addAttribute("confirmPasswordError", Boolean.TRUE);
+      return "resetPassword.html";
+    }
+    // set new password in the user model
+
+
+    return "redirect:" + redirectURL;
+
+  }
+
+
 
 }
