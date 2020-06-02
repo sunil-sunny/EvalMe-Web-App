@@ -1,11 +1,18 @@
 package com.group18.asdc.entities;
 
+import com.opencsv.bean.CsvBindByName;
+
 public class User {
 	
+	@CsvBindByName
 	private String firstName;
+	@CsvBindByName
 	private String lastName;
+	@CsvBindByName
 	private String bannerId;
+	@CsvBindByName
 	private String email;
+	
 	public User() {
 		super();
 	}
@@ -39,6 +46,11 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	@Override
+	public String toString() {
+		return "User [firstName=" + firstName + ", lastName=" + lastName + ", bannerId=" + bannerId + ", email=" + email
+				+ "]";
 	}
 
 }

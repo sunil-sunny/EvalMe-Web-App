@@ -51,10 +51,10 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 						course.setInstructorName(this.getUserById(bannerId));
 					} else if (role.equalsIgnoreCase("STUDENT")) {
-						
+
 						students.add(this.getUserById(bannerId));
 					} else if (role.equalsIgnoreCase("TA")) {
-						
+
 						taList.add(this.getUserById(bannerId));
 					}
 				}
@@ -66,10 +66,23 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-
 			try {
-				getCourses.close();
-				con.close();
+				if (getCourses != null) {
+					getCourses.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+				if (getCourseRoles != null) {
+					getCourseRoles.close();
+				}
+				if (resultSetAllCourses != null) {
+					resultSetAllCourses.close();
+				}
+				if (resultSetAllCourseRoles != null) {
+					resultSetAllCourseRoles.close();
+				}
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -85,7 +98,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
-			connection =dataSource.getConnection();
+			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(
 					"insert into CSCI5308_18_DEVINT.courserole (roleid,courseid,bannerid) values (2,?,?);");
 			statement.setInt(1, Integer.parseInt(courseId));
@@ -101,7 +114,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			e.printStackTrace();
 		} finally {
 			try {
-				connection.close();
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -113,17 +132,16 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	}
 
 	@Override
-	public boolean isUserExists(String bannerId) {
+	public boolean isUserExists(User user) {
 		Connection connection = null;
 		ResultSet resultSet = null;
 		Statement checkUser = null;
 		try {
-			connection =dataSource.getConnection();
-			String userSql = "select * from CSCI5308_18_DEVINT.user where bannerid='" + bannerId + "';";
+			connection = dataSource.getConnection();
+			String userSql = "select * from CSCI5308_18_DEVINT.user where bannerid='" + user.getBannerId() + "';";
 			checkUser = connection.createStatement();
 			resultSet = checkUser.executeQuery(userSql);
 			if (resultSet.next()) {
-				System.out.println("user exists");
 				return true;
 			} else {
 
@@ -135,7 +153,15 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			e.printStackTrace();
 		} finally {
 			try {
-				resultSet.close();
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+				if (checkUser != null) {
+					checkUser.close();
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -151,7 +177,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		Connection connection = null;
 		ResultSet resultSet = null;
 		PreparedStatement getUser = null;
-		User user = new User();
+		User user = null;
 		try {
 			connection = dataSource.getConnection();
 			String userSql = GroupFormationToolUtil.getUserById;
@@ -161,6 +187,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 			while (resultSet.next()) {
 
+				user = new User();
 				user.setBannerId(resultSet.getString("bannerid"));
 				user.setEmail(resultSet.getString("emailid"));
 				user.setFirstName(resultSet.getString("firstname"));
@@ -173,8 +200,15 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			e.printStackTrace();
 		} finally {
 			try {
-				resultSet.close();
-				connection.close();
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+				if (getUser != null) {
+					getUser.close();
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -186,16 +220,128 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCourseWhereUserIsInstrcutor(String bannerid) {
-		
-		
-		
+
 		return null;
 	}
 
 	@Override
-	public List<Course> getCourseWhereUserIsTA(String bannerid) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> filterEligibleStudentsForCourse(List<User> studentList, String courseId) {
+
+		// Returns the list of eligible users to get enrolled in the course.
+
+		List<User> eligibleStudents = new ArrayList<User>();
+		List<User> existingStudentsOfCourse = this.getStudentsByCourse(courseId);
+
+		for (User student : studentList) {
+
+			boolean isExists = false;
+			for (User existingStudent : existingStudentsOfCourse) {
+
+				if (student.getBannerId().equalsIgnoreCase(existingStudent.getBannerId())) {
+					isExists = true;
+					break;
+				}
+			}
+			if (!isExists) {
+				eligibleStudents.add(student);
+			}
+		}
+
+		return eligibleStudents;
+	}
+
+	@Override
+	public List<User> getStudentsByCourse(String courseId) {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSetForStudentList = null;
+		List<User> studentList = new ArrayList<User>();
+		User user = null;
+
+		try {
+			connection = dataSource.getConnection();
+			preparedStatement = connection.prepareStatement(GroupFormationToolUtil.getAlluserRelatedToCourse);
+
+			preparedStatement.setInt(1, Integer.parseInt(courseId));
+			resultSetForStudentList = preparedStatement.executeQuery();
+
+			while (resultSetForStudentList.next()) {
+				user = new User();
+				user.setBannerId(resultSetForStudentList.getString("bannerid"));
+				user.setEmail(resultSetForStudentList.getString("emailid"));
+				user.setFirstName(resultSetForStudentList.getString("firstname"));
+				user.setLastName(resultSetForStudentList.getString("lastname"));
+				studentList.add(user);
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (resultSetForStudentList != null) {
+					resultSetForStudentList.close();
+				}
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return studentList;
+	}
+
+	@Override
+	public boolean enrollStudentsIntoCourse(List<User> studentList, String courseId) {
+
+		Connection connection = null;
+		PreparedStatement queryToEnrollStudent = null;
+
+		boolean enrollStatus = false;
+		try {
+			connection = dataSource.getConnection();
+
+			for (User user : studentList) {
+				queryToEnrollStudent = connection.prepareStatement(GroupFormationToolUtil.enrollStudentIntoCourse);
+				queryToEnrollStudent.setInt(1, Integer.parseInt(courseId));
+				queryToEnrollStudent.setString(2, user.getBannerId());
+				int isEnrolled = queryToEnrollStudent.executeUpdate();
+
+				if (isEnrolled == 1) {
+					enrollStatus = true;
+				}
+				queryToEnrollStudent.close();
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (queryToEnrollStudent != null) {
+					queryToEnrollStudent.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return enrollStatus;
 	}
 
 }

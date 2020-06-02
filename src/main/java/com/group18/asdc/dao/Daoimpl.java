@@ -10,7 +10,6 @@ static {
         con=DriverManager.getConnection("jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_18_DEVINT","CSCI5308_18_DEVINT_USER", "CSCI5308_18_DEVINT_18000");
     } catch (Exception e) {
         System.out.println(e.getMessage());
-        System.out.println("ok ji");
     }
 }
 public static Connection getConnection()
