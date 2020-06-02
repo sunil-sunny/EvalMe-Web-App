@@ -20,6 +20,9 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private UserDao userDao;
+
 	@Override
 	public List<Course> getAllCourses() {
 
@@ -49,13 +52,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 					String bannerId = resultSetAllCourseRoles.getString("bannerid");
 					if (role.equalsIgnoreCase("INSTRUCTOR")) {
 
-						course.setInstructorName(this.getUserById(bannerId));
+						course.setInstructorName(userDao.getUserById(bannerId));
 					} else if (role.equalsIgnoreCase("STUDENT")) {
 
-						students.add(this.getUserById(bannerId));
+						students.add(userDao.getUserById(bannerId));
 					} else if (role.equalsIgnoreCase("TA")) {
 
-						taList.add(this.getUserById(bannerId));
+						taList.add(userDao.getUserById(bannerId));
 					}
 				}
 				course.setTaList(taList);
@@ -93,15 +96,14 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	}
 
 	@Override
-	public boolean allocateTa(String courseId, String bannerId) {
+	public boolean allocateTa(int courseId, String bannerId) {
 
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
 			connection = dataSource.getConnection();
-			statement = connection.prepareStatement(
-					"insert into CSCI5308_18_DEVINT.courserole (roleid,courseid,bannerid) values (2,?,?);");
-			statement.setInt(1, Integer.parseInt(courseId));
+			statement = connection.prepareStatement(GroupFormationToolUtil.allocateTa);
+			statement.setInt(1, courseId);
 			statement.setString(2, bannerId);
 			int taAllocated = statement.executeUpdate();
 			if (taAllocated > 0) {
@@ -132,176 +134,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	}
 
 	@Override
-	public boolean isUserExists(User user) {
-		Connection connection = null;
-		ResultSet resultSet = null;
-		Statement checkUser = null;
-		try {
-			connection = dataSource.getConnection();
-			String userSql = "select * from CSCI5308_18_DEVINT.user where bannerid='" + user.getBannerId() + "';";
-			checkUser = connection.createStatement();
-			resultSet = checkUser.executeQuery(userSql);
-			if (resultSet.next()) {
-				return true;
-			} else {
-
-				return false;
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-				if (checkUser != null) {
-					checkUser.close();
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return false;
-
-	}
-
-	@Override
-	public User getUserById(String bannerId) {
-
-		Connection connection = null;
-		ResultSet resultSet = null;
-		PreparedStatement getUser = null;
-		User user = null;
-		try {
-			connection = dataSource.getConnection();
-			String userSql = GroupFormationToolUtil.getUserById;
-			getUser = connection.prepareStatement(userSql);
-			getUser.setString(1, bannerId);
-			resultSet = getUser.executeQuery();
-
-			while (resultSet.next()) {
-
-				user = new User();
-				user.setBannerId(resultSet.getString("bannerid"));
-				user.setEmail(resultSet.getString("emailid"));
-				user.setFirstName(resultSet.getString("firstname"));
-				user.setLastName(resultSet.getString("lastname"));
-
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-				if (getUser != null) {
-					getUser.close();
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return user;
-	}
-
-	@Override
-	public List<Course> getCourseWhereUserIsInstrcutor(String bannerid) {
-
-		return null;
-	}
-
-	@Override
-	public List<User> filterEligibleStudentsForCourse(List<User> studentList, String courseId) {
-
-		// Returns the list of eligible users to get enrolled in the course.
-
-		List<User> eligibleStudents = new ArrayList<User>();
-		List<User> existingStudentsOfCourse = this.getStudentsByCourse(courseId);
-
-		for (User student : studentList) {
-
-			boolean isExists = false;
-			for (User existingStudent : existingStudentsOfCourse) {
-
-				if (student.getBannerId().equalsIgnoreCase(existingStudent.getBannerId())) {
-					isExists = true;
-					break;
-				}
-			}
-			if (!isExists) {
-				eligibleStudents.add(student);
-			}
-		}
-
-		return eligibleStudents;
-	}
-
-	@Override
-	public List<User> getStudentsByCourse(String courseId) {
-
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSetForStudentList = null;
-		List<User> studentList = new ArrayList<User>();
-		User user = null;
-
-		try {
-			connection = dataSource.getConnection();
-			preparedStatement = connection.prepareStatement(GroupFormationToolUtil.getAlluserRelatedToCourse);
-
-			preparedStatement.setInt(1, Integer.parseInt(courseId));
-			resultSetForStudentList = preparedStatement.executeQuery();
-
-			while (resultSetForStudentList.next()) {
-				user = new User();
-				user.setBannerId(resultSetForStudentList.getString("bannerid"));
-				user.setEmail(resultSetForStudentList.getString("emailid"));
-				user.setFirstName(resultSetForStudentList.getString("firstname"));
-				user.setLastName(resultSetForStudentList.getString("lastname"));
-				studentList.add(user);
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-				if (resultSetForStudentList != null) {
-					resultSetForStudentList.close();
-				}
-				if (preparedStatement != null) {
-					preparedStatement.close();
-				}
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
-		return studentList;
-	}
-
-	@Override
-	public boolean enrollStudentsIntoCourse(List<User> studentList, String courseId) {
+	public boolean enrollStudentsIntoCourse(List<User> studentList, int courseId) {
 
 		Connection connection = null;
 		PreparedStatement queryToEnrollStudent = null;
@@ -312,7 +145,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 			for (User user : studentList) {
 				queryToEnrollStudent = connection.prepareStatement(GroupFormationToolUtil.enrollStudentIntoCourse);
-				queryToEnrollStudent.setInt(1, Integer.parseInt(courseId));
+				queryToEnrollStudent.setInt(1, courseId);
 				queryToEnrollStudent.setString(2, user.getBannerId());
 				int isEnrolled = queryToEnrollStudent.executeUpdate();
 
@@ -342,6 +175,140 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		}
 
 		return enrollStatus;
+	}
+
+	@Override
+	public List<Course> getCoursesWhereUserIsStudent(User user) {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+        ResultSet resultset=null;
+        List<Course> getCoursesAsStudent=new ArrayList<Course>();
+		try {
+			connection = dataSource.getConnection();
+			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsStudent);
+			preparedStatement.setString(1,user.getBannerId());
+			resultset=preparedStatement.executeQuery();
+			Course course=null;
+			while(resultset.next()) {
+				course=new Course();
+				int courseid=resultset.getInt("courseid");
+				course.setCourseId(courseid);
+				course.setCourseName(resultset.getString("coursename"));
+				course.setInstructorName(userDao.getInstructorForCourse(courseid));
+				getCoursesAsStudent.add(course);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if(preparedStatement!=null) {
+					preparedStatement.close();
+				}
+				if(resultset !=null) {
+					resultset.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return getCoursesAsStudent;
+	}
+
+	@Override
+	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
+		
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+        ResultSet resultset=null;
+        List<Course> getCoursesAsInstructor=new ArrayList<Course>();
+		try {
+			connection = dataSource.getConnection();
+			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsInstructor);
+			preparedStatement.setString(1,user.getBannerId());
+			resultset=preparedStatement.executeQuery();
+			Course course=null;
+			while(resultset.next()) {
+				course=new Course();
+				int courseid=resultset.getInt("courseid");
+				course.setCourseId(courseid);
+				course.setCourseName(resultset.getString("coursename"));
+				course.setInstructorName(userDao.getInstructorForCourse(courseid));
+				getCoursesAsInstructor.add(course);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if(preparedStatement!=null) {
+					preparedStatement.close();
+				}
+				if(resultset !=null) {
+					resultset.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return getCoursesAsInstructor;
+	}
+
+	@Override
+	public List<Course> getCoursesWhereUserIsTA(User user) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+        ResultSet resultset=null;
+        List<Course> getCoursesAsTA=new ArrayList<Course>();
+		try {
+			connection = dataSource.getConnection();
+			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsTA);
+			preparedStatement.setString(1,user.getBannerId());
+			resultset=preparedStatement.executeQuery();
+			Course course=null;
+			while(resultset.next()) {
+				course=new Course();
+				int courseid=resultset.getInt("courseid");
+				course.setCourseId(courseid);
+				course.setCourseName(resultset.getString("coursename"));
+				course.setInstructorName(userDao.getInstructorForCourse(courseid));
+				getCoursesAsTA.add(course);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if(preparedStatement!=null) {
+					preparedStatement.close();
+				}
+				if(resultset !=null) {
+					resultset.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return getCoursesAsTA;
 	}
 
 }

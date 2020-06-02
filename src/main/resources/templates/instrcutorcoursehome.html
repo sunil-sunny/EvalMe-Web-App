@@ -8,6 +8,10 @@ h1 {
 	text-align: center;
 }
 
+p {
+	text-align: center;
+}
+
 form {
 	text-align: center;
 }
@@ -60,28 +64,24 @@ body {
 		<h1 th:text="${result}"></h1>
 		<form th:action="@{/allocateTA}" method="post">
 			<div>
-				<input type="hidden" th:value="${courseId}" name="courseid" /> 
-				<input type="hidden" th:value="${coursename}" name="coursename"/>
-				<label for="TA">Allocate TA: </label> <input type="text" name="TA" id="TA">
+				<input type="hidden" th:value="${courseId}" name="courseid" /> <input
+					type="hidden" th:value="${coursename}" name="coursename" /> <label
+					for="TA">Allocate TA: </label> <input type="text" name="TA" id="TA">
 				<input type="submit" value="submit" />
 			</div>
 		</form>
 		<br>
 
-		<h1 th:text="${resultEnrolling}"></h1>
+		<p th:text="${resultEnrolling}"></p>
 		<form th:action="@{/uploadstudents}" method="post"
 			enctype="multipart/form-data">
 			<div>
-				<input type="hidden" th:value="${courseId}" name="courseid" /> 
-				<input type="hidden" th:value="${coursename}" name="coursename"/>
-				<label for="file">Enroll Students: </label> <input type="file" name="file"
+				<input type="hidden" th:value="${courseId}" name="courseid" /> <input
+					type="hidden" th:value="${coursename}" name="coursename" /> <label
+					for="file">Enroll Students: </label> <input type="file" name="file"
 					id="file" accept=".csv"> <input type="submit"
 					value="upload" />
 			</div>
-		</form>
-		<form th:each="prod: ${invalidUsers}" method="get">
-			<!-- <h1>Few users are ignored because of invalid details</h1 -->>
-			<p th:text="${prod.bannerId}"></p>
 		</form>
 
 

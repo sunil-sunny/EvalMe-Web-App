@@ -21,12 +21,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.CourseDetailsService;
+import com.group18.asdc.service.UserService;
 
 @Controller
 public class CourseController {
 
 	@Autowired
 	private CourseDetailsService courseDetailsService;
+	
+	@Autowired
+	private UserService userService;
 
 	/*
 	 * user home end point directs all the user except admin to the page where list
@@ -37,7 +41,7 @@ public class CourseController {
 
 		List<Course> coursesList = courseDetailsService.getAllCourses();
 		theModel.addAttribute("coursesList", coursesList);
-		return "userhome";
+		return "guesthome";
 	}
 
 	/*
@@ -48,7 +52,9 @@ public class CourseController {
 	@RequestMapping(value = "/enrolledcourses")
 	public String getEnrolledCourses(Model theModel) {
 
-		List<Course> coursesList = courseDetailsService.getAllCourses();
+		String bannerid="B00896315";
+		User user=userService.getUserById(bannerid);
+		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsStudent(user);
 		theModel.addAttribute("coursesList", coursesList);
 		return "enrolledcourses";
 	}
@@ -61,7 +67,9 @@ public class CourseController {
 	@GetMapping("/tacourses")
 	public String getTACourses(Model theModel) {
 
-		List<Course> coursesList = courseDetailsService.getAllCourses();
+		String bannerid="B00832218";
+		User user=userService.getUserById(bannerid);
+		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsTA(user);
 		theModel.addAttribute("coursesList", coursesList);
 
 		return "tacourses";
@@ -74,7 +82,10 @@ public class CourseController {
 
 	@RequestMapping(value = "/instructedcourses", method = RequestMethod.GET)
 	public String getInstructedCourses(Model theModel) {
-		List<Course> coursesList = courseDetailsService.getAllCourses();
+		
+		String bannerid="B00832218";
+		User user=userService.getUserById(bannerid);
+		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsInstrcutor(user);
 		theModel.addAttribute("coursesList", coursesList);
 		return "teachingcourses";
 	}
@@ -117,13 +128,19 @@ public class CourseController {
 		String courseName = request.getParameter("coursename");
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
-		User user = courseDetailsService.getUserById(bannerId);
+		User user = userService.getUserById(bannerId);
 		if (user == null) {
 			theModel.addAttribute("result", "user not exists");
 			return "instrcutorcoursehome";
 		} else {
-			courseDetailsService.allocateTa(courseId, bannerId);
-			theModel.addAttribute("result", "TA Allocated");
+			boolean isAloocated=courseDetailsService.allocateTa(Integer.parseInt(courseId), bannerId);
+			if(!isAloocated) {
+				theModel.addAttribute("result", "User is already realted to this course");
+			}
+			else {
+				theModel.addAttribute("result", "TA Allocated");	
+			}
+			
 			return "instrcutorcoursehome";
 		}
 
@@ -186,17 +203,19 @@ public class CourseController {
 
 					}
 
-					System.out.println("valid user length is:"+validUsers.size());
+					//System.out.println("valid user length is:"+validUsers.size());
 					if (validUsers.size() > 0) {
 
-						boolean status = courseDetailsService.enrollStuentsIntoCourse(validUsers, courseId);
+						boolean status = courseDetailsService.enrollStuentsIntoCourse(validUsers, Integer.parseInt(courseId));
 						System.out.println("Student enrolled :" + status);
 						if (status) {
 							theModel.addAttribute("resultEnrolling", "Students enrolled");
 						}
+						else {
+							theModel.addAttribute("resultEnrolling", "Users who are already related to course are ignored");
+						}
 					}
-					System.out.println("invalid user size :"+inValidUsers.size());
-					theModel.addAttribute("invalidUsers", inValidUsers);
+				
 					br.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

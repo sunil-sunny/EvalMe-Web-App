@@ -1,21 +1,19 @@
 package com.group18.asdc.entities;
 
-import com.opencsv.bean.CsvBindByName;
-
 public class User {
-	
-	@CsvBindByName
+
 	private String firstName;
-	@CsvBindByName
+
 	private String lastName;
-	@CsvBindByName
+
 	private String bannerId;
-	@CsvBindByName
+
 	private String email;
-	
+
 	public User() {
 		super();
 	}
+
 	public User(String firstName, String lastName, String bannerId, String email) {
 		super();
 		this.firstName = firstName;
@@ -23,30 +21,39 @@ public class User {
 		this.bannerId = bannerId;
 		this.email = email;
 	}
+
 	public String getFirstName() {
 		return firstName;
 	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 	public String getLastName() {
 		return lastName;
 	}
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 	public String getBannerId() {
 		return bannerId;
 	}
+
 	public void setBannerId(String bannerId) {
 		this.bannerId = bannerId;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	@Override
 	public String toString() {
 		return "User [firstName=" + firstName + ", lastName=" + lastName + ", bannerId=" + bannerId + ", email=" + email

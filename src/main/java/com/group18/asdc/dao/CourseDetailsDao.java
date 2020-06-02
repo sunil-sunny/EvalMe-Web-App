@@ -8,13 +8,9 @@ import com.group18.asdc.entities.User;
 public interface CourseDetailsDao {
 	
 	public List<Course> getAllCourses();
-	public boolean allocateTa(String courseId,String bannerId);
-	public boolean isUserExists(User user);
-	public User getUserById(String bannerId);
-	public List<Course> getCourseWhereUserIsInstrcutor(String bannerid);
-	//public List<Course> getCourseWhereUserIsTA(String bannerid);
-	public List<User> filterEligibleStudentsForCourse(List<User> studentList,String courseId);
-	public List<User> getStudentsByCourse(String courseId);
-	public boolean enrollStudentsIntoCourse(List<User> studentList,String courseId);
-
+	public boolean allocateTa(int courseId,String bannerId);
+	public boolean enrollStudentsIntoCourse(List<User> studentList,int courseId);
+	public List<Course> getCoursesWhereUserIsStudent(User user);
+	public List<Course> getCoursesWhereUserIsInstrcutor(User user);
+	public List<Course> getCoursesWhereUserIsTA(User user);
 }
