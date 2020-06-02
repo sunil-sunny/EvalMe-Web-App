@@ -203,7 +203,7 @@ public class CourseController {
 
 					}
 
-					System.out.println("valid user length is:"+validUsers.size());
+					//System.out.println("valid user length is:"+validUsers.size());
 					if (validUsers.size() > 0) {
 
 						boolean status = courseDetailsService.enrollStuentsIntoCourse(validUsers, Integer.parseInt(courseId));
@@ -212,11 +212,10 @@ public class CourseController {
 							theModel.addAttribute("resultEnrolling", "Students enrolled");
 						}
 						else {
-							theModel.addAttribute("resultEnrolling", "Few users are already related to course !! They are ignored");
+							theModel.addAttribute("resultEnrolling", "Users who are already related to course are ignored");
 						}
 					}
-					System.out.println("invalid user size :"+inValidUsers.size());
-					theModel.addAttribute("invalidUsers", inValidUsers);
+				
 					br.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
