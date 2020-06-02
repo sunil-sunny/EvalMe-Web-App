@@ -9,7 +9,7 @@ public class GroupFormationToolUtil {
 	
 	public final static String emailRegex="^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@\"\r\n" + 
 			"        + \"[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$";
-	
+	public final static String allocateTa="insert into CSCI5308_18_DEVINT.courserole (roleid,courseid,bannerid) values (4,?,?);";
 	public final static String getAlluserRelatedToCourse="SELECT c.bannerid,c.lastname,c.firstname,c.emailid FROM CSCI5308_18_DEVINT.courserole as a\r\n" + 
 			"inner join CSCI5308_18_DEVINT.role as b on a.roleid=b.roleid\r\n" + 
 			"inner join CSCI5308_18_DEVINT.user as c on a.bannerid=c.bannerid where (b.rolename='STUDENT' || b.rolename='INSTRUCTOR' ||\r\n" + 

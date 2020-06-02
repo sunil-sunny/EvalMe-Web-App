@@ -1,5 +1,6 @@
 package com.group18.asdc.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,22 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	@Override
 	public boolean allocateTa(String courseId, String bannerId) {
 		
-		return courseDetailsDao.allocateTa(courseId, bannerId);
+		//inserting user in a list since the filter users methods takes the arraylist as input
+		List<User> taAsList=new ArrayList<User>();
+		User user=userService.getUserById(bannerId);
+		List<User> eligibleUser=null;
+		
+		if(user!=null) {
+			taAsList.add(user);
+			eligibleUser=this.filterEligibleUsersForCourse(taAsList, courseId);
+		}
+		
+		if(eligibleUser!=null && eligibleUser.size()!=0) {
+			
+			return courseDetailsDao.allocateTa(courseId, bannerId);
+		}
+		
+		return false;
 	}
 
 	
@@ -40,7 +56,7 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	public boolean enrollStuentsIntoCourse(List<User> studentList,String courseId) {
 	
 		this.registerStudents(studentList);
-		List<User> eligibleStudents=this.filterEligibleStudentsForCourse(studentList, courseId);
+		List<User> eligibleStudents=this.filterEligibleUsersForCourse(studentList, courseId);
 		
 		return courseDetailsDao.enrollStudentsIntoCourse(eligibleStudents, courseId);
 	}
@@ -69,12 +85,10 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	
 
 	@Override
-	public List<User> filterEligibleStudentsForCourse(List<User> studentList, String courseId) {
+	public List<User> filterEligibleUsersForCourse(List<User> studentList, String courseId) {
 		
 		
-		return courseDetailsDao.filterEligibleStudentsForCourse(studentList, courseId);
+		return courseDetailsDao.filterEligibleUsersForCourse(studentList, courseId);
 	}
-
-	
 
 }

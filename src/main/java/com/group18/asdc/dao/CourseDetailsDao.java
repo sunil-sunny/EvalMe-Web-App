@@ -12,7 +12,7 @@ public interface CourseDetailsDao {
 	
 	public List<Course> getCourseWhereUserIsInstrcutor(String bannerid);
 	//public List<Course> getCourseWhereUserIsTA(String bannerid);
-	public List<User> filterEligibleStudentsForCourse(List<User> studentList,String courseId);
+	public List<User> filterEligibleUsersForCourse(List<User> studentList,String courseId);
 	public List<User> getStudentsByCourse(String courseId);
 	public boolean enrollStudentsIntoCourse(List<User> studentList,String courseId);
 

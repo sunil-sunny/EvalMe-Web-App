@@ -102,8 +102,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		PreparedStatement statement = null;
 		try {
 			connection = dataSource.getConnection();
-			statement = connection.prepareStatement(
-					"insert into CSCI5308_18_DEVINT.courserole (roleid,courseid,bannerid) values (2,?,?);");
+			statement = connection.prepareStatement(GroupFormationToolUtil.allocateTa);
 			statement.setInt(1, Integer.parseInt(courseId));
 			statement.setString(2, bannerId);
 			int taAllocated = statement.executeUpdate();
@@ -143,7 +142,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	}
 
 	@Override
-	public List<User> filterEligibleStudentsForCourse(List<User> studentList, String courseId) {
+	public List<User> filterEligibleUsersForCourse(List<User> studentList, String courseId) {
 
 		// Returns the list of eligible users to get enrolled in the course.
 

@@ -21,12 +21,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.CourseDetailsService;
+import com.group18.asdc.service.UserService;
 
 @Controller
 public class CourseController {
 
 	@Autowired
 	private CourseDetailsService courseDetailsService;
+	
+	@Autowired
+	private UserService userService;
 
 	/*
 	 * user home end point directs all the user except admin to the page where list
@@ -117,13 +121,19 @@ public class CourseController {
 		String courseName = request.getParameter("coursename");
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
-		User user = courseDetailsService.getUserById(bannerId);
+		User user = userService.getUserById(bannerId);
 		if (user == null) {
 			theModel.addAttribute("result", "user not exists");
 			return "instrcutorcoursehome";
 		} else {
-			courseDetailsService.allocateTa(courseId, bannerId);
-			theModel.addAttribute("result", "TA Allocated");
+			boolean isAloocated=courseDetailsService.allocateTa(courseId, bannerId);
+			if(!isAloocated) {
+				theModel.addAttribute("result", "User is already realted to this course");
+			}
+			else {
+				theModel.addAttribute("result", "TA Allocated");	
+			}
+			
 			return "instrcutorcoursehome";
 		}
 

@@ -11,6 +11,6 @@ public interface CourseDetailsService {
 	public boolean allocateTa(String courseId,String bannerId);
 	public boolean enrollStuentsIntoCourse(List<User> studentList,String courseId);
 	public void registerStudents(List<User> studentList);
-	public List<User> filterEligibleStudentsForCourse(List<User> studentList,String courseId);
+	public List<User> filterEligibleUsersForCourse(List<User> studentList,String courseId);
 
 }
