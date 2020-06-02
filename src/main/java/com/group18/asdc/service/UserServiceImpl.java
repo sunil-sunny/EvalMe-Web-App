@@ -2,6 +2,7 @@ package com.group18.asdc.service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.entities.User;
@@ -39,6 +40,19 @@ public class UserServiceImpl implements UserService {
 	public User getUserById(String bannerId) {
 		
 		return userDao.getUserById(bannerId);
+	}
+    
+    @Override
+	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
+		
+		
+		return userDao.filterEligibleUsersForCourse(studentList, courseId);
+	}
+
+	@Override
+	public List<User> getStudentsByCourse(int courseId) {
+		// TODO Auto-generated method stub
+		return userDao.getStudentsByCourse(courseId);
 	}
 
 }

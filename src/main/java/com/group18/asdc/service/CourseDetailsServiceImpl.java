@@ -30,7 +30,7 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	}
 
 	@Override
-	public boolean allocateTa(String courseId, String bannerId) {
+	public boolean allocateTa(int courseId, String bannerId) {
 		
 		//inserting user in a list since the filter users methods takes the arraylist as input
 		List<User> taAsList=new ArrayList<User>();
@@ -39,7 +39,7 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 		
 		if(user!=null) {
 			taAsList.add(user);
-			eligibleUser=this.filterEligibleUsersForCourse(taAsList, courseId);
+			eligibleUser=userService.filterEligibleUsersForCourse(taAsList, courseId);
 		}
 		
 		if(eligibleUser!=null && eligibleUser.size()!=0) {
@@ -53,10 +53,10 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	
 
 	@Override
-	public boolean enrollStuentsIntoCourse(List<User> studentList,String courseId) {
+	public boolean enrollStuentsIntoCourse(List<User> studentList,int courseId) {
 	
 		this.registerStudents(studentList);
-		List<User> eligibleStudents=this.filterEligibleUsersForCourse(studentList, courseId);
+		List<User> eligibleStudents=userService.filterEligibleUsersForCourse(studentList, courseId);
 		
 		return courseDetailsDao.enrollStudentsIntoCourse(eligibleStudents, courseId);
 	}
@@ -82,13 +82,26 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 		}
 	}
 
-	
+	@Override
+	public List<Course> getCoursesWhereUserIsStudent(User user) {
+		
+		return courseDetailsDao.getCoursesWhereUserIsStudent(user);
+	}
 
 	@Override
-	public List<User> filterEligibleUsersForCourse(List<User> studentList, String courseId) {
+	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
 		
-		
-		return courseDetailsDao.filterEligibleUsersForCourse(studentList, courseId);
+		return courseDetailsDao.getCoursesWhereUserIsInstrcutor(user);
 	}
+
+	@Override
+	public List<Course> getCoursesWhereUserIsTA(User user) {
+		
+		return courseDetailsDao.getCoursesWhereUserIsTA(user);
+	}
+
+	
+
+	
 
 }

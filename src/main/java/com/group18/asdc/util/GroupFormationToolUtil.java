@@ -16,5 +16,17 @@ public class GroupFormationToolUtil {
 			"b.rolename='TA') and a.courseid=?;";
 	
 	public final static String enrollStudentIntoCourse="insert into CSCI5308_18_DEVINT.courserole (roleid,courseid,bannerid) values (5,?,?);";
+	
+	public final static String getCoursesWhereUserIsStudent="SELECT b.* from CSCI5308_18_DEVINT.courserole as a inner join CSCI5308_18_DEVINT.course as \r\n" + 
+			"b on a.courseid=b.courseid where a.roleid=5 and a.bannerid=?;";
+	
+	public final static String getInstructorForCourse="select bannerid from CSCI5308_18_DEVINT.courserole where roleid=3 and courseid=?;";
+	
+	public final static String getCoursesWhereUserIsInstructor="SELECT b.* from CSCI5308_18_DEVINT.courserole as a inner join CSCI5308_18_DEVINT.course as \r\n" + 
+			"b on a.courseid=b.courseid where a.roleid=3 and a.bannerid=?;";
+	
+	public final static String getCoursesWhereUserIsTA="SELECT b.* from CSCI5308_18_DEVINT.courserole as a inner join CSCI5308_18_DEVINT.course as \r\n" + 
+			"b on a.courseid=b.courseid where a.roleid=4 and a.bannerid=?;";
+
 
 }

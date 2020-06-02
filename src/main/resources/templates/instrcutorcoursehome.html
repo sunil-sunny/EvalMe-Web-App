@@ -4,8 +4,14 @@
 <meta charset="ISO-8859-1">
 <title>Home Page</title>
 <style>
-h1 {
+h1{
 	text-align: center;
+
+}
+
+p {
+	text-align: center;
+	color:red;
 }
 
 form {
@@ -68,7 +74,7 @@ body {
 		</form>
 		<br>
 
-		<h1 th:text="${resultEnrolling}"></h1>
+		<p th:text="${resultEnrolling}"></p>
 		<form th:action="@{/uploadstudents}" method="post"
 			enctype="multipart/form-data">
 			<div>
@@ -80,7 +86,7 @@ body {
 			</div>
 		</form>
 		<form th:each="prod: ${invalidUsers}" method="get">
-			<!-- <h1>Few users are ignored because of invalid details</h1 -->>
+			<!-- <h1>Few users are ignored because of invalid details</h1>-->
 			<p th:text="${prod.bannerId}"></p>
 		</form>
 
