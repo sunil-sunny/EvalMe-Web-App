@@ -11,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.group18.asdc.database.SQLQueries;
+import com.group18.asdc.util.CommonUtil;
+
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -21,10 +24,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/public/**", "/forgot-password", "/registration", "/home", "/resetPassword").permitAll()
-                .anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login-error")
+                .antMatchers("/public/**", "/forgot-password", "/registration", "/home", "/resetPassword").permitAll();
+
+		http.authorizeRequests().antMatchers("/instructedcourses").hasRole("INSTRUCTOR").antMatchers("/enrolledcourses")
+				.hasRole("STUDENT").antMatchers("/tacourses").hasRole("TA").antMatchers("/instructedcourses")
+				.hasRole("INSTRUCTOR").antMatchers("/coursepage").hasRole("STUDENT")
+				.antMatchers("/coursepageInstrcutor").hasAnyRole("INSTRUCTOR", "TA").antMatchers("/allocateTA")
+				.hasAnyRole("INSTRUCTOR", "TA").antMatchers("/uploadstudents").hasAnyRole("INSTRUCTOR", "TA");
+              http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login-error")
                 .defaultSuccessUrl("/login-success").permitAll().and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
+        
         // .deleteCookies("JSESSIONID")
         // .and()
         // .httpBasic();
