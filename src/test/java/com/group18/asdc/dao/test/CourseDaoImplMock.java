@@ -14,7 +14,6 @@ public class CourseDaoImplMock implements CourseDetailsDao {
 	private static List<User> userList = new ArrayList<User>();
 
 	public CourseDaoImplMock() {
-
 		// declaring the courses
 		Course firstCourse = null;
 		Course secondCourse = null;
@@ -71,14 +70,14 @@ public class CourseDaoImplMock implements CourseDetailsDao {
 	public boolean allocateTa(int courseId, User user) {
 		if (user != null) {
 
-			Course course = this.getCourseById(courseId);
-			List<User> taList = course.getTaList();
-			int taCountBefore = taList.size();
-			taList.add(user);
-			int taCountAfter = taList.size();
-			if (taCountAfter > taCountBefore) {
+			Course theCourse=new Course();
+			theCourse.setCourseId(courseId);
+			theCourse.setTaList(Arrays.asList(user));
+			if(theCourse.getTaList().size()>0) {
 				return true;
 			}
+			
+			return false;
 		}
 		return false;
 	}
@@ -86,19 +85,13 @@ public class CourseDaoImplMock implements CourseDetailsDao {
 	@Override
 	public boolean enrollStudentsIntoCourse(List<User> studentList, int courseId) {
 
-		int studentListBefore = 0;
-		int studentListAfter = 0;
-		Course theCourse = this.getCourseById(courseId);
-		if (theCourse != null) {
-			List<User> existingStudentList = theCourse.getStudentList();
-			studentListBefore = existingStudentList.size();
-			existingStudentList.addAll(studentList);
-			studentListAfter = existingStudentList.size();
-		}
-		if (studentListAfter > studentListBefore) {
+		Course theCourse=new Course();
+		theCourse.setCourseId(courseId);
+		theCourse.setStudentList(studentList);
+		if(theCourse.getStudentList().size()>0) {
 			return true;
 		}
-
+		
 		return false;
 	}
 
@@ -126,7 +119,7 @@ public class CourseDaoImplMock implements CourseDetailsDao {
 
 		for (Course theCourse : CourseDaoImplMock.coursesDetails) {
 
-			if(theCourse.getInstructorName().getBannerId()==user.getBannerId()) {
+			if (theCourse.getInstructorName().getBannerId() == user.getBannerId()) {
 				instructorCourses.add(theCourse);
 			}
 		}
@@ -141,7 +134,7 @@ public class CourseDaoImplMock implements CourseDetailsDao {
 
 			for (User theUser : theCourse.getTaList()) {
 				if (user.getBannerId() == theUser.getBannerId()) {
-					taCourses.add(theCourse);		
+					taCourses.add(theCourse);
 				}
 			}
 
