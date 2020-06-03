@@ -27,6 +27,8 @@ public class GroupFormationToolUtil {
 	
 	public final static String getCoursesWhereUserIsTA="SELECT b.* from CSCI5308_18_DEVINT.courserole as a inner join CSCI5308_18_DEVINT.course as \r\n" + 
 			"b on a.courseid=b.courseid where a.roleid=4 and a.bannerid=?;";
+	
+	public final static String passwordTag="@dal";
 
 
 }
