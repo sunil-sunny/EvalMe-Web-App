@@ -126,7 +126,7 @@ public class UserDaoImpl implements UserDao {
 		// Returns the list of eligible users to get enrolled in the course.
 
 		List<User> eligibleStudents = new ArrayList<User>();
-		List<User> existingStudentsOfCourse = this.getStudentsByCourse(courseId);
+		List<User> existingStudentsOfCourse = this.getAllUsersByCourse(courseId);
 
 		for (User student : studentList) {
 
@@ -147,7 +147,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public List<User> getStudentsByCourse(int courseId) {
+	public List<User> getAllUsersByCourse(int courseId) {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;

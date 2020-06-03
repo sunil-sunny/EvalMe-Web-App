@@ -50,9 +50,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getStudentsByCourse(int courseId) {
+	public List<User> getAllUsersByCourse(int courseId) {
 		// TODO Auto-generated method stub
-		return userDao.getStudentsByCourse(courseId);
+		return userDao.getAllUsersByCourse(courseId);
 	}
 
     @Override

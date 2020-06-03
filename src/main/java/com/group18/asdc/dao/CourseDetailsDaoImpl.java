@@ -96,7 +96,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	}
 
 	@Override
-	public boolean allocateTa(int courseId, String bannerId) {
+	public boolean allocateTa(int courseId, User user) {
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -104,7 +104,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(GroupFormationToolUtil.allocateTa);
 			statement.setInt(1, courseId);
-			statement.setString(2, bannerId);
+			statement.setString(2, user.getBannerId());
 			int taAllocated = statement.executeUpdate();
 			if (taAllocated > 0) {
 				return true;

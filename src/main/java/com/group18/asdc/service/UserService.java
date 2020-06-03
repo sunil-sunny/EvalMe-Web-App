@@ -14,7 +14,7 @@ public interface UserService {
 
 	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId);
 
-	public List<User> getStudentsByCourse(int courseId);
+	public List<User> getAllUsersByCourse(int courseId);
 	
 	void loadUserWithBannerId(String bannerId, User userObj);
 

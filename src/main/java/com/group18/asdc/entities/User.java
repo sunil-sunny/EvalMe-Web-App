@@ -14,13 +14,12 @@ public class User implements UserInterface {
 		super();
 	}
 
-	public User(String firstName, String lastName, String bannerId, String email, String password) {
+	public User(String firstName, String lastName, String bannerId, String email) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.bannerId = bannerId;
 		this.email = email;
-		this.password = password;
 	}
 
 	public User(String bannerId, UserService userService) {
