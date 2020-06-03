@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/">
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="ISO-8859-1">
 <title>Home Page</title>
@@ -41,12 +42,13 @@ body {
 </head>
 <body>
 
-<div class="topnav">
-		<a th:href="@{/userhome}">Course List</a>
-		<a th:href="@{/enrolledcourses}">Courses as student</a>
-		<a th:href="@{/instructedcourses}">Courses as Instructor</a>
-		<a th:href="@{/tacourses}">Courses as TA</a>
-	    <a href="@{/logout}">Logout</a>
+	<div class="topnav">
+		<a th:href="@{/userhome}">Course List</a> <a
+			sec:authorize="hasAuthority('STUDENT')" th:href="@{/enrolledcourses}">Courses
+			as student</a> <a sec:authorize="hasAuthority('INSTRUCTOR')"
+			th:href="@{/instructedcourses}">Courses as Instructor</a> <a
+			sec:authorize="hasAuthority('TA')" th:href="@{/tacourses}">Courses
+			as TA</a> <a th:href="@{/logout}">Logout</a>
 	</div>
 	<center>
 		<h1>Courses as TA</h1>
@@ -64,8 +66,8 @@ body {
 					method="get">
 
 					<tr>
-					    <td th:text="${prod.CourseId}" />
-					   <input type="hidden" th:value="${prod.courseId}" name="id" />
+						<td th:text="${prod.CourseId}" />
+						<input type="hidden" th:value="${prod.courseId}" name="id" />
 						<input type="hidden" th:value="${prod.CourseName}" name="name" />
 						<td th:text="${prod.CourseName}" />
 						<td th:text="${prod.instructorName.firstName}" />

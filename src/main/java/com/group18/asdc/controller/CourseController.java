@@ -27,16 +27,15 @@ public class CourseController {
 
 	@Autowired
 	private CourseDetailsService courseDetailsService;
-	
+
 	@Autowired
 	private UserService userService;
-	
 
 	/*
 	 * user home end point directs all the user except admin to the page where list
 	 * of all courses are present
 	 */
-	
+
 	@GetMapping("/userhome")
 	public String getHomePage(Model theModel) {
 
@@ -53,9 +52,16 @@ public class CourseController {
 	@RequestMapping(value = "/enrolledcourses")
 	public String getEnrolledCourses(Model theModel) {
 
-		
-		String bannerid="B00896315";
-		User user=userService.getUserById(bannerid);
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String bannerid;
+		if (principal instanceof UserDetails) {
+			bannerid = ((UserDetails) principal).getUsername();
+		} else {
+			bannerid = principal.toString();
+		}
+
+		// String bannerid="B00896315";
+		User user = userService.getUserById(bannerid);
 		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsStudent(user);
 		theModel.addAttribute("coursesList", coursesList);
 		return "enrolledcourses";
@@ -69,8 +75,15 @@ public class CourseController {
 	@GetMapping("/tacourses")
 	public String getTACourses(Model theModel) {
 
-		String bannerid="B00832218";
-		User user=userService.getUserById(bannerid);
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String bannerid;
+		if (principal instanceof UserDetails) {
+			bannerid = ((UserDetails) principal).getUsername();
+		} else {
+			bannerid = principal.toString();
+		}
+
+		User user = userService.getUserById(bannerid);
 		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsTA(user);
 		theModel.addAttribute("coursesList", coursesList);
 
@@ -84,20 +97,20 @@ public class CourseController {
 
 	@RequestMapping(value = "/instructedcourses", method = RequestMethod.GET)
 	public String getInstructedCourses(Model theModel) {
-		
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String bannerid;
 		if (principal instanceof UserDetails) {
-		  String username = ((UserDetails)principal).getUsername();
-		  System.out.println("USer roles is: "+ ((UserDetails)principal).getAuthorities());
-		  System.out.println("user is :"+username);
+			bannerid = ((UserDetails) principal).getUsername();
+			System.out.println("USer roles is: " + ((UserDetails) principal).getAuthorities());
+			System.out.println("user is enrolled courses :" + bannerid);
 		} else {
-		  String username = principal.toString();
-		  System.out.println(("user is : "+username));
+			bannerid = principal.toString();
+			System.out.println(("user is enrolled courses: " + bannerid));
 		}
-		
-		
-		String bannerid="B00832218";
-		User user=userService.getUserById(bannerid);
+
+		// String bannerid="B00832218";
+		User user = userService.getUserById(bannerid);
 		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsInstrcutor(user);
 		theModel.addAttribute("coursesList", coursesList);
 		return "teachingcourses";
@@ -146,14 +159,13 @@ public class CourseController {
 			theModel.addAttribute("result", "user not exists");
 			return "instrcutorcoursehome";
 		} else {
-			boolean isAloocated=courseDetailsService.allocateTa(Integer.parseInt(courseId), bannerId);
-			if(!isAloocated) {
+			boolean isAloocated = courseDetailsService.allocateTa(Integer.parseInt(courseId), bannerId);
+			if (!isAloocated) {
 				theModel.addAttribute("result", "User is already realted to this course");
+			} else {
+				theModel.addAttribute("result", "TA Allocated");
 			}
-			else {
-				theModel.addAttribute("result", "TA Allocated");	
-			}
-			
+
 			return "instrcutorcoursehome";
 		}
 
@@ -172,10 +184,10 @@ public class CourseController {
 		String courseName = request.getParameter("coursename");
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
-		//System.out.println("Course id: "+courseId);
-		if(courseId.length()==0) {
+		// System.out.println("Course id: "+courseId);
+		if (courseId.length() == 0) {
 			theModel.addAttribute("resultEnrolling", "Error in loading file !! please try again");
-		}else {
+		} else {
 			if (file.isEmpty()) {
 				System.out.println("empty file");
 				theModel.addAttribute("resultEnrolling", "Upload file to continue");
@@ -198,7 +210,8 @@ public class CourseController {
 							String bannerId = userDetails[2];
 							String email = userDetails[3];
 
-							if (!bannerId.matches("B00(.*)") || bannerId.length() != 9 || !email.matches("(.*)@dal.ca")) {
+							if (!bannerId.matches("B00(.*)") || bannerId.length() != 9
+									|| !email.matches("(.*)@dal.ca")) {
 								inValidUsers.add(user);
 
 							} else {
@@ -216,19 +229,20 @@ public class CourseController {
 
 					}
 
-					//System.out.println("valid user length is:"+validUsers.size());
+					// System.out.println("valid user length is:"+validUsers.size());
 					if (validUsers.size() > 0) {
 
-						boolean status = courseDetailsService.enrollStuentsIntoCourse(validUsers, Integer.parseInt(courseId));
+						boolean status = courseDetailsService.enrollStuentsIntoCourse(validUsers,
+								Integer.parseInt(courseId));
 						System.out.println("Student enrolled :" + status);
 						if (status) {
 							theModel.addAttribute("resultEnrolling", "Students enrolled");
-						}
-						else {
-							theModel.addAttribute("resultEnrolling", "Users who are already related to course are ignored");
+						} else {
+							theModel.addAttribute("resultEnrolling",
+									"Users who are already related to course are ignored");
 						}
 					}
-				
+
 					br.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
