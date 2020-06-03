@@ -6,8 +6,6 @@ import java.util.List;
 
 import com.group18.asdc.entities.User;
 
-import com.group18.asdc.entities.User;
-
 public interface UserDao {
     
     Boolean authenticateByEmailAndPassword(ArrayList<Object> valueList) throws SQLException;
