@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -26,9 +27,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/public/**", "/forgot-password", "/registration", "/home", "/resetPassword").permitAll()
                 .anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login-error")
-                .defaultSuccessUrl("/login-success").permitAll();
-        // .and()
-        // .logout()
+                .defaultSuccessUrl("/login-success").permitAll().and().logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
         // .deleteCookies("JSESSIONID")
         // .and()
         // .httpBasic();
@@ -38,8 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .passwordEncoder(CommonUtil.getInstance().passwordEncoder())
+        auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(CommonUtil.getInstance().passwordEncoder())
                 .usersByUsernameQuery(SQLQueries.USER_AUTH_BY_EMAIL.toString())
                 .authoritiesByUsernameQuery(SQLQueries.GET_USER_ROLES.toString());
         // auth.inMemoryAuthentication()

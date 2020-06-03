@@ -5,14 +5,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import com.group18.asdc.dao.Daoimpl;
 import com.group18.asdc.entities.Registerbean;
 
-@Service
+@Repository
 public class Registerservice {
+
+	@Autowired
+	private DataSource dataSource;
+
+	
 
 	public String registeruser(Registerbean bean) {
 		String banner = null;
@@ -32,11 +40,11 @@ public class Registerservice {
 				System.out.println("The emailid is not valid");
 				return "invalidemailid";
 			}
-			if (bean.getPassword().length() <= 8) {
+			if (bean.getPassword().length() <= 7) {
 				System.out.println("The password is less than 8 characters");
 				return "shortpassword";
 			}
-			connection = Daoimpl.getConnection();
+			connection = dataSource.getConnection();
 			PreparedStatement pst3 = connection.prepareStatement("select * from user where emailid=?");
 			pst3.setString(1, bean.getEmailid());
 			ResultSet rs3 = pst3.executeQuery();
