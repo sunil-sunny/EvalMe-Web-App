@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/">
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="ISO-8859-1">
 <title>Home Page</title>
@@ -51,9 +52,11 @@ body {
 
 	<div class="topnav">
 		<a th:href="@{/userhome}">Course List</a> <a
-			th:href="@{/enrolledcourses}">Courses as student</a> <a
+			sec:authorize="hasAuthority('STUDENT')" th:href="@{/enrolledcourses}">Courses
+			as student</a> <a sec:authorize="hasAuthority('INSTRUCTOR')"
 			th:href="@{/instructedcourses}">Courses as Instructor</a> <a
-			th:href="@{/tacourses}">Courses as TA</a> <a href="@{/logout}">Logout</a>
+			sec:authorize="hasAuthority('TA')" th:href="@{/tacourses}">Courses
+			as TA</a> <a th:href="@{/logout}">Logout</a>
 	</div>
 
 	<div>
