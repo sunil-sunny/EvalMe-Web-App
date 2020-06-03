@@ -10,6 +10,19 @@ public class Course {
 	private User instructorName = new User();
 	private List<User> taList = new ArrayList<User>();
 	private List<User> studentList = new ArrayList<User>();
+	
+	public Course() {
+		super();
+	}
+
+	public Course(int courseId, String courseName, User instructorName, List<User> taList, List<User> studentList) {
+		super();
+		this.courseId = courseId;
+		CourseName = courseName;
+		this.instructorName = instructorName;
+		this.taList = taList;
+		this.studentList = studentList;
+	}
 
 	public int getCourseId() {
 		return courseId;

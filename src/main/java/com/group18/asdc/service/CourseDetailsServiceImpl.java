@@ -34,12 +34,12 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	}
 
 	@Override
-	public boolean allocateTa(int courseId, String bannerId) {
+	public boolean allocateTa(int courseId, User user) {
 
 		// inserting user in a list since the filter users methods takes the arraylist
 		// as input
 		List<User> taAsList = new ArrayList<User>();
-		User user = userService.getUserById(bannerId);
+		//User user = userService.getUserById(bannerId);
 		List<User> eligibleUser = null;
 
 		if (user != null) {
@@ -49,7 +49,7 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 
 		if (eligibleUser != null && eligibleUser.size() != 0) {
 
-			return courseDetailsDao.allocateTa(courseId, bannerId);
+			return courseDetailsDao.allocateTa(courseId, user);
 		}
 
 		return false;

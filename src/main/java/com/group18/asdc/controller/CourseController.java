@@ -159,7 +159,7 @@ public class CourseController {
 			theModel.addAttribute("result", "user not exists");
 			return "instrcutorcoursehome";
 		} else {
-			boolean isAloocated = courseDetailsService.allocateTa(Integer.parseInt(courseId), bannerId);
+			boolean isAloocated = courseDetailsService.allocateTa(Integer.parseInt(courseId), userService.getUserById(bannerId));
 			if (!isAloocated) {
 				theModel.addAttribute("result", "User is already realted to this course");
 			} else {
