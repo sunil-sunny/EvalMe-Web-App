@@ -55,4 +55,26 @@ public class UserServiceImpl implements UserService {
 		return userDao.getStudentsByCourse(courseId);
 	}
 
+    @Override
+    public void loadUserWithBannerId(String bannerId, User userObj) {
+        ArrayList<Object> valuesList = CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerId);
+        try {
+            userDao.loadUserWithBannerId(valuesList, userObj);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Boolean updatePassword(User userObj) {
+        ArrayList<Object> criteriaList = CommonUtil.getInstance().convertQueryVariablesToArrayList(userObj.getBannerId());
+        ArrayList<Object> valueList = CommonUtil.getInstance().convertQueryVariablesToArrayList(userObj.getPassword());
+        try {
+            return userDao.updatePassword(criteriaList, valueList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Boolean.FALSE;
+    }
+
 }

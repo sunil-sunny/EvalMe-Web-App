@@ -5,6 +5,13 @@ public class ResetPassword {
   private String generatedPassword;
   private String newPassword;
   private String confirmNewPassword;
+  private String bannerId;
+
+  public ResetPassword(String bannerId)
+  {
+    super();
+    this.bannerId = bannerId;
+  }
 
   public String getgeneratedPassword() {
     return generatedPassword;
@@ -18,6 +25,10 @@ public class ResetPassword {
     return confirmNewPassword;
   }
 
+  public String getbannerId() {
+    return bannerId;
+  }
+
   public void setgeneratedPassword(String generatedPassword) {
     this.generatedPassword = generatedPassword;
   }
@@ -28,6 +39,10 @@ public class ResetPassword {
 
   public void setconfirmNewPassword(String confirmNewPassword) {
     this.confirmNewPassword = confirmNewPassword;
+  }
+
+  public void setbannerId(String bannerId) {
+    this.bannerId = bannerId;
   }
     
 }

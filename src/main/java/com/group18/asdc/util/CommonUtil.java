@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 public class CommonUtil {
 
     private static CommonUtil commonUtilObj = null;
@@ -11,12 +15,12 @@ public class CommonUtil {
     public static final HashMap<String, String> roleVsLandingPage = new HashMap<String, String>();
 
     public static enum userRoles {
-        ROLE_ADMIN, ROLE_GUEST
+        ADMIN, GUEST
     };
 
     static {
-        roleVsLandingPage.put(userRoles.ROLE_ADMIN.name(), "/admin");
-        roleVsLandingPage.put(userRoles.ROLE_GUEST.name(), "/coursepage");
+        roleVsLandingPage.put(userRoles.ADMIN.name(), "/admin");
+        roleVsLandingPage.put(userRoles.GUEST.name(), "/coursepage");
     }
 
     private CommonUtil() {
@@ -61,6 +65,11 @@ public class CommonUtil {
                 .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
         return generatedString;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

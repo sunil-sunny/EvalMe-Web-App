@@ -69,18 +69,19 @@ public class SQLMethods {
      */
     public Object insertQuery(String sqlQuery, ArrayList<Object> values) throws SQLException {
         Connection conn = dataSource.getConnection();
-
+        Object resultObj = null;
         PreparedStatement preparedStatement = constructPreparedStmt(conn, sqlQuery, values);
         int rowAffected = preparedStatement.executeUpdate();
         if (rowAffected == 1) {
             // get candidate id
             rs = preparedStatement.getGeneratedKeys();
             if (rs.next())
-                return rs.getObject(1);
+            resultObj = rs.getObject(1);
 
         }
         conn.close();
-        return null;
+        rs.close();
+        return resultObj;
     }
 
     /**
@@ -117,6 +118,7 @@ public class SQLMethods {
         }
         //
         conn.close();
+        rs.close();
         return resultRowList;
     }
 
@@ -134,8 +136,9 @@ public class SQLMethods {
         updateValueList.addAll(criteriaValueList);
         PreparedStatement preparedStatement = constructPreparedStmt(conn, sqlQuery, updateValueList);
         //
+        Integer rowCount = preparedStatement.executeUpdate();
         conn.close();
-        return preparedStatement.executeUpdate();
+        return rowCount;
     }
 
     /**
@@ -149,8 +152,9 @@ public class SQLMethods {
         Connection conn = dataSource.getConnection();
         PreparedStatement preparedStatement = constructPreparedStmt(conn, sqlQuery, criteriaList);
         //
+        Integer rowCount = preparedStatement.executeUpdate();
         conn.close();
-        return preparedStatement.executeUpdate();
+        return rowCount;
     }
 
 
@@ -167,8 +171,9 @@ public class SQLMethods {
         //
         preparedStatement = constructBatchInsertQuery(preparedStatement, valuesList);
         //
+        Integer rowCount = preparedStatement.executeBatch().length;
         conn.close();
-        return preparedStatement.executeBatch().length;
+        return rowCount;
     }
 
 }
