@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService {
             userDao.loadUserWithBannerId(valuesList, userObj);
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("ttttttttttttt");
         }
     }
 
@@ -73,6 +74,7 @@ public class UserServiceImpl implements UserService {
             return userDao.updatePassword(criteriaList, valueList);
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("ttttttttttttt");
         }
         return Boolean.FALSE;
     }
