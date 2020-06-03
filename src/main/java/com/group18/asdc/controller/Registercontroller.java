@@ -36,7 +36,7 @@ public class Registercontroller {
 		if (result.hasErrors()) {
 			return "registration";
 		}
-		// Registerservice num = new Registerservice();
+		
 		String s = num.registeruser(bean);
 		if (s.equals("alreadycreated")) {
 			System.out.println("already exists");
@@ -58,7 +58,7 @@ public class Registercontroller {
 		else {
 			System.out.println("successfully created the acc" + s);
 
-			return "redirect:/registration?success";
+			return "redirect:/login?accountcreatedsuccessfully";
 		}
 
 	}

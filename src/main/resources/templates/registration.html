@@ -13,6 +13,8 @@ body {
 }
 </style>
 <style>
+
+
 input[type=text], select {
   width: 50%;
   padding: 12px 20px;
@@ -21,6 +23,15 @@ input[type=text], select {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+.container {
+  padding: 16px;
+  background-color: white;
+}
+.signin {
+  background-color: #f1f1f1;
+  text-align: center;
 }
 input[type=email], select {
   width: 50%;
@@ -61,6 +72,8 @@ div {
   background-color: #f2f2f2;
   padding: 20px;
   height:1500dp;
+   color: green;
+  
 }
 </style>
 <title>Registration</title>
@@ -73,7 +86,7 @@ div {
 
 	<div>
 		
-
+<center><div><h2><b><i>Note: All the fields of the form are mandatory.</i></b></h2></div></center>
 				<div th:if="${param.success}">
 					<div class="alert alert-info"><center><h3><b>Congratulations, you have successfully registered on our portal, now you can login to your account and access all the features.</b></h3></center>
 						</div>
@@ -125,43 +138,46 @@ div {
 					
 					
 						
-						<center> <input type=text placeholder="Enter your firstname here.."
+						<center> <input type=text placeholder="*Enter your firstname here.."
 							id="firstname" th:field="*{firstname}" required/></center>
 						
 					
 					
 					
 						
-						<center> <input type =text placeholder="Enter your last name here.."
+						<center> <input type =text placeholder="*Enter your last name here.."
 							id="lastname"  th:field="*{lastname}"  required/></center>
 						
 					
 					
 					
-						<center><input type =text placeholder="Enter your bannerid here.."
+						<center><input type =text placeholder="*Enter your bannerid here.."
 							id="bannerid"  th:field="*{bannerid}" required/></center>
 						
 					
 					
 					
-						<center><input type= email placeholder="Enter your emailid here.."
+						<center><input type= email placeholder="*Enter your emailid here.."
 							id="emailid" th:field="*{emailid}" required/></center>
 						
 					
 					
 					
-						<center> <input placeholder="Create your password here.."
+						<center> <input placeholder="*Create your password here.."
 							id="password"  type="password"
 							th:field="*{password}"  required/></center>
 						
 					
 					
-						<center> <input id="confirmpassword" placeholder="Enter your password again.."
+						<center> <input id="confirmpassword" placeholder="*Enter your password again.."
 							type="password" th:field="*{confirmpassword}" required/></center>
 					
 					
 					
 						<center><input type="submit" value="Join us Now!" onclick="return Validate()">
+						<div class="container signin">
+    <p>Already have an account? <a href="login">Sign in</a>.</p>
+  </div>
 						
 					<script type="text/javascript">
     function Validate() {
