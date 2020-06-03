@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.database.SQLMethods;
@@ -240,5 +241,27 @@ public class UserDaoImpl implements UserDao {
 
 		return instructor;
 	}
+
+    @Override
+    public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) throws SQLException {
+        ArrayList<HashMap<String,Object>> rowsList = sqlImplementation.selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), valueList);
+        //
+        if( rowsList.size() > 0)
+        {
+            HashMap<String,Object> valuesMap = rowsList.get(0);
+            //
+            userObj.setBannerId((String)valuesMap.get("bannerid"));
+            userObj.setEmail((String)valuesMap.get("emailid"));
+            userObj.setFirstName((String)valuesMap.get("firstname"));
+            userObj.setLastName((String)valuesMap.get("lastname"));
+            userObj.setPassword((String)valuesMap.get("password"));
+        }
+    }
+
+    @Override
+    public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valueList) throws SQLException {
+        Integer rowCount = sqlImplementation.updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valueList, criteriaList);
+        return rowCount > 0;
+    }
 
 }
