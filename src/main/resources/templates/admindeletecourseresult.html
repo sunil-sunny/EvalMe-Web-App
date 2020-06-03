@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Delete Course</title>
+</head>
+
+<body>
+	
+	<div id="deletecourse">
+	
+		<h3>Course Deleted Successfully!</h3>
+		
+		<form th:action="@{/adminhome}" method="get">
+		
+			<button name="goback" value="gobackdashboard" th:href="@{adminhome}">Go Back to admin Dashboard</button>
+		
+		</form>
+	
+	</div>
+
+</body>
+
+</html>
