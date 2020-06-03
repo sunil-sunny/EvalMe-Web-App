@@ -1,5 +1,6 @@
 package com.group18.asdc.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,9 @@ import com.group18.asdc.service.Registerservice;
 @RequestMapping("/registration")
 public class Registercontroller {
 
+	@Autowired
+	private Registerservice num;
+	
 	@ModelAttribute("user")
 	public Registerbean bean() {
 		return new Registerbean();
@@ -32,7 +36,7 @@ public class Registercontroller {
 		if (result.hasErrors()) {
 			return "registration";
 		}
-		Registerservice num = new Registerservice();
+		// Registerservice num = new Registerservice();
 		String s = num.registeruser(bean);
 		if (s.equals("alreadycreated")) {
 			System.out.println("already exists");

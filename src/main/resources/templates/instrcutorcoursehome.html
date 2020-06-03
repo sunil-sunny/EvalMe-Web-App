@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/">
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="ISO-8859-1">
 <title>Home Page</title>
 <style>
 h1 {
+	text-align: center;
+}
+
+p {
 	text-align: center;
 }
 
@@ -46,11 +51,12 @@ body {
 <body>
 
 	<div class="topnav">
-		<a th:href="@{/userhome}">Course List</a>
-		<a th:href="@{/enrolledcourses}">Courses as student</a>
-		<a th:href="@{/instructedcourses}">Courses as Instructor</a>
-		<a th:href="@{/tacourses}">Courses as TA</a>
-	    <a href="@{/logout}">Logout</a>
+		<a th:href="@{/userhome}">Course List</a> <a
+			sec:authorize="hasAuthority('STUDENT')" th:href="@{/enrolledcourses}">Courses
+			as student</a> <a sec:authorize="hasAuthority('INSTRUCTOR')"
+			th:href="@{/instructedcourses}">Courses as Instructor</a> <a
+			sec:authorize="hasAuthority('TA')" th:href="@{/tacourses}">Courses
+			as TA</a> <a th:href="@{/logout}">Logout</a>
 	</div>
 
 	<div>
@@ -61,21 +67,26 @@ body {
 		<h1 th:text="${result}"></h1>
 		<form th:action="@{/allocateTA}" method="post">
 			<div>
-				<input type="hidden" th:value="${courseId}" name="courseid" />
-				<input type="hidden" th:value="${coursename}" name="coursename" /> <label
+				<input type="hidden" th:value="${courseId}" name="courseid" /> <input
+					type="hidden" th:value="${coursename}" name="coursename" /> <label
 					for="TA">Allocate TA: </label> <input type="text" name="TA" id="TA">
 				<input type="submit" value="submit" />
 			</div>
 		</form>
 		<br>
-		<form th:action="@{/uploadstudents}" method="post">
+
+		<p th:text="${resultEnrolling}"></p>
+		<form th:action="@{/uploadstudents}" method="post"
+			enctype="multipart/form-data">
 			<div>
-				<input type="hidden" th:value="${courseId}" name="courseid" /> 
-				<input type="hidden" th:value="${coursename}" name="coursename" /><label
-					for="TA">Enroll Students: </label> <input type="file" name="studentlist">
-				<input type="submit" value="upload" accept=".csv" />
+				<input type="hidden" th:value="${courseId}" name="courseid" /> <input
+					type="hidden" th:value="${coursename}" name="coursename" /> <label
+					for="file">Enroll Students: </label> <input type="file" name="file"
+					id="file" accept=".csv"> <input type="submit"
+					value="upload" />
 			</div>
 		</form>
+
 
 	</div>
 

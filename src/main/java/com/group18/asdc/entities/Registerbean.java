@@ -63,5 +63,16 @@ public class Registerbean {
 		this.confirmpassword = confirmpassword;
 	}
 	
+	public Registerbean(User user) {
+		
+		super();
+		this.bannerid=user.getBannerId();
+		this.firstname=user.getFirstName();
+		this.lastname=user.getLastName();
+		this.emailid=user.getEmail();
+		this.password=user.getBannerId()+"@dal";
+		
+	}
+	
 	
 }
