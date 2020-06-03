@@ -37,6 +37,7 @@ public class Registerservice {
 				return "shortpassword";
 			}
 			connection = Daoimpl.getConnection();
+			System.out.println("Connection is:"+ connection);
 			PreparedStatement pst3 = connection.prepareStatement("select * from user where emailid=?");
 			pst3.setString(1, bean.getEmailid());
 			ResultSet rs3 = pst3.executeQuery();
