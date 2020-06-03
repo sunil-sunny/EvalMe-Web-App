@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
