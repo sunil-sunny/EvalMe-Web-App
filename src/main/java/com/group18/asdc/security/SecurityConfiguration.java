@@ -1,10 +1,6 @@
 package com.group18.asdc.security;
 
 import javax.sql.DataSource;
-
-import com.group18.asdc.database.SQLQueries;
-import com.group18.asdc.util.CommonUtil;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
