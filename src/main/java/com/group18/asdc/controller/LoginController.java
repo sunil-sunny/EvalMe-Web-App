@@ -2,8 +2,11 @@ package com.group18.asdc.controller;
 
 import javax.servlet.http.HttpSession;
 
+import com.group18.asdc.entities.User;
 import com.group18.asdc.handlingformsubmission.ResetPassword;
+import com.group18.asdc.security.SecurityConfiguration;
 import com.group18.asdc.service.EmailService;
+import com.group18.asdc.service.UserService;
 import com.group18.asdc.util.CommonUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ public class LoginController {
 
   @Autowired
   public EmailService emailService;
+
+  @Autowired
+  private UserService userService;
 
   @RequestMapping("/login")
   public String login() {
@@ -51,11 +57,9 @@ public class LoginController {
 
   @RequestMapping("/login-success")
   public RedirectView loginSuccess(Authentication authentication) {
-
-    // String generatedPassword = CommonUtil.getInstance().generateResetPassword();
-    // session.setAttribute("RESET_PASSWORD", generatedPassword);
-    // System.out.println("qqqqqqqqqqqqq"+generatedPassword);
     String redirectURL = CommonUtil.roleVsLandingPage.get(authentication.getAuthorities().iterator().next().toString());
+    System.out.println(
+        "ssssssssssssssss" + redirectURL + "qqqqqq" + authentication.getAuthorities().iterator().next().toString());
     return new RedirectView(redirectURL);
 
   }
@@ -68,43 +72,50 @@ public class LoginController {
   }
 
   @GetMapping("/resetPassword")
-  public String sendResetRequest(@RequestParam(name = "username", required = true) String booNumber, Model model,HttpSession session) {
+  public String sendResetRequest(@RequestParam(name = "username", required = true) String bannerId, Model model,
+      HttpSession session) {
     //
     // get User object with BOO number value and send an email
     //
-
+    User userObj = new User(bannerId, userService);
     /*
     * 
     */
     String genPassword = CommonUtil.getInstance().generateResetPassword();
     session.setAttribute("RESET_PASSWORD", genPassword);
-    model.addAttribute("resetForm", new ResetPassword());
-    // emailService.sendSimpleMessage(to, subject, text);
+    model.addAttribute("resetForm", new ResetPassword(bannerId));
+    emailService.sendSimpleMessage(userObj.getEmail(), "Reset Password", "Your reset password is: " + genPassword);
     return "resetPassword.html";
   }
 
   @PostMapping("/resetPassword")
-  public String resetPassword(@ModelAttribute ResetPassword resetForm,Model model, HttpSession session){
+  public String resetPassword(@ModelAttribute ResetPassword resetForm, Model model, HttpSession session) {
 
     String redirectURL = "login-success";
+    Boolean isError = false;
     //
-    if( !resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD")) )
-    {
+    if (!resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD"))) {
       model.addAttribute("genPasswordError", Boolean.TRUE);
-      return "resetPassword.html";
-    }
-    else if( !resetForm.getnewPassword().equals(resetForm.getconfirmNewPassword()) )
-    {
+      isError = Boolean.TRUE;
+    } else if (!resetForm.getnewPassword().equals(resetForm.getconfirmNewPassword())) {
       model.addAttribute("confirmPasswordError", Boolean.TRUE);
-      return "resetPassword.html";
+      isError = Boolean.TRUE;
+    } else {
+      // set new password in the user model
+      User userObj = new User(resetForm.getbannerId(), userService);
+      userObj.setPassword(CommonUtil.getInstance().passwordEncoder().encode(resetForm.getconfirmNewPassword()));
+      if (!userService.updatePassword(userObj)) {
+        model.addAttribute("passwordResetError", Boolean.TRUE);
+        isError = Boolean.TRUE;
+      }
     }
-    // set new password in the user model
-
-
-    return "redirect:" + redirectURL;
+    if (isError) {
+      model.addAttribute("resetForm", new ResetPassword(resetForm.getbannerId()));
+      return "resetPassword";
+    } else {
+      return "redirect:" + redirectURL;
+    }
 
   }
-
-
 
 }

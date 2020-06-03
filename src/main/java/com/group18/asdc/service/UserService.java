@@ -16,4 +16,7 @@ public interface UserService {
 
 	public List<User> getStudentsByCourse(int courseId);
 	
+	void loadUserWithBannerId(String bannerId, User userObj);
+
+	Boolean updatePassword(User userObj);
 }
