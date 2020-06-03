@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.CourseDetailsService;
@@ -31,11 +30,13 @@ public class CourseController {
 	
 	@Autowired
 	private UserService userService;
+	
 
 	/*
 	 * user home end point directs all the user except admin to the page where list
 	 * of all courses are present
 	 */
+	
 	@GetMapping("/userhome")
 	public String getHomePage(Model theModel) {
 
@@ -52,6 +53,7 @@ public class CourseController {
 	@RequestMapping(value = "/enrolledcourses")
 	public String getEnrolledCourses(Model theModel) {
 
+		
 		String bannerid="B00896315";
 		User user=userService.getUserById(bannerid);
 		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsStudent(user);
@@ -82,6 +84,17 @@ public class CourseController {
 
 	@RequestMapping(value = "/instructedcourses", method = RequestMethod.GET)
 	public String getInstructedCourses(Model theModel) {
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+		  String username = ((UserDetails)principal).getUsername();
+		  System.out.println("USer roles is: "+ ((UserDetails)principal).getAuthorities());
+		  System.out.println("user is :"+username);
+		} else {
+		  String username = principal.toString();
+		  System.out.println(("user is : "+username));
+		}
+		
 		
 		String bannerid="B00832218";
 		User user=userService.getUserById(bannerid);
