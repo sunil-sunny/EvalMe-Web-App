@@ -42,6 +42,7 @@ public class CourseController {
 	@GetMapping("/userhome")
 	public String getHomePage(Model theModel) {
 
+		
 		List<Course> coursesList = courseDetailsService.getAllCourses();
 		theModel.addAttribute("coursesList", coursesList);
 		return "guesthome";
@@ -59,8 +60,10 @@ public class CourseController {
 		String bannerid;
 		if (principal instanceof UserDetails) {
 			bannerid = ((UserDetails) principal).getUsername();
+			//System.out.println(((UserDetails) principal).getAuthorities());
 		} else {
 			bannerid = principal.toString();
+			//System.out.println(principal.);
 		}
 
 		//String bannerid="B00896315";
