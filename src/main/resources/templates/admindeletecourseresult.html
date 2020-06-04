@@ -10,7 +10,7 @@
 	
 	<div id="deletecourse">
 	
-		<h3>Course Deleted Successfully!</h3>
+		<h3 th:text="${deleteresult}"></h3>
 		
 		<form th:action="@{/adminhome}" method="get">
 		

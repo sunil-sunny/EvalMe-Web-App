@@ -1,7 +1,5 @@
 package com.group18.asdc.dao;
 
-
-
 import com.group18.asdc.entities.CourseAdmin;
 
 public interface AdminDao {

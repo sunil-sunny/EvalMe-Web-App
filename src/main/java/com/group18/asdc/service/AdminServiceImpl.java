@@ -1,184 +1,133 @@
 package com.group18.asdc.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.entities.CourseAdmin;
+import com.group18.asdc.entities.User;
 
-
-public class AdminServiceImpl implements AdminService{
+@Service
+public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private AdminDao admindao;
+
+	@Autowired
+	private UserService userService;
+
+	// private AdminDaoImpl admindao=new AdminDaoImpl();
 
 	@Override
 	public String createCourse(CourseAdmin courseadmin) {
 
 		String returnString = "";
 
-		//VALIDATE INPUT
+		// VALIDATE INPUT
 
-		//1.
-		//check if courseid has 4 digits and is a positive integer 
-		//if not, set returnString to "invalidid"
+		// 1.
+		// check if courseid has 4 digits and is a positive integer
+		// if not, set returnString to "invalidid"
 
 		int id = courseadmin.getCourseId();
 		String courseid = String.valueOf(courseadmin.getCourseId());
-		String coursename = courseadmin.getCourseName().trim();
+		String coursename = courseadmin.getCourseName();
 		String instructid = courseadmin.getInstructorId();
+		boolean val = false;
+		System.out.println("id is " + id);
 
+		if (id != 0) {
 
-		if(id!=0) {
-
-			if(id<0 || courseid.length()!=4 ) {
+			if (id < 0 || courseid.length() != 4) {
 				returnString = "invalidid";
 				return returnString;
 			}
+			System.out.println("id is " + id);
+			// check if value of courseId exists in the database already.
+			// if it exists, set returnString to "idexists"
 
-			//check if value of courseId exists in the database already.
-			//if it exists, set returnString to "idexists"
+			val = admindao.checkCourseId(id);
 
-			boolean val = admindao.checkCourseId(id);
-			if(val==true) {
+			System.out.println("check course :" + val);
+			if (val) {
 				returnString = "idexists";
 				return returnString;
 			}
-		}
-		else {
+		} else {
 			return "idcannotbenull";
 		}
-		
 
-		//2.
-		//check if length of courseName is between 5 to 10 digits
-		//if not, set returnString to "shortname"
+		// 3.
+		// check if instructorId starts with a B00
+		// if not, set returnString to "invalidinstid"
 
-		if(!coursename.equals(null)) {
+		if (!val) {
 
-			if(coursename.length()<5 || coursename.length()>10) {
-				returnString = "shortname";
-				return returnString;
-			}
+			if (!instructid.equals(null)) {
+				if (instructid.length() != 9 || !instructid.matches("B00(.*)")) {
+					returnString = "invalidinstid";
+					return returnString;
+				}
 
-			boolean val1 = admindao.checkCourseName(coursename);
-			if(val1==true) {
-				returnString = "nameexists";
-				return returnString;
+				boolean isUserExits = userService.isUserExists(userService.getUserById(instructid));
+				if(isUserExits) {
+
+					// CREATE COURSE
+
+					// if details are entered in course table, a new course is created.
+					// set returnString to "coursecreated"
+					
+					boolean var = admindao.addCourse(courseadmin);
+					if (var == true) {
+						returnString = "coursecreated";
+					} else {
+						returnString = "coursenotcreated";
+					}
+					
+				}
+				else {
+					return "User not registered";
+				}
+
 			}
 
 		}
 
-		//3.
-		//check if instructorId starts with a B00
-		//if not, set returnString to "invalidinstid"
 
-		if(!instructid.equals(null)) {
-			if(instructid.length()!=9 || !instructid.matches("B00(.*)")){
-				returnString = "invalidinstid";
-				return returnString;
-			}
-			
-			String str = admindao.checkInstructorId(instructid);
-				
-				return str;
-			
-		}
-
-
-		//CREATE COURSE
-
-		//if details are entered in course table, a new course is created.
-		//set returnString to "coursecreated"
-
-		
-		if(id!=0 && !coursename.equals(null) && instructid.equals(null)) {
-		//only 2 arguments, no instructor specified
-			
-			boolean var = admindao.addCourse(id,coursename);
-			
-			if(var==true) {
-				returnString = "coursecreated";
-			}
-			else {
-				returnString = "coursenotcreated";
-			}
-			return returnString;
-		}
-		else if(id!=0 && !coursename.equals(null) && !instructid.equals(null)) {
-			//no null arguments
-			
-			boolean var = admindao.addCourse(courseadmin);
-			if(var==true) {
-				returnString = "coursecreated";
-			}
-			else {
-				returnString = "coursenotcreated";
-			}
-			return returnString;
-		}
-		else if(id!=0 && coursename.equals(null) && !instructid.equals(null)) {
-			
-			//modify or assign instructor
-			boolean var = admindao.addInstructor(id, instructid);
-			if(var==true) {
-				returnString = "coursecreated";
-			}
-			else {
-				returnString = "coursenotcreated";
-			}
-			return returnString;
-			
-		}
 		return returnString;
 	}
 
 	@Override
 	public String deleteCourse(int courseId) {
 
-		if(courseId==0) {
+		if (courseId == 0) {
 			return "nocourseid";
-		}
-		else {
+		} else {
 
-			String returnString="";
+			String returnString = "";
 			String courseid = String.valueOf(courseId);
 			boolean val = admindao.checkCourseId(courseId);
 
-			//VALIDATE INPUT
+			System.out.println("im deleting course "+val);
+			// VALIDATE INPUT
+			
+			if(val) {
+				boolean result = admindao.deleteCourse(courseId);
 
-			//check if courseid has 4 digits and is a positive integer 
-			//if not, set returnString to "invalidid"
-
-			if(courseId<0 || courseid.length()!=4 ) {
-				returnString = "invalidid";
-				return returnString;
+				if (result == true) {
+					returnString = "course not deleted";
+					return returnString;
+				} else {
+					returnString = "course deleted";
+					return returnString;
+				}
 			}
-
-
-			//VALIDATE FROM DATABASE 
-
-			//check if value of courseId exists in the database already.
-			//if it does not exist, set returnString to "iddoesnotexist"
-
-			//if val is false, course does not exist, to delete.
-			if(val==false) {
+			else {
 
 				returnString = "iddoesnotexist";
 				return returnString;
 			}
 
-			//DELETE COURSE
-
-			boolean result = admindao.deleteCourse(courseId);
-
-			if(result==true) {
-				returnString="coursedeleted";
-				return returnString;
-			}
-			else {
-				returnString="coursenotdeleted";
-				return returnString;
-			}
 
 		}
 	}
