@@ -17,7 +17,6 @@ import com.group18.asdc.service.AdminServiceImpl;
 public class AdminController {
 
 
-
 	//ADMIN DASHBOARD
 
 	@GetMapping("/adminhome")
@@ -25,7 +24,6 @@ public class AdminController {
 		return "adminhome";
 	}
 
-	
 	//ADD COURSE
 
 	@GetMapping("/adminadd")
@@ -59,12 +57,23 @@ public class AdminController {
 		else if(result=="invalidinstid") {
 			return "redirect:/adminadd?invalidinstid";
 		}
+		else if(result=="idexists") {
+			return "redirect:/adminaddcourse?idexists";
+		}
+		else if(result=="nameexists") {
+			return "redirect:/adminaddcourse?nameexists";
+		}
+		else if(result=="invalidinst") {
+			return "redirect:/adminaddcourse?invalidinst";
+		}
+		else if(result=="coursenotcreated") {
+			return "redirect:/adminaddcourse?coursenotcreated";
+		}
 		else {
 			return "adminaddcourseresult";
 		}
 	}
 
-	
 	//DELETE COURSE 
 
 	@GetMapping("/admindelete")
@@ -87,12 +96,17 @@ public class AdminController {
 		//store the string returned in result, to identify the error and display appropriate alert message
 		String result = adminservice.deleteCourse(course.getCourseId());
 
-		
+
 		//check type of error string returned and return view accordingly
 		if(result=="invalidid") {
 			return "redirect:/admindelete?invalidid";
 		}
-		
+		else if(result=="iddoesnotexist") {
+			return "redirect:/adminaddcourse?iddoesnotexist";
+		}
+		else if(result=="coursenotdeleted") {
+			return "redirect:/adminaddcourse?iddoesnotexist";
+		}
 		else {
 			return "admindeletecourseresult";
 		}

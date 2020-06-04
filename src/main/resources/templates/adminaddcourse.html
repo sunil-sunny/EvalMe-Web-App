@@ -24,6 +24,23 @@
 		<p><h3>Instructor Id should start with 'B00...' and should be 9 characters. Try again!</h3></p>
 	</div>
 	
+	<div th:if="${param.idexists}">
+		<p><h3>Id exists! Try again!</h3></p>
+	</div>
+	
+	<div th:if="${param.nameexists}">
+		<p><h3>Name exists! Try again!</h3></p>
+	</div>
+	
+	<div th:if="${param.invalidinst}">
+		<p><h3>Instructor does not exist! Try again!</h3></p>
+	</div>
+	
+	<div th:if="${param.coursenotcreated}">
+		<p><h3>Course not created. Try again!</h3></p>
+	</div>
+	
+	
 	
 	<div id="addcourse">
 	
