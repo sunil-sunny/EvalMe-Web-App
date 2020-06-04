@@ -169,4 +169,10 @@ public class UserDaoImplMock implements UserDao {
 		return null;
 	}
 
+	@Override
+	public ArrayList getUserRoles(ArrayList<Object> criteriaList) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
