@@ -15,7 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.matchers.InstanceOf;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class CommonUtilTest {
 
     @InjectMocks
