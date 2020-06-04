@@ -1,6 +1,7 @@
 package com.group18.asdc.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -40,6 +41,13 @@ public class CommonUtilTest {
     public void generateResetPasswordTest()
     {
         assertEquals( String.class ,commonUtil.getInstance().generateResetPassword().getClass());
+    }
+
+    @Test
+    public void getInstanceTest()
+    {
+        assertNotNull(CommonUtil.getInstance());
+        assertEquals(CommonUtil.class, CommonUtil.getInstance().getClass());
     }
 
 }

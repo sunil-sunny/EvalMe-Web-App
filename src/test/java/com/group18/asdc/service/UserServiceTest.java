@@ -1,6 +1,7 @@
 package com.group18.asdc.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doAnswer;
@@ -40,7 +41,8 @@ public class UserServiceTest {
     }
 
     private User getDefaultUserObj() {
-        final User userObj = new User();
+        
+        User userObj = new User();
         //
         userObj.setBannerId("B00838575");
         userObj.setEmail("kr630601@dal.ca");
@@ -49,6 +51,16 @@ public class UserServiceTest {
         userObj.setPassword("karthikk");
 
         return userObj;
+
+    }
+
+    private void getDefaultUserObj(User userObj) {
+
+        userObj.setBannerId("B00838575");
+        userObj.setEmail("kr630601@dal.ca");
+        userObj.setFirstName("Karthikk");
+        userObj.setLastName("Tamil");
+        userObj.setPassword("karthikk");
     }
 
     @Test
@@ -60,7 +72,7 @@ public class UserServiceTest {
                 ArrayList arg0 = invocation.getArgument(0);
                 User arg1 = invocation.getArgument(1);
 
-                arg1 = getDefaultUserObj();
+                getDefaultUserObj(arg1);
                 assertEquals("B00838575", arg0.get(0));
                 return null;
             }).when(userDao).loadUserWithBannerId(isA(ArrayList.class), isA(User.class));
@@ -71,6 +83,40 @@ public class UserServiceTest {
         String bannerId = "B00838575";
         userService.loadUserWithBannerId(bannerId, userObj);
         //
+        assertEquals("B00838575", userObj.getBannerId());
+        assertEquals("kr630601@dal.ca", userObj.getEmail());
+        assertEquals("Karthikk", userObj.getFirstName());
+        assertEquals("Tamil", userObj.getLastName());
+        ArrayList checkList = new ArrayList<>();
+        checkList.add(bannerId);
+        try {
+            verify(userDao, times(1)).loadUserWithBannerId(checkList, userObj);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ;
+    }
+
+    @Test
+    public void loadUserWithBannerIdUnavailableTest() {
+        User userObj = new User();
+        //
+        try {
+            doAnswer(invocation -> {
+                ArrayList arg0 = invocation.getArgument(0);
+                User arg1 = invocation.getArgument(1);
+                assertEquals("B00838575", arg0.get(0));
+                return null;
+            }).when(userDao).loadUserWithBannerId(isA(ArrayList.class), isA(User.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String bannerId = "B00838575";
+        userService.loadUserWithBannerId(bannerId, userObj);
+        //
+        assertNull(userObj.getEmail());
+        assertNull(userObj.getBannerId());
         ArrayList checkList = new ArrayList<>();
         checkList.add(bannerId);
         try {
