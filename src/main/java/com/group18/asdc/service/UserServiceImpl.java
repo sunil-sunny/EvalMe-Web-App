@@ -18,17 +18,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    @Override
-    public Boolean authenticateByEmailAndPassword(String bannerid, String password) {
-        ArrayList<Object> valuesList = CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerid, password);
-        try {
-            return userDao.authenticateByEmailAndPassword(valuesList);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        //
-        return Boolean.FALSE;
-    }
+    // @Override
+    // public Boolean authenticateByEmailAndPassword(String bannerid, String password) {
+    //     ArrayList<Object> valuesList = CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerid, password);
+    //     try {
+    //         return userDao.authenticateByEmailAndPassword(valuesList);
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //     }
+    //     //
+    //     return Boolean.FALSE;
+    // }
     
     @Override
 	public boolean isUserExists(User user) {
@@ -77,19 +77,19 @@ public class UserServiceImpl implements UserService {
         return Boolean.FALSE;
     }
 
-    @Override
-    public ArrayList getUserRoles(String bannerid) {
+    // @Override
+    // public ArrayList getUserRoles(String bannerid) {
         
-        ArrayList rolesList = new ArrayList<>();
-        ArrayList<Object> criteriaList = CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerid);
-        try{
-            return userDao.getUserRoles(criteriaList);
-        }
-        catch(SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return rolesList;
-    }
+    //     ArrayList rolesList = new ArrayList<>();
+    //     ArrayList<Object> criteriaList = CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerid);
+    //     try{
+    //         return userDao.getUserRoles(criteriaList);
+    //     }
+    //     catch(SQLException e)
+    //     {
+    //         e.printStackTrace();
+    //     }
+    //     return rolesList;
+    // }
 
 }

@@ -1,5 +1,6 @@
 package com.group18.asdc.service.test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +9,6 @@ import com.group18.asdc.entities.User;
 import com.group18.asdc.service.UserService;
 
 public class UserServiceImplMock implements UserService {
-
-	@Override
-	public Boolean authenticateByEmailAndPassword(String email, String password) {
-
-		return true;
-	}
 
 	@Override
 	public boolean isUserExists(User user) {
@@ -41,7 +36,15 @@ public class UserServiceImplMock implements UserService {
 
 	@Override
 	public void loadUserWithBannerId(String bannerId, User userObj) {
-		// TODO Auto-generated method stub
+		UserDaoImplMock theDaoImplMock = new UserDaoImplMock();
+		ArrayList valueList = new ArrayList<>();
+		valueList.add(bannerId);
+		try {
+			theDaoImplMock.loadUserWithBannerId(valueList, userObj);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -51,10 +54,5 @@ public class UserServiceImplMock implements UserService {
 		return null;
 	}
 
-	@Override
-	public ArrayList getUserRoles(String bannerid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
