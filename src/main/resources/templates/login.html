@@ -10,11 +10,14 @@
 </head>
 
 <body>
-<div th:if="${param.accountcreatedsuccessfully}">
-					<div class="alert alert-info"><center><h5><b>Congratulations, you have successfully registered on our portal, now you can login to your account from below and access all the features.</b></h5></center>
-						</div>
-						
-				</div>
+    <div th:if="${param.accountcreatedsuccessfully}">
+        <div class="alert alert-info">
+            <center>
+                <h5><b>Congratulations, you have successfully registered on our portal, now you can login to your account from below and access all the features.</b></h5>
+            </center>
+        </div>
+
+    </div>
     <div th:replace="fragments/header :: header"></div>
     <div class="container" style="position: absolute;top:calc(100vh - 70%);right:calc(100vw - 80%);">
         <div class=" d-flex justify-content-center h-100 ">
@@ -23,6 +26,9 @@
                     <h3>Sign In</h3>
                 </div>
                 <div class="card-body ">
+                    <div class="alert alert-danger" role="alert" th:if="${loginError}">
+                        Kindly check the Banner id and password and make sure you're registered.
+                    </div>
                     <form th:action="@{/login}" method="post">
                         <div class="input-group form-group ">
                             <input type="text" class="form-control" name="username" placeholder="Banner Id" required>
