@@ -48,7 +48,7 @@ public class LoginController {
   @RequestMapping("/login-error")
   public String loginError(Model model) {
 
-    model.addAttribute("loginError", true);
+    model.addAttribute("loginError", Boolean.TRUE);
     return "login.html";
 
   }
@@ -77,7 +77,7 @@ public class LoginController {
     /*
     * 
     */
-    if (userObj.getEmail() != null && userObj.getEmail().isEmpty()) {
+    if (userObj.getEmail() != null && !userObj.getEmail().isEmpty()) {
       String genPassword = CommonUtil.getInstance().generateResetPassword();
       session.setAttribute("RESET_PASSWORD", genPassword);
       model.addAttribute("resetForm", new ResetPassword(bannerId));
@@ -85,7 +85,7 @@ public class LoginController {
       emailService.sendSimpleMessage(userObj.getEmail(), "Reset Password", "Your reset password is: " + genPassword);
       return "resetPassword.html";
     } else {
-      model.addAttribute("BANNER_ID_EXIST", Boolean.FALSE);
+      model.addAttribute("BANNER_ID_NOT_EXIST", Boolean.TRUE);
       return "forgot-password.html";
     }
   }
@@ -96,23 +96,28 @@ public class LoginController {
     String redirectURL = "login-success";
     Boolean isError = false;
     //
+    User userObj = new User(resetForm.getbannerId(), userService);
     if (!resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD"))) {
       model.addAttribute("genPasswordError", Boolean.TRUE);
+      model.addAttribute("reason","Password sent in mail does not match");
       isError = Boolean.TRUE;
     } else if (!resetForm.getnewPassword().equals(resetForm.getconfirmNewPassword())) {
       model.addAttribute("confirmPasswordError", Boolean.TRUE);
+      model.addAttribute("reason","New password and confirm password does not match");
       isError = Boolean.TRUE;
     } else {
       // set new password in the user model
-      User userObj = new User(resetForm.getbannerId(), userService);
       userObj.setPassword(CommonUtil.getInstance().passwordEncoder().encode(resetForm.getconfirmNewPassword()));
       if (!userService.updatePassword(userObj)) {
         model.addAttribute("passwordResetError", Boolean.TRUE);
+        model.addAttribute("reason","Error resetting password.");
         isError = Boolean.TRUE;
       }
     }
     if (isError) {
       model.addAttribute("resetForm", new ResetPassword(resetForm.getbannerId()));
+      model.addAttribute("isError", Boolean.TRUE);
+      model.addAttribute("sentEmail", userObj.getEmail());
       return "resetPassword";
     } else {
       return "redirect:" + redirectURL;
