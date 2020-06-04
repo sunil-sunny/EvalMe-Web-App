@@ -275,4 +275,20 @@ public class UserDaoImpl implements UserDao {
         return rowCount > 0;
     }
 
+	@Override
+	public ArrayList getUserRoles(ArrayList<Object> criteriaList) throws SQLException {
+		ArrayList rolesList = new ArrayList<>();
+		ArrayList<HashMap<String,Object>> valuesList = sqlImplementation.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
+		//
+		if ( valuesList != null && valuesList.size() > 0 )
+		{
+			for( HashMap valueMap : valuesList)
+			{
+				rolesList.add(valueMap.get("rolename"));
+			}
+		}
+		//
+		return rolesList;
+	}
+
 }

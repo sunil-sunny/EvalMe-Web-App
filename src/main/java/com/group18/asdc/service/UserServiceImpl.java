@@ -19,8 +19,8 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public Boolean authenticateByEmailAndPassword(String email, String password) {
-        ArrayList<Object> valuesList = CommonUtil.getInstance().convertQueryVariablesToArrayList(email, password);
+    public Boolean authenticateByEmailAndPassword(String bannerid, String password) {
+        ArrayList<Object> valuesList = CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerid, password);
         try {
             return userDao.authenticateByEmailAndPassword(valuesList);
         } catch (SQLException e) {
@@ -73,9 +73,23 @@ public class UserServiceImpl implements UserService {
             return userDao.updatePassword(criteriaList, valueList);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("ttttttttttttt");
         }
         return Boolean.FALSE;
+    }
+
+    @Override
+    public ArrayList getUserRoles(String bannerid) {
+        
+        ArrayList rolesList = new ArrayList<>();
+        ArrayList<Object> criteriaList = CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerid);
+        try{
+            return userDao.getUserRoles(criteriaList);
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return rolesList;
     }
 
 }

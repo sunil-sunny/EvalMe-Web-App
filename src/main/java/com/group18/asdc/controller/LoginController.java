@@ -32,7 +32,13 @@ public class LoginController {
   @Autowired
   private UserService userService;
 
-  @RequestMapping(value = {"/login","/home","/"})
+  @RequestMapping("/")
+  public RedirectView redirectPage()
+  {
+    return new RedirectView("/login-success");
+  }
+
+  @RequestMapping(value = {"/login","/home"})
   public String login() {
 
     return "login.html";
@@ -48,18 +54,9 @@ public class LoginController {
 
   }
 
-  // @GetMapping("/greeting")
-  // public String greetingForm(HttpSession session) {
-  // System.out.println("wwwwwwwwwwwwwwwww" +
-  // session.getAttribute("RESET_PASSWORD"));
-  // return String.format("sssss");
-  // }
-
   @RequestMapping("/login-success")
   public RedirectView loginSuccess(Authentication authentication) {
     String redirectURL = CommonUtil.roleVsLandingPage.get(authentication.getAuthorities().iterator().next().toString());
-    System.out.println(
-        "ssssssssssssssss" + redirectURL + "qqqqqq" + authentication.getAuthorities().iterator().next().toString());
     return new RedirectView(redirectURL);
 
   }
