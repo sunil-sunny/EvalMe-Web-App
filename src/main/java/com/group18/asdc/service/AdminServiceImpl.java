@@ -1,11 +1,9 @@
 package com.group18.asdc.service;
 
-import com.group18.asdc.entities.CourseAdmin;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.group18.asdc.dao.AdminDao;
+import com.group18.asdc.entities.CourseAdmin;
 
 
 public class AdminServiceImpl implements AdminService{
@@ -26,13 +24,13 @@ public class AdminServiceImpl implements AdminService{
 
 		int id = courseadmin.getCourseId();
 		String courseid = String.valueOf(courseadmin.getCourseId());
-		String coursename = courseadmin.getCourseName().strip();
-		String instructid = courseadmin.getInstructorId().strip();
+		String coursename = courseadmin.getCourseName().trim();
+		String instructid = courseadmin.getInstructorId();
 
 
 		if(id!=0) {
 
-			if(id<0 || courseid.strip().length()!=4 ) {
+			if(id<0 || courseid.length()!=4 ) {
 				returnString = "invalidid";
 				return returnString;
 			}
@@ -151,7 +149,7 @@ public class AdminServiceImpl implements AdminService{
 			//check if courseid has 4 digits and is a positive integer 
 			//if not, set returnString to "invalidid"
 
-			if(courseId<0 || courseid.strip().length()!=4 ) {
+			if(courseId<0 || courseid.length()!=4 ) {
 				returnString = "invalidid";
 				return returnString;
 			}
