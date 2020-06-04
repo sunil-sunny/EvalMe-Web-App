@@ -29,4 +29,18 @@ public class GroupFormationToolUtil {
 			"b on a.courseid=b.courseid where a.roleid=4 and a.bannerid=?;";
 
 
+	public final static String checkCourseId="SELECT courseid from course where courseid=?";
+	public final static String checkCourseName="SELECT coursename from course where coursename=?";
+	public final static String checkInstructorId="SELECT bannerid from user where bannerid=?";
+	public final static String checkInstructorStudent="SELECT bannerid from courserole where roleid in (select roleid from role where rolename in ('STUDENT','TA')) and bannerid=?";
+	
+	public final static String createCourse1="insert into course(courseid,coursename) values (?,?)";
+	public final static String createCourse2="insert into courserole(roleid,courseid,bannerid) values ((select roleid from role where rolename='INSTRUCTOR'),?,?)";
+	public final static String checkcreateCourse2 = "select bannerid from courserole where courseid=? and bannerid=? and roleid=(select roleid from role where rolename='INSTRUCTOR')";
+	public final static String deletecreateCourse2 = "delete from courserole where courseid=? and roleid=(select roleid from role where rolename='INSTRUCTOR')";
+	
+	public final static String deleteCourse1="delete from courserole where courseid=?";
+	public final static String deleteCourse2="delete from course where courseid=?";
+	
+	public final static String useDatabase="use CSCI5308_18_DEVINT";
 }

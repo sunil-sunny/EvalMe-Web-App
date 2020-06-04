@@ -1,7 +1,6 @@
 package com.group18.asdc.entities;
 
 
-
 public class Registerbean {
 
 	public Registerbean() {
