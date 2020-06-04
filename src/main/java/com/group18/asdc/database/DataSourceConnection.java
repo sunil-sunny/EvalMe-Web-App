@@ -53,9 +53,9 @@ public class DataSourceConnection {
 	@Profile("dev")
 	@Bean
 	public String devDatabaseConnection() {
-		System.out.println("DB connection for DEV - H2");
-		System.out.println(driverClassName);
-		System.out.println(url);
+		//System.out.println("DB connection for DEV - H2");
+		//System.out.println(driverClassName);
+		//System.out.println(url);
 		return "DB connection for DEV - H2";
 	}
 

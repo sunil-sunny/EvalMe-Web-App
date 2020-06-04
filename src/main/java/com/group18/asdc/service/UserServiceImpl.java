@@ -62,7 +62,6 @@ public class UserServiceImpl implements UserService {
             userDao.loadUserWithBannerId(valuesList, userObj);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("ttttttttttttt");
         }
     }
 
