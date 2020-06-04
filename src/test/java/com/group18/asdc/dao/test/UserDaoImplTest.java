@@ -5,25 +5,51 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.group18.asdc.dao.UserDao;
+import com.group18.asdc.dao.UserDaoImpl;
+import com.group18.asdc.database.SQLMethods;
+import com.group18.asdc.database.SQLQueries;
 import com.group18.asdc.entities.User;
 
 @SpringBootTest
 public class UserDaoImplTest {
 
+	@InjectMocks
+	UserDao userDao = new UserDaoImpl();
+
+	@Mock
+	SQLMethods sqlMethods;
+
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
+
 	// test for isUserExists method
 	@Test
 	public void isUserExistsTestOne() {
 
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User user = null;
-		boolean isExist = userDaoImplMock.isUserExists(user);
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User user = null;
+		final boolean isExist = userDaoImplMock.isUserExists(user);
 		assertFalse(isExist);
 		// assertTrue(isExist);
 
@@ -32,10 +58,10 @@ public class UserDaoImplTest {
 	@Test
 	public void isUserExistsTestTwo() {
 
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User user = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User user = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
 		;
-		boolean isExist = userDaoImplMock.isUserExists(user);
+		final boolean isExist = userDaoImplMock.isUserExists(user);
 		assertTrue(isExist);
 
 	}
@@ -43,10 +69,10 @@ public class UserDaoImplTest {
 	@Test
 	public void isUserExistsTestThree() {
 
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User user = new User("Sachin", "Tendulkar", "B00999999", "sachin@dal.ca");
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User user = new User("Sachin", "Tendulkar", "B00999999", "sachin@dal.ca");
 		;
-		boolean isExist = userDaoImplMock.isUserExists(user);
+		final boolean isExist = userDaoImplMock.isUserExists(user);
 		assertFalse(isExist);
 
 	}
@@ -60,8 +86,8 @@ public class UserDaoImplTest {
 	@Test
 	public void getUserByIdTestOne() {
 
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User user = userDaoImplMock.getUserById("B00111111");
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User user = userDaoImplMock.getUserById("B00111111");
 		assertNull(user);
 
 	}
@@ -72,110 +98,197 @@ public class UserDaoImplTest {
 	@Test
 	public void getUserByIdTestTwo() {
 
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User user = userDaoImplMock.getUserById("");
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User user = userDaoImplMock.getUserById("");
 		assertNull(user);
 
 	}
-	
+
 	/*
-	 * Third test is to send a valid banner id and we should get the valid user object
+	 * Third test is to send a valid banner id and we should get the valid user
+	 * object
 	 */
 	@Test
 	public void getUserByIdTestThree() {
 
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User user = userDaoImplMock.getUserById("B00123456");
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User user = userDaoImplMock.getUserById("B00123456");
 		assertNotNull(user);
 
 	}
-	
-	//send an user who is instructor and student in course and we should get zero
+
+	// send an user who is instructor and student in course and we should get zero
 	@Test
 	public void filterEligibleUsersForCourseTestOne() {
-		
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User instructorOne = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
-		User studentFive = new User("Shane", "Warne", "B00654194", "shane@dal.ca");
-		List<User> userList=Arrays.asList(instructorOne,studentFive);
-		List<User> eligiList=userDaoImplMock.filterEligibleUsersForCourse(userList, 1);
+
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User instructorOne = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
+		final User studentFive = new User("Shane", "Warne", "B00654194", "shane@dal.ca");
+		final List<User> userList = Arrays.asList(instructorOne, studentFive);
+		final List<User> eligiList = userDaoImplMock.filterEligibleUsersForCourse(userList, 1);
 		assertEquals(0, eligiList.size());
 	}
-	
-	/*sending two users where one is eligible and the other is not eligible
-	 * and we should only get one user
+
+	/*
+	 * sending two users where one is eligible and the other is not eligible and we
+	 * should only get one user
 	 */
-	
+
 	@Test
 	public void filterEligibleUsersForCourseTestTwo() {
-		
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User instructorOne = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
-		User studentThree = new User("Brett", "Lee", "B00852693", "ricky@dal.ca");
-		List<User> userList=Arrays.asList(instructorOne,studentThree);
-		List<User> eligiList=userDaoImplMock.filterEligibleUsersForCourse(userList, 1);
+
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User instructorOne = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
+		final User studentThree = new User("Brett", "Lee", "B00852693", "ricky@dal.ca");
+		final List<User> userList = Arrays.asList(instructorOne, studentThree);
+		final List<User> eligiList = userDaoImplMock.filterEligibleUsersForCourse(userList, 1);
 		assertEquals(1, eligiList.size());
 	}
-	
-	//sending both eligible users and we should get both
+
+	// sending both eligible users and we should get both
 	@Test
 	public void filterEligibleUsersForCourseTestThree() {
-		
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User studentTwo = new User("Glenn", "Maxwell", "B00753159", "glenn@dal.ca");
-		User studentThree = new User("Brett", "Lee", "B00852693", "ricky@dal.ca");
-		List<User> userList=Arrays.asList(studentTwo,studentThree);
-		List<User> eligiList=userDaoImplMock.filterEligibleUsersForCourse(userList, 1);
+
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User studentTwo = new User("Glenn", "Maxwell", "B00753159", "glenn@dal.ca");
+		final User studentThree = new User("Brett", "Lee", "B00852693", "ricky@dal.ca");
+		final List<User> userList = Arrays.asList(studentTwo, studentThree);
+		final List<User> eligiList = userDaoImplMock.filterEligibleUsersForCourse(userList, 1);
 		assertEquals(2, eligiList.size());
 	}
-	
+
 	/*
-	 * Below test is done by sending valid course id and and we should get all 5 users
-	 * for course id 1
+	 * Below test is done by sending valid course id and and we should get all 5
+	 * users for course id 1
 	 */
-	
+
 	@Test
 	public void getAllUsersByCourseTestOne() {
 
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		List<User> allUsers=userDaoImplMock.getAllUsersByCourse(1);
-		assertEquals(5, allUsers.size());	
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final List<User> allUsers = userDaoImplMock.getAllUsersByCourse(1);
+		assertEquals(5, allUsers.size());
 	}
-	
+
 	/*
-	 * second test is done by sending invalid course id and we get zero users for that
+	 * second test is done by sending invalid course id and we get zero users for
+	 * that
 	 */
 	@Test
 	public void getAllUsersByCourseTestTwo() {
 
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		List<User> allUsers=userDaoImplMock.getAllUsersByCourse(10);
-		assertEquals(0, allUsers.size());	
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final List<User> allUsers = userDaoImplMock.getAllUsersByCourse(10);
+		assertEquals(0, allUsers.size());
 	}
-	
+
 	/*
 	 * Below test carries out by sending valid course id and get the instructor
 	 */
 	@Test
 	public void getInstructorForCourseTestOne() {
-		
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User instructor=userDaoImplMock.getInstructorForCourse(2);
+
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User instructor = userDaoImplMock.getInstructorForCourse(2);
 		assertNotNull(instructor);
-		
+
 	}
-	
+
 	/*
-	 * Below test carries out by sending invalid course id and get the the null object
+	 * Below test carries out by sending invalid course id and get the the null
+	 * object
 	 */
-	
+
 	@Test
 	public void getInstructorForCourseTestTwo() {
-		
-		UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
-		User instructor=userDaoImplMock.getInstructorForCourse(10);
+
+		final UserDaoImplMock userDaoImplMock = new UserDaoImplMock();
+		final User instructor = userDaoImplMock.getInstructorForCourse(10);
 		assertNull(instructor);
+
+	}
+
+	private ArrayList getDefaultUserObj() {
+		final ArrayList<HashMap<String, Object>> userList = new ArrayList<HashMap<String, Object>>();
+		//
+		final HashMap valueMap = new HashMap<>();
+		valueMap.put("bannerid", "B00838575");
+		valueMap.put("emailid", "kr630601@dal.ca");
+		valueMap.put("password", "karthikk");
+		valueMap.put("firstname", "Karthikk");
+		valueMap.put("lastname", "Tamil");
+
+		userList.add(valueMap);
+
+		return userList;
+	}
+
+	@Test
+	public void loadUserWithBannerIdTest() throws SQLException {
+		final User userObj = new User();
+		final ArrayList criteriaList = new ArrayList<>();
+		criteriaList.add("B00838575");
+		//
 		
+		when(sqlMethods.selectQuery(isA(String.class), isA(ArrayList.class))).thenReturn(getDefaultUserObj());
+		userDao.loadUserWithBannerId(criteriaList, userObj);
+		//
+		assertEquals("kr630601@dal.ca", userObj.getEmail());
+		assertEquals("Karthikk", userObj.getFirstName());
+		assertEquals("B00838575", userObj.getBannerId());
+
+		verify(sqlMethods, times(1)).selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), criteriaList);
+
+	}
+
+	@Test
+	public void loadUserNotAvailableTest() throws SQLException {
+		final User userObj = new User();
+		final ArrayList criteriaList = new ArrayList<>();
+		criteriaList.add("B00838575");
+		//
+		
+		when(sqlMethods.selectQuery(isA(String.class), isA(ArrayList.class))).thenReturn(new ArrayList<>());
+		userDao.loadUserWithBannerId(criteriaList, userObj);
+		//
+		assertNull(userObj.getBannerId());
+
+		verify(sqlMethods, times(1)).selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), criteriaList);
+
+	}
+
+	@Test
+	public void updatePasswordTest() throws SQLException{
+		final ArrayList criteriaList = new ArrayList<>();
+		criteriaList.add("B00838575");
+		//
+		final ArrayList valuesList = new ArrayList<>();
+		valuesList.add("tamilmani");
+		//
+		when(sqlMethods.updateQuery(isA(String.class), isA(ArrayList.class), isA(ArrayList.class))).thenReturn(new Integer(1));
+		//
+		assertTrue(userDao.updatePassword(criteriaList, valuesList));
+		//
+		verify(sqlMethods, times(1)).updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valuesList , criteriaList);
+		
+
+	}
+
+	@Test
+	public void updatePasswordFalseTest() throws SQLException{
+		final ArrayList criteriaList = new ArrayList<>();
+		criteriaList.add("B00838575");
+		//
+		final ArrayList valuesList = new ArrayList<>();
+		valuesList.add("tamilmani");
+		//
+		when(sqlMethods.updateQuery(isA(String.class), isA(ArrayList.class), isA(ArrayList.class))).thenReturn(new Integer(0));
+		//
+		assertFalse(userDao.updatePassword(criteriaList, valuesList));
+		//
+		verify(sqlMethods, times(1)).updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valuesList , criteriaList);
+		
+
 	}
 
 }

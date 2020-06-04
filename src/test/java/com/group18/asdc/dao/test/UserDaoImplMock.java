@@ -66,12 +66,6 @@ public class UserDaoImplMock implements UserDao {
 	}
 
 	@Override
-	public Boolean authenticateByEmailAndPassword(ArrayList<Object> valueList) throws SQLException {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
 	public boolean isUserExists(User user) {
 		boolean isExists = false;
 
@@ -145,32 +139,31 @@ public class UserDaoImplMock implements UserDao {
 
 	@Override
 	public User getInstructorForCourse(int courseId) {
-		
-		User instrUser=null;
-		for(Course theCourse:UserDaoImplMock.coursesDetails) {
-			
-			if(theCourse.getCourseId()==courseId) {
-				instrUser=theCourse.getInstructorName();
+
+		User instrUser = null;
+		for (Course theCourse : UserDaoImplMock.coursesDetails) {
+
+			if (theCourse.getCourseId() == courseId) {
+				instrUser = theCourse.getInstructorName();
 			}
-			
+
 		}
 		return instrUser;
 	}
 
 	@Override
 	public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) throws SQLException {
-		// TODO Auto-generated method stub
+		
+		for (User theUser : UserDaoImplMock.userList) {
+			if (theUser.getBannerId() == "B00123456") {
+				userObj = theUser;
+			}
+		}
 
 	}
 
 	@Override
 	public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valuesList) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ArrayList getUserRoles(ArrayList<Object> criteriaList) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}

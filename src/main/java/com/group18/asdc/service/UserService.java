@@ -20,7 +20,7 @@ public interface UserService {
 
 	public Boolean updatePassword(User userObj);
 
-	public Boolean authenticateByEmailAndPassword(String bannerid, String password);
+	// public Boolean authenticateByEmailAndPassword(String bannerid, String password);
 
-	public ArrayList getUserRoles(String bannerid);
+	// public ArrayList getUserRoles(String bannerid);
 }

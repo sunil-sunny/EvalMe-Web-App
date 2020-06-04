@@ -32,10 +32,10 @@ public class UserDaoImpl implements UserDao {
 	
 	private Logger log=Logger.getLogger(UserDaoImpl.class.getName());
 
-	@Override
-	public Boolean authenticateByEmailAndPassword(ArrayList<Object> valuesList) throws SQLException {
-		return sqlImplementation.selectQuery(SQLQueries.USER_AUTH_BY_EMAIL_PASSWORD.toString(), valuesList).size() == 1;
-	}
+	// @Override
+	// public Boolean authenticateByEmailAndPassword(ArrayList<Object> valuesList) throws SQLException {
+	// 	return sqlImplementation.selectQuery(SQLQueries.USER_AUTH_BY_EMAIL_PASSWORD.toString(), valuesList).size() == 1;
+	// }
 
 	@Override
 	public boolean isUserExists(User user) {
@@ -276,20 +276,20 @@ public class UserDaoImpl implements UserDao {
         return rowCount > 0;
     }
 
-	@Override
-	public ArrayList getUserRoles(ArrayList<Object> criteriaList) throws SQLException {
-		ArrayList rolesList = new ArrayList<>();
-		ArrayList<HashMap<String,Object>> valuesList = sqlImplementation.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
-		//
-		if ( valuesList != null && valuesList.size() > 0 )
-		{
-			for( HashMap valueMap : valuesList)
-			{
-				rolesList.add(valueMap.get("rolename"));
-			}
-		}
-		//
-		return rolesList;
-	}
+	// @Override
+	// public ArrayList getUserRoles(ArrayList<Object> criteriaList) throws SQLException {
+	// 	ArrayList rolesList = new ArrayList<>();
+	// 	ArrayList<HashMap<String,Object>> valuesList = sqlImplementation.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
+	// 	//
+	// 	if ( valuesList != null && valuesList.size() > 0 )
+	// 	{
+	// 		for( HashMap valueMap : valuesList)
+	// 		{
+	// 			rolesList.add(valueMap.get("rolename"));
+	// 		}
+	// 	}
+	// 	//
+	// 	return rolesList;
+	// }
 
 }
