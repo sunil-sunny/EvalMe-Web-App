@@ -7,9 +7,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
 import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.group18.asdc.controller.CourseController;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.GroupFormationToolUtil;
@@ -17,12 +22,15 @@ import com.group18.asdc.util.GroupFormationToolUtil;
 @Repository
 public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
+	private Logger log=Logger.getLogger(CourseController.class.getName());
+
 	@Autowired
 	private DataSource dataSource;
 
 	@Autowired
 	private UserDao userDao;
 
+	
 	@Override
 	public List<Course> getAllCourses() {
 
@@ -33,6 +41,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		ResultSet resultSetAllCourseRoles = null;
 		List<Course> allCourses = new ArrayList<Course>();
 		try {
+			log.info("In CourseDao to get all courses");
 			con = dataSource.getConnection();
 			getCourses = con.createStatement();
 			resultSetAllCourses = getCourses.executeQuery(GroupFormationToolUtil.getAllCourses);
@@ -85,6 +94,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				if (resultSetAllCourseRoles != null) {
 					resultSetAllCourseRoles.close();
 				}
+				log.info("closing all the data connections in after getting all courses");
 
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -102,6 +112,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		PreparedStatement statement = null;
 		try {
 			connection = dataSource.getConnection();
+			log.info("In Course Dao allocating TA");
 			statement = connection.prepareStatement(GroupFormationToolUtil.allocateTa);
 			statement.setInt(1, courseId);
 			statement.setString(2, user.getBannerId());
@@ -127,6 +138,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			log.info("Closing the connections after allocating TA");
 		}
 
 		return false;
@@ -145,6 +157,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 			for (User user : studentList) {
 				queryToEnrollStudent = connection.prepareStatement(GroupFormationToolUtil.enrollStudentIntoCourse);
+				log.info("In Course Controller for enrolling students into course");
 				queryToEnrollStudent.setInt(1, courseId);
 				queryToEnrollStudent.setString(2, user.getBannerId());
 				int isEnrolled = queryToEnrollStudent.executeUpdate();
@@ -167,6 +180,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				if (queryToEnrollStudent != null) {
 					queryToEnrollStudent.close();
 				}
+				log.info("Closed after enrolling students into course");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -188,6 +202,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			connection = dataSource.getConnection();
 			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsStudent);
 			preparedStatement.setString(1,user.getBannerId());
+			log.info("In course Dao after getting all courses where user is Student");
 			resultset=preparedStatement.executeQuery();
 			Course course=null;
 			while(resultset.next()) {
@@ -212,6 +227,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				if(resultset !=null) {
 					resultset.close();
 				}
+				log.info("Closing connection after getting all courses where user is Student");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -234,6 +250,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsInstructor);
 			preparedStatement.setString(1,user.getBannerId());
 			resultset=preparedStatement.executeQuery();
+			log.info("In course Dao after getting all courses where user is Instructor");
 			Course course=null;
 			while(resultset.next()) {
 				course=new Course();
@@ -260,6 +277,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				log.info("closing connection after getting all courses where user is Instructor");
 			}
 
 		}
@@ -278,6 +296,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsTA);
 			preparedStatement.setString(1,user.getBannerId());
 			resultset=preparedStatement.executeQuery();
+			log.info("In course Dao after getting all courses where user is TA");
 			Course course=null;
 			while(resultset.next()) {
 				course=new Course();
@@ -304,6 +323,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				log.info("Closed connection after getting all courses where user is TA");
 			}
 
 		}

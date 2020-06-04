@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -27,6 +28,8 @@ public class UserDaoImpl implements UserDao {
 	private SQLMethods sqlImplementation;
 	@Autowired
 	private DataSource dataSource;
+	
+	private Logger log=Logger.getLogger(UserDaoImpl.class.getName());
 
 	@Override
 	public Boolean authenticateByEmailAndPassword(ArrayList<Object> valuesList) throws SQLException {
@@ -37,12 +40,13 @@ public class UserDaoImpl implements UserDao {
 	public boolean isUserExists(User user) {
 		Connection connection = null;
 		ResultSet resultSet = null;
-		Statement checkUser = null;
+		PreparedStatement checkUser = null;
 		try {
 			connection = dataSource.getConnection();
-			String userSql = "select * from CSCI5308_18_DEVINT.user where bannerid='" + user.getBannerId() + "';";
-			checkUser = connection.createStatement();
-			resultSet = checkUser.executeQuery(userSql);
+			checkUser = connection.prepareStatement(GroupFormationToolUtil.isUserExists);
+			checkUser.setString(1, user.getBannerId());
+			resultSet = checkUser.executeQuery();
+			log.info("In User Dao to check if user exists or not");
 			if (resultSet.next()) {
 				return true;
 			} else {
@@ -64,6 +68,7 @@ public class UserDaoImpl implements UserDao {
 				if (checkUser != null) {
 					checkUser.close();
 				}
+				log.info("closing connection after having a check if user exists or not");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -85,6 +90,7 @@ public class UserDaoImpl implements UserDao {
 			String userSql = GroupFormationToolUtil.getUserById;
 			getUser = connection.prepareStatement(userSql);
 			getUser.setString(1, bannerId);
+			log.info("In User Dao to get the user for given banner id");
 			resultSet = getUser.executeQuery();
 
 			while (resultSet.next()) {
@@ -111,6 +117,7 @@ public class UserDaoImpl implements UserDao {
 				if (getUser != null) {
 					getUser.close();
 				}
+				log.info("closing the connection after getting user by banner id");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -128,6 +135,7 @@ public class UserDaoImpl implements UserDao {
 		List<User> eligibleStudents = new ArrayList<User>();
 		List<User> existingStudentsOfCourse = this.getAllUsersByCourse(courseId);
 
+		log.info("In User Dao to get filterEligible ");
 		for (User student : studentList) {
 
 			boolean isExists = false;
@@ -158,7 +166,7 @@ public class UserDaoImpl implements UserDao {
 		try {
 			connection = dataSource.getConnection();
 			preparedStatement = connection.prepareStatement(GroupFormationToolUtil.getAlluserRelatedToCourse);
-
+            log.info("In users dao getting all users based on course id");
 			preparedStatement.setInt(1, courseId);
 			resultSetForStudentList = preparedStatement.executeQuery();
 
@@ -185,6 +193,7 @@ public class UserDaoImpl implements UserDao {
 				if (preparedStatement != null) {
 					preparedStatement.close();
 				}
+				log.info("Closing connections after getting users based on course");
 
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -209,6 +218,7 @@ public class UserDaoImpl implements UserDao {
 			preparedStatement.setInt(1, courseId);
 			resultSet = preparedStatement.executeQuery();
 			String bannerId = null;
+			log.info("In user dao for getting Instructor for course id");
 			while (resultSet.next()) {
 				bannerId = resultSet.getString("bannerid");
 			}
@@ -233,6 +243,7 @@ public class UserDaoImpl implements UserDao {
 				if (resultSet != null) {
 					preparedStatement.close();
 				}
+				log.info("closing connection after getting instructor for a course");
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
