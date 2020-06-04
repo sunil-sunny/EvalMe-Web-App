@@ -19,7 +19,7 @@ public class CommonUtil {
     };
 
     static {
-        roleVsLandingPage.put(userRoles.ADMIN.name(), "/admin");
+        roleVsLandingPage.put(userRoles.ADMIN.name(), "/adminpage");
         roleVsLandingPage.put(userRoles.GUEST.name(), "/coursepage");
     }
 

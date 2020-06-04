@@ -8,7 +8,7 @@ import com.group18.asdc.entities.User;
 
 public interface UserDao {
     
-    public Boolean authenticateByEmailAndPassword(ArrayList<Object> valueList) throws SQLException;
+    // public Boolean authenticateByEmailAndPassword(ArrayList<Object> valueList) throws SQLException;
     public boolean isUserExists(User user);
 	public User getUserById(String bannerId);
 	public List<User> filterEligibleUsersForCourse(List<User> studentList,int courseId);
@@ -19,5 +19,5 @@ public interface UserDao {
 
     public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valuesList)throws SQLException;
 
-    public ArrayList getUserRoles(ArrayList<Object> criteriaList)throws SQLException;
+    // public ArrayList getUserRoles(ArrayList<Object> criteriaList)throws SQLException;
 }

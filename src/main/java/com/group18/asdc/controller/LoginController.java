@@ -33,12 +33,11 @@ public class LoginController {
   private UserService userService;
 
   @RequestMapping("/")
-  public RedirectView redirectPage()
-  {
+  public RedirectView redirectPage() {
     return new RedirectView("/login-success");
   }
 
-  @RequestMapping(value = {"/login","/home"})
+  @RequestMapping(value = { "/login", "/home" })
   public String login() {
 
     return "login.html";
@@ -78,11 +77,17 @@ public class LoginController {
     /*
     * 
     */
-    String genPassword = CommonUtil.getInstance().generateResetPassword();
-    session.setAttribute("RESET_PASSWORD", genPassword);
-    model.addAttribute("resetForm", new ResetPassword(bannerId));
-    emailService.sendSimpleMessage(userObj.getEmail(), "Reset Password", "Your reset password is: " + genPassword);
-    return "resetPassword.html";
+    if (userObj.getEmail() != null && userObj.getEmail().isEmpty()) {
+      String genPassword = CommonUtil.getInstance().generateResetPassword();
+      session.setAttribute("RESET_PASSWORD", genPassword);
+      model.addAttribute("resetForm", new ResetPassword(bannerId));
+      model.addAttribute("sentEmail", userObj.getEmail());
+      emailService.sendSimpleMessage(userObj.getEmail(), "Reset Password", "Your reset password is: " + genPassword);
+      return "resetPassword.html";
+    } else {
+      model.addAttribute("BANNER_ID_EXIST", Boolean.FALSE);
+      return "forgot-password.html";
+    }
   }
 
   @PostMapping("/resetPassword")
