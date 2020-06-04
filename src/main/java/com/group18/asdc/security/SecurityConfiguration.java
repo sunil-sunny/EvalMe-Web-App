@@ -37,7 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		 * "TA").antMatchers("/uploadstudents").hasAnyRole("INSTRUCTOR", "TA");
 		 */
               http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login-error")
-                .defaultSuccessUrl("/").permitAll().and().logout()
+                .defaultSuccessUrl("/login-success").permitAll().and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
         
         // .deleteCookies("JSESSIONID")
