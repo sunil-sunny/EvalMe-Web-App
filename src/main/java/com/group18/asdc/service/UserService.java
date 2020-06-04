@@ -1,12 +1,12 @@
 package com.group18.asdc.service;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.group18.asdc.entities.User;
 
 public interface UserService {
-
-	Boolean authenticateByEmailAndPassword(String email, String password);
 
 	public boolean isUserExists(User user);
 
@@ -16,7 +16,11 @@ public interface UserService {
 
 	public List<User> getAllUsersByCourse(int courseId);
 	
-	void loadUserWithBannerId(String bannerId, User userObj);
+	public void loadUserWithBannerId(String bannerId, User userObj);
 
-	Boolean updatePassword(User userObj);
+	public Boolean updatePassword(User userObj);
+
+	public Boolean authenticateByEmailAndPassword(String bannerid, String password);
+
+	public ArrayList getUserRoles(String bannerid);
 }

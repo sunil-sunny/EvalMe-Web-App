@@ -56,25 +56,25 @@ public class DataSourceConnection {
 		//System.out.println("DB connection for DEV - H2");
 		//System.out.println(driverClassName);
 		//System.out.println(url);
-		return "DB connection for DEV - H2";
+		return "DB Connection to DEV";
 	}
 
 	@Profile("test")
 	@Bean
 	public String testDatabaseConnection() {
-		System.out.println("DB Connection to RDS_TEST - Low Cost Instance");
+		System.out.println("DB Connection to TEST");
 		System.out.println(driverClassName);
 		System.out.println(url);
-		return "DB Connection to RDS_TEST - Low Cost Instance";
+		return "DB Connection to TEST";
 	}
 
 	@Profile("prod")
 	@Bean
 	public String prodDatabaseConnection() {
-		System.out.println("DB Connection to RDS_PROD - High Performance Instance");
+		System.out.println("DB Connection to PROD");
 		System.out.println(driverClassName);
 		System.out.println(url);
-		return "DB Connection to RDS_PROD - High Performance Instance";
+		return "DB Connection to PROD";
 	}
 
 	// @Bean

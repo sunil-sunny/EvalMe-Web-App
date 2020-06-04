@@ -23,10 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests()
-                .antMatchers("/public/**", "/forgot-password", "/registration", "/home", "/resetPassword").permitAll();
-
-		/*
+        /*
 		 * http.authorizeRequests().antMatchers("/instructedcourses").hasRole(
 		 * "INSTRUCTOR").antMatchers("/enrolledcourses")
 		 * .hasRole("STUDENT").antMatchers("/tacourses").hasRole("TA").antMatchers(
@@ -36,10 +33,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		 * "TA").antMatchers("/allocateTA") .hasAnyRole("INSTRUCTOR",
 		 * "TA").antMatchers("/uploadstudents").hasAnyRole("INSTRUCTOR", "TA");
 		 */
-              http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login-error")
-                .defaultSuccessUrl("/").permitAll().and().logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
-        
+
+        http.authorizeRequests()
+                .antMatchers("/public/**", "/forgot-password", "/registration", "/home", "/resetPassword").permitAll()
+                .anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login-error")
+                .defaultSuccessUrl("/login-success").permitAll().and().logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
+                .invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll();
         // .deleteCookies("JSESSIONID")
         // .and()
         // .httpBasic();
