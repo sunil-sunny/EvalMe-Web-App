@@ -3,89 +3,69 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="ISO-8859-1">
-<title>Home Page</title>
-<style>
-h1 {
-	text-align: center;
-}
+<title>EvalMe</title>
+<link th:href="@{/public/bootstrap.min.css}" rel="stylesheet">
 
-p {
+<style>
+h1, h3 {
 	text-align: center;
 }
 
 form {
 	text-align: center;
 }
-
-body {
-	margin: 0;
-	font-family: Arial, Helvetica, sans-serif;
-}
-
-.topnav {
-	overflow: hidden;
-	background-color: #333;
-}
-
-.topnav a {
-	float: left;
-	color: #f2f2f2;
-	text-align: center;
-	padding: 14px 16px;
-	text-decoration: none;
-	font-size: 17px;
-}
-
-.topnav a:hover {
-	background-color: #ddd;
-	color: black;
-}
-
-.topnav a.active {
-	background-color: #4CAF50;
-	color: white;
-}
 </style>
-
 </head>
 <body>
 
-	<div class="topnav">
-		<a th:href="@{/userhome}">Course List</a> <a
-			sec:authorize="hasAuthority('STUDENT')" th:href="@{/enrolledcourses}">Courses
-			as student</a> <a sec:authorize="hasAuthority('INSTRUCTOR')"
-			th:href="@{/instructedcourses}">Courses as Instructor</a> <a
-			sec:authorize="hasAuthority('TA')" th:href="@{/tacourses}">Courses
-			as TA</a> <a th:href="@{/logout}">Logout</a>
-	</div>
+	<div th:replace="fragments/courseheader :: header"></div>
 
-	<div>
-
-
+	<br>
+	<div style="width:800px; margin:0 auto;">
 		<h1 th:text="${coursename}"></h1>
-		<br>
-		<h1 th:text="${result}"></h1>
-		<form th:action="@{/allocateTA}" method="post">
-			<div>
+		<br> <br>
+		<hr>
+		<form class="form-inline" th:action="@{/allocateTA}" method="post">
+			<div class="form-group mx-sm-3 mb-2">
 				<input type="hidden" th:value="${courseId}" name="courseid" /> <input
-					type="hidden" th:value="${coursename}" name="coursename" /> <label
-					for="TA">Allocate TA: </label> <input type="text" name="TA" id="TA">
-				<input type="submit" value="submit" />
+					type="hidden" th:value="${coursename}" name="coursename" />
+				<h2>Allocate TA:</h2>
+				<br>
+				<input type="text" class="form-control" placeholder="Banner Id"
+					name="TA" id="TA">
 			</div>
+			<input type="submit" value="Allocate" class="btn btn-primary mb-2" />
 		</form>
+		<h3 style="color: #5d7fa6;" th:text="${result}"></h3>
+
+
+		<br> <br> <br>
+		<hr>
 		<br>
 
-		<p th:text="${resultEnrolling}"></p>
-		<form th:action="@{/uploadstudents}" method="post"
-			enctype="multipart/form-data">
-			<div>
-				<input type="hidden" th:value="${courseId}" name="courseid" /> <input
-					type="hidden" th:value="${coursename}" name="coursename" /> <label
-					for="file">Enroll Students: </label> <input type="file" name="file"
-					id="file" accept=".csv"> <input type="submit"
-					value="upload" />
+			<div style="width:800px; margin:0 auto;" class="input-group">
+
+				<div class="custom-file">
+					<form style="text-align: center;" class="form-inline"
+						th:action="@{/uploadstudents}" method="post"
+						enctype="multipart/form-data">
+						<div>
+							<input type="hidden" th:value="${courseId}" name="courseid" /> <input
+								type="hidden" th:value="${coursename}" name="coursename" />
+							<h2>Enroll Students:</h2>
+							<br>
+							<input type="file" name="file" id="file" accept=".csv"> <input
+								type="submit" id="file" value="upload" class="btn btn-primary" />
+						</div>
+					</form>
+				</div>
 			</div>
-		</form>
+			<br>
+			<br>
+			<h3 class="text-justify" style="color: #5d7fa6;"
+				th:text="${resultEnrolling}"></h3>
+
+	
 
 
 	</div>
