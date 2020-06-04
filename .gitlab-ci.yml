@@ -20,7 +20,7 @@ build:
     paths:
       - .m2/repository
   tags:
-    - grad
+    - ugrad
   script: ./mvnw package
  # artifacts:
   #  paths:
