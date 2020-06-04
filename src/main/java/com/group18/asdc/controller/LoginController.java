@@ -77,7 +77,7 @@ public class LoginController {
     /*
     * 
     */
-    if (userObj.getEmail() != null && userObj.getEmail().isEmpty()) {
+    if (userObj.getEmail() != null && !userObj.getEmail().isEmpty()) {
       String genPassword = CommonUtil.getInstance().generateResetPassword();
       session.setAttribute("RESET_PASSWORD", genPassword);
       model.addAttribute("resetForm", new ResetPassword(bannerId));
