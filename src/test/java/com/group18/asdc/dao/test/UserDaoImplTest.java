@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -243,8 +243,8 @@ public class UserDaoImplTest {
 
 	@Test
 	public void loadUserNotAvailableTest() throws SQLException {
-		final User userObj = new User();
-		final ArrayList criteriaList = new ArrayList<>();
+		User userObj = new User();
+		ArrayList criteriaList = new ArrayList<>();
 		criteriaList.add("B00838575");
 		//
 		
@@ -256,6 +256,18 @@ public class UserDaoImplTest {
 		verify(sqlMethods, times(1)).selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), criteriaList);
 
 	}
+
+	@Test(expected = SQLException.class)
+	public void loadBannerIdExceptionTest() throws SQLException
+	{
+		when(sqlMethods.selectQuery(isA(String.class), isA(ArrayList.class))).thenThrow(new SQLException());
+		
+		User userObj = new User();
+		ArrayList criteriaList = new ArrayList<>();
+		criteriaList.add("B00838575");
+		userDao.loadUserWithBannerId(criteriaList, userObj);
+	}
+	
 
 	@Test
 	public void updatePasswordTest() throws SQLException{
@@ -288,6 +300,21 @@ public class UserDaoImplTest {
 		//
 		verify(sqlMethods, times(1)).updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valuesList , criteriaList);
 		
+
+	}
+
+	@Test(expected = SQLException.class)
+	public void updatePasswordxceptionTest() throws SQLException
+	{
+		ArrayList criteriaList = new ArrayList<>();
+		criteriaList.add("B00838575");
+		//
+		ArrayList valuesList = new ArrayList<>();
+		valuesList.add("tamilmani");
+		//
+		when(sqlMethods.updateQuery(isA(String.class), isA(ArrayList.class), isA(ArrayList.class))).thenThrow(new SQLException());
+		//
+		userDao.updatePassword(criteriaList, valuesList);
 
 	}
 
