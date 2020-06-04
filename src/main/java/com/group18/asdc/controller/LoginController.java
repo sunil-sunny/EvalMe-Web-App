@@ -114,5 +114,11 @@ public class LoginController {
     }
 
   }
+  
+  @GetMapping("/error")
+  public String getErrorPage() {
+	  
+	  return "error";
+  }
 
 }
