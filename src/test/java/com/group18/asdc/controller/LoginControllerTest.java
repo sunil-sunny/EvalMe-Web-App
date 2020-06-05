@@ -1,57 +1,38 @@
 package com.group18.asdc.controller;
 
-import com.group18.asdc.EvalMeMain;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
+
 import com.group18.asdc.entities.User;
-import com.group18.asdc.security.SecurityConfiguration;
 import com.group18.asdc.service.EmailService;
-import com.group18.asdc.service.EmailServiceImpl;
 import com.group18.asdc.service.UserService;
-import com.group18.asdc.service.test.UserServiceImplMock;
 import com.group18.asdc.util.CommonUtil;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.servlet.ModelAndView;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.sql.DataSource;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(LoginController.class)
@@ -59,7 +40,7 @@ public class LoginControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    
+
     @MockBean
     UserService userService;
 
@@ -95,9 +76,8 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void resetPasswordTest() throws Exception
-    {
-        
+    public void resetPasswordTest() throws Exception {
+
         doAnswer(invocation -> {
             String arg0 = invocation.getArgument(0);
             User arg1 = invocation.getArgument(1);
@@ -112,23 +92,19 @@ public class LoginControllerTest {
             String arg0 = invocation.getArgument(0);
             String arg1 = invocation.getArgument(1);
             String arg2 = invocation.getArgument(1);
-            
+
             assertEquals("justin@dal.ca", arg0);
             return null;
-        }).when(emailService).sendSimpleMessage(isA(String.class), isA(String.class),isA(String.class));
+        }).when(emailService).sendSimpleMessage(isA(String.class), isA(String.class), isA(String.class));
 
-        mockMvc.perform(get("/resetPassword").param("username", "B00838575"))
-                .andExpect(status().isOk())             
-                .andExpect(model().attribute("sentEmail","justin@dal.ca"));
-            //    .andExpect(model().attribute("BANNER_ID_NOT_EXIST",false));
+        mockMvc.perform(get("/resetPassword").param("username", "B00838575")).andExpect(status().isOk())
+                .andExpect(model().attribute("sentEmail", "justin@dal.ca"));
 
-        
     }
 
     @Test
-    public void resetPasswordUserNotAvaiableTest() throws Exception
-    {
-        
+    public void resetPasswordUserNotAvaiableTest() throws Exception {
+
         doAnswer(invocation -> {
             String arg0 = invocation.getArgument(0);
             User arg1 = invocation.getArgument(1);
@@ -136,11 +112,85 @@ public class LoginControllerTest {
             return null;
         }).when(userService).loadUserWithBannerId(isA(String.class), isA(User.class));
 
-        mockMvc.perform(get("/resetPassword").param("username", "B00838575"))
-                .andExpect(status().isOk())                
-               .andExpect(model().attribute("BANNER_ID_NOT_EXIST",true));
+        mockMvc.perform(get("/resetPassword").param("username", "B00838575")).andExpect(status().isOk())
+                .andExpect(model().attribute("BANNER_ID_NOT_EXIST", true));
 
-        
+    }
+
+    @Test
+    public void verifyResetPasswordTest() throws Exception {
+
+        //
+        when(userService.updatePassword(isA(User.class))).thenReturn(Boolean.TRUE);
+
+        //
+        mockMvc.perform(post("/resetPassword")
+            .param("bannerId","B00838575")
+            .param("generatedPassword","PASSWORD")
+            .param("newPassword","NEWPASSWORD")
+            .param("confirmNewPassword","NEWPASSWORD")
+            .sessionAttr("RESET_PASSWORD", "PASSWORD")
+            .with(csrf()))
+            .andExpect(redirectedUrl("login-success"));                
+               
+
+    }
+
+    @Test
+    public void verifyResetPasswordFailTest() throws Exception {
+
+        //
+        when(userService.updatePassword(isA(User.class))).thenReturn(Boolean.TRUE);
+
+        //
+        mockMvc.perform(post("/resetPassword")
+            .param("bannerId","B00838575")
+            .param("generatedPassword","NEWPASSWORD")
+            .param("newPassword","NEWPASSWORD")
+            .param("confirmNewPassword","NEWPASSWORD")
+            .sessionAttr("RESET_PASSWORD", "PASSWORD")
+            .with(csrf()))
+            .andExpect(model().attribute("genPasswordError", true));
+               
+
+    }
+
+    @Test
+    public void verifyResetPasswordmatchErrorTest() throws Exception {
+
+        //
+        when(userService.updatePassword(isA(User.class))).thenReturn(Boolean.TRUE);
+
+        //
+        mockMvc.perform(post("/resetPassword")
+            .param("bannerId","B00838575")
+            .param("generatedPassword","PASSWORD")
+            .param("newPassword","NEWPASSWORD")
+            .param("confirmNewPassword","PASSWORD")
+            .sessionAttr("RESET_PASSWORD", "PASSWORD")
+            .with(csrf()))
+            .andExpect(model().attribute("confirmPasswordError", true));
+               
+
+    }
+
+    @Test
+    public void verifyResetPasswordupdateErrorTest() throws Exception {
+
+        //
+        when(userService.updatePassword(isA(User.class))).thenReturn(Boolean.FALSE);
+
+        //
+        mockMvc.perform(post("/resetPassword")
+            .param("bannerId","B00838575")
+            .param("generatedPassword","PASSWORD")
+            .param("newPassword","NEWPASSWORD")
+            .param("confirmNewPassword","NEWPASSWORD")
+            .sessionAttr("RESET_PASSWORD", "PASSWORD")
+            .with(csrf()))
+            .andExpect(model().attribute("passwordResetError", true));
+               
+
     }
 
 
