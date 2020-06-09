@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDao.updatePassword(criteriaList, valueList);
         } catch (SQLException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
         return Boolean.FALSE;
     }
