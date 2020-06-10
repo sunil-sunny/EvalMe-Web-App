@@ -27,6 +27,15 @@ public class User implements UserInterface {
 		userService.loadUserWithBannerId(bannerId, this);
 	}
 
+	public Boolean isValidUser()
+	{
+		if( bannerId != null && !bannerId.isEmpty())
+		{
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}

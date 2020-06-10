@@ -16,10 +16,8 @@ import com.group18.asdc.util.GroupFormationToolUtil;
 @Repository
 public class AdminDaoImpl implements AdminDao {
 
-	@Autowired
 	private DataSource dataSource;
 
-	@Autowired
 	public AdminDaoImpl(DataSource theDataSource) {
 		super();
 		dataSource = theDataSource;

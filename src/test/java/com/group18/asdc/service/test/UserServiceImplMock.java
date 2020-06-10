@@ -39,17 +39,20 @@ public class UserServiceImplMock implements UserService {
 		UserDaoImplMock theDaoImplMock = new UserDaoImplMock();
 		ArrayList valueList = new ArrayList<>();
 		valueList.add(bannerId);
-		try {
-			theDaoImplMock.loadUserWithBannerId(valueList, userObj);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		theDaoImplMock.loadUserWithBannerId(valueList, userObj);
+		
 
 	}
 
 	@Override
 	public Boolean updatePassword(User userObj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList getUserRoles(User userObj) {
 		// TODO Auto-generated method stub
 		return null;
 	}

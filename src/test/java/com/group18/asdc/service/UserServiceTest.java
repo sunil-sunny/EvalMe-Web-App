@@ -43,7 +43,7 @@ public class UserServiceTest {
     }
 
     private User getDefaultUserObj() {
-        
+
         User userObj = new User();
         //
         userObj.setBannerId("B00838575");
@@ -69,18 +69,15 @@ public class UserServiceTest {
     public void loadUserWithBannerIdTest() {
         User userObj = new User();
         //
-        try {
-            doAnswer(invocation -> {
-                ArrayList arg0 = invocation.getArgument(0);
-                User arg1 = invocation.getArgument(1);
 
-                getDefaultUserObj(arg1);
-                assertEquals("B00838575", arg0.get(0));
-                return null;
-            }).when(userDao).loadUserWithBannerId(isA(ArrayList.class), isA(User.class));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        doAnswer(invocation -> {
+            ArrayList arg0 = invocation.getArgument(0);
+            User arg1 = invocation.getArgument(1);
+
+            getDefaultUserObj(arg1);
+            assertEquals("B00838575", arg0.get(0));
+            return null;
+        }).when(userDao).loadUserWithBannerId(isA(ArrayList.class), isA(User.class));
 
         String bannerId = "B00838575";
         userService.loadUserWithBannerId(bannerId, userObj);
@@ -91,11 +88,9 @@ public class UserServiceTest {
         assertEquals("Tamil", userObj.getLastName());
         ArrayList checkList = new ArrayList<>();
         checkList.add(bannerId);
-        try {
-            verify(userDao, times(1)).loadUserWithBannerId(checkList, userObj);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+        verify(userDao, times(1)).loadUserWithBannerId(checkList, userObj);
+
         ;
     }
 
@@ -103,16 +98,12 @@ public class UserServiceTest {
     public void loadUserWithBannerIdUnavailableTest() {
         User userObj = new User();
         //
-        try {
-            doAnswer(invocation -> {
-                ArrayList arg0 = invocation.getArgument(0);
-                User arg1 = invocation.getArgument(1);
-                assertEquals("B00838575", arg0.get(0));
-                return null;
-            }).when(userDao).loadUserWithBannerId(isA(ArrayList.class), isA(User.class));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        doAnswer(invocation -> {
+            ArrayList arg0 = invocation.getArgument(0);
+            User arg1 = invocation.getArgument(1);
+            assertEquals("B00838575", arg0.get(0));
+            return null;
+        }).when(userDao).loadUserWithBannerId(isA(ArrayList.class), isA(User.class));
 
         String bannerId = "B00838575";
         userService.loadUserWithBannerId(bannerId, userObj);
@@ -121,22 +112,13 @@ public class UserServiceTest {
         assertNull(userObj.getBannerId());
         ArrayList checkList = new ArrayList<>();
         checkList.add(bannerId);
-        try {
-            verify(userDao, times(1)).loadUserWithBannerId(checkList, userObj);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        verify(userDao, times(1)).loadUserWithBannerId(checkList, userObj);
         ;
     }
 
     @Test
-    public void checkUpdatePassword()
-    {
-        try {
-            when(userDao.updatePassword(isA(ArrayList.class), isA(ArrayList.class))).thenReturn(Boolean.TRUE);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void checkUpdatePassword() {
+        when(userDao.updatePassword(isA(ArrayList.class), isA(ArrayList.class))).thenReturn(Boolean.TRUE);
 
         User userObj = getDefaultUserObj();
         //
@@ -147,26 +129,7 @@ public class UserServiceTest {
         ArrayList<Object> valuesList = new ArrayList<Object>();
         valuesList.add("karthikk");
         //
-        try {
-            verify(userDao, times(1)).updatePassword(criteriaList, valuesList);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void checkErrorUpdatePassword()
-    {
-        try {
-            when(userDao.updatePassword(isA(ArrayList.class), isA(ArrayList.class))).thenThrow(new SQLException());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        User userObj = getDefaultUserObj();
-        //
-        assertEquals(Boolean.FALSE, userService.updatePassword(userObj));
-        
+        verify(userDao, times(1)).updatePassword(criteriaList, valuesList);
     }
 
 }

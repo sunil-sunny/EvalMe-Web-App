@@ -24,7 +24,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	private Logger log=Logger.getLogger(CourseController.class.getName());
 
-	@Autowired
 	private DataSource dataSource;
 
 	@Autowired

@@ -25,16 +25,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-	@Autowired
-	private SQLMethods sqlImplementation;
-	@Autowired
 	private DataSource dataSource;
-	
-	private Logger log=Logger.getLogger(UserDaoImpl.class.getName());
+
+	private Logger log = Logger.getLogger(UserDaoImpl.class.getName());
 
 	// @Override
-	// public Boolean authenticateByEmailAndPassword(ArrayList<Object> valuesList) throws SQLException {
-	// 	return sqlImplementation.selectQuery(SQLQueries.USER_AUTH_BY_EMAIL_PASSWORD.toString(), valuesList).size() == 1;
+	// public Boolean authenticateByEmailAndPassword(ArrayList<Object> valuesList)
+	// throws SQLException {
+	// SQLMethods sqlImplementation = new SQLMethods();
+	// return
+	// sqlImplementation.selectQuery(SQLQueries.USER_AUTH_BY_EMAIL_PASSWORD.toString(),
+	// valuesList).size() == 1;
 	// }
 
 	@Override
@@ -167,7 +168,7 @@ public class UserDaoImpl implements UserDao {
 		try {
 			connection = dataSource.getConnection();
 			preparedStatement = connection.prepareStatement(GroupFormationToolUtil.getAlluserRelatedToCourse);
-            log.info("In users dao getting all users based on course id");
+			log.info("In users dao getting all users based on course id");
 			preparedStatement.setInt(1, courseId);
 			resultSetForStudentList = preparedStatement.executeQuery();
 
@@ -254,42 +255,74 @@ public class UserDaoImpl implements UserDao {
 		return instructor;
 	}
 
-    @Override
-    public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) throws SQLException {
-        ArrayList<HashMap<String,Object>> rowsList = sqlImplementation.selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), valueList);
-        //
-        if( rowsList.size() > 0)
-        {
-            HashMap<String,Object> valuesMap = rowsList.get(0);
-            //
-            userObj.setBannerId((String)valuesMap.get("bannerid"));
-            userObj.setEmail((String)valuesMap.get("emailid"));
-            userObj.setFirstName((String)valuesMap.get("firstname"));
-            userObj.setLastName((String)valuesMap.get("lastname"));
-            userObj.setPassword((String)valuesMap.get("password"));
-        }
-    }
+	@Override
+	public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) {
+		SQLMethods sqlImplementation = null;
+		System.out.println("nnnnnnnnnnnnnnnnn");
+		try {
+			sqlImplementation = new SQLMethods();
+			ArrayList<HashMap<String, Object>> rowsList = sqlImplementation
+					.selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), valueList);
+			//
+			if (rowsList.size() > 0) {
+				HashMap<String, Object> valuesMap = rowsList.get(0);
+				//
+				userObj.setBannerId((String) valuesMap.get("bannerid"));
+				userObj.setEmail((String) valuesMap.get("emailid"));
+				userObj.setFirstName((String) valuesMap.get("firstname"));
+				userObj.setLastName((String) valuesMap.get("lastname"));
+				userObj.setPassword((String) valuesMap.get("password"));
+			}
+		} catch (SQLException e) {
 
-    @Override
-    public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valueList) throws SQLException {
-        Integer rowCount = sqlImplementation.updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valueList, criteriaList);
-        return rowCount > 0;
-    }
+		} finally {
+			if (sqlImplementation != null) {
+				sqlImplementation.cleanup();
+			}
+		}
+	}
 
-	// @Override
-	// public ArrayList getUserRoles(ArrayList<Object> criteriaList) throws SQLException {
-	// 	ArrayList rolesList = new ArrayList<>();
-	// 	ArrayList<HashMap<String,Object>> valuesList = sqlImplementation.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
-	// 	//
-	// 	if ( valuesList != null && valuesList.size() > 0 )
-	// 	{
-	// 		for( HashMap valueMap : valuesList)
-	// 		{
-	// 			rolesList.add(valueMap.get("rolename"));
-	// 		}
-	// 	}
-	// 	//
-	// 	return rolesList;
-	// }
+	@Override
+	public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valueList) {
+		SQLMethods sqlImplementation = null;
+		try {
+			sqlImplementation = new SQLMethods();
+			Integer rowCount = sqlImplementation.updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valueList,
+					criteriaList);
+			return rowCount > 0;
+		} catch (SQLException e) {
+			// TODO: handle exception
+		} finally {
+			if (sqlImplementation != null) {
+				sqlImplementation.cleanup();
+			}
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
+	public ArrayList getUserRoles(ArrayList<Object> criteriaList) {
+		ArrayList rolesList = new ArrayList<>();
+		SQLMethods sqlImplementation = null;
+		try {
+			sqlImplementation = new SQLMethods();
+			ArrayList<HashMap<String, Object>> valuesList = sqlImplementation
+					.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
+			//
+			if (valuesList != null && valuesList.size() > 0) {
+				for (HashMap valueMap : valuesList) {
+					rolesList.add(valueMap.get("rolename"));
+				}
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+		} finally {
+			if (sqlImplementation != null) {
+				sqlImplementation.cleanup();
+			}
+		}
+		//
+		return rolesList;
+	}
 
 }
