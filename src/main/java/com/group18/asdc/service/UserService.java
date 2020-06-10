@@ -22,5 +22,5 @@ public interface UserService {
 
 	// public Boolean authenticateByEmailAndPassword(String bannerid, String password);
 
-	// public ArrayList getUserRoles(String bannerid);
+	public ArrayList getUserRoles(User userObj);
 }

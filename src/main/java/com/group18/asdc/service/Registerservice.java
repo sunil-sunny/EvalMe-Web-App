@@ -17,7 +17,7 @@ import com.group18.asdc.entities.Registerbean;
 @Repository
 public class Registerservice {
 
-	@Autowired
+	
 	private DataSource dataSource;
 
 	
