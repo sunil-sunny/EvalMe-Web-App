@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.CourseAdmin;
 import com.group18.asdc.util.GroupFormationToolUtil;
 
@@ -47,7 +48,7 @@ public class AdminDaoImpl implements AdminDao {
 
 			// open connection to database
 
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 			
 
 			// statement to check if courseid exists in the database
@@ -123,7 +124,7 @@ public class AdminDaoImpl implements AdminDao {
 
 			// open connection to database
 
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 
 			// statement to check if coursename exists in the database
 			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkCourseName);
@@ -208,7 +209,7 @@ public class AdminDaoImpl implements AdminDao {
 
 			// open connection to database
 
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 
 			// statement to check if instructorid exists in the database
 			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkInstructorId);
@@ -315,7 +316,7 @@ public class AdminDaoImpl implements AdminDao {
 		try {
 			// open connection to database
 
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 
 			// statement to use database
 
@@ -398,7 +399,7 @@ public class AdminDaoImpl implements AdminDao {
 		try {
 			// open connection to database
 
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 
 			// statement to insert new course in the database - course table
 			pstatement = connection.prepareStatement(GroupFormationToolUtil.createCourse1);
@@ -497,7 +498,7 @@ public class AdminDaoImpl implements AdminDao {
 		try {
 			// open connection to database
 
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 
 			// statement to delete course in the database - courserole table
 			pstatement = connection.prepareStatement(GroupFormationToolUtil.deleteCourse1);
@@ -581,7 +582,7 @@ public class AdminDaoImpl implements AdminDao {
 		try {
 			// open connection to database
 
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 
 			// it is assumed that the course exists in the course table.
 			// Values will only be added in course role table.

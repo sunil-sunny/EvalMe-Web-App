@@ -7,8 +7,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.CourseDetailsService;
@@ -29,12 +31,6 @@ public class CourseController {
 	
 	private Logger log=Logger.getLogger(CourseController.class.getName());
 
-	@Autowired
-	private CourseDetailsService courseDetailsService;
-	
-	@Autowired
-	private UserService userService;
-
 	/*
 	 * user home end point directs all the user except admin to the page where list
 	 * of all courses are present
@@ -42,7 +38,7 @@ public class CourseController {
 	@GetMapping("/userhome")
 	public String getHomePage(Model theModel) {
 
-		
+		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		List<Course> coursesList = courseDetailsService.getAllCourses();
 		theModel.addAttribute("coursesList", coursesList);
 		return "guesthome";
@@ -67,6 +63,8 @@ public class CourseController {
 		}
 
 		//String bannerid="B00896315";
+		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
+		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		User user=userService.getUserById(bannerid);
 		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsStudent(user);
 		theModel.addAttribute("coursesList", coursesList);
@@ -88,8 +86,8 @@ public class CourseController {
 		} else {
 			bannerid = principal.toString();
 		}
-
-		//String bannerid="B00832218";
+		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
+		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		User user=userService.getUserById(bannerid);
 		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsTA(user);
 		theModel.addAttribute("coursesList", coursesList);
@@ -113,7 +111,8 @@ public class CourseController {
 			bannerid = principal.toString();
 		}
 
-		//String bannerid="B00832218";
+		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
+		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		User user=userService.getUserById(bannerid);
 		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsInstrcutor(user);
 		theModel.addAttribute("coursesList", coursesList);
@@ -158,6 +157,8 @@ public class CourseController {
 		String courseName = request.getParameter("coursename");
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
+		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
+		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		User user = userService.getUserById(bannerId);
 		if (user == null) {
 			log.info("User doesnt exists or given id is invalid");
@@ -193,6 +194,7 @@ public class CourseController {
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
 		//System.out.println("Course id: "+courseId);
+		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		if(courseId.length()==0) {
 			log.info("Error in loading file !! user will be prompted to upload file again");
 			theModel.addAttribute("resultEnrolling", "Error in loading file !! please try again");

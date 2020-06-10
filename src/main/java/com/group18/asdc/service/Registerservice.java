@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Registerbean;
 
 @Repository
@@ -44,7 +45,7 @@ public class Registerservice {
 				System.out.println("The password is less than 8 characters");
 				return "shortpassword";
 			}
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 			PreparedStatement pst3 = connection.prepareStatement("select * from user where emailid=?");
 			pst3.setString(1, bean.getEmailid());
 			ResultSet rs3 = pst3.executeQuery();

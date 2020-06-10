@@ -25,6 +25,7 @@ public class SQLMethods{
         openConnection();
         
     }
+    
 
     private void openConnection()throws SQLException{
         this.connection = ConnectionManager.getInstance().getDBConnection();

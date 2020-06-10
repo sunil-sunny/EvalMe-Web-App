@@ -1,31 +1,25 @@
 package com.group18.asdc.dao;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.sql.DataSource;
-import java.util.HashMap;
+import org.springframework.stereotype.Repository;
 
-import com.group18.asdc.dao.UserDao;
+import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.database.SQLMethods;
 import com.group18.asdc.database.SQLQueries;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.GroupFormationToolUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 @Repository
 public class UserDaoImpl implements UserDao {
 
-	private DataSource dataSource;
 
 	private Logger log = Logger.getLogger(UserDaoImpl.class.getName());
 
@@ -44,7 +38,7 @@ public class UserDaoImpl implements UserDao {
 		ResultSet resultSet = null;
 		PreparedStatement checkUser = null;
 		try {
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 			checkUser = connection.prepareStatement(GroupFormationToolUtil.isUserExists);
 			checkUser.setString(1, user.getBannerId());
 			resultSet = checkUser.executeQuery();
@@ -88,7 +82,7 @@ public class UserDaoImpl implements UserDao {
 		PreparedStatement getUser = null;
 		User user = null;
 		try {
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 			String userSql = GroupFormationToolUtil.getUserById;
 			getUser = connection.prepareStatement(userSql);
 			getUser.setString(1, bannerId);
@@ -166,7 +160,7 @@ public class UserDaoImpl implements UserDao {
 		User user = null;
 
 		try {
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 			preparedStatement = connection.prepareStatement(GroupFormationToolUtil.getAlluserRelatedToCourse);
 			log.info("In users dao getting all users based on course id");
 			preparedStatement.setInt(1, courseId);
@@ -215,7 +209,7 @@ public class UserDaoImpl implements UserDao {
 		ResultSet resultSet = null;
 		User instructor = null;
 		try {
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 			preparedStatement = connection.prepareStatement(GroupFormationToolUtil.getInstructorForCourse);
 			preparedStatement.setInt(1, courseId);
 			resultSet = preparedStatement.executeQuery();

@@ -1,17 +1,15 @@
 package com.group18.asdc.service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.service.UserService;
 import com.group18.asdc.util.CommonUtil;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {

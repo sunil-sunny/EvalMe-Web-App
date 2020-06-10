@@ -9,12 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.controller.CourseController;
+import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.GroupFormationToolUtil;
@@ -24,15 +23,12 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	private Logger log=Logger.getLogger(CourseController.class.getName());
 
-	private DataSource dataSource;
-
-	@Autowired
-	private UserDao userDao;
 
 	
 	@Override
 	public List<Course> getAllCourses() {
 
+		UserDao userDao=SystemConfig.getSingletonInstance().getTheUserDao();
 		Connection con = null;
 		Statement getCourses = null;
 		PreparedStatement getCourseRoles = null;
@@ -41,7 +37,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		List<Course> allCourses = new ArrayList<Course>();
 		try {
 			log.info("In CourseDao to get all courses");
-			con = dataSource.getConnection();
+			con = ConnectionManager.getInstance().getDBConnection();
 			getCourses = con.createStatement();
 			resultSetAllCourses = getCourses.executeQuery(GroupFormationToolUtil.getAllCourses);
 			getCourseRoles = con.prepareStatement(GroupFormationToolUtil.getCourseDetails);
@@ -110,7 +106,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 			log.info("In Course Dao allocating TA");
 			statement = connection.prepareStatement(GroupFormationToolUtil.allocateTa);
 			statement.setInt(1, courseId);
@@ -152,7 +148,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 		boolean enrollStatus = false;
 		try {
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 
 			for (User user : studentList) {
 				queryToEnrollStudent = connection.prepareStatement(GroupFormationToolUtil.enrollStudentIntoCourse);
@@ -193,12 +189,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Override
 	public List<Course> getCoursesWhereUserIsStudent(User user) {
 
+		UserDao userDao=SystemConfig.getSingletonInstance().getTheUserDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
         ResultSet resultset=null;
         List<Course> getCoursesAsStudent=new ArrayList<Course>();
 		try {
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsStudent);
 			preparedStatement.setString(1,user.getBannerId());
 			log.info("In course Dao after getting all courses where user is Student");
@@ -240,12 +237,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Override
 	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
 		
+		UserDao userDao=SystemConfig.getSingletonInstance().getTheUserDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
         ResultSet resultset=null;
         List<Course> getCoursesAsInstructor=new ArrayList<Course>();
 		try {
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsInstructor);
 			preparedStatement.setString(1,user.getBannerId());
 			resultset=preparedStatement.executeQuery();
@@ -286,12 +284,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCoursesWhereUserIsTA(User user) {
+		UserDao userDao=SystemConfig.getSingletonInstance().getTheUserDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
         ResultSet resultset=null;
         List<Course> getCoursesAsTA=new ArrayList<Course>();
 		try {
-			connection = dataSource.getConnection();
+			connection = ConnectionManager.getInstance().getDBConnection();
 			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsTA);
 			preparedStatement.setString(1,user.getBannerId());
 			resultset=preparedStatement.executeQuery();
