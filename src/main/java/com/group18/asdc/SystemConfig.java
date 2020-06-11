@@ -18,6 +18,10 @@ import com.group18.asdc.database.DefaultDatabaseConfiguration;
 import com.group18.asdc.database.IDatabaseConfiguration;
 import com.group18.asdc.security.BCryptPasswordEncryption;
 import com.group18.asdc.security.IPasswordEncryption;
+import com.group18.asdc.passwordpolicy.IPasswordPolicyDB;
+import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
+import com.group18.asdc.passwordpolicy.PasswordPolicyDB;
+import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
 import com.group18.asdc.service.AdminService;
 import com.group18.asdc.service.AdminServiceImpl;
 import com.group18.asdc.service.CourseDetailsService;
@@ -59,6 +63,8 @@ public class SystemConfig {
 	private CreateQuestionDao theCreateQuestionDao;
 	private ViewQuestionsDao theViewQuestionsDao;
 	private DeleteQuestionDao theDeleteQuestionDao;
+	private IPasswordPolicyDB passwordPolicyDB;
+	private IBasePasswordPolicyManager basePasswordPolicyManager;
 
 	private SystemConfig() {
 		
@@ -82,6 +88,11 @@ public class SystemConfig {
 		this.theCreateQuestionDao=new CreateQuestionDaoImpl();
 		this.theViewQuestionsDao=new ViewQuestionsDaoImpl();
 		this.theDeleteQuestionDao=new DeleteQuestionDaoImpl();
+		//this.theRegisterDao=new RegisterDaoImpl();
+		this.theUserDao=new UserDaoImpl();
+		this.passwordPolicyDB = new PasswordPolicyDB();
+		this.basePasswordPolicyManager = new BasePasswordPolicyManager();
+
 	}
 
 	public static SystemConfig getSingletonInstance() {
@@ -239,5 +250,14 @@ public class SystemConfig {
 
 	public void setTheViewQuestionsDao(ViewQuestionsDao theViewQuestionsDao) {
 		this.theViewQuestionsDao = theViewQuestionsDao;
+	}
+	
+	public IPasswordPolicyDB getPasswordPolicyDB(){
+		return passwordPolicyDB;
+	}
+
+	public IBasePasswordPolicyManager getBasePasswordPolicyManager()
+	{
+		return basePasswordPolicyManager;
 	}
 }

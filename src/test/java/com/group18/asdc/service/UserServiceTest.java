@@ -2,10 +2,8 @@ package com.group18.asdc.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,9 +13,10 @@ import java.util.ArrayList;
 
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.service.UserService;
-import com.group18.asdc.service.UserServiceImpl;
-import com.group18.asdc.util.CommonUtil;
+import com.group18.asdc.errorhandling.PasswordPolicyException;
+import com.group18.asdc.passwordpolicy.MinlengthPolicy;
+import com.group18.asdc.passwordpolicy.BasePasswordPolicyManagerMock;
+import com.group18.asdc.passwordpolicy.TestOne;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,8 +24,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootTest
 public class UserServiceTest {
@@ -131,5 +128,6 @@ public class UserServiceTest {
         //
         verify(userDao, times(1)).updatePassword(criteriaList, valuesList);
     }
+
 
 }
