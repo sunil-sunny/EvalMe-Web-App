@@ -22,9 +22,6 @@ import com.group18.asdc.util.GroupFormationToolUtil;
 public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	private Logger log=Logger.getLogger(CourseController.class.getName());
-
-
-	
 	@Override
 	public List<Course> getAllCourses() {
 

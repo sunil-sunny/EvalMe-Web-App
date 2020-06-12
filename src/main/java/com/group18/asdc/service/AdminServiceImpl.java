@@ -1,20 +1,14 @@
 package com.group18.asdc.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.entities.CourseAdmin;
-import com.group18.asdc.entities.User;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
-	@Autowired
-	private AdminDao admindao;
-
-	@Autowired
-	private UserService userService;
 
 	// private AdminDaoImpl admindao=new AdminDaoImpl();
 
@@ -23,6 +17,8 @@ public class AdminServiceImpl implements AdminService {
 
 		String returnString = "";
 
+		AdminDao admindao=SystemConfig.getSingletonInstance().getTheAdminDao();
+		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
 		// VALIDATE INPUT
 
 		// 1.
@@ -100,6 +96,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public String deleteCourse(int courseId) {
 
+		AdminDao admindao=SystemConfig.getSingletonInstance().getTheAdminDao();
 		if (courseId == 0) {
 			return "nocourseid";
 		} else {

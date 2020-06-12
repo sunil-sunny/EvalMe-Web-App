@@ -5,9 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.group18.asdc.database.ConnectionManager;
@@ -17,12 +14,6 @@ import com.group18.asdc.util.GroupFormationToolUtil;
 @Repository
 public class AdminDaoImpl implements AdminDao {
 
-	private DataSource dataSource;
-
-	public AdminDaoImpl(DataSource theDataSource) {
-		super();
-		dataSource = theDataSource;
-	}
 
 	public AdminDaoImpl() {
 		super();
