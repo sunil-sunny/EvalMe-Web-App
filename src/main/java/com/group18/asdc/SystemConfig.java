@@ -1,11 +1,17 @@
 package com.group18.asdc;
 
+import javax.sql.*;
+
 import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.dao.AdminDaoImpl;
 import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.dao.CourseDetailsDaoImpl;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
+import com.group18.asdc.database.DefaultDatabaseConfiguration;
+import com.group18.asdc.database.IDatabaseConfiguration;
+import com.group18.asdc.security.BCryptPasswordEncryption;
+import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.service.AdminService;
 import com.group18.asdc.service.AdminServiceImpl;
 import com.group18.asdc.service.CourseDetailsService;
@@ -15,6 +21,9 @@ import com.group18.asdc.service.EmailServiceImpl;
 import com.group18.asdc.service.Registerservice;
 import com.group18.asdc.service.UserService;
 import com.group18.asdc.service.UserServiceImpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SystemConfig {
 
@@ -32,6 +41,8 @@ public class SystemConfig {
 	private CourseDetailsDao theCourseDetailsDao;
 	//private RegisterDao theRegisterDao;
 	private UserDao theUserDao;
+	private IPasswordEncryption passwordEncryption;
+	private IDatabaseConfiguration databaseConfiguration;
 
 	private SystemConfig() {
 		this.theAdminService=new AdminServiceImpl();
@@ -43,8 +54,9 @@ public class SystemConfig {
 		this.theCourseDetailsDao=new CourseDetailsDaoImpl();
 		//this.theRegisterDao=new RegisterDaoImpl();
 		this.theUserDao=new UserDaoImpl();
-		
-
+		//
+		this.passwordEncryption = new BCryptPasswordEncryption();
+		this.databaseConfiguration = new DefaultDatabaseConfiguration();
 	}
 
 	public static SystemConfig getSingletonInstance() {
@@ -123,4 +135,12 @@ public class SystemConfig {
 		this.theUserDao = theUserDao;
 	}
 
+	public IPasswordEncryption getPasswordEncryption(){
+		return passwordEncryption;
+	}
+
+	public IDatabaseConfiguration getDatabaseConfiguration()
+	{
+		return databaseConfiguration;
+	}
 }

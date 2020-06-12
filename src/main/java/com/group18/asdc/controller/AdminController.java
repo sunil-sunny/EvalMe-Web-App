@@ -1,24 +1,20 @@
 package com.group18.asdc.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.CourseAdmin;
 import com.group18.asdc.service.AdminService;
-import com.group18.asdc.service.AdminServiceImpl;
 
 @Controller
 public class AdminController {
 
-	@Autowired
-	private AdminService theAdminService;
 	// ADMIN DASHBOARD
 
 	@GetMapping("/adminhome")
@@ -39,6 +35,7 @@ public class AdminController {
 
 		// If any errors occur because of type-mismatch or any other reason, return the
 		// same view to add courses
+		 AdminService theAdminService=SystemConfig.getSingletonInstance().getTheAdminService();
 		if (bindingresult.hasErrors()) {
 			return "redirect:/adminadd?error";
 		}
@@ -85,6 +82,7 @@ public class AdminController {
 	public String adminDeleteForm(@ModelAttribute("course") Course course, BindingResult bindingresult,
 			Model theModel) {
 
+		 AdminService theAdminService=SystemConfig.getSingletonInstance().getTheAdminService();
 		// If any errors occur because of type-mismatch or any other reason, return the
 		// same view to delete courses
 		if (bindingresult.hasErrors()) {

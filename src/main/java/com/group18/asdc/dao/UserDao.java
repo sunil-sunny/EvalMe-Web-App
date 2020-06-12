@@ -15,9 +15,9 @@ public interface UserDao {
 	public List<User> getAllUsersByCourse(int courseId);
 	public User getInstructorForCourse(int courseId);
 
-    public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj)throws SQLException;
+    public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj);
 
-    public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valuesList)throws SQLException;
+    public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valuesList);
 
-    // public ArrayList getUserRoles(ArrayList<Object> criteriaList)throws SQLException;
+    public ArrayList getUserRoles(ArrayList<Object> criteriaList);
 }
