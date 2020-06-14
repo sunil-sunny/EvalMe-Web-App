@@ -58,7 +58,8 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 
 	@Override
 	public void registerStudents(List<User> studentList) {
-		Registerservice Registerservice = new Registerservice();
+		
+		RegisterService Registerservice = SystemConfig.getSingletonInstance().getTheRegisterservice();
 		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
 
 		EmailService emailService = SystemConfig.getSingletonInstance().getTheEmailService();
@@ -70,8 +71,11 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 				String result = Registerservice.registeruser(new Registerbean(user));
 
 				if (result.equalsIgnoreCase("success")) {
+					System.out.println("User banner is :"+user.getBannerId());
 					String messageText = "Thank you for being a part of us !! \n  you username is " + user.getBannerId()
 							+ " and the password is " + user.getBannerId().concat(GroupFormationToolUtil.passwordTag);
+					System.out.println(messageText);
+					System.out.println("User email is:"+ user.getEmail());
 					emailService.sendSimpleMessage(user.getEmail(), "you are now a part of EvalMe", messageText);
 				} else {
 					System.out.println("user registartion error");

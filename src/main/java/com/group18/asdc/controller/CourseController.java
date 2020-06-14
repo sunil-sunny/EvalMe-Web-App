@@ -191,6 +191,7 @@ public class CourseController {
 
 		String courseId = request.getParameter("courseid");
 		String courseName = request.getParameter("coursename");
+		System.out.println("The Course id is "+courseId);
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
 		//System.out.println("Course id: "+courseId);
