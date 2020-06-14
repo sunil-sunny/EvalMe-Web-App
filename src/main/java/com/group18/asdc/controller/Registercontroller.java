@@ -1,6 +1,4 @@
 package com.group18.asdc.controller;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,18 +6,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.Registerbean;
-import com.group18.asdc.service.Registerservice;
+import com.group18.asdc.service.RegisterService;
 
 
 @Controller
 @RequestMapping("/registration")
 public class Registercontroller {
 
-	@Autowired
-	private Registerservice num;
-	
 	@ModelAttribute("user")
 	public Registerbean bean() {
 		return new Registerbean();
@@ -32,6 +27,8 @@ public class Registercontroller {
 
 	@PostMapping
 	public String registerUserAccount(@ModelAttribute("user") Registerbean bean, BindingResult result) {
+		
+		RegisterService num=SystemConfig.getSingletonInstance().getTheRegisterservice();
 
 		if (result.hasErrors()) {
 			return "registration";
