@@ -82,7 +82,11 @@ public class CreateQuestionsDaoImplTest {
 		CreateQuestionsDaoImplMock theCreateQuestionsDaoImplMock=new CreateQuestionsDaoImplMock();
 		int id = theCreateQuestionsDaoImplMock.getIdForQuestionTitle("java");
 
-		assertNotEquals(0, id);
+		boolean gotQuestionTitle=false;
+		if(id>0) {
+			gotQuestionTitle=true;
+		}
+		assertTrue(gotQuestionTitle);
 
 	}
 
@@ -91,8 +95,11 @@ public class CreateQuestionsDaoImplTest {
 
 		CreateQuestionsDaoImplMock theCreateQuestionsDaoImplMock=new CreateQuestionsDaoImplMock();
 		int id = theCreateQuestionsDaoImplMock.getIdForQuestionType("freetext");
-
-		assertNotEquals(0, id);
+		boolean gotQuestionTitle=false;
+		if(id>0) {
+			gotQuestionTitle=true;
+		}
+		assertTrue(gotQuestionTitle);
 
 	}
 
