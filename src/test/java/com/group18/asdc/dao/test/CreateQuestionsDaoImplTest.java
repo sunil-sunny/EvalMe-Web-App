@@ -1,8 +1,7 @@
 package com.group18.asdc.dao.test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -86,7 +85,7 @@ public class CreateQuestionsDaoImplTest {
 		if(id>0) {
 			gotQuestionTitle=true;
 		}
-		assertTrue(gotQuestionTitle);
+		assertFalse(gotQuestionTitle);
 
 	}
 
@@ -99,7 +98,7 @@ public class CreateQuestionsDaoImplTest {
 		if(id>0) {
 			gotQuestionTitle=true;
 		}
-		assertTrue(gotQuestionTitle);
+		assertFalse(gotQuestionTitle);
 
 	}
 
