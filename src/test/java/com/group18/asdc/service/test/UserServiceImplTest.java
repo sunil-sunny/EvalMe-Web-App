@@ -154,5 +154,14 @@ public class UserServiceImplTest {
 		List<User> allUsers = UserServiceImplMock.getAllUsersByCourse(10);
 		assertEquals(0, allUsers.size());
 	}
+	
+	
+	@Test
+	public void getCurrentUserTest() {
+	
+		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
+		User user=UserServiceImplMock.getCurrentUser();
+		assertNotNull(user);
+	}
 
 }

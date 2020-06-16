@@ -40,8 +40,6 @@ public class UserServiceImplMock implements UserService {
 		valueList.add(bannerId);
 		
 		theDaoImplMock.loadUserWithBannerId(valueList, userObj);
-		
-
 	}
 
 	@Override
@@ -58,8 +56,8 @@ public class UserServiceImplMock implements UserService {
 
 	@Override
 	public User getCurrentUser() {
-		// TODO Auto-generated method stub
-		return null;
+		User current =new User();
+		return current;
 	}
 
 
