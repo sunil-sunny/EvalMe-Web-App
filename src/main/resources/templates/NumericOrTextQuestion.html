@@ -26,11 +26,21 @@ h1 {
 		<!-- Numeric Question Form Start -->
 		<div class="container">
 
-			<form>
+			<form th:action="@{/questionpage/createNumericQuestion}"
+				th:object="${question}" method="post">
 				<div class="row">
 					<h4>Displaying Numeric questions looks like this:</h4>
 				</div>
 				<hr>
+				<input type="hidden" id="questionTitle" name="questionTitle"
+					th:field="*{questionTitle}"
+					th:value="${BasicQuestion.questionTitle}"> <input
+					type="hidden" id="questionText" name="questionText"
+					th:field="*{questionText}" th:value="${BasicQuestion.questionText}">
+
+				<input type="hidden" id="questionType" name="questionType"
+					th:field="*{questionType}" th:value="${questionType}">
+
 				<div class="row">
 					<div class="col-8">
 						<p th:text="${BasicQuestion.questionText}"></p>
@@ -40,8 +50,9 @@ h1 {
 					</div>
 				</div>
 				<hr>
-				<a href="/questionpage/getCreateQuestionHome" class="btn btn-primary"
-				style="width: 15%; color: white;">Return Home</a>
+				<a href="/questionpage/getCreateQuestionHome"
+					class="btn btn-primary" style="width: 15%; color: white;">Return
+					Home</a>
 
 				<button type="submit" class="btn btn-primary" style="width: 15%;">Next</button>
 
@@ -55,13 +66,22 @@ h1 {
 	<div class="container"
 		th:if="${BasicQuestion.questionType}== 'freetext'">
 
-		<form th:action="@{/questionpage/getQuestionConfirm}"
+		<form th:action="@{/questionpage/createFreeTextQuestion}"
 			th:object="${question}" method="post">
 
 			<div class="row">
 				<h4>Displaying Free text questions looks like this:</h4>
 			</div>
 			<hr>
+			<input type="hidden" id="questionTitle" name="questionTitle"
+				th:field="*{questionTitle}"
+				th:value="${BasicQuestion.questionTitle}"> <input
+				type="hidden" id="questionText" name="questionText"
+				th:field="*{questionText}" th:value="${BasicQuestion.questionText}">
+
+			<input type="hidden" id="questionType" name="questionType"
+				th:field="*{questionType}" th:value="${BasicQuestion.questionType}">
+
 			<div class="row">
 				<div class="col-8">
 					<p th:text="${BasicQuestion.questionText}"></p>
@@ -79,7 +99,7 @@ h1 {
 
 			<button type="submit" class="btn btn-primary" style="width: 15%;">Next</button>
 
-		</form> 
+		</form>
 
 	</div>
 	<!-- Free text Question Form End -->

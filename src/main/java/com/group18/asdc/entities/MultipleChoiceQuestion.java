@@ -3,7 +3,7 @@ package com.group18.asdc.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultipleChoiceChooseOne extends BasicQuestionData{
+public class MultipleChoiceQuestion extends BasicQuestionData{
 
 	private List<Option> optionList=new ArrayList<Option>();
 

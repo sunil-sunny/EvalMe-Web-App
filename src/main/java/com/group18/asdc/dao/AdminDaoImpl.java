@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.CourseAdmin;
-import com.group18.asdc.util.GroupFormationToolUtil;
+import com.group18.asdc.util.DataBaseQueriesUtil;
 
 @Repository
 public class AdminDaoImpl implements AdminDao {
@@ -43,7 +43,7 @@ public class AdminDaoImpl implements AdminDao {
 			
 
 			// statement to check if courseid exists in the database
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkCourseId);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.checkCourseId);
 			// set values in prepared statement
 			pstatement.setInt(1, courseidps);
 
@@ -118,7 +118,7 @@ public class AdminDaoImpl implements AdminDao {
 			connection = ConnectionManager.getInstance().getDBConnection();
 
 			// statement to check if coursename exists in the database
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkCourseName);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.checkCourseName);
 			// set values in prepared statement
 			pstatement.setString(1, coursenameps);
 
@@ -203,7 +203,7 @@ public class AdminDaoImpl implements AdminDao {
 			connection = ConnectionManager.getInstance().getDBConnection();
 
 			// statement to check if instructorid exists in the database
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkInstructorId);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.checkInstructorId);
 			// set values in prepared statement
 			pstatement.setString(1, instructidps);
 
@@ -227,7 +227,7 @@ public class AdminDaoImpl implements AdminDao {
 				returnType = "invalidinst";
 
 				// statement to check if instructor is registered as a student or TA
-				pstatement = connection.prepareStatement(GroupFormationToolUtil.checkInstructorStudent);
+				pstatement = connection.prepareStatement(DataBaseQueriesUtil.checkInstructorStudent);
 
 				// set values in prepared statement
 				pstatement.setString(1, instructidps);
@@ -312,7 +312,7 @@ public class AdminDaoImpl implements AdminDao {
 			// statement to use database
 
 			// statement to insert new course in the database
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.createCourse1);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.createCourse1);
 			// set values in prepared statement
 			pstatement.setInt(1, courseid);
 			pstatement.setString(2, coursename);
@@ -321,7 +321,7 @@ public class AdminDaoImpl implements AdminDao {
 			pstatement.execute();
 
 			// check if the newly added course is in the course table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkCourseId);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.checkCourseId);
 			pstatement.setInt(1, courseid);
 
 			// execute query
@@ -393,7 +393,7 @@ public class AdminDaoImpl implements AdminDao {
 			connection = ConnectionManager.getInstance().getDBConnection();
 
 			// statement to insert new course in the database - course table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.createCourse1);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.createCourse1);
 			// set values in prepared statement
 			pstatement.setInt(1, courseid);
 			pstatement.setString(2, coursename);
@@ -402,7 +402,7 @@ public class AdminDaoImpl implements AdminDao {
 			pstatement.execute();
 
 			// statement to insert new course in the database - courserole table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.createCourse2);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.createCourse2);
 			// set values in prepared statement
 			pstatement.setInt(1, courseid);
 			pstatement.setString(2, instructorid);
@@ -411,7 +411,7 @@ public class AdminDaoImpl implements AdminDao {
 			pstatement.execute();
 
 			// 1.check if the newly added course is in the course table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkCourseId);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.checkCourseId);
 			pstatement.setInt(1, courseid);
 
 			// execute query
@@ -423,7 +423,7 @@ public class AdminDaoImpl implements AdminDao {
 			}
 
 			// 2.check if the newly added course is in the courserole table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkcreateCourse2);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.checkcreateCourse2);
 			pstatement.setInt(1, courseid);
 			pstatement.setString(2, instructorid);
 
@@ -492,7 +492,7 @@ public class AdminDaoImpl implements AdminDao {
 			connection = ConnectionManager.getInstance().getDBConnection();
 
 			// statement to delete course in the database - courserole table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.deleteCourse1);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.deleteCourse1);
 			// set values in prepared statement
 			pstatement.setInt(1, courseid);
 
@@ -500,7 +500,7 @@ public class AdminDaoImpl implements AdminDao {
 			pstatement.execute();
 
 			// statement to delete course in the database - course table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.deleteCourse2);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.deleteCourse2);
 			// set values in prepared statement
 			pstatement.setInt(1, courseid);
 
@@ -508,7 +508,7 @@ public class AdminDaoImpl implements AdminDao {
 			pstatement.execute();
 
 			// check if the deleted course is in the course table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkCourseId);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.checkCourseId);
 			pstatement.setInt(1, courseid);
 
 			// execute query
@@ -580,7 +580,7 @@ public class AdminDaoImpl implements AdminDao {
 
 			// we delete any existing instructors from course role table
 
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.deletecreateCourse2);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.deletecreateCourse2);
 			// set values in prepared statement
 			pstatement.setInt(1, courseid);
 
@@ -588,7 +588,7 @@ public class AdminDaoImpl implements AdminDao {
 			pstatement.execute();
 
 			// statement to insert new instructor in the database - courserole table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.createCourse2);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.createCourse2);
 			// set values in prepared statement
 			pstatement.setInt(1, courseid);
 			pstatement.setString(2, bannerid);
@@ -597,7 +597,7 @@ public class AdminDaoImpl implements AdminDao {
 			pstatement.execute();
 
 			// 1.check if the newly added course is in the course table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkCourseId);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.checkCourseId);
 			pstatement.setInt(1, courseid);
 
 			// execute query
@@ -609,7 +609,7 @@ public class AdminDaoImpl implements AdminDao {
 			}
 
 			// 2.check if the newly added course is in the courserole table
-			pstatement = connection.prepareStatement(GroupFormationToolUtil.checkcreateCourse2);
+			pstatement = connection.prepareStatement(DataBaseQueriesUtil.checkcreateCourse2);
 			pstatement.setInt(1, courseid);
 			pstatement.setString(2, bannerid);
 

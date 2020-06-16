@@ -1,6 +1,6 @@
 package com.group18.asdc.util;
 
-public class GroupFormationToolUtil {
+public class DataBaseQueriesUtil {
 	
 	public final static String getAllCourses="SELECT * FROM course;";
 	public final static String getCourseDetails="SELECT a.courseid,a.bannerid,b.rolename FROM courserole as a inner join role as b\r\n" + 
@@ -45,6 +45,8 @@ public class GroupFormationToolUtil {
 	
 	public final static String deleteCourse1="delete from courserole where courseid=?";
 	public final static String deleteCourse2="delete from course where courseid=?";
-	
-	public final static String useDatabase="use CSCI5308_18_DEVINT";
+	public final static String isQuestionTitle="select * from questiontitle where qtitle=?;";
+	public final static String createQuestionTitle="insert into questiontitle (qtitle) values (?);";
+	public final static String getQuestionTypeId="SELECT * FROM questiontype where questiontypename=?;";
+	public final static String createQuestion="insert into questions (bannerid,questiontypeid,qtitleid,question,datecreated)  values (?,?,?,?,?);";
 }

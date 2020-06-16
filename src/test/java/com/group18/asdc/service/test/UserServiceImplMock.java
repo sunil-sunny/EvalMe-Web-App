@@ -1,6 +1,5 @@
 package com.group18.asdc.service.test;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +52,12 @@ public class UserServiceImplMock implements UserService {
 
 	@Override
 	public ArrayList getUserRoles(User userObj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User getCurrentUser() {
 		// TODO Auto-generated method stub
 		return null;
 	}
