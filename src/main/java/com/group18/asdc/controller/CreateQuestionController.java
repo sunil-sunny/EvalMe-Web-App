@@ -39,10 +39,7 @@ public class CreateQuestionController {
 		return new MultipleChoiceQuestion();
 	}
 
-	@GetMapping("/getHome")
-	public String getCourseQuestionPage() {
-		return "QuestionPageHome";
-	}
+	
 
 	@GetMapping("/getCreateQuestionHome")
 	public String getcreateQuestionPage(Model model) {

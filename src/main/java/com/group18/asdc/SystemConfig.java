@@ -10,6 +10,8 @@ import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.dao.RegisterDaoImpl;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
+import com.group18.asdc.dao.ViewQuestionsDao;
+import com.group18.asdc.dao.ViewQuestionsDaoImpl;
 import com.group18.asdc.database.DefaultDatabaseConfiguration;
 import com.group18.asdc.database.IDatabaseConfiguration;
 import com.group18.asdc.security.BCryptPasswordEncryption;
@@ -26,6 +28,8 @@ import com.group18.asdc.service.RegisterService;
 import com.group18.asdc.service.RegisterServiceImpl;
 import com.group18.asdc.service.UserService;
 import com.group18.asdc.service.UserServiceImpl;
+import com.group18.asdc.service.ViewQuestionsService;
+import com.group18.asdc.service.ViewQuestionsServiceImpl;
 
 public class SystemConfig {
 
@@ -38,6 +42,7 @@ public class SystemConfig {
 	private RegisterService theRegisterService;
 	private UserService theUserService;
 	private CreateQuestionService theCreateQuestionService;
+	private ViewQuestionsService theViewQuestionsService;
 
 	// Below are the instance objects for Dao layer
 	private AdminDao theAdminDao;
@@ -47,6 +52,7 @@ public class SystemConfig {
 	private IPasswordEncryption passwordEncryption;
 	private IDatabaseConfiguration databaseConfiguration;
 	private CreateQuestionDao theCreateQuestionDao;
+	private ViewQuestionsDao theViewQuestionsDao;
 
 	private SystemConfig() {
 		
@@ -57,7 +63,7 @@ public class SystemConfig {
 		this.theRegisterService=new RegisterServiceImpl();
 		this.theUserService=new UserServiceImpl();
 		this.theCreateQuestionService=new CreateQuestionServiceImpl();
-		
+		this.theViewQuestionsService=new ViewQuestionsServiceImpl();
 		
 		//Instantiating Dao objects
 		this.theAdminDao=new AdminDaoImpl();
@@ -67,6 +73,7 @@ public class SystemConfig {
 		this.passwordEncryption = new BCryptPasswordEncryption();
 		this.databaseConfiguration = new DefaultDatabaseConfiguration();
 		this.theCreateQuestionDao=new CreateQuestionDaoImpl();
+		this.theViewQuestionsDao=new ViewQuestionsDaoImpl();
 	}
 
 	public static SystemConfig getSingletonInstance() {
@@ -192,5 +199,21 @@ public class SystemConfig {
 
 	public void setTheCreateQuestionDao(CreateQuestionDao theCreateQuestionDao) {
 		this.theCreateQuestionDao = theCreateQuestionDao;
+	}
+
+	public ViewQuestionsService getTheViewQuestionsService() {
+		return theViewQuestionsService;
+	}
+
+	public void setTheViewQuestionsService(ViewQuestionsService theViewQuestionsService) {
+		this.theViewQuestionsService = theViewQuestionsService;
+	}
+
+	public ViewQuestionsDao getTheViewQuestionsDao() {
+		return theViewQuestionsDao;
+	}
+
+	public void setTheViewQuestionsDao(ViewQuestionsDao theViewQuestionsDao) {
+		this.theViewQuestionsDao = theViewQuestionsDao;
 	}
 }
