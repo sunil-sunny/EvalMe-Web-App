@@ -6,6 +6,8 @@ import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.dao.CourseDetailsDaoImpl;
 import com.group18.asdc.dao.CreateQuestionDao;
 import com.group18.asdc.dao.CreateQuestionDaoImpl;
+import com.group18.asdc.dao.DeleteQuestionDao;
+import com.group18.asdc.dao.DeleteQuestionDaoImpl;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.dao.RegisterDaoImpl;
 import com.group18.asdc.dao.UserDao;
@@ -22,6 +24,8 @@ import com.group18.asdc.service.CourseDetailsService;
 import com.group18.asdc.service.CourseDetailsServiceImpl;
 import com.group18.asdc.service.CreateQuestionService;
 import com.group18.asdc.service.CreateQuestionServiceImpl;
+import com.group18.asdc.service.DeleteQuestionService;
+import com.group18.asdc.service.DeleteQuestionServiceImpl;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.EmailServiceImpl;
 import com.group18.asdc.service.RegisterService;
@@ -43,6 +47,7 @@ public class SystemConfig {
 	private UserService theUserService;
 	private CreateQuestionService theCreateQuestionService;
 	private ViewQuestionsService theViewQuestionsService;
+	private DeleteQuestionService theDeleteQuestionService;
 
 	// Below are the instance objects for Dao layer
 	private AdminDao theAdminDao;
@@ -53,6 +58,7 @@ public class SystemConfig {
 	private IDatabaseConfiguration databaseConfiguration;
 	private CreateQuestionDao theCreateQuestionDao;
 	private ViewQuestionsDao theViewQuestionsDao;
+	private DeleteQuestionDao theDeleteQuestionDao;
 
 	private SystemConfig() {
 		
@@ -64,6 +70,7 @@ public class SystemConfig {
 		this.theUserService=new UserServiceImpl();
 		this.theCreateQuestionService=new CreateQuestionServiceImpl();
 		this.theViewQuestionsService=new ViewQuestionsServiceImpl();
+		this.theDeleteQuestionService=new DeleteQuestionServiceImpl();
 		
 		//Instantiating Dao objects
 		this.theAdminDao=new AdminDaoImpl();
@@ -74,6 +81,7 @@ public class SystemConfig {
 		this.databaseConfiguration = new DefaultDatabaseConfiguration();
 		this.theCreateQuestionDao=new CreateQuestionDaoImpl();
 		this.theViewQuestionsDao=new ViewQuestionsDaoImpl();
+		this.theDeleteQuestionDao=new DeleteQuestionDaoImpl();
 	}
 
 	public static SystemConfig getSingletonInstance() {
@@ -195,6 +203,22 @@ public class SystemConfig {
 
 	public CreateQuestionDao getTheCreateQuestionDao() {
 		return theCreateQuestionDao;
+	}
+
+	public DeleteQuestionService getTheDeleteQuestionService() {
+		return theDeleteQuestionService;
+	}
+
+	public void setTheDeleteQuestionService(DeleteQuestionService theDeleteQuestionService) {
+		this.theDeleteQuestionService = theDeleteQuestionService;
+	}
+
+	public DeleteQuestionDao getTheDeleteQuestionDao() {
+		return theDeleteQuestionDao;
+	}
+
+	public void setTheDeleteQuestionDao(DeleteQuestionDao theDeleteQuestionDao) {
+		this.theDeleteQuestionDao = theDeleteQuestionDao;
 	}
 
 	public void setTheCreateQuestionDao(CreateQuestionDao theCreateQuestionDao) {

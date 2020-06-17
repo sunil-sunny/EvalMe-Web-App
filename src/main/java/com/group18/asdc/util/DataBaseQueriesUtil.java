@@ -59,4 +59,6 @@ public class DataBaseQueriesUtil {
 			+ " questiontitle as b on a.qtitleid=b.qtitleid where a.bannerid=? order by a.datecreated DESC;";
 	public final static String getAllQuestionsSortByTitle = "SELECT a.questionid,b.qtitle,a.question,a.datecreated FROM questions as a inner join\r\n"
 			+ " questiontitle as b on a.qtitleid=b.qtitleid where a.bannerid=? order by b.qtitle;";
+
+	public final static String deleteQuestion = "delete from questions where questionid=?;";
 }

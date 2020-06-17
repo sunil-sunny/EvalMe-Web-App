@@ -23,17 +23,15 @@ h1 {
 		<div class="row justify-content-center">
 			<div class="col-3">
 
-				<a class="btn btn-primary"
-					th:href="@{/viewQuestions/sortByTitle}"
+				<a class="btn btn-primary" th:href="@{/viewQuestions/sortByTitle}"
 					style="color: white; width: 80%;">Sort by Title</a>
 
 			</div>
 
 			<div class="col-3">
 
-				<a class="btn btn-primary"
-					th:href="@{/viewQuestions/sortByDate}"
-					style="color: white;width: 80%;">Sort by Creation Date </a>
+				<a class="btn btn-primary" th:href="@{/viewQuestions/sortByDate}"
+					style="color: white; width: 80%;">Sort by Creation Date </a>
 
 			</div>
 
@@ -41,7 +39,7 @@ h1 {
 
 				<a class="btn btn-primary"
 					th:href="@{/questionpage/getCreateQuestionHome}"
-					style="color: white;width: 80%;">Create Question</a>
+					style="color: white; width: 80%;">Create Question</a>
 
 			</div>
 		</div>
@@ -59,8 +57,8 @@ h1 {
 				</tr>
 			</thead>
 			<tbody>
-				<form th:each="prod: ${allquestions}"
-					th:action="@{/coursepageInstrcutor}" method="get">
+				<form th:each="prod: ${allquestions}" th:action="@{/deleteQuestion}"
+					method="get">
 
 					<tr>
 						<td th:text="${prod.questionTitle}" />
