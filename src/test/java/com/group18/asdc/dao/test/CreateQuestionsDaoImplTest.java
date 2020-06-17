@@ -19,29 +19,7 @@ public class CreateQuestionsDaoImplTest {
 	 * new CreateQuestionsDaoImplMock(); }
 	 */
 
-	@Test
-	public void isQuestionTitleExistsTest() {
 
-		BasicQuestionData theBasicQuestionData = new BasicQuestionData();
-		theBasicQuestionData.setQuestionText("what is serialization in java?");
-		theBasicQuestionData.setQuestionTitle("java");
-		theBasicQuestionData.setQuestionType("freetext");
-		CreateQuestionsDaoImplMock theCreateQuestionsDaoImplMock = new CreateQuestionsDaoImplMock();
-		boolean isCourseTitleExists = theCreateQuestionsDaoImplMock.isQuestionTitleExists(theBasicQuestionData);
-		assertTrue(isCourseTitleExists);
-	}
-
-	@Test
-	public void createQuestionTitleTest() {
-
-		BasicQuestionData theBasicQuestionData = new BasicQuestionData();
-		theBasicQuestionData.setQuestionText("what is serialization in java?");
-		theBasicQuestionData.setQuestionTitle("java");
-		theBasicQuestionData.setQuestionType("freetext");
-		CreateQuestionsDaoImplMock theCreateQuestionsDaoImplMock=new CreateQuestionsDaoImplMock();
-		boolean isCourseTitleExists = theCreateQuestionsDaoImplMock.createQuestionTitle(theBasicQuestionData);
-		assertTrue(isCourseTitleExists);
-	}
 
 	@Test
 	public void createNumericOrTextQuestionTest() {
@@ -65,18 +43,7 @@ public class CreateQuestionsDaoImplTest {
 		assertTrue(isQuestionCreated);
 	}
 
-	@Test
-	public void getIdForQuestionTitleTest() {
-		CreateQuestionsDaoImplMock theCreateQuestionsDaoImplMock=new CreateQuestionsDaoImplMock();
-		int id = theCreateQuestionsDaoImplMock.getIdForQuestionTitle("java");
 
-		boolean gotQuestionTitle=false;
-		if(id>0) {
-			gotQuestionTitle=true;
-		}
-		assertFalse(gotQuestionTitle);
-
-	}
 
 	@Test
 	public void getIdForQuestionTypeTest() {
@@ -92,11 +59,11 @@ public class CreateQuestionsDaoImplTest {
 	}
 	
 	@Test
-	public void getQuestionIdTest() {
+	public void isQuestionExsistTest() {
 		BasicQuestionData theBasicQuestionData=new BasicQuestionData();
 		CreateQuestionsDaoImplMock theCreateQuestionsDaoImplMock=new CreateQuestionsDaoImplMock();
-		int i=theCreateQuestionsDaoImplMock.getQuestionId(theBasicQuestionData);
-		assertEquals(1, i);
+		boolean isQuestionExists=theCreateQuestionsDaoImplMock.isQuestionExists(theBasicQuestionData);
+		assertTrue(isQuestionExists);
 	}
 
 }
