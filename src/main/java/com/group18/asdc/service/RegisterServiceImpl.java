@@ -26,15 +26,10 @@ public class RegisterServiceImpl implements RegisterService {
 			System.out.println("The emailid is not valid");
 			return "invalidemailid";
 		}
-		if (bean.getPassword().length() <= 7) {
-			System.out.println("The password is less than 8 characters");
-			return "shortpassword";
-		}
 
 		try {
 			User.isPasswordValid(bean.getConfirmpassword(), SystemConfig.getSingletonInstance().getBasePasswordPolicyManager());
 		} catch (PasswordPolicyException e) {
-			System.out.println("exception eeeeeeeee"+e.getMessage());
 			return "passwordPolicyException="+e.getMessage();
 			
 		}

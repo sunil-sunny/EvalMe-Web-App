@@ -105,8 +105,6 @@ public class LoginController {
     UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
     User userObj = new User(resetForm.getbannerId(), userService);
     //
-    session.setAttribute("RESET_PASSWORD", "karthikk");
-    //
     if (!resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD"))) {
       model.addAttribute("genPasswordError", Boolean.TRUE);
       model.addAttribute("reason", "Password sent in mail does not match");

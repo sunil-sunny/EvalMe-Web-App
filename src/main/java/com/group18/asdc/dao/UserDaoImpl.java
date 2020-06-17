@@ -21,9 +21,7 @@ import com.group18.asdc.util.DataBaseQueriesUtil;
 public class UserDaoImpl implements UserDao {
 
 
-	// private Logger log = Logger.getLogger(UserDaoImpl.class.getName());
-	private Logger log = null;
-
+	private Logger log = Logger.getLogger(UserDaoImpl.class.getName());
 	// @Override
 	// public Boolean authenticateByEmailAndPassword(ArrayList<Object> valuesList)
 	// throws SQLException {
