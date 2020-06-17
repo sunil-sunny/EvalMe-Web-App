@@ -4,18 +4,22 @@ import com.group18.asdc.errorhandling.PasswordPolicyException;
 
 public class MaxlengthPolicy implements IBasePasswordPolicy {
 
+    private Integer maxLength;
+
     public MaxlengthPolicy(){
 
     }
 
     public MaxlengthPolicy(Object maxLength){
-        
+        this.maxLength = (Integer) maxLength;
     }
 
     @Override
     public void validate(String password) throws PasswordPolicyException {
-        // TODO Auto-generated method stub
-
+        if ( password.trim().length() > maxLength)
+        {
+            throw new PasswordPolicyException("Password length is greater than "+maxLength);
+        }
     }
     
 }

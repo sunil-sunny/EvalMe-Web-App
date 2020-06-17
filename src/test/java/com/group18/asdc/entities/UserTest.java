@@ -33,13 +33,13 @@ public class UserTest {
     }
 
 
-    @Test(expected = PasswordPolicyException.class)
-    public void validateMinLengthPasswordDefaultTest() throws PasswordPolicyException
-    {
-        BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinlengthPolicy());
-        //
-        obj.validatePassword("1234567");
-    }
+    // @Test(expected = PasswordPolicyException.class)
+    // public void validateMinLengthPasswordDefaultTest() throws PasswordPolicyException
+    // {
+    //     BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinlengthPolicy());
+    //     //
+    //     obj.validatePassword("1234567");
+    // }
 
 
     @Test(expected = PasswordPolicyException.class)
@@ -59,13 +59,13 @@ public class UserTest {
     }
 
 
-    @Test(expected = PasswordPolicyException.class)
-    public void validateMaxLengthPasswordDefaultTest() throws PasswordPolicyException
-    {
-        BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MaxlengthPolicy());
-        //
-        obj.validatePassword("karthikkkarthikk");
-    }
+    // @Test(expected = PasswordPolicyException.class)
+    // public void validateMaxLengthPasswordDefaultTest() throws PasswordPolicyException
+    // {
+    //     BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MaxlengthPolicy());
+    //     //
+    //     obj.validatePassword("karthikkkarthikk");
+    // }
 
     @Test(expected = PasswordPolicyException.class)
     public void validateMinLengthUpperPasswordErrorTest() throws PasswordPolicyException
@@ -84,13 +84,13 @@ public class UserTest {
     }
 
 
-    @Test(expected = PasswordPolicyException.class)
-    public void validateMinLengthUpperPasswordDefaultTest() throws PasswordPolicyException
-    {
-        BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinUppercasePolicy());
-        //
-        obj.validatePassword("karthikk");
-    }
+    // @Test(expected = PasswordPolicyException.class)
+    // public void validateMinLengthUpperPasswordDefaultTest() throws PasswordPolicyException
+    // {
+    //     BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinUppercasePolicy());
+    //     //
+    //     obj.validatePassword("karthikk");
+    // }
 
     @Test(expected = PasswordPolicyException.class)
     public void validateMinLengthlowerPasswordErrorTest() throws PasswordPolicyException
@@ -105,20 +105,20 @@ public class UserTest {
     {
         BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinLowercasePolicy(8));
         //
-        obj.validatePassword("KARTHIKK");
+        obj.validatePassword("karthikk");
     }
 
 
-    @Test(expected = PasswordPolicyException.class)
-    public void validateMinLengthlowerPasswordDefaultTest() throws PasswordPolicyException
-    {
-        BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinLowercasePolicy());
-        //
-        obj.validatePassword("karthIKK");
-    }
+    // @Test(expected = PasswordPolicyException.class)
+    // public void validateMinLengthlowerPasswordDefaultTest() throws PasswordPolicyException
+    // {
+    //     BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinLowercasePolicy());
+    //     //
+    //     obj.validatePassword("karthIKK");
+    // }
 
     @Test(expected = PasswordPolicyException.class)
-    public void validateMinLengthCharsPasswordErrorTest() throws PasswordPolicyException
+    public void validateMinLengthSpecialCharsPasswordErrorTest() throws PasswordPolicyException
     {
         BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinSpecialcharPolicy(3));
         //
@@ -126,7 +126,7 @@ public class UserTest {
     }
 
     @Test
-    public void validateMinLengthCharsPasswordTest() throws PasswordPolicyException
+    public void validateMinLengthSpecialCharsPasswordTest() throws PasswordPolicyException
     {
         BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinSpecialcharPolicy(3));
         //
@@ -134,13 +134,13 @@ public class UserTest {
     }
 
 
-    @Test
-    public void validateMinLengthCharsPasswordDefaultTest() throws PasswordPolicyException
-    {
-        BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinSpecialcharPolicy());
-        //
-        obj.validatePassword("k@#arthikk");
-    }
+    // @Test
+    // public void validateMinLengthCharsPasswordDefaultTest() throws PasswordPolicyException
+    // {
+    //     BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MinSpecialcharPolicy());
+    //     //
+    //     obj.validatePassword("k@#arthikk");
+    // }
 
     @Test(expected = PasswordPolicyException.class)
     public void validateCharsNotAllowedPasswordTest() throws PasswordPolicyException
@@ -150,12 +150,12 @@ public class UserTest {
         obj.validatePassword("kar@thikk");
     }
 
-    @Test(expected = PasswordPolicyException.class)
+    @Test
     public void validateCharsNotAllowedPasswordErrorTest() throws PasswordPolicyException
     {
-        BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new CharsNotAllowedPolicy());
+        BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new CharsNotAllowedPolicy("@!#"));
         //
-        obj.validatePassword("kar~@thikk");
+        obj.validatePassword("kar*()thikk");
     }
     
 }

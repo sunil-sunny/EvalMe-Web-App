@@ -58,6 +58,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     // @Override
     // protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // auth.inMemoryAuthentication()
+        // .withUser("rob").password("{noop}rob").roles("ADMIN").and()
+        // .withUser("student").password("{noop}student").roles("GUEST");
+        // .passwordEncoder(passwordEncoder());
 
     //     auth.jdbcAuthentication().dataSource(SystemConfig.getSingletonInstance().getDataSource()).passwordEncoder(CommonUtil.getInstance().passwordEncoder())
     //             .usersByUsernameQuery(SQLQueries.USER_AUTH_BY_EMAIL.toString())

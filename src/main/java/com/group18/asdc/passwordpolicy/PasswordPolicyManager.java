@@ -9,17 +9,17 @@ import com.group18.asdc.errorhandling.PasswordPolicyException;
 
 public class PasswordPolicyManager extends BasePasswordPolicyManager implements IPasswordPolicyManager {
 
-    private static final HashMap<String, String> VALUE_VS_CLASSNAME_MAP = new HashMap<>();
-    private static ArrayList<String> enabledPasswordPolicies = null;
+    private static final HashMap<String, String> VALUE_VS_CLASSNAMES_MAP = new HashMap<>();
+    private static ArrayList<HashMap> enabledPasswordPolicies = null;
 
     static {
         // value and their class name/ package name
+        VALUE_VS_CLASSNAMES_MAP.put("HistoryConstraint", HistoryConstraintPolicy.class.getName());
 
     }
 
     public PasswordPolicyManager() {
         // load default configurations
-        super();
         loadDefaultConfigurations();
     }
 
@@ -40,12 +40,12 @@ public class PasswordPolicyManager extends BasePasswordPolicyManager implements 
         super.validatePassword(password);
         //
         IPasswordPolicy passwordPolicy = null;
-        for (String eachClass : enabledPasswordPolicies) {
+        for (HashMap eachEnabledPolicy : enabledPasswordPolicies) {
             //
             try {
 
-                passwordPolicy = (IPasswordPolicy) Class.forName(VALUE_VS_CLASSNAME_MAP.get(eachClass)).getConstructor()
-                        .newInstance();
+                passwordPolicy = (IPasswordPolicy) Class.forName(VALUE_VS_CLASSNAMES_MAP.get(eachEnabledPolicy.get("POLICY_NAME"))).getConstructor(Object.class)
+                        .newInstance(eachEnabledPolicy.get("POLICY_VALUE"));
                 passwordPolicy.validate(bannerId , password);
 
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
