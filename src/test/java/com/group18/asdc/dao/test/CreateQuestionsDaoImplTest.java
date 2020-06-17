@@ -1,14 +1,13 @@
 package com.group18.asdc.dao.test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.group18.asdc.entities.BasicQuestionData;
-import com.group18.asdc.entities.FreeTextQuestion;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
-import com.group18.asdc.entities.NumericQuestion;
 import com.group18.asdc.entities.User;
 
 @SpringBootTest
@@ -44,23 +43,12 @@ public class CreateQuestionsDaoImplTest {
 	}
 
 	@Test
-	public void createNumericQuestionTest() {
+	public void createNumericOrTextQuestionTest() {
 
-		NumericQuestion theNumericQuestion = new NumericQuestion();
+		BasicQuestionData theBasicQuestionData=new BasicQuestionData();
 		User theUser = new User();
 		CreateQuestionsDaoImplMock theCreateQuestionsDaoImplMock=new CreateQuestionsDaoImplMock();
-		boolean isQuestionCreated = theCreateQuestionsDaoImplMock.createNumericQuestion(theNumericQuestion,
-				theUser);
-		assertTrue(isQuestionCreated);
-	}
-
-	@Test
-	public void createFreeTextQuestionTest() {
-
-		FreeTextQuestion theFreeTextQuestion = new FreeTextQuestion();
-		User theUser = new User();
-		CreateQuestionsDaoImplMock theCreateQuestionsDaoImplMock=new CreateQuestionsDaoImplMock();
-		boolean isQuestionCreated = theCreateQuestionsDaoImplMock.createFreeTextQuestion(theFreeTextQuestion,
+		boolean isQuestionCreated = theCreateQuestionsDaoImplMock.createNumericOrTextQuestion(theBasicQuestionData,
 				theUser);
 		assertTrue(isQuestionCreated);
 	}

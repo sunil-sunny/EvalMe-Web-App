@@ -49,4 +49,7 @@ public class DataBaseQueriesUtil {
 	public final static String createQuestionTitle="insert into questiontitle (qtitle) values (?);";
 	public final static String getQuestionTypeId="SELECT * FROM questiontype where questiontypename=?;";
 	public final static String createQuestion="insert into questions (bannerid,questiontypeid,qtitleid,question,datecreated)  values (?,?,?,?,?);";
+	public final static String createOptions="insert into options (questionid,optiontext,optionlinenumber) values (?,?,?); ";
+	public final static String getQuestionId="SELECT questionid FROM questions where bannerid=? and questiontypeid=? and qtitleid=?\r\n" + 
+			"and question=? order by datecreated DESC limit 1;";
 }

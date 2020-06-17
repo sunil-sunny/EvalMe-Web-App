@@ -5,17 +5,14 @@ import java.util.List;
 
 import com.group18.asdc.dao.CreateQuestionDao;
 import com.group18.asdc.entities.BasicQuestionData;
-import com.group18.asdc.entities.FreeTextQuestion;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
-import com.group18.asdc.entities.NumericQuestion;
 import com.group18.asdc.entities.User;
 
 public class CreateQuestionsDaoImplMock implements CreateQuestionDao {
 
 	private static List<String> titles = new ArrayList<String>();
 	private static List<String> types=new ArrayList<String>();
-	private static List<NumericQuestion> numericList = new ArrayList<NumericQuestion>();
-	private static List<FreeTextQuestion> freeTextList = new ArrayList<FreeTextQuestion>();
+	private static List<BasicQuestionData> numberOrTextQuestions = new ArrayList<BasicQuestionData>();
 	private static List<MultipleChoiceQuestion> multipleQuestions = new ArrayList<MultipleChoiceQuestion>();
 
 	public CreateQuestionsDaoImplMock() {
@@ -56,17 +53,10 @@ public class CreateQuestionsDaoImplMock implements CreateQuestionDao {
 	}
 
 	@Override
-	public boolean createNumericQuestion(NumericQuestion theNumericQuestion, User theUser) {
+	public boolean createNumericOrTextQuestion(BasicQuestionData theBasicQuestionData, User theUser) {
 
-		CreateQuestionsDaoImplMock.numericList.add(theNumericQuestion);
+		CreateQuestionsDaoImplMock.numberOrTextQuestions.add(theBasicQuestionData);
  
-		return true;
-	}
-
-	@Override
-	public boolean createFreeTextQuestion(FreeTextQuestion theFreeTextQuestion, User theUser) {
-		
-		CreateQuestionsDaoImplMock.freeTextList.add(theFreeTextQuestion);
 		return true;
 	}
 
@@ -90,6 +80,16 @@ public class CreateQuestionsDaoImplMock implements CreateQuestionDao {
 
 		CreateQuestionsDaoImplMock.multipleQuestions.add(theMultipleChoiceChoose);
 		return true;
+	}
+
+	@Override
+	public int getQuestionId(BasicQuestionData theBasicQuestionData) {
+		
+		String questionTitle=theBasicQuestionData.getQuestionTitle();
+		if(questionTitle!=null) {
+			return 1;
+		}
+		return 1;
 	}
 
 }

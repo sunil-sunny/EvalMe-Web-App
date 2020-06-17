@@ -23,5 +23,10 @@ public class BasicQuestionData {
 	public void setQuestionType(String questionType) {
 		this.questionType = questionType;
 	}
+	@Override
+	public String toString() {
+		return "BasicQuestionData [questionTitle=" + questionTitle + ", questionText=" + questionText
+				+ ", questionType=" + questionType + "]";
+	}
 
 }

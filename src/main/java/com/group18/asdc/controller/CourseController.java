@@ -10,8 +10,6 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,20 +50,9 @@ public class CourseController {
 	@RequestMapping(value = "/enrolledcourses")
 	public String getEnrolledCourses(Model theModel) {
 
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String bannerid;
-		if (principal instanceof UserDetails) {
-			bannerid = ((UserDetails) principal).getUsername();
-			//System.out.println(((UserDetails) principal).getAuthorities());
-		} else {
-			bannerid = principal.toString();
-			//System.out.println(principal.);
-		}
-
-		//String bannerid="B00896315";
 		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
 		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
-		User user=userService.getUserById(bannerid);
+		User user=userService.getCurrentUser();
 		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsStudent(user);
 		theModel.addAttribute("coursesList", coursesList);
 		return "enrolledcourses";
@@ -79,16 +66,10 @@ public class CourseController {
 	@GetMapping("/tacourses")
 	public String getTACourses(Model theModel) {
 
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String bannerid;
-		if (principal instanceof UserDetails) {
-			bannerid = ((UserDetails) principal).getUsername();
-		} else {
-			bannerid = principal.toString();
-		}
+		
 		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
 		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
-		User user=userService.getUserById(bannerid);
+		User user=userService.getCurrentUser();
 		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsTA(user);
 		theModel.addAttribute("coursesList", coursesList);
 
@@ -103,17 +84,9 @@ public class CourseController {
 	@RequestMapping(value = "/instructedcourses", method = RequestMethod.GET)
 	public String getInstructedCourses(Model theModel) {
 		
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String bannerid;
-		if (principal instanceof UserDetails) {
-			bannerid = ((UserDetails) principal).getUsername();
-		} else {
-			bannerid = principal.toString();
-		}
-
 		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
 		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
-		User user=userService.getUserById(bannerid);
+		User user=userService.getCurrentUser();
 		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsInstrcutor(user);
 		theModel.addAttribute("coursesList", coursesList);
 		return "teachingcourses";

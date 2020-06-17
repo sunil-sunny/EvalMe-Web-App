@@ -5,9 +5,8 @@ import com.group18.asdc.entities.MultipleChoiceQuestion;
 
 public interface CreateQuestionService {
 
-	public boolean createNumericQuestion(BasicQuestionData theBasicQuestionData);
+	public boolean createNumericOrTextQuestion(BasicQuestionData theBasicQuestionData);
 
-	public boolean createFreeTextQuestion(BasicQuestionData theBasicQuestionData);
 
 	public boolean createMultipleQuestion(MultipleChoiceQuestion theMultipleChoiceChooseOne);
 

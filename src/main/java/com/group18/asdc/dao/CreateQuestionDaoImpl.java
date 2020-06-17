@@ -1,18 +1,20 @@
 package com.group18.asdc.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.logging.Logger;
+
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.BasicQuestionData;
-import com.group18.asdc.entities.FreeTextQuestion;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
-import com.group18.asdc.entities.NumericQuestion;
+import com.group18.asdc.entities.Option;
 import com.group18.asdc.entities.User;
+import com.group18.asdc.service.UserService;
 import com.group18.asdc.util.DataBaseQueriesUtil;
 
 public class CreateQuestionDaoImpl implements CreateQuestionDao {
@@ -98,28 +100,29 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 	}
 
 	@Override
-	public boolean createNumericQuestion(NumericQuestion theNumericQuestion, User theUser) {
+	public boolean createNumericOrTextQuestion(BasicQuestionData theBasicQuestionData, User theUser) {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
-		boolean isNumericQuestionCreated = false;
+		boolean isQuestionCreated = false;
 
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.createQuestion);
 			thePreparedStatement.setString(1, theUser.getBannerId());
-			int questionTypeId = this.getIdForQuestionType(theNumericQuestion.getQuestionType());
-			int questionTitleId = this.getIdForQuestionTitle(theNumericQuestion.getQuestionTitle());
+			int questionTypeId = this.getIdForQuestionType(theBasicQuestionData.getQuestionType());
+			int questionTitleId = this.getIdForQuestionTitle(theBasicQuestionData.getQuestionTitle());
+
 			if ((questionTypeId == 0) || (questionTitleId == 0)) {
-				isNumericQuestionCreated = false;
+				isQuestionCreated = false;
 			} else {
 				thePreparedStatement.setInt(2, questionTypeId);
 				thePreparedStatement.setInt(3, questionTitleId);
-				thePreparedStatement.setString(4, theNumericQuestion.getQuestionText().toLowerCase());
-				Date currentDate = new Date(Calendar.getInstance().getTime().getTime());
-				thePreparedStatement.setDate(5, currentDate);
+				thePreparedStatement.setString(4, theBasicQuestionData.getQuestionText().toLowerCase());
+				Timestamp currentTimestamp = new Timestamp(Calendar.getInstance().getTime().getTime());
+				thePreparedStatement.setTimestamp(5, currentTimestamp);
 				int createQuestionResult = thePreparedStatement.executeUpdate();
 				if (createQuestionResult > 0) {
-					isNumericQuestionCreated=true;
+					isQuestionCreated = true;
 				}
 			}
 
@@ -136,78 +139,63 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				if (thePreparedStatement != null) {
 					thePreparedStatement.close();
 				}
-				log.info("closing connection after creating a numeric question");
+				log.info("closing connection after creating a numeric or text question");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		}
-		return isNumericQuestionCreated;
+		return isQuestionCreated;
 	}
 
 	@Override
-	public boolean createFreeTextQuestion(FreeTextQuestion theFreeTextQuestion, User theUser) {
-		Connection connection = null;
-		PreparedStatement thePreparedStatement = null;
-		boolean isFreeTextQuestionCreated = false;
-
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.createQuestion);
-			thePreparedStatement.setString(1, theUser.getBannerId());
-			int questionTypeId = this.getIdForQuestionType(theFreeTextQuestion.getQuestionType());
-			int questionTitleId = this.getIdForQuestionTitle(theFreeTextQuestion.getQuestionTitle());
-			if ((questionTypeId == 0) || (questionTitleId == 0)) {
-				isFreeTextQuestionCreated = false;
-			} else {
-				thePreparedStatement.setInt(2, questionTypeId);
-				thePreparedStatement.setInt(3, questionTitleId);
-				thePreparedStatement.setString(4, theFreeTextQuestion.getQuestionText().toLowerCase());
-				Date currentDate = new Date(Calendar.getInstance().getTime().getTime());
-				thePreparedStatement.setDate(5, currentDate);
-				int createQuestionResult = thePreparedStatement.executeUpdate();
-				if (createQuestionResult > 0) {
-					isFreeTextQuestionCreated=true;
-				}
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-
-			try {
-
-				if (connection != null) {
-					connection.close();
-				}
-				if (thePreparedStatement != null) {
-					thePreparedStatement.close();
-				}
-				log.info("closing connection after creating a freetext question");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-		return isFreeTextQuestionCreated;
-	}
-
-	
-
-	@Override
-	public boolean createMultipleChoiceQuestion(MultipleChoiceQuestion theMultipleChoiceChooseOne,
-			User theUser) {
+	public boolean createMultipleChoiceQuestion(MultipleChoiceQuestion theMultipleChoiceQuestion, User theUser) {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
-
+		boolean isQuestionCreated = false;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
+			// save basic question first and opions later
+			BasicQuestionData theBasicQuestionData = new BasicQuestionData();
+			theBasicQuestionData.setQuestionText(theMultipleChoiceQuestion.getQuestionText());
+			theBasicQuestionData.setQuestionTitle(theMultipleChoiceQuestion.getQuestionTitle());
+			theBasicQuestionData.setQuestionType(theMultipleChoiceQuestion.getQuestionType());
+			boolean isBasicQuestionCreated = this.createNumericOrTextQuestion(theBasicQuestionData, theUser);
+			// System.out.println("Basic question created in dao :"+isBasicQuestionCreated);
+			if (isBasicQuestionCreated) {
+				// System.out.println("Basic question created");
+				int questionId = this.getQuestionId(theBasicQuestionData);
+				// System.out.println("question id is "+questionId);
+				if (questionId != 0) {
+					for (Option theOption : theMultipleChoiceQuestion.getOptionList()) {
+
+						thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.createOptions);
+						thePreparedStatement.setInt(1, questionId);
+						thePreparedStatement.setString(2, theOption.getDisplayText());
+						thePreparedStatement.setInt(3, theOption.getStoredData());
+						// System.out.println("Saving option :"+theOption.getDisplayText()+"
+						// "+theOption.getStoredData());
+						int createdResult = thePreparedStatement.executeUpdate();
+						// System.out.println("option saved result is"+createdResult);
+						if (createdResult == 0) {
+							//System.out.println("option not inserted and closing ps");
+							isQuestionCreated = false;
+							break;
+						} else {
+							isQuestionCreated = true;
+							//System.out.println("option inserted and closing ps");
+							if (thePreparedStatement != null) {
+								thePreparedStatement.close();
+							}
+						}
+					}
+				}
+			}
+
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} finally {
 
@@ -221,14 +209,14 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				if (thePreparedStatement != null) {
 					thePreparedStatement.close();
 				}
-				log.info("closing connection after having a check if question title exists or not");
+				log.info("closing connection after creating multiple choice question");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		}
-		return false;
+		return isQuestionCreated;
 	}
 
 	@Override
@@ -237,7 +225,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
 		int titleId = 0;
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.isQuestionTitle);
@@ -308,6 +295,50 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		}
 
 		return typeId;
+	}
+
+	@Override
+	public int getQuestionId(BasicQuestionData theBasicQuestionData) {
+		Connection connection = null;
+		PreparedStatement thePreparedStatement = null;
+		ResultSet theResultSet = null;
+		UserService theUserService = SystemConfig.getSingletonInstance().getTheUserService();
+		int id = 0;
+		try {
+			connection = ConnectionManager.getInstance().getDBConnection();
+			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getQuestionId);
+			thePreparedStatement.setString(1, theUserService.getCurrentUser().getBannerId());
+			thePreparedStatement.setInt(2, this.getIdForQuestionType(theBasicQuestionData.getQuestionType()));
+			thePreparedStatement.setInt(3, this.getIdForQuestionTitle(theBasicQuestionData.getQuestionTitle()));
+			thePreparedStatement.setString(4, theBasicQuestionData.getQuestionText().toLowerCase());
+			theResultSet = thePreparedStatement.executeQuery();
+			if (theResultSet.next()) {
+				id = theResultSet.getInt(1);
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (theResultSet != null) {
+					theResultSet.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+				if (thePreparedStatement != null) {
+					thePreparedStatement.close();
+				}
+				log.info("closing connection after getting question id");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		return id;
 	}
 
 }

@@ -17,5 +17,9 @@ public class Option {
 	public void setStoredData(int storedData) {
 		this.storedData = storedData;
 	}
+	@Override
+	public String toString() {
+		return "Option [displayText=" + displayText + ", storedData=" + storedData + "]";
+	}
 
 }
