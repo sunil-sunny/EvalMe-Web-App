@@ -10,7 +10,7 @@ import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.Registerbean;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.GroupFormationToolUtil;
+import com.group18.asdc.util.DataBaseQueriesUtil;
 
 @Service
 public class CourseDetailsServiceImpl implements CourseDetailsService {
@@ -73,7 +73,7 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 				if (result.equalsIgnoreCase("success")) {
 					System.out.println("User banner is :"+user.getBannerId());
 					String messageText = "Thank you for being a part of us !! \n  you username is " + user.getBannerId()
-							+ " and the password is " + user.getBannerId().concat(GroupFormationToolUtil.passwordTag);
+							+ " and the password is " + user.getBannerId().concat(DataBaseQueriesUtil.passwordTag);
 					System.out.println(messageText);
 					System.out.println("User email is:"+ user.getEmail());
 					emailService.sendSimpleMessage(user.getEmail(), "you are now a part of EvalMe", messageText);

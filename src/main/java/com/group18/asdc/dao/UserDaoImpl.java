@@ -15,7 +15,7 @@ import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.database.SQLMethods;
 import com.group18.asdc.database.SQLQueries;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.GroupFormationToolUtil;
+import com.group18.asdc.util.DataBaseQueriesUtil;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao {
 		PreparedStatement checkUser = null;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			checkUser = connection.prepareStatement(GroupFormationToolUtil.isUserExists);
+			checkUser = connection.prepareStatement(DataBaseQueriesUtil.isUserExists);
 			checkUser.setString(1, user.getBannerId());
 			resultSet = checkUser.executeQuery();
 			log.info("In User Dao to check if user exists or not");
@@ -83,7 +83,7 @@ public class UserDaoImpl implements UserDao {
 		User user = null;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			String userSql = GroupFormationToolUtil.getUserById;
+			String userSql = DataBaseQueriesUtil.getUserById;
 			getUser = connection.prepareStatement(userSql);
 			getUser.setString(1, bannerId);
 			log.info("In User Dao to get the user for given banner id");
@@ -161,7 +161,7 @@ public class UserDaoImpl implements UserDao {
 
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			preparedStatement = connection.prepareStatement(GroupFormationToolUtil.getAlluserRelatedToCourse);
+			preparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getAlluserRelatedToCourse);
 			log.info("In users dao getting all users based on course id");
 			preparedStatement.setInt(1, courseId);
 			resultSetForStudentList = preparedStatement.executeQuery();
@@ -210,7 +210,7 @@ public class UserDaoImpl implements UserDao {
 		User instructor = null;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			preparedStatement = connection.prepareStatement(GroupFormationToolUtil.getInstructorForCourse);
+			preparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getInstructorForCourse);
 			preparedStatement.setInt(1, courseId);
 			resultSet = preparedStatement.executeQuery();
 			String bannerId = null;

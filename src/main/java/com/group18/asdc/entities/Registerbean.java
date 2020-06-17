@@ -1,6 +1,6 @@
 package com.group18.asdc.entities;
 
-import com.group18.asdc.util.GroupFormationToolUtil;
+import com.group18.asdc.util.DataBaseQueriesUtil;
 
 public class Registerbean {
 
@@ -70,7 +70,7 @@ public class Registerbean {
 		this.firstname=user.getFirstName();
 		this.lastname=user.getLastName();
 		this.emailid=user.getEmail();
-		this.password=user.getBannerId()+GroupFormationToolUtil.passwordTag;
+		this.password=user.getBannerId()+DataBaseQueriesUtil.passwordTag;
 		
 	}
 	
