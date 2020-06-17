@@ -21,7 +21,7 @@ public class DeleteQuestionController {
 		boolean isDeleted = theDeleteQuestionService.deleteQuestion(Integer.parseInt(questionId));
 
 		if (isDeleted) {
-			return "forward:/viewQuestions/getHome";
+			return "redirect:/viewQuestions/getHome";
 
 		} else {
 			return "error";
