@@ -1,5 +1,6 @@
 package com.group18.asdc.dao.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -88,6 +89,14 @@ public class CreateQuestionsDaoImplTest {
 		}
 		assertFalse(gotQuestionTitle);
 
+	}
+	
+	@Test
+	public void getQuestionIdTest() {
+		BasicQuestionData theBasicQuestionData=new BasicQuestionData();
+		CreateQuestionsDaoImplMock theCreateQuestionsDaoImplMock=new CreateQuestionsDaoImplMock();
+		int i=theCreateQuestionsDaoImplMock.getQuestionId(theBasicQuestionData);
+		assertEquals(1, i);
 	}
 
 }

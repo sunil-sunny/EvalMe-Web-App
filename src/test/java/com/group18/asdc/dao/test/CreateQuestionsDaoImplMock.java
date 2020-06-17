@@ -86,7 +86,7 @@ public class CreateQuestionsDaoImplMock implements CreateQuestionDao {
 	public int getQuestionId(BasicQuestionData theBasicQuestionData) {
 		
 		String questionTitle=theBasicQuestionData.getQuestionTitle();
-		if(questionTitle!=null) {
+		if(questionTitle==null) {
 			return 1;
 		}
 		return 1;
