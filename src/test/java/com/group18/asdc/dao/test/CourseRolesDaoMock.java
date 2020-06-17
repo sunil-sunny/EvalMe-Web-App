@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.group18.asdc.dao.CourseDetailsDao;
+import com.group18.asdc.dao.CourseRolesDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 
-public class CourseDaoImplMock implements CourseDetailsDao {
-
+public class CourseRolesDaoMock implements CourseRolesDao{
+	
 	private static List<Course> coursesDetails = new ArrayList<Course>();
 	private static List<User> userList = new ArrayList<User>();
 
-	public CourseDaoImplMock() {
+	public CourseRolesDaoMock() {
 		// declaring the courses
 		Course firstCourse = null;
 		Course secondCourse = null;
@@ -61,75 +61,32 @@ public class CourseDaoImplMock implements CourseDetailsDao {
 	}
 
 	@Override
-	public List<Course> getAllCourses() {
+	public boolean allocateTa(int courseId, User user) {
+		if (user != null) {
 
-		return CourseDaoImplMock.coursesDetails;
-	}
-
-	
-
-	@Override
-	public List<Course> getCoursesWhereUserIsStudent(User user) {
-
-		List<Course> studentCourses = new ArrayList<Course>();
-
-		for (Course theCourse : CourseDaoImplMock.coursesDetails) {
-
-			for (User theUser : theCourse.getStudentList()) {
-				if (user.getBannerId() == theUser.getBannerId()) {
-					studentCourses.add(theCourse);
-				}
+			Course theCourse=new Course();
+			theCourse.setCourseId(courseId);
+			theCourse.setTaList(Arrays.asList(user));
+			if(theCourse.getTaList().size()>0) {
+				return true;
 			}
-
+			
+			return false;
 		}
-
-		return studentCourses;
+		return false;
 	}
 
 	@Override
-	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
-		List<Course> instructorCourses = new ArrayList<Course>();
+	public boolean enrollStudentsIntoCourse(List<User> studentList, int courseId) {
 
-		for (Course theCourse : CourseDaoImplMock.coursesDetails) {
-
-			if (theCourse.getInstructorName().getBannerId() == user.getBannerId()) {
-				instructorCourses.add(theCourse);
-			}
+		Course theCourse=new Course();
+		theCourse.setCourseId(courseId);
+		theCourse.setStudentList(studentList);
+		if(theCourse.getStudentList().size()>0) {
+			return true;
 		}
-		return instructorCourses;
-	}
-
-	@Override
-	public List<Course> getCoursesWhereUserIsTA(User user) {
-		List<Course> taCourses = new ArrayList<Course>();
-
-		for (Course theCourse : CourseDaoImplMock.coursesDetails) {
-
-			for (User theUser : theCourse.getTaList()) {
-				if (user.getBannerId() == theUser.getBannerId()) {
-					taCourses.add(theCourse);
-				}
-			}
-
-		}
-
-		return taCourses;
-	}
-
-	public Course getCourseById(int courseId) {
-
-		Course course = null;
-
-		for (Course listOfCourse : CourseDaoImplMock.coursesDetails) {
-
-			if (listOfCourse.getCourseId() == courseId) {
-				course = listOfCourse;
-				break;
-			}
-		}
-
-		return course;
-
+		
+		return false;
 	}
 
 }
