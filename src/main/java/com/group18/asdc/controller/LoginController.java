@@ -2,6 +2,20 @@ package com.group18.asdc.controller;
 
 import javax.servlet.http.HttpSession;
 
+import com.group18.asdc.SystemConfig;
+import com.group18.asdc.entities.PasswordHistory;
+import com.group18.asdc.entities.User;
+import com.group18.asdc.errorhandling.PasswordPolicyException;
+import com.group18.asdc.handlingformsubmission.ResetPassword;
+import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
+import com.group18.asdc.passwordpolicy.PasswordPolicyManager;
+import com.group18.asdc.security.IPasswordEncryption;
+import com.group18.asdc.security.SecurityConfiguration;
+import com.group18.asdc.service.EmailService;
+import com.group18.asdc.service.PasswordHistoryService;
+import com.group18.asdc.service.UserService;
+import com.group18.asdc.util.CommonUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -21,12 +35,6 @@ import com.group18.asdc.util.CommonUtil;
 
 @Controller
 public class LoginController {
-
-  @Autowired
-  public EmailService emailService;
-
-  @Autowired
-  private UserService userService;
 
   @RequestMapping("/")
   public RedirectView redirectPage() {
@@ -69,15 +77,17 @@ public class LoginController {
     //
     // get User object with BOO number value and send an email
     //
+    UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
     User userObj = new User(bannerId, userService);
     /*
     * 
     */
     if (userObj.getEmail() != null && !userObj.getEmail().isEmpty()) {
-      String genPassword = CommonUtil.getInstance().generateResetPassword();
+      String genPassword = SystemConfig.getSingletonInstance().getRandomStringGenerator().generateRandomString();
       session.setAttribute("RESET_PASSWORD", genPassword);
       model.addAttribute("resetForm", new ResetPassword(bannerId));
       model.addAttribute("sentEmail", userObj.getEmail());
+      EmailService emailService = SystemConfig.getSingletonInstance().getTheEmailService();
       emailService.sendSimpleMessage(userObj.getEmail(), "Reset Password", "Your reset password is: " + genPassword);
       return "resetPassword.html";
     } else {
@@ -92,21 +102,42 @@ public class LoginController {
     String redirectURL = "login-success";
     Boolean isError = false;
     //
+    UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
     User userObj = new User(resetForm.getbannerId(), userService);
+    //
     if (!resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD"))) {
       model.addAttribute("genPasswordError", Boolean.TRUE);
-      model.addAttribute("reason","Password sent in mail does not match");
+      model.addAttribute("reason", "Password sent in mail does not match");
       isError = Boolean.TRUE;
     } else if (!resetForm.getnewPassword().equals(resetForm.getconfirmNewPassword())) {
       model.addAttribute("confirmPasswordError", Boolean.TRUE);
-      model.addAttribute("reason","New password and confirm password does not match");
+      model.addAttribute("reason", "New password and confirm password does not match");
       isError = Boolean.TRUE;
     } else {
       // set new password in the user model
-      userObj.setPassword(CommonUtil.getInstance().passwordEncoder().encode(resetForm.getconfirmNewPassword()));
-      if (!userService.updatePassword(userObj)) {
-        model.addAttribute("passwordResetError", Boolean.TRUE);
-        model.addAttribute("reason","Error resetting password.");
+      try {
+        userObj.setPassword(resetForm.getconfirmNewPassword());
+        userObj.isPasswordValid(SystemConfig.getSingletonInstance().getPasswordPolicyManager());
+        if (!userService.updatePassword(userObj, SystemConfig.getSingletonInstance().getPasswordEncryption())) {
+          model.addAttribute("passwordResetError", Boolean.TRUE);
+          model.addAttribute("reason", "Error resetting password.");
+          isError = Boolean.TRUE;
+        } else {
+          // insert value to history
+          PasswordHistory passwordHistory = new PasswordHistory();
+          passwordHistory.setBannerID(userObj.getBannerId());
+          passwordHistory.setPassword(userObj.getPassword());
+          passwordHistory.setDate(System.currentTimeMillis());
+          //
+          PasswordHistoryService passwordHistoryService = SystemConfig.getSingletonInstance()
+              .getPasswordHistoryService();
+          passwordHistoryService.insertPassword(passwordHistory,
+              SystemConfig.getSingletonInstance().getPasswordEncryption());
+        }
+
+      } catch (PasswordPolicyException e) {
+        model.addAttribute("historyConstrainError", Boolean.TRUE);
+        model.addAttribute("reason", e.getMessage());
         isError = Boolean.TRUE;
       }
     }
@@ -120,11 +151,20 @@ public class LoginController {
     }
 
   }
-  
+
   @GetMapping("/error")
   public String getErrorPage() {
-	  
-	  return "error";
+
+    return "error";
+  }
+
+  @GetMapping("/resetPasswordPolicies")
+  public String resetPasswordPolicies() {
+    SystemConfig.getSingletonInstance().setBasePasswordPolicyManager(
+        new BasePasswordPolicyManager(SystemConfig.getSingletonInstance().getPasswordPolicyDB()));
+    SystemConfig.getSingletonInstance()
+        .setPasswordPolicyManager(new PasswordPolicyManager(SystemConfig.getSingletonInstance().getPasswordPolicyDB()));
+    return "policyReset";
   }
 
 }

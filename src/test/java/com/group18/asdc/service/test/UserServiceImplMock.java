@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.group18.asdc.dao.test.UserDaoImplMock;
 import com.group18.asdc.entities.User;
+import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.service.UserService;
 
 public class UserServiceImplMock implements UserService {
@@ -43,7 +44,7 @@ public class UserServiceImplMock implements UserService {
 	}
 
 	@Override
-	public Boolean updatePassword(User userObj) {
+	public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption) {
 		// TODO Auto-generated method stub
 		return null;
 	}
