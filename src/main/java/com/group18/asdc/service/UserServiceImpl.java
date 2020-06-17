@@ -3,9 +3,10 @@ package com.group18.asdc.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
 import com.group18.asdc.entities.User;
@@ -84,5 +85,24 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserRoles(criteriaList);
 
     }
+
+	@Override
+	public User getCurrentUser() {
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String bannerid="";
+		if (principal instanceof UserDetails) {
+			bannerid = ((UserDetails) principal).getUsername();
+			//System.out.println(((UserDetails) principal).getAuthorities());
+		} else {
+			bannerid = principal.toString();
+			//System.out.println(principal.);
+		}
+		User currentUser=null;
+		if(bannerid!=null) {
+			currentUser=this.getUserById(bannerid);
+		}
+		return currentUser;
+	}
 
 }

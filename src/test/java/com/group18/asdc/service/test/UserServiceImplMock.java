@@ -1,6 +1,5 @@
 package com.group18.asdc.service.test;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +40,6 @@ public class UserServiceImplMock implements UserService {
 		valueList.add(bannerId);
 		
 		theDaoImplMock.loadUserWithBannerId(valueList, userObj);
-		
-
 	}
 
 	@Override
@@ -55,6 +52,12 @@ public class UserServiceImplMock implements UserService {
 	public ArrayList getUserRoles(User userObj) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public User getCurrentUser() {
+		User current =new User();
+		return current;
 	}
 
 

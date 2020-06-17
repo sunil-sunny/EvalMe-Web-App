@@ -16,7 +16,7 @@ import com.group18.asdc.controller.CourseController;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.GroupFormationToolUtil;
+import com.group18.asdc.util.DataBaseQueriesUtil;
 
 @Repository
 public class CourseDetailsDaoImpl implements CourseDetailsDao {
@@ -36,8 +36,8 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			log.info("In CourseDao to get all courses");
 			con = ConnectionManager.getInstance().getDBConnection();
 			getCourses = con.createStatement();
-			resultSetAllCourses = getCourses.executeQuery(GroupFormationToolUtil.getAllCourses);
-			getCourseRoles = con.prepareStatement(GroupFormationToolUtil.getCourseDetails);
+			resultSetAllCourses = getCourses.executeQuery(DataBaseQueriesUtil.getAllCourses);
+			getCourseRoles = con.prepareStatement(DataBaseQueriesUtil.getCourseDetails);
 			Course course = null;
 			while (resultSetAllCourses.next()) {
 				course = new Course();
@@ -105,7 +105,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			log.info("In Course Dao allocating TA");
-			statement = connection.prepareStatement(GroupFormationToolUtil.allocateTa);
+			statement = connection.prepareStatement(DataBaseQueriesUtil.allocateTa);
 			statement.setInt(1, courseId);
 			statement.setString(2, user.getBannerId());
 			int taAllocated = statement.executeUpdate();
@@ -148,7 +148,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			connection = ConnectionManager.getInstance().getDBConnection();
 
 			for (User user : studentList) {
-				queryToEnrollStudent = connection.prepareStatement(GroupFormationToolUtil.enrollStudentIntoCourse);
+				queryToEnrollStudent = connection.prepareStatement(DataBaseQueriesUtil.enrollStudentIntoCourse);
 				log.info("In Course Controller for enrolling students into course");
 				queryToEnrollStudent.setInt(1, courseId);
 				queryToEnrollStudent.setString(2, user.getBannerId());
@@ -193,7 +193,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
         List<Course> getCoursesAsStudent=new ArrayList<Course>();
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsStudent);
+			preparedStatement=connection.prepareStatement(DataBaseQueriesUtil.getCoursesWhereUserIsStudent);
 			preparedStatement.setString(1,user.getBannerId());
 			log.info("In course Dao after getting all courses where user is Student");
 			resultset=preparedStatement.executeQuery();
@@ -241,7 +241,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
         List<Course> getCoursesAsInstructor=new ArrayList<Course>();
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsInstructor);
+			preparedStatement=connection.prepareStatement(DataBaseQueriesUtil.getCoursesWhereUserIsInstructor);
 			preparedStatement.setString(1,user.getBannerId());
 			resultset=preparedStatement.executeQuery();
 			log.info("In course Dao after getting all courses where user is Instructor");
@@ -288,7 +288,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
         List<Course> getCoursesAsTA=new ArrayList<Course>();
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			preparedStatement=connection.prepareStatement(GroupFormationToolUtil.getCoursesWhereUserIsTA);
+			preparedStatement=connection.prepareStatement(DataBaseQueriesUtil.getCoursesWhereUserIsTA);
 			preparedStatement.setString(1,user.getBannerId());
 			resultset=preparedStatement.executeQuery();
 			log.info("In course Dao after getting all courses where user is TA");

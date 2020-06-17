@@ -4,6 +4,8 @@ import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.dao.AdminDaoImpl;
 import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.dao.CourseDetailsDaoImpl;
+import com.group18.asdc.dao.CreateQuestionDao;
+import com.group18.asdc.dao.CreateQuestionDaoImpl;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.dao.RegisterDaoImpl;
 import com.group18.asdc.dao.UserDao;
@@ -16,6 +18,8 @@ import com.group18.asdc.service.AdminService;
 import com.group18.asdc.service.AdminServiceImpl;
 import com.group18.asdc.service.CourseDetailsService;
 import com.group18.asdc.service.CourseDetailsServiceImpl;
+import com.group18.asdc.service.CreateQuestionService;
+import com.group18.asdc.service.CreateQuestionServiceImpl;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.EmailServiceImpl;
 import com.group18.asdc.service.RegisterService;
@@ -33,6 +37,7 @@ public class SystemConfig {
 	private EmailService theEmailService;
 	private RegisterService theRegisterService;
 	private UserService theUserService;
+	private CreateQuestionService theCreateQuestionService;
 
 	// Below are the instance objects for Dao layer
 	private AdminDao theAdminDao;
@@ -41,20 +46,27 @@ public class SystemConfig {
 	private UserDao theUserDao;
 	private IPasswordEncryption passwordEncryption;
 	private IDatabaseConfiguration databaseConfiguration;
+	private CreateQuestionDao theCreateQuestionDao;
 
 	private SystemConfig() {
+		
+		//Instantiating Service Objects
 		this.theAdminService=new AdminServiceImpl();
 		this.theCourseDetailsService=new CourseDetailsServiceImpl();
 		this.theEmailService=new EmailServiceImpl();
 		this.theRegisterService=new RegisterServiceImpl();
 		this.theUserService=new UserServiceImpl();
+		this.theCreateQuestionService=new CreateQuestionServiceImpl();
+		
+		
+		//Instantiating Dao objects
 		this.theAdminDao=new AdminDaoImpl();
 		this.theCourseDetailsDao=new CourseDetailsDaoImpl();
-		
 		this.theUserDao=new UserDaoImpl();
 		this.theRegisterDao=new RegisterDaoImpl();
 		this.passwordEncryption = new BCryptPasswordEncryption();
 		this.databaseConfiguration = new DefaultDatabaseConfiguration();
+		this.theCreateQuestionDao=new CreateQuestionDaoImpl();
 	}
 
 	public static SystemConfig getSingletonInstance() {
@@ -164,5 +176,21 @@ public class SystemConfig {
 
 	public void setDatabaseConfiguration(IDatabaseConfiguration databaseConfiguration) {
 		this.databaseConfiguration = databaseConfiguration;
+	}
+
+	public CreateQuestionService getTheCreateQuestionService() {
+		return theCreateQuestionService;
+	}
+
+	public void setTheCreateQuestionService(CreateQuestionService theCreateQuestionService) {
+		this.theCreateQuestionService = theCreateQuestionService;
+	}
+
+	public CreateQuestionDao getTheCreateQuestionDao() {
+		return theCreateQuestionDao;
+	}
+
+	public void setTheCreateQuestionDao(CreateQuestionDao theCreateQuestionDao) {
+		this.theCreateQuestionDao = theCreateQuestionDao;
 	}
 }
