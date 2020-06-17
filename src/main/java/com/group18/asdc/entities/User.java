@@ -31,10 +31,8 @@ public class User implements UserInterface {
 		userService.loadUserWithBannerId(bannerId, this);
 	}
 
-	public Boolean isValidUser()
-	{
-		if( bannerId != null && !bannerId.isEmpty())
-		{
+	public Boolean isValidUser() {
+		if (bannerId != null && !bannerId.isEmpty()) {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
@@ -86,16 +84,14 @@ public class User implements UserInterface {
 		this.password = password;
 	}
 
-	public void isPasswordValid(String password, IBasePasswordPolicyManager passwordPolicyManager)throws PasswordPolicyException
-	{
-		 //= SystemConfig.getSingletonInstance().getPasswordPolicyManager();
+	public static void isPasswordValid(String password, IBasePasswordPolicyManager passwordPolicyManager)
+			throws PasswordPolicyException {
 		//
-		 passwordPolicyManager.validatePassword(password);
+		passwordPolicyManager.validatePassword(password);
 	}
 
-	public void isPasswordValid(String bannerId, String password ,IPasswordPolicyManager passwordPolicyManager)throws PasswordPolicyException
-	{
-		 passwordPolicyManager.validatePassword(bannerId, password);
+	public void isPasswordValid(IPasswordPolicyManager passwordPolicyManager) throws PasswordPolicyException {
+		passwordPolicyManager.validatePassword(bannerId, password);
 	}
 
 }

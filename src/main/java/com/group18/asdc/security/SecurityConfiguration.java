@@ -23,8 +23,6 @@ import com.group18.asdc.util.CommonUtil;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    // @Autowired
-    // private DataSource dataSource;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -42,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		 */
 
         http.authorizeRequests()
-                .antMatchers("/public/**", "/forgot-password", "/registration", "/home", "/resetPassword").permitAll()
+                .antMatchers("/public/**", "/forgot-password", "/registration", "/home", "/resetPassword","/login").permitAll()
                 .anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login-error")
                 .defaultSuccessUrl("/login-success").permitAll().and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")

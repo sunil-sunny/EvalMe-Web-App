@@ -4,15 +4,19 @@ import org.apache.commons.lang3.StringUtils;
 
 public class CustomStringUtils implements ICustomStringUtils {
 
-    private Integer getStringCount(String value){
-        int upperCase = 0, lowerCase = 0, numberCount = 0, specialCharCount = 0; 
-  
-        for(char c : value.toCharArray())
-        {
-            if (Character.isUpperCase(c)){ upperCase++; }
-            else if (Character.isLowerCase(c)){ lowerCase++; }
-            else if (Character.isDigit(c)){ numberCount++;}
-            else { specialCharCount++; }
+    private Integer getStringCount(String value) {
+        int upperCase = 0, lowerCase = 0, numberCount = 0, specialCharCount = 0;
+
+        for (char c : value.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                upperCase++;
+            } else if (Character.isLowerCase(c)) {
+                lowerCase++;
+            } else if (Character.isDigit(c)) {
+                numberCount++;
+            } else {
+                specialCharCount++;
+            }
         }
 
         return specialCharCount;
@@ -39,6 +43,4 @@ public class CustomStringUtils implements ICustomStringUtils {
         return getStringCount(value);
     }
 
-
-    
 }

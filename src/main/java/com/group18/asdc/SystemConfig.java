@@ -16,6 +16,7 @@ import com.group18.asdc.dao.ViewQuestionsDao;
 import com.group18.asdc.dao.ViewQuestionsDaoImpl;
 import com.group18.asdc.database.DefaultDatabaseConfiguration;
 import com.group18.asdc.database.IDatabaseConfiguration;
+import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.security.BCryptPasswordEncryption;
 import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.passwordpolicy.IPasswordPolicyDB;
@@ -34,6 +35,8 @@ import com.group18.asdc.service.DeleteQuestionService;
 import com.group18.asdc.service.DeleteQuestionServiceImpl;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.EmailServiceImpl;
+import com.group18.asdc.service.PasswordHistoryService;
+import com.group18.asdc.service.PasswordHistoryServiceImpl;
 import com.group18.asdc.service.RegisterService;
 import com.group18.asdc.service.RegisterServiceImpl;
 import com.group18.asdc.service.UserService;
@@ -77,6 +80,7 @@ public class SystemConfig {
 	private IQueryVariableToArrayList queryVariableToArrayList;
 	private IRandomStringGenerator randomStringGenerator;
 	private ICustomStringUtils customStringUtils;
+	private PasswordHistoryService passwordHistoryService;
 
 	private SystemConfig() {
 		
@@ -85,12 +89,13 @@ public class SystemConfig {
 		this.theCourseDetailsService=new CourseDetailsServiceImpl();
 		this.theEmailService=new EmailServiceImpl();
 		this.theRegisterService=new RegisterServiceImpl();
-		this.theUserService=new UserServiceImpl();
 		this.theCreateQuestionService=new CreateQuestionServiceImpl();
 		this.theViewQuestionsService=new ViewQuestionsServiceImpl();
 		this.theDeleteQuestionService=new DeleteQuestionServiceImpl();
 		
 		//Instantiating Dao objects
+		this.queryVariableToArrayList = new QueryVariableToArraylist();
+		this.theUserService=new UserServiceImpl(this.queryVariableToArrayList);
 		this.theAdminDao=new AdminDaoImpl();
 		this.theUserDao=new UserDaoImpl();
 		this.theCourseDetailsDao=new CourseDetailsDaoImpl();
@@ -103,11 +108,11 @@ public class SystemConfig {
 		this.theDeleteQuestionDao=new DeleteQuestionDaoImpl();
 		//this.theRegisterDao=new RegisterDaoImpl();
 		this.passwordPolicyDB = new PasswordPolicyDB();
-		this.basePasswordPolicyManager = new BasePasswordPolicyManager();
-		this.passwordPolicyManager = new PasswordPolicyManager();
-		this.queryVariableToArrayList = new QueryVariableToArraylist();
+		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB);
+		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB);
 		this.randomStringGenerator = new RandomStringGenerator();
-		//this.customStringUtils = new CustomStringUtils();
+		this.customStringUtils = new CustomStringUtils();
+		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
 
 	}
 
@@ -272,9 +277,19 @@ public class SystemConfig {
 		return passwordPolicyDB;
 	}
 
+	public void setBasePasswordPolicyManager(IBasePasswordPolicyManager basePasswordPolicyManager)
+	{
+		this.basePasswordPolicyManager = basePasswordPolicyManager;
+	}
+
 	public IBasePasswordPolicyManager getBasePasswordPolicyManager()
 	{
 		return basePasswordPolicyManager;
+	}
+
+	public void setPasswordPolicyManager(IPasswordPolicyManager passwordPolicyManager)
+	{
+		this.passwordPolicyManager = passwordPolicyManager;
 	}
 
 	public IPasswordPolicyManager getPasswordPolicyManager()
@@ -294,5 +309,10 @@ public class SystemConfig {
 	public ICustomStringUtils getCustomStringUtils()
 	{
 		return customStringUtils;
+	}
+
+	public PasswordHistoryService getPasswordHistoryService()
+	{
+		return this.passwordHistoryService;
 	}
 }

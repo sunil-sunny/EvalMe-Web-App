@@ -6,20 +6,19 @@ public class MaxlengthPolicy implements IBasePasswordPolicy {
 
     private Integer maxLength;
 
-    public MaxlengthPolicy(){
+    public MaxlengthPolicy() {
 
     }
 
-    public MaxlengthPolicy(Object maxLength){
-        this.maxLength = (Integer) maxLength;
+    public MaxlengthPolicy(String maxLength) {
+        this.maxLength = Integer.parseInt(maxLength);
     }
 
     @Override
     public void validate(String password) throws PasswordPolicyException {
-        if ( password.trim().length() > maxLength)
-        {
-            throw new PasswordPolicyException("Password length is greater than "+maxLength);
+        if (password.trim().length() > maxLength) {
+            throw new PasswordPolicyException("Password length is greater than " + maxLength);
         }
     }
-    
+
 }

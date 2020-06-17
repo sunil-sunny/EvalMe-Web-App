@@ -6,22 +6,20 @@ public class MinlengthPolicy implements IBasePasswordPolicy {
 
     private static final Integer DEFAULT_MIN_LENGTH = 8;
     private Integer minLength;
-    public MinlengthPolicy()
-    {
+
+    public MinlengthPolicy() {
         minLength = DEFAULT_MIN_LENGTH;
     }
 
-    public MinlengthPolicy(Object minLength)
-    {
-        this.minLength = (Integer)minLength;
+    public MinlengthPolicy(String minLength) {
+        this.minLength = Integer.parseInt(minLength);
     }
 
     @Override
     public void validate(String password) throws PasswordPolicyException {
-        if ( password == null || password.trim().length() < minLength)
-        {
-            throw new PasswordPolicyException("Password length lesser than "+minLength);
+        if (password == null || password.trim().length() < minLength) {
+            throw new PasswordPolicyException("Password length lesser than " + minLength);
         }
     }
-    
+
 }

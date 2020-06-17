@@ -21,7 +21,8 @@ import com.group18.asdc.util.DataBaseQueriesUtil;
 public class UserDaoImpl implements UserDao {
 
 
-	private Logger log = Logger.getLogger(UserDaoImpl.class.getName());
+	// private Logger log = Logger.getLogger(UserDaoImpl.class.getName());
+	private Logger log = null;
 
 	// @Override
 	// public Boolean authenticateByEmailAndPassword(ArrayList<Object> valuesList)
@@ -252,7 +253,6 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) {
 		SQLMethods sqlImplementation = null;
-		System.out.println("nnnnnnnnnnnnnnnnn");
 		try {
 			sqlImplementation = new SQLMethods();
 			ArrayList<HashMap<String, Object>> rowsList = sqlImplementation
@@ -268,7 +268,7 @@ public class UserDaoImpl implements UserDao {
 				userObj.setPassword((String) valuesMap.get("password"));
 			}
 		} catch (SQLException e) {
-
+			e.printStackTrace();
 		} finally {
 			if (sqlImplementation != null) {
 				sqlImplementation.cleanup();
@@ -285,7 +285,7 @@ public class UserDaoImpl implements UserDao {
 					criteriaList);
 			return rowCount > 0;
 		} catch (SQLException e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
 			if (sqlImplementation != null) {
 				sqlImplementation.cleanup();

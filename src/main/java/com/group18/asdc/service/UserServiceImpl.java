@@ -11,15 +11,18 @@ import org.springframework.stereotype.Service;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
 import com.group18.asdc.entities.User;
+import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.util.CommonUtil;
+import com.group18.asdc.util.IQueryVariableToArrayList;
 
-@Service
 public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
+    private IQueryVariableToArrayList queryVariableToArrayList;
 
-    public UserServiceImpl() {
+    public UserServiceImpl(IQueryVariableToArrayList queryVariableToArrayList) {
         userDao = new UserDaoImpl();
+        this.queryVariableToArrayList = queryVariableToArrayList;
     }
 
     // @Override
@@ -63,21 +66,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void loadUserWithBannerId(String bannerId, User userObj) {
-        ArrayList<Object> valuesList = SystemConfig.getSingletonInstance().getQueryVariableToArrayListConverter().convertQueryVariablesToArrayList(bannerId);
+        ArrayList<Object> valuesList = queryVariableToArrayList.convertQueryVariablesToArrayList(bannerId);
         userDao.loadUserWithBannerId(valuesList, userObj);
     }
 
     @Override
-    public Boolean updatePassword(User userObj) {
-        ArrayList<Object> criteriaList = SystemConfig.getSingletonInstance().getQueryVariableToArrayListConverter().convertQueryVariablesToArrayList(userObj.getBannerId());
-        ArrayList<Object> valueList = SystemConfig.getSingletonInstance().getQueryVariableToArrayListConverter().convertQueryVariablesToArrayList(userObj.getPassword());
+    public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption) {
+        ArrayList<Object> criteriaList = queryVariableToArrayList
+                .convertQueryVariablesToArrayList(userObj.getBannerId());
+        ArrayList<Object> valueList = queryVariableToArrayList
+                .convertQueryVariablesToArrayList(passwordEncryption.encryptPassword(userObj.getPassword()));
         return userDao.updatePassword(criteriaList, valueList);
     }
 
     @Override
     public ArrayList getUserRoles(User userObj) {
 
-        ArrayList<Object> criteriaList = SystemConfig.getSingletonInstance().getQueryVariableToArrayListConverter()
+        ArrayList<Object> criteriaList = queryVariableToArrayList
                 .convertQueryVariablesToArrayList(userObj.getBannerId());
         return userDao.getUserRoles(criteriaList);
 
