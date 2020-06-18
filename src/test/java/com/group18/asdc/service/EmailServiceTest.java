@@ -35,7 +35,7 @@ public class EmailServiceTest {
     @Test
     public void checkEmails() {
         emailService.sendSimpleMessage("kr630601@dal.ca", "Reset", "Your Password");
-        //
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo("kr630601@dal.ca");
         message.setSubject("Reset");
