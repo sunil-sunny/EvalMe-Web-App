@@ -88,22 +88,20 @@ public class SystemConfig {
 	private PasswordHistoryService passwordHistoryService;
 	private CourseRolesDao theCourseRolesDao;
 
-	
 	private SystemConfig() {
 
 		this.javaMailSenderConfiguration = new DefaultMailSenderConfiguration();
 		this.customStringUtils = new CustomStringUtils();
-		//Instantiating Service Objects
-		this.theAdminService=new AdminServiceImpl();
-		this.theCourseDetailsService=new CourseDetailsServiceImpl();
-		this.theEmailService=new EmailServiceImpl(this.javaMailSenderConfiguration);
-		this.theRegisterService=new RegisterServiceImpl();
-		this.theCreateQuestionService=new CreateQuestionServiceImpl();
-		this.theViewQuestionsService=new ViewQuestionsServiceImpl();
-		this.theDeleteQuestionService=new DeleteQuestionServiceImpl();
-		this.theCourseRolesService=new CourseRolesServiceImpl();
-		
-		//Instantiating Dao objects
+
+		this.theAdminService = new AdminServiceImpl();
+		this.theCourseDetailsService = new CourseDetailsServiceImpl();
+		this.theEmailService = new EmailServiceImpl(this.javaMailSenderConfiguration);
+		this.theRegisterService = new RegisterServiceImpl();
+		this.theCreateQuestionService = new CreateQuestionServiceImpl();
+		this.theViewQuestionsService = new ViewQuestionsServiceImpl();
+		this.theDeleteQuestionService = new DeleteQuestionServiceImpl();
+		this.theCourseRolesService = new CourseRolesServiceImpl();
+
 		this.queryVariableToArrayList = new QueryVariableToArraylist();
 		this.theUserService = new UserServiceImpl(this.queryVariableToArrayList);
 		this.theAdminDao = new AdminDaoImpl();
@@ -113,16 +111,16 @@ public class SystemConfig {
 		this.theRegisterDao = new RegisterDaoImpl();
 		this.passwordEncryption = new BCryptPasswordEncryption();
 		this.databaseConfiguration = new DefaultDatabaseConfiguration();
-		this.theCreateQuestionDao=new CreateQuestionDaoImpl();
-		this.theViewQuestionsDao=new ViewQuestionsDaoImpl();
-		this.theDeleteQuestionDao=new DeleteQuestionDaoImpl();
-		this.theRegisterDao=new RegisterDaoImpl();
+		this.theCreateQuestionDao = new CreateQuestionDaoImpl();
+		this.theViewQuestionsDao = new ViewQuestionsDaoImpl();
+		this.theDeleteQuestionDao = new DeleteQuestionDaoImpl();
+		this.theRegisterDao = new RegisterDaoImpl();
 		this.passwordPolicyDB = new PasswordPolicyDB();
 		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB);
 		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB);
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
-		this.theCourseRolesDao=new CourseRolesDaoImpl();
+		this.theCourseRolesDao = new CourseRolesDaoImpl();
 
 	}
 
@@ -162,10 +160,6 @@ public class SystemConfig {
 	public RegisterService getTheRegisterservice() {
 		return theRegisterService;
 	}
-
-//	public void setTheRegisterservice(RegisterServiceImpl theRegisterservice) {
-//		this.theRegisterService = theRegisterservice;
-//	}
 
 	public UserService getTheUserService() {
 		return theUserService;
