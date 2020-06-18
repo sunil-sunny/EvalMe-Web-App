@@ -11,8 +11,8 @@ import com.group18.asdc.entities.User;
 import com.group18.asdc.util.DataBaseQueriesUtil;
 
 public class CourseRolesDaoImpl implements CourseRolesDao {
-	
-	private Logger log=Logger.getLogger(CourseRolesDaoImpl.class.getName());
+
+	private Logger log = Logger.getLogger(CourseRolesDaoImpl.class.getName());
 
 	@Override
 	public boolean allocateTa(int courseId, User user) {
@@ -51,7 +51,6 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 		}
 
 		return false;
-
 	}
 
 	@Override
@@ -59,7 +58,6 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 
 		Connection connection = null;
 		PreparedStatement queryToEnrollStudent = null;
-
 		boolean enrollStatus = false;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
@@ -69,7 +67,6 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 				queryToEnrollStudent.setInt(1, courseId);
 				queryToEnrollStudent.setString(2, user.getBannerId());
 				int isEnrolled = queryToEnrollStudent.executeUpdate();
-
 				if (isEnrolled == 1) {
 					enrollStatus = true;
 				}
@@ -99,4 +96,3 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 		return enrollStatus;
 	}
 }
-

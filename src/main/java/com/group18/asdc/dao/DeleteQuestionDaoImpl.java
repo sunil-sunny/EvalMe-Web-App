@@ -16,7 +16,6 @@ public class DeleteQuestionDaoImpl implements DeleteQuestionDao {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		boolean isQuestionDeleted = false;
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement=connection.prepareStatement(DataBaseQueriesUtil.deleteQuestion);
@@ -43,7 +42,6 @@ public class DeleteQuestionDaoImpl implements DeleteQuestionDao {
 				e.printStackTrace();
 			}
 		}
-
 		return isQuestionDeleted;
 	}
 

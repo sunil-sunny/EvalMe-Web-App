@@ -27,7 +27,10 @@
 				<h4>Answers</h4>
 			</div>
 			<hr>
-			<p th:text="${error}"></p>
+
+			<div class="alert alert-danger" role="alert">
+				<p th:text="${error}"></p>
+			</div>
 			<form th:action="@{/questionpage/createMultipleChoiceQuestion}"
 				th:object="${question}" method="post">
 				<div id="options">
@@ -138,39 +141,48 @@
 </body>
 
 <script>
-    $(document).ready(function() {
-        var i = 5;
-        
-        // Create a DIV and style it using .css() method.
-        var row = $(document.createElement('div')).css({
-           
-        });
-		
-		var columnone=$(document.createElement('div')).css({
-		
-		});
-		var columntwo=$(document.createElement('div')).css({
-		
-		});
-		
-		$(row).addClass("row");
-		$(columnone).addClass("col-5 form-group");
-		$(columntwo).addClass("col-5 form-group");
+	$(document)
+			.ready(
+					function() {
+						var i = 5;
 
+						// Create a DIV and style it using .css() method.
+						var row = $(document.createElement('div')).css({
 
-        $('#btAdd').click(function() {
-            
-                i = i + 1;
-				$(columnone).append('<label for="displaytext-1">Display Text:</label>'+' <input type="text" class="form-control" id="optiontext-'+i+'"'+
+						});
+
+						var columnone = $(document.createElement('div')).css({
+
+						});
+						var columntwo = $(document.createElement('div')).css({
+
+						});
+
+						$(row).addClass("row");
+						$(columnone).addClass("col-5 form-group");
+						$(columntwo).addClass("col-5 form-group");
+
+						$('#btAdd')
+								.click(
+										function() {
+
+											i = i + 1;
+											$(columnone)
+													.append(
+															'<label for="displaytext-1">Display Text:</label>'
+																	+ ' <input type="text" class="form-control" id="optiontext-'+i+'"'+
 							'name="optiontext-'+i+'" placeholder="Enter Display text">');
-				$(columntwo).append('<label for="stored-1">Stored As:</label>'+' <input type="number" class="form-control" id="optionstored-'+i+'" '+
+											$(columntwo)
+													.append(
+															'<label for="stored-1">Stored As:</label>'
+																	+ ' <input type="number" class="form-control" id="optionstored-'+i+'" '+
 				'name="optionstored-'+i+'" value="'+i+'">');
-				$(row).append(columnone);
-				$(row).append(columntwo);			
-                // Add both DIVs to the main container.
-                $('#options').after(row);
-           
-        });
-    });
+											$(row).append(columnone);
+											$(row).append(columntwo);
+											// Add both DIVs to the main container.
+											$('#options').after(row);
+
+										});
+					});
 </script>
 </html>

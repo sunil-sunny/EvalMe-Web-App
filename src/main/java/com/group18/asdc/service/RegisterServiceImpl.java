@@ -27,47 +27,33 @@ public class RegisterServiceImpl implements RegisterService {
 			System.out.println("The bannerid is not valid");
 			return "invalid bannerid2";
 		}
-
 		if (!userDetails.getEmailid().matches("(.*)@dal.ca")) {
 			System.out.println("The emailid is not valid");
 			return "invalidemailid";
 		}
-
 		try {
 			User.isPasswordValid(userDetails.getPassword(), SystemConfig.getSingletonInstance().getBasePasswordPolicyManager());
 		} catch (PasswordPolicyException e) {
-			return "passwordPolicyException="+e.getMessage();
-			
+			return "passwordPolicyException="+e.getMessage();	
 		}
-
 		RegisterDao registerDao=SystemConfig.getSingletonInstance().getTheRegisterDao();
 		boolean isEmailExits=registerDao.checkUserWithEmail(userDetails.getEmailid());
 		boolean isBannerIdExists=registerDao.checkUserWithEmail(userDetails.getBannerid());
-		
 		if(isBannerIdExists) {
-			
 			return "Banner Id already exists";
-		}
-		
+		}	
 		if(isEmailExits) {
 			return "Email already exists";
 		}
-		
 		boolean registerResult=false;
-		if(!isBannerIdExists && !isEmailExits) {
-			
+		if(!isBannerIdExists && !isEmailExits) {	
 			registerResult=registerDao.registeruser(userDetails);
 		}
-		
-		if(registerResult) {
-			
+		if(registerResult) {	
 			return "Success";
 		}
-
-
 		return "User not Registered";
 	}
-	
 	
 	@Override
 	public boolean registerStudents(List<User> studentList) {

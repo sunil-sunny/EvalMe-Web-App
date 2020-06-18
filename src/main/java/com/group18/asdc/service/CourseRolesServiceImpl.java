@@ -19,12 +19,10 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 		List<User> eligibleUser = null;
 		CourseRolesDao courseRolesDao = SystemConfig.getSingletonInstance().getTheCourseRolesDao();
 		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
-
 		if (user != null) {
 			taAsList.add(user);
 			eligibleUser = userService.filterEligibleUsersForCourse(taAsList, courseId);
 		}
-
 		if (eligibleUser != null && eligibleUser.size() != 0) {
 
 			return courseRolesDao.allocateTa(courseId, user);
@@ -51,5 +49,4 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 			return false;
 		}
 	}
-
 }

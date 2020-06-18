@@ -23,7 +23,6 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
 		List<QuestionMetaData> allQuestions = new ArrayList<QuestionMetaData>();
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getAllQuestions);
@@ -68,7 +67,6 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
 		List<QuestionMetaData> allQuestionsSortByDate = new ArrayList<QuestionMetaData>();
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getAllQuestionsSortByDate);
@@ -86,7 +84,6 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-
 			try {
 				if (theResultSet != null) {
 					theResultSet.close();
@@ -113,7 +110,6 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
 		List<QuestionMetaData> allQuestionsSortByTitle = new ArrayList<QuestionMetaData>();
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getAllQuestionsSortByTitle);
@@ -151,5 +147,4 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 
 		return allQuestionsSortByTitle;
 	}
-
 }

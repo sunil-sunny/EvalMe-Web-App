@@ -2,15 +2,13 @@ package com.group18.asdc.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.util.IQueryVariableToArrayList;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserServiceImpl implements UserService {
 

@@ -48,10 +48,7 @@ public class CreateQuestionController {
 	public String getQuestionConfirmPage(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model) {
 
 		log.info("confirming questions based on type");
-
-		System.out.println(basicQuestionData.getQuestionType());
 		model.addAttribute("BasicQuestion", basicQuestionData);
-
 		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.numericType)
 				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.freeText)) {
 			return "NumericOrTextQuestion";
@@ -67,7 +64,6 @@ public class CreateQuestionController {
 	@RequestMapping(value = "/createNumericOrTextQuestion", method = RequestMethod.POST)
 	public String createNumericOrQuestion(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model,
 			RedirectAttributes theRedirectAttributes) {
-
 		log.info("creating Numeric question");
 		CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
 				.getTheCreateQuestionService();
@@ -86,7 +82,6 @@ public class CreateQuestionController {
 	@RequestMapping(value = "/createMultipleChoiceQuestion", method = RequestMethod.POST)
 	public String createMultipleChoiceQuestion(@ModelAttribute("question") BasicQuestionData theBasicQuestionData,
 			HttpServletRequest request, Model model, RedirectAttributes theRedirectAttributes) {
-
 		CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
 				.getTheCreateQuestionService();
 		MultipleChoiceQuestion theMultipleChoiceQuestion = new MultipleChoiceQuestion();
@@ -99,7 +94,6 @@ public class CreateQuestionController {
 		Option theOption = null;
 		int iterativeNumber = 1;
 		while (true) {
-
 			theOption = new Option();
 			displayOption = request.getParameter("optiontext-" + iterativeNumber + "");
 			storedOption = request.getParameter("optionstored-" + iterativeNumber + "");

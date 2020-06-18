@@ -32,7 +32,7 @@ import com.group18.asdc.service.AdminServiceImpl;
 import com.group18.asdc.service.CourseDetailsService;
 import com.group18.asdc.service.CourseDetailsServiceImpl;
 import com.group18.asdc.service.CourseRolesService;
-
+import com.group18.asdc.service.CourseRolesServiceImpl;
 import com.group18.asdc.service.CreateQuestionService;
 import com.group18.asdc.service.CreateQuestionServiceImpl;
 import com.group18.asdc.service.DeleteQuestionService;
@@ -102,7 +102,7 @@ public class SystemConfig {
 		this.theCreateQuestionService=new CreateQuestionServiceImpl();
 		this.theViewQuestionsService=new ViewQuestionsServiceImpl();
 		this.theDeleteQuestionService=new DeleteQuestionServiceImpl();
-		//this.theCourseRolesService=new CourseRolesServiceImpl();
+		this.theCourseRolesService=new CourseRolesServiceImpl();
 		
 		//Instantiating Dao objects
 		this.queryVariableToArrayList = new QueryVariableToArraylist();
@@ -244,6 +244,30 @@ public class SystemConfig {
 		this.theCourseRolesService = theCourseRolesService;
 	}
 
+	public void setTheCreateQuestionService(CreateQuestionService theCreateQuestionService) {
+		this.theCreateQuestionService = theCreateQuestionService;
+	}
+
+	public CreateQuestionDao getTheCreateQuestionDao() {
+		return theCreateQuestionDao;
+	}
+
+	public IJavaMailSenderConfiguration getJavaMailSenderConfiguration() {
+		return javaMailSenderConfiguration;
+	}
+
+	public void setJavaMailSenderConfiguration(IJavaMailSenderConfiguration javaMailSenderConfiguration) {
+		this.javaMailSenderConfiguration = javaMailSenderConfiguration;
+	}
+
+	public IQueryVariableToArrayList getQueryVariableToArrayList() {
+		return queryVariableToArrayList;
+	}
+
+	public void setQueryVariableToArrayList(IQueryVariableToArrayList queryVariableToArrayList) {
+		this.queryVariableToArrayList = queryVariableToArrayList;
+	}
+
 	public CourseRolesDao getTheCourseRolesDao() {
 		return theCourseRolesDao;
 	}
@@ -252,12 +276,20 @@ public class SystemConfig {
 		this.theCourseRolesDao = theCourseRolesDao;
 	}
 
-	public void setTheCreateQuestionService(CreateQuestionService theCreateQuestionService) {
-		this.theCreateQuestionService = theCreateQuestionService;
+	public void setPasswordPolicyDB(IPasswordPolicyDB passwordPolicyDB) {
+		this.passwordPolicyDB = passwordPolicyDB;
 	}
 
-	public CreateQuestionDao getTheCreateQuestionDao() {
-		return theCreateQuestionDao;
+	public void setRandomStringGenerator(IRandomStringGenerator randomStringGenerator) {
+		this.randomStringGenerator = randomStringGenerator;
+	}
+
+	public void setCustomStringUtils(ICustomStringUtils customStringUtils) {
+		this.customStringUtils = customStringUtils;
+	}
+
+	public void setPasswordHistoryService(PasswordHistoryService passwordHistoryService) {
+		this.passwordHistoryService = passwordHistoryService;
 	}
 
 	public DeleteQuestionService getTheDeleteQuestionService() {

@@ -33,7 +33,6 @@ public class UserServiceImplTest {
 
 		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
 		User user = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
-		;
 		boolean isExist = UserServiceImplMock.isUserExists(user);
 		assertTrue(isExist);
 
@@ -44,7 +43,6 @@ public class UserServiceImplTest {
 
 		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
 		User user = new User("Sachin", "Tendulkar", "B00999999", "sachin@dal.ca");
-		;
 		boolean isExist = UserServiceImplMock.isUserExists(user);
 		assertFalse(isExist);
 

@@ -35,14 +35,13 @@ public class DataBaseQueriesUtil {
 	public final static String isCourseIdExists = "SELECT courseid from course where courseid=?";
 	public final static String isCourseNameExists = "SELECT coursename from course where coursename=?";
 	public final static String isInstructorAssigned = "select bannerid from courserole where courseid = ? and bannerid = ? and roleid = (select roleid from role where rolename='INSTRUCTOR')";
-	
+
 	public final static String isInstructorStudent = "SELECT bannerid from courserole where roleid in (select roleid from role where rolename in ('STUDENT','TA')) and bannerid=? and courseid=?";
 
 	public final static String createCourse = "insert into course(courseid,coursename) values (?,?)";
 	public final static String allocateCourseInstructor = "insert into courserole(roleid,courseid,bannerid) values ((select roleid from role where rolename='INSTRUCTOR'),?,?)";
-	
 	public final static String deleteCourse = "delete from course where courseid=?";
-	
+
 	public final static String isQuestionTitle = "select * from questiontitle where qtitle=?;";
 	public final static String createQuestionTitle = "insert into questiontitle (qtitle) values (?);";
 	public final static String getQuestionTypeId = "SELECT * FROM questiontype where questiontypename=?;";

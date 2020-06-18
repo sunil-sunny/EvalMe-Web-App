@@ -2,6 +2,16 @@ package com.group18.asdc.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
+
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.entities.User;
@@ -13,17 +23,6 @@ import com.group18.asdc.passwordpolicy.PasswordPolicyManager;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.UserService;
-import com.group18.asdc.util.ICustomStringUtils;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class LoginController {
