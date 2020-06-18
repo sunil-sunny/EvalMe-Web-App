@@ -1,5 +1,9 @@
 package com.group18.asdc.entities;
 
+import com.group18.asdc.SystemConfig;
+import com.group18.asdc.errorhandling.PasswordPolicyException;
+import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
+import com.group18.asdc.passwordpolicy.IPasswordPolicyManager;
 import com.group18.asdc.service.UserService;
 
 public class User implements UserInterface {
@@ -27,10 +31,8 @@ public class User implements UserInterface {
 		userService.loadUserWithBannerId(bannerId, this);
 	}
 
-	public Boolean isValidUser()
-	{
-		if( bannerId != null && !bannerId.isEmpty())
-		{
+	public Boolean isValidUser() {
+		if (bannerId != null && !bannerId.isEmpty()) {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
@@ -80,6 +82,16 @@ public class User implements UserInterface {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public static void isPasswordValid(String password, IBasePasswordPolicyManager passwordPolicyManager)
+			throws PasswordPolicyException {
+		//
+		passwordPolicyManager.validatePassword(password);
+	}
+
+	public void isPasswordValid(IPasswordPolicyManager passwordPolicyManager) throws PasswordPolicyException {
+		passwordPolicyManager.validatePassword(bannerId, password);
 	}
 
 }

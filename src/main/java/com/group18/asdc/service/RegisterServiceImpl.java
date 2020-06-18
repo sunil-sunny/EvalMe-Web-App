@@ -9,7 +9,7 @@ import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.entities.Registerbean;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.DataBaseQueriesUtil;
+import com.group18.asdc.errorhandling.PasswordPolicyException;
 
 @Repository
 public class RegisterServiceImpl implements RegisterService {
@@ -31,10 +31,16 @@ public class RegisterServiceImpl implements RegisterService {
 			System.out.println("The emailid is not valid");
 			return "invalidemailid";
 		}
-		if (bean.getPassword().length() <= 7) {
-			System.out.println("The password is less than 8 characters");
-			return "shortpassword";
+
+		try {
+			User.isPasswordValid(bean.getConfirmpassword(), SystemConfig.getSingletonInstance().getBasePasswordPolicyManager());
+		} catch (PasswordPolicyException e) {
+			return "passwordPolicyException="+e.getMessage();
+			
 		}
+		
+
+		
 		
 		RegisterDao registerDao=SystemConfig.getSingletonInstance().getTheRegisterDao();
 		boolean isEmailExits=registerDao.checkUserWithEmail(bean.getEmailid());
@@ -56,6 +62,7 @@ public class RegisterServiceImpl implements RegisterService {
 		}
 		
 		if(result) {
+			
 			return "Success";
 		}
 
