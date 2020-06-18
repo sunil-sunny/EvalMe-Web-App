@@ -30,27 +30,6 @@ public class CreateQuestionsDaoImplMock implements CreateQuestionDao {
 		
 	}
 
-	@Override
-	public boolean isQuestionTitleExists(BasicQuestionData theBasicQuestionData) {
-		
-		String questionTitle=theBasicQuestionData.getQuestionTitle();
-		
-		for(String title:CreateQuestionsDaoImplMock.titles) {
-			if(title.equalsIgnoreCase(questionTitle)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public boolean createQuestionTitle(BasicQuestionData basicQuestionData) {
-		
-		CreateQuestionsDaoImplMock.titles.add(basicQuestionData.getQuestionTitle());
-		
-		return true;
-	}
 
 	@Override
 	public boolean createNumericOrTextQuestion(BasicQuestionData theBasicQuestionData, User theUser) {
@@ -60,12 +39,7 @@ public class CreateQuestionsDaoImplMock implements CreateQuestionDao {
 		return true;
 	}
 
-	@Override
-	public int getIdForQuestionTitle(String questionTitle) {
-
-		int index=CreateQuestionsDaoImplMock.titles.indexOf(questionTitle);
-		return index;
-	}
+	
 
 	@Override
 	public int getIdForQuestionType(String questionType) {
@@ -83,13 +57,13 @@ public class CreateQuestionsDaoImplMock implements CreateQuestionDao {
 	}
 
 	@Override
-	public int getQuestionId(BasicQuestionData theBasicQuestionData) {
+	public boolean isQuestionExists(BasicQuestionData theBasicQuestionData) {
 		
 		String questionTitle=theBasicQuestionData.getQuestionTitle();
 		if(questionTitle==null) {
-			return 1;
+			return true;
 		}
-		return 1;
+		return true;
 	}
 
 }

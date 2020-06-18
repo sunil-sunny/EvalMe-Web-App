@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group18.asdc.entities.User;
+import com.group18.asdc.security.IPasswordEncryption;
+import com.group18.asdc.util.IQueryVariableToArrayList;
 
 public interface UserService {
 
@@ -17,7 +19,7 @@ public interface UserService {
 	
 	public void loadUserWithBannerId(String bannerId, User userObj);
 
-	public Boolean updatePassword(User userObj);
+	public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption);
 
 	public User getCurrentUser();
 

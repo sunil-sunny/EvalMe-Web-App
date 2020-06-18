@@ -1,13 +1,20 @@
 package com.group18.asdc.service;
 
+import java.util.List;
+import java.util.logging.Logger;
+
 import org.springframework.stereotype.Repository;
 
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.entities.Registerbean;
+import com.group18.asdc.entities.User;
+import com.group18.asdc.errorhandling.PasswordPolicyException;
 
 @Repository
 public class RegisterServiceImpl implements RegisterService {
+	
+	private Logger log=Logger.getLogger(RegisterServiceImpl.class.getName());
 
 	@Override
 	public String registeruser(Registerbean bean) {
@@ -24,10 +31,16 @@ public class RegisterServiceImpl implements RegisterService {
 			System.out.println("The emailid is not valid");
 			return "invalidemailid";
 		}
-		if (bean.getPassword().length() <= 7) {
-			System.out.println("The password is less than 8 characters");
-			return "shortpassword";
+
+		try {
+			User.isPasswordValid(bean.getConfirmpassword(), SystemConfig.getSingletonInstance().getBasePasswordPolicyManager());
+		} catch (PasswordPolicyException e) {
+			return "passwordPolicyException="+e.getMessage();
+			
 		}
+		
+
+		
 		
 		RegisterDao registerDao=SystemConfig.getSingletonInstance().getTheRegisterDao();
 		boolean isEmailExits=registerDao.checkUserWithEmail(bean.getEmailid());
@@ -49,10 +62,37 @@ public class RegisterServiceImpl implements RegisterService {
 		}
 		
 		if(result) {
+			
 			return "Success";
 		}
 
 
 		return "User not Registered";
+	}
+	
+	
+	@Override
+	public boolean registerStudents(List<User> studentList) {
+		
+		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
+		EmailService emailService = null;
+		boolean isAllStudentsRegistered=true;
+		for (User user : studentList) {
+
+			if (!userService.isUserExists(user)) {
+
+				String result = this.registeruser(new Registerbean(user));
+
+				if (result.equalsIgnoreCase("success")) {
+					emailService=SystemConfig.getSingletonInstance().getTheEmailService();
+					String messageText = "Thank you for being a part of us !! \n  you username is " + user.getBannerId()
+							+ " and the password is " + user.getBannerId().concat(DataBaseQueriesUtil.passwordTag);
+					emailService.sendSimpleMessage(user.getEmail(), "you are now a part of EvalMe", messageText);
+				} else {
+					log.info("user registartion error");
+				}
+			}
+		}
+		return isAllStudentsRegistered;
 	}
 }

@@ -1,4 +1,5 @@
 package com.group18.asdc.controller;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -6,10 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.group18.asdc.SystemConfig;
-import com.group18.asdc.entities.Registerbean;
-import com.group18.asdc.service.RegisterService;
 
+import java.sql.Date;
+
+import com.group18.asdc.SystemConfig;
+import com.group18.asdc.entities.PasswordHistory;
+import com.group18.asdc.entities.Registerbean;
+import com.group18.asdc.service.PasswordHistoryService;
+import com.group18.asdc.service.PasswordHistoryServiceImpl;
+import com.group18.asdc.service.RegisterService;
 
 @Controller
 @RequestMapping("/registration")
@@ -27,13 +33,13 @@ public class Registercontroller {
 
 	@PostMapping
 	public String registerUserAccount(@ModelAttribute("user") Registerbean bean, BindingResult result) {
-		
-		RegisterService num=SystemConfig.getSingletonInstance().getTheRegisterservice();
+
+		RegisterService num = SystemConfig.getSingletonInstance().getTheRegisterservice();
 
 		if (result.hasErrors()) {
 			return "registration";
 		}
-		
+
 		String s = num.registeruser(bean);
 		if (s.equals("alreadycreated")) {
 			System.out.println("already exists");
@@ -50,10 +56,23 @@ public class Registercontroller {
 			return "redirect:/registration?invalidemailid";
 		} else if (s.equals("shortpassword")) {
 			return "redirect:/registration?shortpassword";
+		} else if (s.contains("passwordPolicyException")) {
+			return "redirect:/registration?" + s;
 		}
 
 		else {
 			System.out.println("successfully created the acc" + s);
+			// insert new password to history is registration is successful
+
+			PasswordHistory passwordHistory = new PasswordHistory();
+			passwordHistory.setBannerID(bean.getBannerid());
+			passwordHistory.setPassword(bean.getPassword());
+			passwordHistory.setDate(System.currentTimeMillis());
+			//
+			PasswordHistoryService passwordHistoryService = SystemConfig.getSingletonInstance()
+					.getPasswordHistoryService();
+			passwordHistoryService.insertPassword(passwordHistory,
+					SystemConfig.getSingletonInstance().getPasswordEncryption());
 
 			return "redirect:/login?accountcreatedsuccessfully";
 		}

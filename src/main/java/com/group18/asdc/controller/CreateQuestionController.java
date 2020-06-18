@@ -39,8 +39,6 @@ public class CreateQuestionController {
 		return new MultipleChoiceQuestion();
 	}
 
-	
-
 	@GetMapping("/getCreateQuestionHome")
 	public String getcreateQuestionPage(Model model) {
 		return "QuestionCreateHome";
@@ -67,26 +65,27 @@ public class CreateQuestionController {
 	}
 
 	@RequestMapping(value = "/createNumericOrTextQuestion", method = RequestMethod.POST)
-	public String createNumericOrQuestion(@ModelAttribute("question") BasicQuestionData basicQuestionData,
-			Model model,RedirectAttributes theRedirectAttributes) {
+	public String createNumericOrQuestion(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model,
+			RedirectAttributes theRedirectAttributes) {
 
 		log.info("creating Numeric question");
 		CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
 				.getTheCreateQuestionService();
 		boolean isQuestionCreated = theCreateQuestionService.createNumericOrTextQuestion(basicQuestionData);
-		System.out.println("Free tecxt created: "+isQuestionCreated );
 		if (isQuestionCreated) {
-			return "QuestionPageHome";
+			log.info("Numeric or text question created");
+
+			return "Question";
 		} else {
+			log.info("Error creating numeric or text question");
+
 			return "error";
 		}
 	}
 
-	
-
 	@RequestMapping(value = "/createMultipleChoiceQuestion", method = RequestMethod.POST)
 	public String createMultipleChoiceQuestion(@ModelAttribute("question") BasicQuestionData theBasicQuestionData,
-			HttpServletRequest request,Model model, RedirectAttributes theRedirectAttributes) {
+			HttpServletRequest request, Model model, RedirectAttributes theRedirectAttributes) {
 
 		CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
 				.getTheCreateQuestionService();
@@ -99,10 +98,9 @@ public class CreateQuestionController {
 		String storedOption = null;
 		Option theOption = null;
 		int iterativeNumber = 1;
-
 		while (true) {
 
-			theOption=new Option();
+			theOption = new Option();
 			displayOption = request.getParameter("optiontext-" + iterativeNumber + "");
 			storedOption = request.getParameter("optionstored-" + iterativeNumber + "");
 			if ((displayOption == null) || (storedOption == null)) {
@@ -115,25 +113,24 @@ public class CreateQuestionController {
 			}
 			iterativeNumber++;
 		}
-		if(optionList.size()==0) {
-			
+		if (optionList.size() == 0) {
+
 			model.addAttribute("BasicQuestion", theBasicQuestionData);
 			model.addAttribute("error", "Enter Options to proceed");
 
 			return "MultipleChoiceQuestion";
-		}
-		else {
-			
+		} else {
+
 			theMultipleChoiceQuestion.setOptionList(optionList);
 		}
 
-		boolean isQuestionCreated =theCreateQuestionService.createMultipleQuestion(theMultipleChoiceQuestion);
+		boolean isQuestionCreated = theCreateQuestionService.createMultipleQuestion(theMultipleChoiceQuestion);
 
-		
-		if(isQuestionCreated) {
+		if (isQuestionCreated) {
+			log.info("Created multiple choice questions success");
 			return "QuestionPageHome";
-		}
-		else {
+		} else {
+			log.info("Error in Created multiple choice questions success");
 			return "error";
 		}
 	}

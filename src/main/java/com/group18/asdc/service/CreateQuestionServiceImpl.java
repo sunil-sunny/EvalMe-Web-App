@@ -14,21 +14,10 @@ public class CreateQuestionServiceImpl implements CreateQuestionService {
 		CreateQuestionDao theCreateQuestionDao = SystemConfig.getSingletonInstance().getTheCreateQuestionDao();
 		UserService theUserService = SystemConfig.getSingletonInstance().getTheUserService();
 		User theUser = theUserService.getCurrentUser();
-		boolean isQuestiontitleExists = theCreateQuestionDao.isQuestionTitleExists(theBasicQuestionData);
-		if (!isQuestiontitleExists) {
-			boolean isQuestionTitleCreated = theCreateQuestionDao.createQuestionTitle(theBasicQuestionData);
-			if (isQuestionTitleCreated) {
-				isQuestiontitleExists = true;
-			}
+		boolean isQuestionExist = theCreateQuestionDao.isQuestionExists(theBasicQuestionData);
+		if (!isQuestionExist) {
+			return theCreateQuestionDao.createNumericOrTextQuestion(theBasicQuestionData, theUser);
 		}
-		int isQuestionExistStatus = theCreateQuestionDao.getQuestionId(theBasicQuestionData);
-
-		if (isQuestiontitleExists) {
-			if (isQuestionExistStatus == 0) {
-				return theCreateQuestionDao.createNumericOrTextQuestion(theBasicQuestionData, theUser);
-			}
-		}
-
 		return false;
 	}
 
@@ -41,23 +30,9 @@ public class CreateQuestionServiceImpl implements CreateQuestionService {
 		theBasicQuestionData.setQuestionTitle(theMultipleChoiceChoose.getQuestionTitle());
 		theBasicQuestionData.setQuestionText(theMultipleChoiceChoose.getQuestionText());
 		theBasicQuestionData.setQuestionType(theMultipleChoiceChoose.getQuestionType());
-		boolean isQuestiontitleExists = theCreateQuestionDao.isQuestionTitleExists(theBasicQuestionData);
-
-		if (!isQuestiontitleExists) {
-			boolean isQuestionTitleCreated = theCreateQuestionDao.createQuestionTitle(theBasicQuestionData);
-			if (isQuestionTitleCreated) {
-				isQuestiontitleExists = true;
-			}
-		}
-
-		int isQuestionExistStatus = theCreateQuestionDao.getQuestionId(theBasicQuestionData);
-
-		
-		if (isQuestiontitleExists) {
-
-			if (isQuestionExistStatus == 0) {
-				return theCreateQuestionDao.createMultipleChoiceQuestion(theMultipleChoiceChoose, theUser);
-			}
+		boolean isQuestionExist = theCreateQuestionDao.isQuestionExists(theBasicQuestionData);
+		if (!isQuestionExist) {
+			return theCreateQuestionDao.createMultipleChoiceQuestion(theMultipleChoiceChoose, theUser);
 		}
 
 		return false;
