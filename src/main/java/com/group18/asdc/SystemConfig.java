@@ -164,9 +164,6 @@ public class SystemConfig {
 		return theRegisterService;
 	}
 
-//	public void setTheRegisterservice(RegisterServiceImpl theRegisterservice) {
-//		this.theRegisterService = theRegisterservice;
-//	}
 
 	public UserService getTheUserService() {
 		return theUserService;

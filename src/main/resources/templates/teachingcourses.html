@@ -29,7 +29,6 @@ h1 {
 		<tbody>
 			<form th:each="prod: ${coursesList}"
 				th:action="@{/coursepageInstrcutor}" method="get">
-
 				<tr>
 					<td th:text="${prod.CourseId}" />
 					<td th:text="${prod.CourseName}" />
