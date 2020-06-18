@@ -47,8 +47,7 @@ public class RegisterServiceImpl implements RegisterService {
 		if(isBannerIdExists) {
 			
 			return "Banner Id already exists";
-		}
-		
+		}	
 		if(isEmailExits) {
 			return "Email already exists";
 		}
