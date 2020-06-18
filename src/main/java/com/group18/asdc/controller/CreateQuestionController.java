@@ -123,9 +123,7 @@ public class CreateQuestionController {
 
 			theMultipleChoiceQuestion.setOptionList(optionList);
 		}
-
 		boolean isQuestionCreated = theCreateQuestionService.createMultipleQuestion(theMultipleChoiceQuestion);
-
 		if (isQuestionCreated) {
 			log.info("Created multiple choice questions success");
 			return "QuestionCreateSuccess";
