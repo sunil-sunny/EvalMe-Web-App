@@ -1,6 +1,5 @@
 package com.group18.asdc.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -8,9 +7,7 @@ import org.springframework.stereotype.Service;
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.entities.Course;
-import com.group18.asdc.entities.UserRegistartionDetails;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.DataBaseQueriesUtil;
 
 @Service
 public class CourseDetailsServiceImpl implements CourseDetailsService {
@@ -21,9 +18,6 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 		CourseDetailsDao courseDetailsDao = SystemConfig.getSingletonInstance().getTheCourseDetailsDao();
 		return courseDetailsDao.getAllCourses();
 	}
-
-	
-	
 
 	@Override
 	public List<Course> getCoursesWhereUserIsStudent(User user) {

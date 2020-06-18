@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.group18.asdc.entities.User;
 import com.group18.asdc.security.IPasswordEncryption;
-import com.group18.asdc.util.IQueryVariableToArrayList;
 
 public interface UserService {
 
@@ -16,7 +15,7 @@ public interface UserService {
 	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId);
 
 	public List<User> getAllUsersByCourse(int courseId);
-	
+
 	public void loadUserWithBannerId(String bannerId, User userObj);
 
 	public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption);

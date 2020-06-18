@@ -29,7 +29,6 @@ public class CourseRolesController {
 
 	@RequestMapping(value = "/allocateTA", method = RequestMethod.POST)
 	public String allocateTA(HttpServletRequest request, Model theModel) {
-
 		String bannerId = request.getParameter("TA");
 		String courseId = request.getParameter("courseid");
 		String courseName = request.getParameter("coursename");
@@ -53,10 +52,8 @@ public class CourseRolesController {
 				log.info("User has been allocated as TA role for the course");
 				theModel.addAttribute("result", "TA Allocated");
 			}
-
 			return "instrcutorcoursehome";
 		}
-
 	}
 
 	/*
@@ -67,7 +64,6 @@ public class CourseRolesController {
 	@RequestMapping(value = "/uploadstudents", method = RequestMethod.POST)
 	public String uploadStudentsToCourse(@RequestParam(name = "file") MultipartFile file, Model theModel,
 			HttpServletRequest request) {
-
 		String courseId = request.getParameter("courseid");
 		String courseName = request.getParameter("coursename");
 		System.out.println("The Course id is " + courseId);
@@ -118,9 +114,7 @@ public class CourseRolesController {
 							log.info("Rows which has invalid details are ignored");
 							theModel.addAttribute("fileDetailsErrors", "Rows which has invalid details are ignored");
 						}
-
 					}
-
 					if (validUsers.size() > 0) {
 
 						boolean status = courseRolesService.enrollStuentsIntoCourse(validUsers,
@@ -135,7 +129,6 @@ public class CourseRolesController {
 									"Success!! Users who are already related to course are ignored");
 						}
 					}
-
 					br.close();
 				} catch (IOException e) {
 
@@ -146,5 +139,4 @@ public class CourseRolesController {
 		}
 		return "instrcutorcoursehome";
 	}
-
 }

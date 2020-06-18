@@ -30,13 +30,10 @@ public class RegisterController {
 
 	@PostMapping
 	public String registerUserAccount(@ModelAttribute("user") UserRegistartionDetails bean, BindingResult result) {
-
 		RegisterService theRegisterService = SystemConfig.getSingletonInstance().getTheRegisterservice();
-
 		if (result.hasErrors()) {
 			return "registration";
 		}
-
 		String registrationStatus = theRegisterService.registeruser(bean);
 		if (registrationStatus.equals("alreadycreated")) {
 			System.out.println("already exists");
@@ -55,23 +52,17 @@ public class RegisterController {
 			return "redirect:/registration?shortpassword";
 		} else if (registrationStatus.contains("passwordPolicyException")) {
 			return "redirect:/registration?" + registrationStatus;
-		}
-
-		else {
+		} else {
 			// insert new password to history is registration is successful
-
 			PasswordHistory passwordHistory = new PasswordHistory();
 			passwordHistory.setBannerID(bean.getBannerid());
 			passwordHistory.setPassword(bean.getPassword());
 			passwordHistory.setDate(System.currentTimeMillis());
-			//
 			PasswordHistoryService passwordHistoryService = SystemConfig.getSingletonInstance()
 					.getPasswordHistoryService();
 			passwordHistoryService.insertPassword(passwordHistory,
 					SystemConfig.getSingletonInstance().getPasswordEncryption());
-
 			return "redirect:/login?accountcreatedsuccessfully";
 		}
-
 	}
 }

@@ -10,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.UserRegistartionDetails;
 
-
 public class RegisterDaoImpl implements RegisterDao {
 
 	@Override
@@ -21,22 +20,18 @@ public class RegisterDaoImpl implements RegisterDao {
 		PreparedStatement assignRoleStatement = null;
 		boolean isUserRegisterd=false;
 		boolean isGuestRoleAssigned=false;
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			connection.setAutoCommit(false);
 			registerUserStatement = connection.prepareStatement("insert into user values(?,?,?,?,?)");
-
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String hashedPassword = passwordEncoder.encode(registerDetails.getPassword());
-			// System.out.println("encrypted password is" + hashedPassword);
 			registerUserStatement.setString(1, registerDetails.getBannerid());
 			registerUserStatement.setString(2, registerDetails.getLastname());
 			registerUserStatement.setString(3, registerDetails.getFirstname());
 			registerUserStatement.setString(4, registerDetails.getEmailid());
 			registerUserStatement.setString(5, hashedPassword);
 			int registerStatus = registerUserStatement.executeUpdate();
-			
 			if (registerStatus > 0) {
 				isUserRegisterd=true;
 			}
@@ -44,12 +39,10 @@ public class RegisterDaoImpl implements RegisterDao {
 			assignRoleStatement.setInt(1, 2);
 			assignRoleStatement.setString(2, registerDetails.getBannerid());
 			int assignRoleResult = assignRoleStatement.executeUpdate();
-			
 			if (assignRoleResult > 0) {
 				System.out.println("The role is addded as a guest user");
 				isGuestRoleAssigned=true;
 			}
-			
 			if(isGuestRoleAssigned&&isUserRegisterd) {
 				connection.commit();
 			}
@@ -72,9 +65,7 @@ public class RegisterDaoImpl implements RegisterDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
-
 		return isUserRegisterd && isGuestRoleAssigned;
 	}
 
@@ -121,7 +112,6 @@ public class RegisterDaoImpl implements RegisterDao {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement("select * from user where bannerid=?");
@@ -149,10 +139,7 @@ public class RegisterDaoImpl implements RegisterDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
-
 		return false;
 	}
-
 }

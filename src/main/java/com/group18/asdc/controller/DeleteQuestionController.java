@@ -13,16 +13,12 @@ public class DeleteQuestionController {
 
 	@GetMapping("/deleteQuestion")
 	public String deleteQuestion(HttpServletRequest request) {
-
-		System.out.println("in delete controller");
 		String questionId = request.getParameter("id");
 		DeleteQuestionService theDeleteQuestionService = SystemConfig.getSingletonInstance()
 				.getTheDeleteQuestionService();
 		boolean isDeleted = theDeleteQuestionService.deleteQuestion(Integer.parseInt(questionId));
-
 		if (isDeleted) {
 			return "redirect:/viewQuestions/getHome";
-
 		} else {
 			return "error";
 		}

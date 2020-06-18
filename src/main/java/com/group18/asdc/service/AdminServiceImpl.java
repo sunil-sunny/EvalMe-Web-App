@@ -10,21 +10,19 @@ import com.group18.asdc.entities.Course;
 @Service
 public class AdminServiceImpl implements AdminService {
 
-	AdminDao admindao;
+	private AdminDao admindao;
+	private Logger log = Logger.getLogger(AdminServiceImpl.class.getName());
 
 	public AdminServiceImpl() {
 		super();
 	}
 
-	private Logger log = Logger.getLogger(AdminServiceImpl.class.getName());
-
 	@Override
 	public boolean isCourseIdValid(Course course) {
-
-		admindao=SystemConfig.getSingletonInstance().getTheAdminDao();
-
+		log.info("Acceesing admin service impl");
+		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
 		int courseId = course.getCourseId();
-		if (0 >= courseId || 4 != String.valueOf(courseId).length()){
+		if (0 >= courseId || 4 != String.valueOf(courseId).length()) {
 			return false;
 		}
 		return true;
@@ -33,49 +31,41 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public boolean iscreateCourseParametersValid(Course course) {
 
-		admindao=SystemConfig.getSingletonInstance().getTheAdminDao();
-
-		if(false == isCourseIdValid(course)) {
+		log.info("Acceesing admin service impl");
+		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
+		if (!isCourseIdValid(course)) {
 			return false;
 		}
-		if(true==admindao.isCourseExists(course)) {
+		if (admindao.isCourseExists(course)) {
 			return false;
 		}
-
 		String instructorId = course.getInstructorName().getBannerId();
-
-		if ( instructorId.length() !=9 || !instructorId.matches("B00(.*)")) {
+		if (instructorId.length() != 9 || !instructorId.matches("B00(.*)")) {
 			return false;
 		}
-		if(true == admindao.isUserInstructor(course)) {
+		if (true == admindao.isUserInstructor(course)) {
 			return false;
 		}
 		return true;
 	}
 
-
 	@Override
-	public boolean createCourse(Course course){
+	public boolean createCourse(Course course) {
 
-		admindao=SystemConfig.getSingletonInstance().getTheAdminDao();
-
-		if(true == iscreateCourseParametersValid(course)) {
+		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
+		if (true == iscreateCourseParametersValid(course)) {
 			return admindao.addCourse(course);
 		}
-
 		return false;
 	}
 
 	@Override
 	public boolean deleteCourse(Course course) {
 
-		admindao=SystemConfig.getSingletonInstance().getTheAdminDao();
-
-		if(true == isCourseIdValid(course) ) {
+		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
+		if (true == isCourseIdValid(course)) {
 			return admindao.deleteCourse(course);
 		}
-
 		return false;
 	}
-
 }

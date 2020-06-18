@@ -15,31 +15,26 @@ import com.group18.asdc.service.ViewQuestionsService;
 @Controller
 public class ViewQuestionsController {
 
-	
 	@GetMapping("/getHome")
 	public String getAllQuestions(Model theModel) {
-		
-		ViewQuestionsService theViewQuestionsService=SystemConfig.getSingletonInstance().getTheViewQuestionsService();
-		List<QuestionMetaData> allQuestions=theViewQuestionsService.getAllQuestions();
+		ViewQuestionsService theViewQuestionsService = SystemConfig.getSingletonInstance().getTheViewQuestionsService();
+		List<QuestionMetaData> allQuestions = theViewQuestionsService.getAllQuestions();
 		theModel.addAttribute("allquestions", allQuestions);
-	
 		return "QuestionPageHome";
 	}
-	
+
 	@GetMapping("/sortByTitle")
 	public String getAllQuestionSortedByTitle(Model theModel) {
-		
-		ViewQuestionsService theViewQuestionsService=SystemConfig.getSingletonInstance().getTheViewQuestionsService();
-		List<QuestionMetaData> allQuestionsSortByTitle=theViewQuestionsService.getAllQuestionsSortByTitle();
+		ViewQuestionsService theViewQuestionsService = SystemConfig.getSingletonInstance().getTheViewQuestionsService();
+		List<QuestionMetaData> allQuestionsSortByTitle = theViewQuestionsService.getAllQuestionsSortByTitle();
 		theModel.addAttribute("allquestions", allQuestionsSortByTitle);
 		return "QuestionPageHome";
 	}
-	
+
 	@GetMapping("/sortByDate")
 	public String getAllQuestionsSortedByDate(Model theModel) {
-		
-		ViewQuestionsService theViewQuestionsService=SystemConfig.getSingletonInstance().getTheViewQuestionsService();
-		List<QuestionMetaData> allQuestionsSortByDate=theViewQuestionsService.getAllQuestionsSortByDate();
+		ViewQuestionsService theViewQuestionsService = SystemConfig.getSingletonInstance().getTheViewQuestionsService();
+		List<QuestionMetaData> allQuestionsSortByDate = theViewQuestionsService.getAllQuestionsSortByDate();
 		theModel.addAttribute("allquestions", allQuestionsSortByDate);
 		return "QuestionPageHome";
 	}

@@ -3,22 +3,12 @@ package com.group18.asdc.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import com.group18.asdc.dao.UserDao;
-import com.group18.asdc.entities.User;
-import com.group18.asdc.errorhandling.PasswordPolicyException;
-import com.group18.asdc.passwordpolicy.MinlengthPolicy;
-import com.group18.asdc.security.IPasswordEncryption;
-import com.group18.asdc.passwordpolicy.BasePasswordPolicyManagerMock;
-import com.group18.asdc.util.IQueryVariableToArrayList;
-import com.group18.asdc.util.QueryVariableToArraylist;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +16,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.group18.asdc.dao.UserDao;
+import com.group18.asdc.entities.User;
+import com.group18.asdc.security.IPasswordEncryption;
+import com.group18.asdc.util.IQueryVariableToArrayList;
 
 @SpringBootTest
 public class UserServiceTest {

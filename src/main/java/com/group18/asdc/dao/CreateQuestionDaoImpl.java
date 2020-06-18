@@ -26,7 +26,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		boolean isQuestionCreated = false;
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.createQuestion);
@@ -65,7 +64,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 		return isQuestionCreated;
 	}
@@ -85,7 +83,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 					PreparedStatement.RETURN_GENERATED_KEYS);
 			preparedStatementForQuestionCreation.setString(1, theUser.getBannerId());
 			int questionTypeId = this.getIdForQuestionType(theMultipleChoiceQuestion.getQuestionType());
-
 			if (questionTypeId == 0) {
 				isQuestionCreated = false;
 			} else {
@@ -103,7 +100,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 					long id = theResultSet.getLong(1);
 					int questionId = (int) id;
 					System.out.println(questionId);
-
 					for (Option theOption : theMultipleChoiceQuestion.getOptionList()) {
 
 						preparedStatementForOptionCreation = connection
@@ -127,10 +123,8 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 							}
 						}
 					}
-
 				}
 			}
-
 			if (isQuestionCreated) {
 				connection.commit();
 			}
@@ -169,7 +163,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
 		int typeId = 0;
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getQuestionTypeId);
@@ -208,7 +201,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
 		UserService theUserService = SystemConfig.getSingletonInstance().getTheUserService();
-		boolean isQuestionExists=false;
+		boolean isQuestionExists = false;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getQuestionId);
@@ -218,9 +211,8 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 			thePreparedStatement.setString(4, theBasicQuestionData.getQuestionText().toLowerCase());
 			theResultSet = thePreparedStatement.executeQuery();
 			if (theResultSet.next()) {
-				isQuestionExists=true;
+				isQuestionExists = true;
 			}
-
 		} catch (SQLException e) {
 
 			e.printStackTrace();
@@ -241,7 +233,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 		return isQuestionExists;
 	}

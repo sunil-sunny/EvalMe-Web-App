@@ -1,7 +1,5 @@
 package com.group18.asdc.controller;
 
-
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,28 +18,23 @@ public class AdminController {
 	public String adminHome() {
 		return "adminhome";
 	}
-
 	@GetMapping("/adminadd")
 	public String adminAddDisplay(Model model) {
 		model.addAttribute("course", new Course());
 		return "adminaddcourse";
 	}
-
 	@PostMapping("/adminadd")
 	public String adminAddForm(@ModelAttribute("course") Course course, BindingResult bindingresult) {
 
 		AdminService theAdminService = SystemConfig.getSingletonInstance().getTheAdminService();
-		 
+
 		if (bindingresult.hasErrors()) {
 			return "redirect:/adminadd?error";
 		}
-
 		boolean result = theAdminService.createCourse(course);
-
-		if(true==result) {
+		if (result) {
 			return "adminaddcourseresult";
-		}
-		else {
+		} else {
 			return "redirect:/adminadd?error";
 		}
 	}
@@ -55,18 +48,14 @@ public class AdminController {
 	@PostMapping("/admindelete")
 	public String adminDeleteForm(@ModelAttribute("course") Course course, BindingResult bindingresult,
 			Model theModel) {
-
-		 AdminService theAdminService=SystemConfig.getSingletonInstance().getTheAdminService();
-		
+		AdminService theAdminService = SystemConfig.getSingletonInstance().getTheAdminService();
 		if (bindingresult.hasErrors()) {
 			return "redirect:/admindelete?error";
 		}
-
 		boolean result = theAdminService.deleteCourse(course);
-
-		if(false==result) {
+		if (!result) {
 			return "redirect:/admindelete?error";
-		}else {
+		} else {
 			return "admindeletecourseresult";
 		}
 	}
