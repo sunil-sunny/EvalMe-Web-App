@@ -1,41 +1,26 @@
 package com.group18.asdc.dao;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.sql.DataSource;
-import java.util.HashMap;
-
-import com.group18.asdc.dao.UserDao;
+import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.database.SQLMethods;
 import com.group18.asdc.database.SQLQueries;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.GroupFormationToolUtil;
+import com.group18.asdc.util.DataBaseQueriesUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserDaoImpl implements UserDao {
 
-	@Autowired
-	private SQLMethods sqlImplementation;
-	@Autowired
-	private DataSource dataSource;
-	
-	private Logger log=Logger.getLogger(UserDaoImpl.class.getName());
-
-	// @Override
-	// public Boolean authenticateByEmailAndPassword(ArrayList<Object> valuesList) throws SQLException {
-	// 	return sqlImplementation.selectQuery(SQLQueries.USER_AUTH_BY_EMAIL_PASSWORD.toString(), valuesList).size() == 1;
-	// }
+	private Logger log = Logger.getLogger(UserDaoImpl.class.getName());
 
 	@Override
 	public boolean isUserExists(User user) {
@@ -43,8 +28,8 @@ public class UserDaoImpl implements UserDao {
 		ResultSet resultSet = null;
 		PreparedStatement checkUser = null;
 		try {
-			connection = dataSource.getConnection();
-			checkUser = connection.prepareStatement(GroupFormationToolUtil.isUserExists);
+			connection = ConnectionManager.getInstance().getDBConnection();
+			checkUser = connection.prepareStatement(DataBaseQueriesUtil.isUserExists);
 			checkUser.setString(1, user.getBannerId());
 			resultSet = checkUser.executeQuery();
 			log.info("In User Dao to check if user exists or not");
@@ -56,7 +41,6 @@ public class UserDaoImpl implements UserDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
@@ -71,7 +55,6 @@ public class UserDaoImpl implements UserDao {
 				}
 				log.info("closing connection after having a check if user exists or not");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -87,8 +70,8 @@ public class UserDaoImpl implements UserDao {
 		PreparedStatement getUser = null;
 		User user = null;
 		try {
-			connection = dataSource.getConnection();
-			String userSql = GroupFormationToolUtil.getUserById;
+			connection = ConnectionManager.getInstance().getDBConnection();
+			String userSql = DataBaseQueriesUtil.getUserById;
 			getUser = connection.prepareStatement(userSql);
 			getUser.setString(1, bannerId);
 			log.info("In User Dao to get the user for given banner id");
@@ -165,9 +148,9 @@ public class UserDaoImpl implements UserDao {
 		User user = null;
 
 		try {
-			connection = dataSource.getConnection();
-			preparedStatement = connection.prepareStatement(GroupFormationToolUtil.getAlluserRelatedToCourse);
-            log.info("In users dao getting all users based on course id");
+			connection = ConnectionManager.getInstance().getDBConnection();
+			preparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getAlluserRelatedToCourse);
+			log.info("In users dao getting all users based on course id");
 			preparedStatement.setInt(1, courseId);
 			resultSetForStudentList = preparedStatement.executeQuery();
 
@@ -214,8 +197,8 @@ public class UserDaoImpl implements UserDao {
 		ResultSet resultSet = null;
 		User instructor = null;
 		try {
-			connection = dataSource.getConnection();
-			preparedStatement = connection.prepareStatement(GroupFormationToolUtil.getInstructorForCourse);
+			connection = ConnectionManager.getInstance().getDBConnection();
+			preparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getInstructorForCourse);
 			preparedStatement.setInt(1, courseId);
 			resultSet = preparedStatement.executeQuery();
 			String bannerId = null;
@@ -254,42 +237,73 @@ public class UserDaoImpl implements UserDao {
 		return instructor;
 	}
 
-    @Override
-    public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) throws SQLException {
-        ArrayList<HashMap<String,Object>> rowsList = sqlImplementation.selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), valueList);
-        //
-        if( rowsList.size() > 0)
-        {
-            HashMap<String,Object> valuesMap = rowsList.get(0);
-            //
-            userObj.setBannerId((String)valuesMap.get("bannerid"));
-            userObj.setEmail((String)valuesMap.get("emailid"));
-            userObj.setFirstName((String)valuesMap.get("firstname"));
-            userObj.setLastName((String)valuesMap.get("lastname"));
-            userObj.setPassword((String)valuesMap.get("password"));
-        }
-    }
+	@Override
+	public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) {
+		SQLMethods sqlImplementation = null;
+		try {
+			sqlImplementation = new SQLMethods();
+			ArrayList<HashMap<String, Object>> rowsList = sqlImplementation
+					.selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), valueList);
+			//
+			if (rowsList.size() > 0) {
+				HashMap<String, Object> valuesMap = rowsList.get(0);
+				//
+				userObj.setBannerId((String) valuesMap.get("bannerid"));
+				userObj.setEmail((String) valuesMap.get("emailid"));
+				userObj.setFirstName((String) valuesMap.get("firstname"));
+				userObj.setLastName((String) valuesMap.get("lastname"));
+				userObj.setPassword((String) valuesMap.get("password"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlImplementation != null) {
+				sqlImplementation.cleanup();
+			}
+		}
+	}
 
-    @Override
-    public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valueList) throws SQLException {
-        Integer rowCount = sqlImplementation.updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valueList, criteriaList);
-        return rowCount > 0;
-    }
+	@Override
+	public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valueList) {
+		SQLMethods sqlImplementation = null;
+		try {
+			sqlImplementation = new SQLMethods();
+			Integer rowCount = sqlImplementation.updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valueList,
+					criteriaList);
+			return rowCount > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlImplementation != null) {
+				sqlImplementation.cleanup();
+			}
+		}
+		return Boolean.FALSE;
+	}
 
-	// @Override
-	// public ArrayList getUserRoles(ArrayList<Object> criteriaList) throws SQLException {
-	// 	ArrayList rolesList = new ArrayList<>();
-	// 	ArrayList<HashMap<String,Object>> valuesList = sqlImplementation.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
-	// 	//
-	// 	if ( valuesList != null && valuesList.size() > 0 )
-	// 	{
-	// 		for( HashMap valueMap : valuesList)
-	// 		{
-	// 			rolesList.add(valueMap.get("rolename"));
-	// 		}
-	// 	}
-	// 	//
-	// 	return rolesList;
-	// }
+	@Override
+	public ArrayList getUserRoles(ArrayList<Object> criteriaList) {
+		ArrayList rolesList = new ArrayList<>();
+		SQLMethods sqlImplementation = null;
+		try {
+			sqlImplementation = new SQLMethods();
+			ArrayList<HashMap<String, Object>> valuesList = sqlImplementation
+					.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
+			//
+			if (valuesList != null && valuesList.size() > 0) {
+				for (HashMap valueMap : valuesList) {
+					rolesList.add(valueMap.get("rolename"));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlImplementation != null) {
+				sqlImplementation.cleanup();
+			}
+		}
+		//
+		return rolesList;
+	}
 
 }

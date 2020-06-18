@@ -15,8 +15,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 @SpringBootTest
 public class EmailServiceTest {
 
+    @Mock
+    IJavaMailSenderConfiguration javaMailSenderConfiguration = new JavaMailSenderConfigurationMock();
+
     @InjectMocks
-    EmailService emailService = new EmailServiceImpl();
+    EmailService emailService = new EmailServiceImpl(javaMailSenderConfiguration);
 
     @Mock
     JavaMailSender mailSender;
@@ -29,7 +32,7 @@ public class EmailServiceTest {
     @Test
     public void checkEmails() {
         emailService.sendSimpleMessage("kr630601@dal.ca", "Reset", "Your Password");
-        //
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo("kr630601@dal.ca");
         message.setSubject("Reset");

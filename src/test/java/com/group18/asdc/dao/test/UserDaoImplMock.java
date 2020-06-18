@@ -1,6 +1,5 @@
 package com.group18.asdc.dao.test;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -152,7 +151,7 @@ public class UserDaoImplMock implements UserDao {
 	}
 
 	@Override
-	public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) throws SQLException {
+	public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) {
 		
 		for (User theUser : UserDaoImplMock.userList) {
 			if (theUser.getBannerId() == "B00123456") {
@@ -163,9 +162,17 @@ public class UserDaoImplMock implements UserDao {
 	}
 
 	@Override
-	public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valuesList) throws SQLException {
+	public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valuesList){
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public ArrayList getUserRoles(ArrayList<Object> criteriaList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 }
