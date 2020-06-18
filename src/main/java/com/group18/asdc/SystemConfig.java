@@ -4,6 +4,8 @@ import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.dao.AdminDaoImpl;
 import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.dao.CourseDetailsDaoImpl;
+import com.group18.asdc.dao.CourseRolesDao;
+import com.group18.asdc.dao.CourseRolesDaoImpl;
 import com.group18.asdc.dao.CreateQuestionDao;
 import com.group18.asdc.dao.CreateQuestionDaoImpl;
 import com.group18.asdc.dao.DeleteQuestionDao;
@@ -29,6 +31,8 @@ import com.group18.asdc.service.AdminService;
 import com.group18.asdc.service.AdminServiceImpl;
 import com.group18.asdc.service.CourseDetailsService;
 import com.group18.asdc.service.CourseDetailsServiceImpl;
+import com.group18.asdc.service.CourseRolesService;
+import com.group18.asdc.service.CourseRolesServiceImpl;
 import com.group18.asdc.service.CreateQuestionService;
 import com.group18.asdc.service.CreateQuestionServiceImpl;
 import com.group18.asdc.service.DeleteQuestionService;
@@ -63,6 +67,7 @@ public class SystemConfig {
 	private CreateQuestionService theCreateQuestionService;
 	private ViewQuestionsService theViewQuestionsService;
 	private DeleteQuestionService theDeleteQuestionService;
+	private CourseRolesService theCourseRolesService;
 
 	// Below are the instance objects for Dao layer
 	private AdminDao theAdminDao;
@@ -92,6 +97,7 @@ public class SystemConfig {
 		this.theCreateQuestionService=new CreateQuestionServiceImpl();
 		this.theViewQuestionsService=new ViewQuestionsServiceImpl();
 		this.theDeleteQuestionService=new DeleteQuestionServiceImpl();
+		this.theCourseRolesService=new CourseRolesServiceImpl();
 		
 		//Instantiating Dao objects
 		this.queryVariableToArrayList = new QueryVariableToArraylist();
@@ -227,6 +233,22 @@ public class SystemConfig {
 
 	public CreateQuestionService getTheCreateQuestionService() {
 		return theCreateQuestionService;
+	}
+
+	public CourseRolesService getTheCourseRolesService() {
+		return theCourseRolesService;
+	}
+
+	public void setTheCourseRolesService(CourseRolesService theCourseRolesService) {
+		this.theCourseRolesService = theCourseRolesService;
+	}
+
+	public CourseRolesDao getTheCourseRolesDao() {
+		return theCourseRolesDao;
+	}
+
+	public void setTheCourseRolesDao(CourseRolesDao theCourseRolesDao) {
+		this.theCourseRolesDao = theCourseRolesDao;
 	}
 
 	public void setTheCreateQuestionService(CreateQuestionService theCreateQuestionService) {
