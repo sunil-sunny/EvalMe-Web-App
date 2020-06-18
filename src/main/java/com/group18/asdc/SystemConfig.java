@@ -18,15 +18,14 @@ import com.group18.asdc.dao.ViewQuestionsDao;
 import com.group18.asdc.dao.ViewQuestionsDaoImpl;
 import com.group18.asdc.database.DefaultDatabaseConfiguration;
 import com.group18.asdc.database.IDatabaseConfiguration;
-import com.group18.asdc.entities.PasswordHistory;
-import com.group18.asdc.security.BCryptPasswordEncryption;
-import com.group18.asdc.security.IPasswordEncryption;
+import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
+import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.IPasswordPolicyDB;
 import com.group18.asdc.passwordpolicy.IPasswordPolicyManager;
-import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.PasswordPolicyDB;
 import com.group18.asdc.passwordpolicy.PasswordPolicyManager;
-import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
+import com.group18.asdc.security.BCryptPasswordEncryption;
+import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.service.AdminService;
 import com.group18.asdc.service.AdminServiceImpl;
 import com.group18.asdc.service.CourseDetailsService;
@@ -86,7 +85,9 @@ public class SystemConfig {
 	private IRandomStringGenerator randomStringGenerator;
 	private ICustomStringUtils customStringUtils;
 	private PasswordHistoryService passwordHistoryService;
+	private CourseRolesDao theCourseRolesDao;
 
+	
 	private SystemConfig() {
 		
 		//Instantiating Service Objects
@@ -119,6 +120,7 @@ public class SystemConfig {
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.customStringUtils = new CustomStringUtils();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
+		this.theCourseRolesDao=new CourseRolesDaoImpl();
 
 	}
 

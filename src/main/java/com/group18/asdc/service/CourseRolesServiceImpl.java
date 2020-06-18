@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group18.asdc.SystemConfig;
-import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.dao.CourseRolesDao;
 import com.group18.asdc.entities.User;
 
@@ -42,8 +41,12 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 		boolean isStudentsRegistered = theRegisterService.registerStudents(studentList);
 		if (isStudentsRegistered) {
 			List<User> eligibleStudents = userService.filterEligibleUsersForCourse(studentList, courseId);
-
-			return courseRolesDao.enrollStudentsIntoCourse(eligibleStudents, courseId);
+			if(eligibleStudents.size()==0) {
+				return false;
+			}
+			else {
+				return courseRolesDao.enrollStudentsIntoCourse(eligibleStudents, courseId);
+			}
 		} else {
 			return false;
 		}

@@ -40,7 +40,7 @@ public class CourseRolesController {
 		User user = userService.getUserById(bannerId);
 		if (user == null) {
 			log.info("User doesnt exists or given id is invalid");
-			theModel.addAttribute("result", "user not exists");
+			theModel.addAttribute("result", "User doesnt exists or given id is invalid");
 			return "instrcutorcoursehome";
 		} else {
 			boolean isAloocated = courseRolesService.allocateTa(Integer.parseInt(courseId),
@@ -48,7 +48,7 @@ public class CourseRolesController {
 			if (!isAloocated) {
 				log.info(
 						"User is already realted to the course i.e user might be already a instructor or TA or Student for the course");
-				theModel.addAttribute("result", "User is already realted to this course");
+				theModel.addAttribute("result", "User is already a part of this course");
 			} else {
 				log.info("User has been allocated as TA role for the course");
 				theModel.addAttribute("result", "TA Allocated");
@@ -125,7 +125,6 @@ public class CourseRolesController {
 
 						boolean status = courseRolesService.enrollStuentsIntoCourse(validUsers,
 								Integer.parseInt(courseId));
-						System.out.println("Student enrolled :" + status);
 						if (status) {
 							log.info("All the student enrolled in the course");
 							theModel.addAttribute("resultEnrolling", "All Students enrolled");

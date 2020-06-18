@@ -19,7 +19,7 @@ import com.group18.asdc.service.RegisterService;
 
 @Controller
 @RequestMapping("/registration")
-public class Registercontroller {
+public class RegisterController {
 
 	@ModelAttribute("user")
 	public Registerbean bean() {
