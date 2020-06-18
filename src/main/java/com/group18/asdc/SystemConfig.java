@@ -119,17 +119,13 @@ public class SystemConfig {
 		this.theCreateQuestionDao=new CreateQuestionDaoImpl();
 		this.theViewQuestionsDao=new ViewQuestionsDaoImpl();
 		this.theDeleteQuestionDao=new DeleteQuestionDaoImpl();
-		//this.theRegisterDao=new RegisterDaoImpl();
+		this.theRegisterDao=new RegisterDaoImpl();
 		this.passwordPolicyDB = new PasswordPolicyDB();
 		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
 		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
-<<<<<<< HEAD
 		this.theCourseRolesDao=new CourseRolesDaoImpl();
-=======
-		this.theCourseRolesDao = new CourseRolesDaoImpl();
->>>>>>> 06142557af29200ad0d3fca8eb8c8c5f986158f0
 
 	}
 
