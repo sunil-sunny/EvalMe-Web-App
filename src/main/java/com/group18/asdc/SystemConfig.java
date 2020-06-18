@@ -18,15 +18,14 @@ import com.group18.asdc.dao.ViewQuestionsDao;
 import com.group18.asdc.dao.ViewQuestionsDaoImpl;
 import com.group18.asdc.database.DefaultDatabaseConfiguration;
 import com.group18.asdc.database.IDatabaseConfiguration;
-import com.group18.asdc.entities.PasswordHistory;
-import com.group18.asdc.security.BCryptPasswordEncryption;
-import com.group18.asdc.security.IPasswordEncryption;
+import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
+import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.IPasswordPolicyDB;
 import com.group18.asdc.passwordpolicy.IPasswordPolicyManager;
-import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.PasswordPolicyDB;
 import com.group18.asdc.passwordpolicy.PasswordPolicyManager;
-import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
+import com.group18.asdc.security.BCryptPasswordEncryption;
+import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.service.AdminService;
 import com.group18.asdc.service.AdminServiceImpl;
 import com.group18.asdc.service.CourseDetailsService;
@@ -91,6 +90,7 @@ public class SystemConfig {
 	private PasswordHistoryService passwordHistoryService;
 	private CourseRolesDao theCourseRolesDao;
 
+	
 	private SystemConfig() {
 		
 		//
@@ -119,13 +119,13 @@ public class SystemConfig {
 		this.theCreateQuestionDao=new CreateQuestionDaoImpl();
 		this.theViewQuestionsDao=new ViewQuestionsDaoImpl();
 		this.theDeleteQuestionDao=new DeleteQuestionDaoImpl();
-		//this.theRegisterDao=new RegisterDaoImpl();
+		this.theRegisterDao=new RegisterDaoImpl();
 		this.passwordPolicyDB = new PasswordPolicyDB();
 		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
 		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
-		this.theCourseRolesDao = new CourseRolesDaoImpl();
+		this.theCourseRolesDao=new CourseRolesDaoImpl();
 
 	}
 

@@ -63,7 +63,6 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 		boolean enrollStatus = false;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-
 			for (User user : studentList) {
 				queryToEnrollStudent = connection.prepareStatement(DataBaseQueriesUtil.enrollStudentIntoCourse);
 				log.info("In Course Controller for enrolling students into course");

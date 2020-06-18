@@ -1,10 +1,5 @@
 package com.group18.asdc.controller;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -15,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.Course;
@@ -36,6 +29,7 @@ public class CourseController {
 	@GetMapping("/userhome")
 	public String getHomePage(Model theModel) {
 
+		log.info("in course controller");
 		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		List<Course> coursesList = courseDetailsService.getAllCourses();
 		theModel.addAttribute("coursesList", coursesList);
