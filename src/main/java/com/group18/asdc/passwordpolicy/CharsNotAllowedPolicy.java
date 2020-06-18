@@ -21,7 +21,7 @@ public class CharsNotAllowedPolicy implements IBasePasswordPolicy {
     public void validate(String password) throws PasswordPolicyException {
 
         if (customStringUtils.containsAnyCharacter(password, this.charsNotAllowed)) {
-            throw new PasswordPolicyException("Password contains restricted chars:" + charsNotAllowed);
+            throw new PasswordPolicyException("Password should not contain following characters:" + charsNotAllowed);
         }
     }
 

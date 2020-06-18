@@ -18,7 +18,7 @@ public class MinlengthPolicy implements IBasePasswordPolicy {
     @Override
     public void validate(String password) throws PasswordPolicyException {
         if (password == null || password.trim().length() < minLength) {
-            throw new PasswordPolicyException("Password length lesser than " + minLength);
+            throw new PasswordPolicyException("Password should be atleast " + minLength + " characters");
         }
     }
 

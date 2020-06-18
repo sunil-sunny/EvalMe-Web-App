@@ -25,7 +25,7 @@ public class MinSpecialcharPolicy implements IBasePasswordPolicy {
 
         if (numberSpecialCharacters < minSpecialChars) {
             throw new PasswordPolicyException(
-                    "Password does not contain " + minSpecialChars + " of special characters.");
+                "Password should contain at least " + minSpecialChars + " special characters");
         }
 
     }

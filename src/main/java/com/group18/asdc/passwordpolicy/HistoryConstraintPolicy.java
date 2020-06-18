@@ -29,7 +29,7 @@ public class HistoryConstraintPolicy implements IPasswordPolicy {
             String eachPassword = eachPasswordHistory.getPassword();
             if (passwordEncryption.matches(password, eachPassword)) {
                 throw new PasswordPolicyException(
-                        "Password matches with one of the old " + numberOfHistoryRecords + " passwords");
+                        "Password should not be one of your past " + numberOfHistoryRecords + " passwords");
             }
         }
 

@@ -24,7 +24,7 @@ public class MinUppercasePolicy implements IBasePasswordPolicy {
         Integer upperCaseCharsCount = customStringUtils.getUpperCaseCharactersCount(password);
         if (upperCaseCharsCount < this.minUpperCase) {
             throw new PasswordPolicyException(
-                    "Password does not contain " + minUpperCase + " of upper case characters");
+                "Password should contain at least " + minUpperCase + " uppercase characters");
         }
     }
 

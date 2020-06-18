@@ -17,7 +17,7 @@ public class MaxlengthPolicy implements IBasePasswordPolicy {
     @Override
     public void validate(String password) throws PasswordPolicyException {
         if (password.trim().length() > maxLength) {
-            throw new PasswordPolicyException("Password length is greater than " + maxLength);
+            throw new PasswordPolicyException("Password should not exceed " + maxLength+ " characters");
         }
     }
 

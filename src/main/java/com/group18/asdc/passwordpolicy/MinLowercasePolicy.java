@@ -24,7 +24,7 @@ public class MinLowercasePolicy implements IBasePasswordPolicy {
         Integer lowerCaseCharsCount = customStringUtils.getLowerCaseCharactersCount(password);
         if (lowerCaseCharsCount < this.minLowerCase) {
             throw new PasswordPolicyException(
-                    "Password does not contain " + minLowerCase + " of lower case characters");
+                    "Password should contain at least " + minLowerCase + " lower case characters");
         }
     }
 
