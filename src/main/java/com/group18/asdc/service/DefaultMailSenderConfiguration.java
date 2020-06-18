@@ -1,4 +1,4 @@
-package com.group18.asdc.util;
+package com.group18.asdc.service;
 
 public class DefaultMailSenderConfiguration implements IJavaMailSenderConfiguration {
 

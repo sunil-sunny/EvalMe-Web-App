@@ -1,7 +1,6 @@
 package com.group18.asdc;
 
 import com.group18.asdc.dao.AdminDao;
-
 import com.group18.asdc.dao.AdminDaoImpl;
 import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.dao.CourseDetailsDaoImpl;
@@ -35,10 +34,12 @@ import com.group18.asdc.service.CourseRolesService;
 import com.group18.asdc.service.CourseRolesServiceImpl;
 import com.group18.asdc.service.CreateQuestionService;
 import com.group18.asdc.service.CreateQuestionServiceImpl;
+import com.group18.asdc.service.DefaultMailSenderConfiguration;
 import com.group18.asdc.service.DeleteQuestionService;
 import com.group18.asdc.service.DeleteQuestionServiceImpl;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.EmailServiceImpl;
+import com.group18.asdc.service.IJavaMailSenderConfiguration;
 import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.PasswordHistoryServiceImpl;
 import com.group18.asdc.service.RegisterService;
@@ -48,9 +49,7 @@ import com.group18.asdc.service.UserServiceImpl;
 import com.group18.asdc.service.ViewQuestionsService;
 import com.group18.asdc.service.ViewQuestionsServiceImpl;
 import com.group18.asdc.util.CustomStringUtils;
-import com.group18.asdc.util.DefaultMailSenderConfiguration;
 import com.group18.asdc.util.ICustomStringUtils;
-import com.group18.asdc.util.IJavaMailSenderConfiguration;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 import com.group18.asdc.util.IRandomStringGenerator;
 import com.group18.asdc.util.QueryVariableToArraylist;
