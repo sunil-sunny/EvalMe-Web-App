@@ -1,12 +1,7 @@
 package com.group18.asdc.passwordpolicy;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-
-import javax.xml.crypto.Data;
 
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
@@ -16,7 +11,6 @@ public class BasePasswordPolicyManager implements IBasePasswordPolicyManager {
 
     private ArrayList<HashMap> enabledPasswordPolicies = null;
     private IPasswordPolicyDB passwordPolicyDB = null;
-    private ICustomStringUtils customStringUtils = null;
 
     private enum DatabasePolicyName {
         MIN_LENGTH_POLICY("MinLength"), MAX_LENGTH_POLICY("MaxLength"), MIN_LOWERCASE_POLICY("MinLowercase"),
@@ -36,10 +30,8 @@ public class BasePasswordPolicyManager implements IBasePasswordPolicyManager {
 
     };
 
-    public BasePasswordPolicyManager(IPasswordPolicyDB passwordPolicyDB, ICustomStringUtils customStringUtils) {
-        // load default configurations
+    public BasePasswordPolicyManager(IPasswordPolicyDB passwordPolicyDB) {
         this.passwordPolicyDB = passwordPolicyDB;
-        this.customStringUtils = customStringUtils;
     }
 
     private void loadDefaultConfigurations() {
@@ -54,9 +46,8 @@ public class BasePasswordPolicyManager implements IBasePasswordPolicyManager {
     public void validatePassword(String password) throws PasswordPolicyException {
 
         loadDefaultConfigurations();
-
         IBasePasswordPolicy passwordPolicy = null;
-
+        ICustomStringUtils customStringUtils = SystemConfig.getSingletonInstance().getCustomStringUtils();
         for (HashMap eachEnabledPolicy : enabledPasswordPolicies) {
             //
             String policyName = (String) eachEnabledPolicy.get("POLICY_NAME");
@@ -81,25 +72,4 @@ public class BasePasswordPolicyManager implements IBasePasswordPolicyManager {
 
     }
 
-    // private static HashMap<String, String> VALUE_VS_CLASSNAMES_MAP = new
-    // HashMap<String, String>();
-    // static {
-    // VALUE_VS_CLASSNAMES_MAP.put("MinLength", MinlengthPolicy.class.getName());
-    // VALUE_VS_CLASSNAMES_MAP.put("MaxLength", MaxlengthPolicy.class.getName());
-    // }
-    // for (String eachClass : enabledPasswordPolicies) {
-    // try {
-    //
-    // passwordPolicy = (IBasePasswordPolicy)
-    // Class.forName(VALUE_VS_CLASSNAMES_MAP.get(eachClass))
-    // .getConstructor().newInstance();
-    // passwordPolicy.validate(password);
-    // } catch (InstantiationException | IllegalAccessException |
-    // IllegalArgumentException
-    // | InvocationTargetException | NoSuchMethodException | SecurityException
-    // | ClassNotFoundException e) {
-    // e.printStackTrace();
-    // }
-    //
-    
 }

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.group18.asdc.entities.User;
 import com.group18.asdc.security.IPasswordEncryption;
-import com.group18.asdc.util.IQueryVariableToArrayList;
 
 public interface UserService {
 

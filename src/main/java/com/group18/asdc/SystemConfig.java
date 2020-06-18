@@ -60,7 +60,6 @@ public class SystemConfig {
 
 	private static SystemConfig singletonInstance = null;
 
-	// Below are the instance objects for service layer
 	private AdminService theAdminService;
 	private CourseDetailsService theCourseDetailsService;
 	private IJavaMailSenderConfiguration javaMailSenderConfiguration;
@@ -72,7 +71,6 @@ public class SystemConfig {
 	private DeleteQuestionService theDeleteQuestionService;
 	private CourseRolesService theCourseRolesService;
 
-	// Below are the instance objects for Dao layer
 	private AdminDao theAdminDao;
 	private CourseDetailsDao theCourseDetailsDao;
 	private RegisterDao theRegisterDao;
@@ -93,8 +91,7 @@ public class SystemConfig {
 
 	
 	private SystemConfig() {
-		
-		//
+
 		this.javaMailSenderConfiguration = new DefaultMailSenderConfiguration();
 		this.customStringUtils = new CustomStringUtils();
 		//Instantiating Service Objects
@@ -109,12 +106,12 @@ public class SystemConfig {
 		
 		//Instantiating Dao objects
 		this.queryVariableToArrayList = new QueryVariableToArraylist();
-		this.theUserService=new UserServiceImpl(this.queryVariableToArrayList);
-		this.theAdminDao=new AdminDaoImpl();
-		this.theUserDao=new UserDaoImpl();
-		this.theCourseDetailsDao=new CourseDetailsDaoImpl();
-		this.theUserDao=new UserDaoImpl();
-		this.theRegisterDao=new RegisterDaoImpl();
+		this.theUserService = new UserServiceImpl(this.queryVariableToArrayList);
+		this.theAdminDao = new AdminDaoImpl();
+		this.theUserDao = new UserDaoImpl();
+		this.theCourseDetailsDao = new CourseDetailsDaoImpl();
+		this.theUserDao = new UserDaoImpl();
+		this.theRegisterDao = new RegisterDaoImpl();
 		this.passwordEncryption = new BCryptPasswordEncryption();
 		this.databaseConfiguration = new DefaultDatabaseConfiguration();
 		this.theCreateQuestionDao=new CreateQuestionDaoImpl();
@@ -122,8 +119,8 @@ public class SystemConfig {
 		this.theDeleteQuestionDao=new DeleteQuestionDaoImpl();
 		this.theRegisterDao=new RegisterDaoImpl();
 		this.passwordPolicyDB = new PasswordPolicyDB();
-		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
-		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
+		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB);
+		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB);
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
 		this.theCourseRolesDao=new CourseRolesDaoImpl();
@@ -131,16 +128,13 @@ public class SystemConfig {
 	}
 
 	public static SystemConfig getSingletonInstance() {
-		
-		if (null == singletonInstance)
-		{
+
+		if (null == singletonInstance) {
 			singletonInstance = new SystemConfig();
 		}
 
 		return singletonInstance;
 	}
-
-	
 
 	public AdminService getTheAdminService() {
 		return theAdminService;
@@ -206,12 +200,11 @@ public class SystemConfig {
 		this.theUserDao = theUserDao;
 	}
 
-	public IPasswordEncryption getPasswordEncryption(){
+	public IPasswordEncryption getPasswordEncryption() {
 		return passwordEncryption;
 	}
 
-	public IDatabaseConfiguration getDatabaseConfiguration()
-	{
+	public IDatabaseConfiguration getDatabaseConfiguration() {
 		return databaseConfiguration;
 	}
 
@@ -302,47 +295,40 @@ public class SystemConfig {
 	public void setTheViewQuestionsDao(ViewQuestionsDao theViewQuestionsDao) {
 		this.theViewQuestionsDao = theViewQuestionsDao;
 	}
-	
-	public IPasswordPolicyDB getPasswordPolicyDB(){
+
+	public IPasswordPolicyDB getPasswordPolicyDB() {
 		return passwordPolicyDB;
 	}
 
-	public void setBasePasswordPolicyManager(IBasePasswordPolicyManager basePasswordPolicyManager)
-	{
+	public void setBasePasswordPolicyManager(IBasePasswordPolicyManager basePasswordPolicyManager) {
 		this.basePasswordPolicyManager = basePasswordPolicyManager;
 	}
 
-	public IBasePasswordPolicyManager getBasePasswordPolicyManager()
-	{
+	public IBasePasswordPolicyManager getBasePasswordPolicyManager() {
 		return basePasswordPolicyManager;
 	}
 
-	public void setPasswordPolicyManager(IPasswordPolicyManager passwordPolicyManager)
-	{
+	public void setPasswordPolicyManager(IPasswordPolicyManager passwordPolicyManager) {
 		this.passwordPolicyManager = passwordPolicyManager;
 	}
 
-	public IPasswordPolicyManager getPasswordPolicyManager()
-	{
+	public IPasswordPolicyManager getPasswordPolicyManager() {
 		return passwordPolicyManager;
 	}
 
-	public IQueryVariableToArrayList getQueryVariableToArrayListConverter()
-	{
+	public IQueryVariableToArrayList getQueryVariableToArrayListConverter() {
 		return queryVariableToArrayList;
 	}
 
-	public IRandomStringGenerator getRandomStringGenerator(){
+	public IRandomStringGenerator getRandomStringGenerator() {
 		return randomStringGenerator;
 	}
 
-	public ICustomStringUtils getCustomStringUtils()
-	{
+	public ICustomStringUtils getCustomStringUtils() {
 		return customStringUtils;
 	}
 
-	public PasswordHistoryService getPasswordHistoryService()
-	{
+	public PasswordHistoryService getPasswordHistoryService() {
 		return this.passwordHistoryService;
 	}
 }
