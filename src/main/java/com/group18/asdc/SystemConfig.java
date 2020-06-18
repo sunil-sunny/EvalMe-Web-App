@@ -42,7 +42,7 @@ import com.group18.asdc.service.EmailServiceImpl;
 import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.PasswordHistoryServiceImpl;
 import com.group18.asdc.service.RegisterService;
-
+import com.group18.asdc.service.RegisterServiceImpl;
 import com.group18.asdc.service.UserService;
 import com.group18.asdc.service.UserServiceImpl;
 import com.group18.asdc.service.ViewQuestionsService;
@@ -250,14 +250,14 @@ public class SystemConfig {
 	public void setTheCourseRolesService(CourseRolesService theCourseRolesService) {
 		this.theCourseRolesService = theCourseRolesService;
 	}
-//
-//	public CourseRolesDao getTheCourseRolesDao() {
-//		return theCourseRolesDao;
-//	}
-//
-//	public void setTheCourseRolesDao(CourseRolesDao theCourseRolesDao) {
-//		this.theCourseRolesDao = theCourseRolesDao;
-//	}
+
+	public CourseRolesDao getTheCourseRolesDao() {
+		return theCourseRolesDao;
+	}
+
+	public void setTheCourseRolesDao(CourseRolesDao theCourseRolesDao) {
+		this.theCourseRolesDao = theCourseRolesDao;
+	}
 
 	public void setTheCreateQuestionService(CreateQuestionService theCreateQuestionService) {
 		this.theCreateQuestionService = theCreateQuestionService;
