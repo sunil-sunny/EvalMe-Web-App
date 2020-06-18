@@ -35,7 +35,6 @@ public class ConnectionManager
 	
 	public Connection getDBConnection() throws SQLException
 	{
-		System.out.println("bbbbbbbbbbbbbb"+dbURL+"qqqqq"+dbUserName+"uuu"+dbPassword);
 		return DriverManager.getConnection(dbURL, dbUserName, dbPassword);
 	}
 }

@@ -8,13 +8,14 @@ import com.group18.asdc.entities.User;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.handlingformsubmission.ResetPassword;
 import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
+import com.group18.asdc.passwordpolicy.IPasswordPolicyDB;
 import com.group18.asdc.passwordpolicy.PasswordPolicyManager;
 import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.security.SecurityConfiguration;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.UserService;
-import com.group18.asdc.util.CommonUtil;
+import com.group18.asdc.util.ICustomStringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,10 +32,11 @@ import com.group18.asdc.entities.User;
 import com.group18.asdc.handlingformsubmission.ResetPassword;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.UserService;
-import com.group18.asdc.util.CommonUtil;
 
 @Controller
 public class LoginController {
+
+  private UserService userService;
 
   @RequestMapping("/")
   public RedirectView redirectPage() {
@@ -59,7 +61,13 @@ public class LoginController {
 
   @RequestMapping("/login-success")
   public RedirectView loginSuccess(Authentication authentication) {
-    String redirectURL = CommonUtil.roleVsLandingPage.get(authentication.getAuthorities().iterator().next().toString());
+    String systemRoleForCurrentUser = authentication.getAuthorities().iterator().next().toString();
+    String redirectURL = "/coursepage";
+    //
+    if( systemRoleForCurrentUser.equals("ADMIN") )
+    {
+      redirectURL = "/adminhome";
+    }
     return new RedirectView(redirectURL);
 
   }
@@ -102,7 +110,7 @@ public class LoginController {
     String redirectURL = "login-success";
     Boolean isError = false;
     //
-    UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
+    userService = SystemConfig.getSingletonInstance().getTheUserService();
     User userObj = new User(resetForm.getbannerId(), userService);
     //
     if (!resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD"))) {
@@ -160,10 +168,13 @@ public class LoginController {
 
   @GetMapping("/resetPasswordPolicies")
   public String resetPasswordPolicies() {
+
+    IPasswordPolicyDB passwordPolicyDB = SystemConfig.getSingletonInstance().getPasswordPolicyDB();
+    ICustomStringUtils customStringUtils = SystemConfig.getSingletonInstance().getCustomStringUtils();
     SystemConfig.getSingletonInstance().setBasePasswordPolicyManager(
-        new BasePasswordPolicyManager(SystemConfig.getSingletonInstance().getPasswordPolicyDB()));
+        new BasePasswordPolicyManager(passwordPolicyDB, customStringUtils));
     SystemConfig.getSingletonInstance()
-        .setPasswordPolicyManager(new PasswordPolicyManager(SystemConfig.getSingletonInstance().getPasswordPolicyDB()));
+        .setPasswordPolicyManager(new PasswordPolicyManager(passwordPolicyDB, customStringUtils));
     return "policyReset";
   }
 

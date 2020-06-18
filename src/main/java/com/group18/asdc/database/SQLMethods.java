@@ -101,8 +101,6 @@ public class SQLMethods{
         Object resultObj = null;
         PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, values);
         //
-        System.out.println("ooooooooooooo"+preparedStatement);
-        //
         int rowAffected = preparedStatement.executeUpdate();
         if (rowAffected == 1) {
             // get candidate id

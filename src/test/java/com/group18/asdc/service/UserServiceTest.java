@@ -11,14 +11,12 @@ import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.passwordpolicy.MinlengthPolicy;
+import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.passwordpolicy.BasePasswordPolicyManagerMock;
-import com.group18.asdc.passwordpolicy.TestOne;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 import com.group18.asdc.util.QueryVariableToArraylist;
 
@@ -42,8 +40,7 @@ public class UserServiceTest {
     UserDao userDao;
 
     @Mock
-    SystemConfig systemConfig;
-
+    IPasswordEncryption passwordEncryption;
 
     @Before
     public void init() {
@@ -132,25 +129,64 @@ public class UserServiceTest {
         ;
     }
 
-    // @Test
-    // public void checkUpdatePassword() {
+    @Test
+    public void getUserRolesTest(){
+        //
+        ArrayList criteriaList = new ArrayList<>();
+        criteriaList.add("B00838575");
+        //
+        when(queryVariableToArraylist.convertQueryVariablesToArrayList(isA(String.class))).thenReturn(criteriaList);
+        //
+        when(userDao.getUserRoles(isA(ArrayList.class))).thenReturn(new ArrayList<>());
 
-    //     ArrayList<Object> criteriaList = new ArrayList<Object>();
-    //     criteriaList.add("B00838575");
-    //     ArrayList<Object> valuesList = new ArrayList<Object>();
-    //     valuesList.add("karthikk");
-    //     when(queryVariableToArraylist.convertQueryVariablesToArrayList(is(ArrayList.class), isA(ArrayList.class))).thenReturn(valuesList);
+        //
+        User userObj = getDefaultUserObj();
+        userService.getUserRoles(userObj);
+        //
+        verify(userDao, times(1)).getUserRoles(criteriaList);
+    }
 
-    //     when(userDao.updatePassword(isA(ArrayList.class), isA(ArrayList.class))).thenReturn(Boolean.TRUE);
+    @Test
+    public void checkUpdatePassword() {
 
-    //     User userObj = getDefaultUserObj();
-    //     //
-    //     assertEquals(Boolean.TRUE, userService.updatePassword(userObj));
-    //     //
-       
-    //     //
-    //     verify(userDao, times(1)).updatePassword(criteriaList, valuesList);
-    // }
+        
+        ArrayList<Object> valuesList = new ArrayList<Object>();
+        valuesList.add("karthikk");
+        when(queryVariableToArraylist.convertQueryVariablesToArrayList(isA(String.class))).thenReturn(valuesList);
+
+        when(userDao.updatePassword(isA(ArrayList.class), isA(ArrayList.class))).thenReturn(Boolean.TRUE);
+        //
+        when(passwordEncryption.encryptPassword(isA(String.class))).thenReturn("encrypted");
+
+        User userObj = getDefaultUserObj();
+        assertEquals(Boolean.TRUE, userService.updatePassword(userObj,passwordEncryption));
+        //
+        verify(userDao, times(1)).updatePassword(valuesList, valuesList);
+        verify(queryVariableToArraylist, times(1)).convertQueryVariablesToArrayList("B00838575");
+        verify(queryVariableToArraylist, times(1)).convertQueryVariablesToArrayList("encrypted");
+        verify(passwordEncryption, times(1)).encryptPassword("karthikk");
+        //
+
+    }
+
+    @Test
+    public void checkUpdateErrorPassword() {
+
+        
+        ArrayList<Object> valuesList = new ArrayList<Object>();
+        valuesList.add("karthikk");
+        when(queryVariableToArraylist.convertQueryVariablesToArrayList(isA(String.class))).thenReturn(valuesList);
+
+        when(userDao.updatePassword(isA(ArrayList.class), isA(ArrayList.class))).thenReturn(Boolean.FALSE);
+        //
+        when(passwordEncryption.encryptPassword(isA(String.class))).thenReturn("encrypted");
+
+        User userObj = getDefaultUserObj();
+        assertEquals(Boolean.FALSE, userService.updatePassword(userObj,passwordEncryption));
+        //
+        //
+
+    }
 
 
 }
