@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.entities.Course;
+import com.group18.asdc.entities.User;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -31,6 +32,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public boolean iscreateCourseParametersValid(Course course) {
 
+		UserService theUserService=SystemConfig.getSingletonInstance().getTheUserService();
 		log.info("Acceesing admin service impl");
 		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
 		if (!isCourseIdValid(course)) {
@@ -40,6 +42,10 @@ public class AdminServiceImpl implements AdminService {
 			return false;
 		}
 		String instructorId = course.getInstructorName().getBannerId();
+		User instructor=theUserService.getUserById(instructorId);
+		if(instructor==null) {
+			return false;
+		}
 		if (instructorId.length() != 9 || !instructorId.matches("B00(.*)")) {
 			return false;
 		}
@@ -53,7 +59,7 @@ public class AdminServiceImpl implements AdminService {
 	public boolean createCourse(Course course) {
 
 		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
-		if (true == iscreateCourseParametersValid(course)) {
+		if (iscreateCourseParametersValid(course)) {
 			return admindao.addCourse(course);
 		}
 		return false;
@@ -63,7 +69,7 @@ public class AdminServiceImpl implements AdminService {
 	public boolean deleteCourse(Course course) {
 
 		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
-		if (true == isCourseIdValid(course)) {
+		if (isCourseIdValid(course)) {
 			return admindao.deleteCourse(course);
 		}
 		return false;
