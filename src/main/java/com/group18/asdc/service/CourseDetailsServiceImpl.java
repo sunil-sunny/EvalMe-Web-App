@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.entities.Course;
-import com.group18.asdc.entities.Registerbean;
+import com.group18.asdc.entities.UserRegistartionDetails;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.DataBaseQueriesUtil;
 
