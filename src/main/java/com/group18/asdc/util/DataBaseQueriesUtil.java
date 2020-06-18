@@ -32,18 +32,17 @@ public class DataBaseQueriesUtil {
 
 	public final static String isUserExists = "select * from user where bannerid= ?;";
 
-	public final static String checkCourseId = "SELECT courseid from course where courseid=?";
-	public final static String checkCourseName = "SELECT coursename from course where coursename=?";
-	public final static String checkInstructorId = "SELECT bannerid from user where bannerid=?";
-	public final static String checkInstructorStudent = "SELECT bannerid from courserole where roleid in (select roleid from role where rolename in ('STUDENT','TA')) and bannerid=?";
+	public final static String isCourseIdExists = "SELECT courseid from course where courseid=?";
+	public final static String isCourseNameExists = "SELECT coursename from course where coursename=?";
+	public final static String isInstructorAssigned = "select bannerid from courserole where courseid = ? and bannerid = ? and roleid = (select roleid from role where rolename='INSTRUCTOR')";
+	
+	public final static String isInstructorStudent = "SELECT bannerid from courserole where roleid in (select roleid from role where rolename in ('STUDENT','TA')) and bannerid=? and courseid=?";
 
-	public final static String createCourse1 = "insert into course(courseid,coursename) values (?,?)";
-	public final static String createCourse2 = "insert into courserole(roleid,courseid,bannerid) values ((select roleid from role where rolename='INSTRUCTOR'),?,?)";
-	public final static String checkcreateCourse2 = "select bannerid from courserole where courseid=? and bannerid=? and roleid=(select roleid from role where rolename='INSTRUCTOR')";
-	public final static String deletecreateCourse2 = "delete from courserole where courseid=? and roleid=(select roleid from role where rolename='INSTRUCTOR')";
-
-	public final static String deleteCourse1 = "delete from courserole where courseid=?";
-	public final static String deleteCourse2 = "delete from course where courseid=?";
+	public final static String createCourse = "insert into course(courseid,coursename) values (?,?)";
+	public final static String allocateCourseInstructor = "insert into courserole(roleid,courseid,bannerid) values ((select roleid from role where rolename='INSTRUCTOR'),?,?)";
+	
+	public final static String deleteCourse = "delete from course where courseid=?";
+	
 	public final static String isQuestionTitle = "select * from questiontitle where qtitle=?;";
 	public final static String createQuestionTitle = "insert into questiontitle (qtitle) values (?);";
 	public final static String getQuestionTypeId = "SELECT * FROM questiontype where questiontypename=?;";
