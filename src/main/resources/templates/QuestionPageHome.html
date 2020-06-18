@@ -10,6 +10,16 @@ h1 {
 	text-align: center;
 }
 </style>
+<script>
+function alert() {
+  var txt;
+  if (confirm("Delete question")) {
+    return true;
+  } else {
+    return false;
+  }
+}
+</script>
 </head>
 <body>
 
@@ -67,8 +77,8 @@ h1 {
 
 						<input type="hidden" th:value="${prod.questionId}" name="id" />
 
-						<td><input type="Submit" value="Delete Question"
-							class="btn btn-danger"></td>
+						<td><input type="submit" value="Delete Question"
+							class="btn btn-danger" onclick="return alert()"/></td>
 					</tr>
 				</form>
 			</tbody>

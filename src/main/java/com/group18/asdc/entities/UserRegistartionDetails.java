@@ -2,12 +2,12 @@ package com.group18.asdc.entities;
 
 import com.group18.asdc.util.DataBaseQueriesUtil;
 
-public class Registerbean {
+public class UserRegistartionDetails {
 
-	public Registerbean() {
+	public UserRegistartionDetails() {
 		
 	}
-	public Registerbean(String firstname, String lastname,String bannerid, String emailid, String password, String confirmpassword) {
+	public UserRegistartionDetails(String firstname, String lastname,String bannerid, String emailid, String password, String confirmpassword) {
 		super();
 	
 		this.bannerid = bannerid;
@@ -63,7 +63,7 @@ public class Registerbean {
 		this.confirmpassword = confirmpassword;
 	}
 	
-	public Registerbean(User user) {
+	public UserRegistartionDetails(User user) {
 		
 		super();
 		this.bannerid=user.getBannerId();

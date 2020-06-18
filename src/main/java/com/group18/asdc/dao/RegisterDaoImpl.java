@@ -8,44 +8,50 @@ import java.sql.SQLException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.group18.asdc.database.ConnectionManager;
-import com.group18.asdc.entities.Registerbean;
+import com.group18.asdc.entities.UserRegistartionDetails;
+
 
 public class RegisterDaoImpl implements RegisterDao {
 
 	@Override
-	public boolean registeruser(Registerbean bean) {
+	public boolean registeruser(UserRegistartionDetails registerDetails) {
 
 		Connection connection = null;
-		PreparedStatement pst = null;
-		PreparedStatement pst7 = null;
+		PreparedStatement registerUserStatement = null;
+		PreparedStatement assignRoleStatement = null;
 		boolean isUserRegisterd=false;
 		boolean isGuestRoleAssigned=false;
 
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			pst = connection.prepareStatement("insert into user values(?,?,?,?,?)");
+			connection.setAutoCommit(false);
+			registerUserStatement = connection.prepareStatement("insert into user values(?,?,?,?,?)");
 
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			String hashedPassword = passwordEncoder.encode(bean.getPassword());
+			String hashedPassword = passwordEncoder.encode(registerDetails.getPassword());
 			// System.out.println("encrypted password is" + hashedPassword);
-			pst.setString(1, bean.getBannerid());
-			pst.setString(2, bean.getLastname());
-			pst.setString(3, bean.getFirstname());
-			pst.setString(4, bean.getEmailid());
-			pst.setString(5, hashedPassword);
-			int rs = pst.executeUpdate();
+			registerUserStatement.setString(1, registerDetails.getBannerid());
+			registerUserStatement.setString(2, registerDetails.getLastname());
+			registerUserStatement.setString(3, registerDetails.getFirstname());
+			registerUserStatement.setString(4, registerDetails.getEmailid());
+			registerUserStatement.setString(5, hashedPassword);
+			int registerStatus = registerUserStatement.executeUpdate();
 			
-			if (rs > 0) {
+			if (registerStatus > 0) {
 				isUserRegisterd=true;
 			}
-			pst7 = connection.prepareStatement("insert into systemrole(roleid,bannerid) values(?,?)");
-			pst7.setInt(1, 2);
-			pst7.setString(2, bean.getBannerid());
-			int rs5 = pst7.executeUpdate();
+			assignRoleStatement = connection.prepareStatement("insert into systemrole(roleid,bannerid) values(?,?)");
+			assignRoleStatement.setInt(1, 2);
+			assignRoleStatement.setString(2, registerDetails.getBannerid());
+			int assignRoleResult = assignRoleStatement.executeUpdate();
 			
-			if (rs5 > 0) {
+			if (assignRoleResult > 0) {
 				System.out.println("The role is addded as a guest user");
 				isGuestRoleAssigned=true;
+			}
+			
+			if(isGuestRoleAssigned&&isUserRegisterd) {
+				connection.commit();
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -56,11 +62,11 @@ public class RegisterDaoImpl implements RegisterDao {
 				if (connection != null) {
 					connection.close();
 				}
-				if (pst != null) {
-					pst.close();
+				if (registerUserStatement != null) {
+					registerUserStatement.close();
 				}
-				if (pst7 != null) {
-					pst7.close();
+				if (assignRoleStatement != null) {
+					assignRoleStatement.close();
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -75,14 +81,14 @@ public class RegisterDaoImpl implements RegisterDao {
 	@Override
 	public boolean checkUserWithEmail(String email) {
 		Connection connection = null;
-		PreparedStatement pst3 = null;
-		ResultSet rs3 = null;
+		PreparedStatement thePreparedStatement = null;
+		ResultSet theResultSet = null;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			pst3 = connection.prepareStatement("select * from user where emailid=?");
-			pst3.setString(1, email);
-			rs3 = pst3.executeQuery();
-			if (rs3.next()) {
+			thePreparedStatement = connection.prepareStatement("select * from user where emailid=?");
+			thePreparedStatement.setString(1, email);
+			theResultSet = thePreparedStatement.executeQuery();
+			if (theResultSet.next()) {
 				return true;
 			}
 		} catch (SQLException e) {
@@ -94,11 +100,11 @@ public class RegisterDaoImpl implements RegisterDao {
 				if (connection != null) {
 					connection.close();
 				}
-				if (pst3 != null) {
-					pst3.close();
+				if (thePreparedStatement != null) {
+					thePreparedStatement.close();
 				}
-				if (rs3 != null) {
-					rs3.close();
+				if (theResultSet != null) {
+					theResultSet.close();
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -113,15 +119,15 @@ public class RegisterDaoImpl implements RegisterDao {
 	public boolean checkUserWithBannerId(String bannerId) {
 
 		Connection connection = null;
-		PreparedStatement pst2 = null;
-		ResultSet rs2 = null;
+		PreparedStatement thePreparedStatement = null;
+		ResultSet theResultSet = null;
 
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			pst2 = connection.prepareStatement("select * from user where bannerid=?");
-			pst2.setString(1, bannerId);
-			rs2 = pst2.executeQuery();
-			if (rs2.next()) {
+			thePreparedStatement = connection.prepareStatement("select * from user where bannerid=?");
+			thePreparedStatement.setString(1, bannerId);
+			theResultSet = thePreparedStatement.executeQuery();
+			if (theResultSet.next()) {
 				return true;
 			}
 		} catch (SQLException e) {
@@ -133,11 +139,11 @@ public class RegisterDaoImpl implements RegisterDao {
 				if (connection != null) {
 					connection.close();
 				}
-				if (pst2 != null) {
-					pst2.close();
+				if (thePreparedStatement != null) {
+					thePreparedStatement.close();
 				}
-				if (rs2 != null) {
-					rs2.close();
+				if (theResultSet != null) {
+					theResultSet.close();
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

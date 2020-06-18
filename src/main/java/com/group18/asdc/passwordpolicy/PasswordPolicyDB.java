@@ -17,7 +17,7 @@ public class PasswordPolicyDB implements IPasswordPolicyDB {
             policiesList = sqlImplementation.selectQuery(SQLQueries.GET_BASEPASSWORD_POLICIES.toString(),
                     new ArrayList<>());
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         } finally {
             if (sqlImplementation != null) {
                 sqlImplementation.cleanup();
@@ -37,7 +37,7 @@ public class PasswordPolicyDB implements IPasswordPolicyDB {
             policiesList = sqlImplementation.selectQuery(SQLQueries.GET_HISTORYPASSWORD_POLICIES.toString(),
                     new ArrayList<>());
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         } finally {
             if (sqlImplementation != null) {
                 sqlImplementation.cleanup();

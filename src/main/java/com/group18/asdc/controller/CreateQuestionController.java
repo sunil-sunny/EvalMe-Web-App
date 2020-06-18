@@ -75,7 +75,7 @@ public class CreateQuestionController {
 		if (isQuestionCreated) {
 			log.info("Numeric or text question created");
 
-			return "Question";
+			return "QuestionCreateSuccess";
 		} else {
 			log.info("Error creating numeric or text question");
 
@@ -123,12 +123,10 @@ public class CreateQuestionController {
 
 			theMultipleChoiceQuestion.setOptionList(optionList);
 		}
-
 		boolean isQuestionCreated = theCreateQuestionService.createMultipleQuestion(theMultipleChoiceQuestion);
-
 		if (isQuestionCreated) {
 			log.info("Created multiple choice questions success");
-			return "QuestionPageHome";
+			return "QuestionCreateSuccess";
 		} else {
 			log.info("Error in Created multiple choice questions success");
 			return "error";
