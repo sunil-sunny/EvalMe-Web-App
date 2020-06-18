@@ -12,7 +12,6 @@ import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.security.IPasswordEncryption;
-import com.group18.asdc.util.CommonUtil;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 
 public class UserServiceImpl implements UserService {
@@ -72,6 +71,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption) {
+        //
         ArrayList<Object> criteriaList = queryVariableToArrayList
                 .convertQueryVariablesToArrayList(userObj.getBannerId());
         ArrayList<Object> valueList = queryVariableToArrayList

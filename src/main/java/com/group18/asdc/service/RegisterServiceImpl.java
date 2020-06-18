@@ -10,6 +10,7 @@ import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.entities.Registerbean;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
+import com.group18.asdc.util.DataBaseQueriesUtil;
 
 @Repository
 public class RegisterServiceImpl implements RegisterService {

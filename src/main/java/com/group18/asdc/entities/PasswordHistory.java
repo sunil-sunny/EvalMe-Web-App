@@ -1,7 +1,5 @@
 package com.group18.asdc.entities;
 
-import java.sql.Date;
-
 public class PasswordHistory {
 
     private long id;
