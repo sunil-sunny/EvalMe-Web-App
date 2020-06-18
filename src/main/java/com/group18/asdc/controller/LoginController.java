@@ -23,7 +23,6 @@ import com.group18.asdc.passwordpolicy.PasswordPolicyManager;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.UserService;
-import com.group18.asdc.util.ICustomStringUtils;
 
 @Controller
 public class LoginController {
@@ -37,51 +36,35 @@ public class LoginController {
 
   @RequestMapping(value = { "/login", "/home" })
   public String login() {
-
     return "login.html";
-
   }
 
-  // Login form with error
   @RequestMapping("/login-error")
   public String loginError(Model model) {
-
     model.addAttribute("loginError", Boolean.TRUE);
     return "login.html";
-
   }
 
   @RequestMapping("/login-success")
   public RedirectView loginSuccess(Authentication authentication) {
     String systemRoleForCurrentUser = authentication.getAuthorities().iterator().next().toString();
     String redirectURL = "/coursepage";
-    //
-    if( systemRoleForCurrentUser.equals("ADMIN") )
-    {
+    if (systemRoleForCurrentUser.equals("ADMIN")) {
       redirectURL = "/adminhome";
     }
     return new RedirectView(redirectURL);
-
   }
 
   @RequestMapping("/forgot-password")
   public String forgotPasswordPage() {
-
     return "forgot-password.html";
-
   }
 
   @GetMapping("/resetPassword")
   public String sendResetRequest(@RequestParam(name = "username", required = true) String bannerId, Model model,
       HttpSession session) {
-    //
-    // get User object with BOO number value and send an email
-    //
     UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
     User userObj = new User(bannerId, userService);
-    /*
-    * 
-    */
     if (userObj.getEmail() != null && !userObj.getEmail().isEmpty()) {
       String genPassword = SystemConfig.getSingletonInstance().getRandomStringGenerator().generateRandomString();
       session.setAttribute("RESET_PASSWORD", genPassword);
@@ -114,7 +97,6 @@ public class LoginController {
       model.addAttribute("reason", "New password and confirm password does not match");
       isError = Boolean.TRUE;
     } else {
-      // set new password in the user model
       try {
         userObj.setPassword(resetForm.getconfirmNewPassword());
         userObj.isPasswordValid(SystemConfig.getSingletonInstance().getPasswordPolicyManager());
@@ -123,7 +105,6 @@ public class LoginController {
           model.addAttribute("reason", "Error resetting password.");
           isError = Boolean.TRUE;
         } else {
-          // insert value to history
           PasswordHistory passwordHistory = new PasswordHistory();
           passwordHistory.setBannerID(userObj.getBannerId());
           passwordHistory.setPassword(userObj.getPassword());
@@ -162,11 +143,10 @@ public class LoginController {
   public String resetPasswordPolicies() {
 
     IPasswordPolicyDB passwordPolicyDB = SystemConfig.getSingletonInstance().getPasswordPolicyDB();
-    ICustomStringUtils customStringUtils = SystemConfig.getSingletonInstance().getCustomStringUtils();
-    SystemConfig.getSingletonInstance().setBasePasswordPolicyManager(
-        new BasePasswordPolicyManager(passwordPolicyDB, customStringUtils));
     SystemConfig.getSingletonInstance()
-        .setPasswordPolicyManager(new PasswordPolicyManager(passwordPolicyDB, customStringUtils));
+        .setBasePasswordPolicyManager(new BasePasswordPolicyManager(passwordPolicyDB));
+    SystemConfig.getSingletonInstance()
+        .setPasswordPolicyManager(new PasswordPolicyManager(passwordPolicyDB));
     return "policyReset";
   }
 

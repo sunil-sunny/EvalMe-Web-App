@@ -2,9 +2,6 @@ package com.group18.asdc.errorhandling;
 
 public class PasswordPolicyException extends Exception{
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     private String exceptionType;
 

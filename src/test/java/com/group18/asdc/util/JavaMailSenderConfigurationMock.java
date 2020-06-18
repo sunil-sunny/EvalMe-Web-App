@@ -4,14 +4,14 @@ public class JavaMailSenderConfigurationMock implements IJavaMailSenderConfigura
 
     @Override
     public String getEmail() {
-        // TODO Auto-generated method stub
+
         return "abcd@gmail.com";
     }
 
     @Override
     public String getPassword() {
-        // TODO Auto-generated method stub
+
         return "password";
     }
-    
+
 }

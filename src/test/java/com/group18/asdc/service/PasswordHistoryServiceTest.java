@@ -2,7 +2,6 @@ package com.group18.asdc.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,74 +39,73 @@ public class PasswordHistoryServiceTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        
+
     }
 
-    private PasswordHistory getDefaultPasswordHistory()
-    {
+    private PasswordHistory getDefaultPasswordHistory() {
         PasswordHistory passwordHistory = new PasswordHistory();
-        //
+
         passwordHistory.setBannerID("B00838575");
         passwordHistory.setDate(123456789l);
         passwordHistory.setPassword("password");
-        //
+
         return passwordHistory;
     }
-    
-    @Test
-    public void insertPasswordHistoryTest(){
 
-        //
+    @Test
+    public void insertPasswordHistoryTest() {
+
         ArrayList valuesList = new ArrayList();
-        //
+
         valuesList.add("B00838575");
         valuesList.add("encryptedPassword");
         valuesList.add(123456789l);
-        //
+
         when(passwordEncryption.encryptPassword("password")).thenReturn("encryptedPassword");
-        when(queryVariableToArraylist.convertQueryVariablesToArrayList(isA(String.class),isA(String.class),isA(Long.class))).thenReturn(valuesList);
+        when(queryVariableToArraylist.convertQueryVariablesToArrayList(isA(String.class), isA(String.class),
+                isA(Long.class))).thenReturn(valuesList);
         when(passwordHistoryDao.insertPasswordHistory(isA(ArrayList.class))).thenReturn(1);
-        //
+
         PasswordHistory passwordHistory = getDefaultPasswordHistory();
-        //
-        assertEquals(1,passwordHistoryService.insertPassword(passwordHistory, passwordEncryption));
-        //
+
+        assertEquals(1, passwordHistoryService.insertPassword(passwordHistory, passwordEncryption));
+
         verify(passwordHistoryDao, times(1)).insertPasswordHistory(valuesList);
-        verify(queryVariableToArraylist, times(1)).convertQueryVariablesToArrayList("B00838575","encryptedPassword",123456789l);
+        verify(queryVariableToArraylist, times(1)).convertQueryVariablesToArrayList("B00838575", "encryptedPassword",
+                123456789l);
 
     }
 
-    private ArrayList getDefaultPasswordHistoryDao()
-    {
+    private ArrayList getDefaultPasswordHistoryDao() {
         ArrayList resultList = new ArrayList<>();
-        //
+
         HashMap map = new HashMap<>();
         map.put("bannerid", "B00838575");
         map.put("password", "encryptedPassword");
-        //
+
         resultList.add(map);
-        //
+
         return resultList;
     }
 
     @Test
-    public void getPasswordHistoryTest()
-    {
+    public void getPasswordHistoryTest() {
         ArrayList valuesList = new ArrayList();
-        //
+
         valuesList.add("B00838575");
         valuesList.add(5);
 
-        when(queryVariableToArraylist.convertQueryVariablesToArrayList(isA(String.class),isA(Integer.class))).thenReturn(valuesList);
+        when(queryVariableToArraylist.convertQueryVariablesToArrayList(isA(String.class), isA(Integer.class)))
+                .thenReturn(valuesList);
         when(passwordHistoryDao.getPasswordHistory(isA(ArrayList.class))).thenReturn(getDefaultPasswordHistoryDao());
-        //
+
         ArrayList resultList = passwordHistoryService.getPasswordHistory("B00838575", 5);
-        //
-        verify(passwordHistoryDao , times(1)).getPasswordHistory(valuesList);
-        verify(queryVariableToArraylist, times(1)).convertQueryVariablesToArrayList("B00838575" , 5);
-        //
-        PasswordHistory resultHistory = (PasswordHistory)resultList.get(0);
-        //
+
+        verify(passwordHistoryDao, times(1)).getPasswordHistory(valuesList);
+        verify(queryVariableToArraylist, times(1)).convertQueryVariablesToArrayList("B00838575", 5);
+
+        PasswordHistory resultHistory = (PasswordHistory) resultList.get(0);
+
         assertEquals("encryptedPassword", resultHistory.getPassword());
         assertEquals("B00838575", resultHistory.getBannerID());
     }

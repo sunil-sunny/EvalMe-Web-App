@@ -9,27 +9,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.springframework.stereotype.Repository;
-
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.database.SQLMethods;
 import com.group18.asdc.database.SQLQueries;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.DataBaseQueriesUtil;
 
+import org.springframework.stereotype.Repository;
+
 @Repository
 public class UserDaoImpl implements UserDao {
 
-
 	private Logger log = Logger.getLogger(UserDaoImpl.class.getName());
-	// @Override
-	// public Boolean authenticateByEmailAndPassword(ArrayList<Object> valuesList)
-	// throws SQLException {
-	// SQLMethods sqlImplementation = new SQLMethods();
-	// return
-	// sqlImplementation.selectQuery(SQLQueries.USER_AUTH_BY_EMAIL_PASSWORD.toString(),
-	// valuesList).size() == 1;
-	// }
 
 	@Override
 	public boolean isUserExists(User user) {
@@ -50,7 +41,6 @@ public class UserDaoImpl implements UserDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
@@ -65,7 +55,6 @@ public class UserDaoImpl implements UserDao {
 				}
 				log.info("closing connection after having a check if user exists or not");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -307,7 +296,7 @@ public class UserDaoImpl implements UserDao {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
 			if (sqlImplementation != null) {
 				sqlImplementation.cleanup();

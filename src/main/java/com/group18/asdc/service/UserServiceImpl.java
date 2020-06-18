@@ -2,10 +2,8 @@ package com.group18.asdc.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
 import com.group18.asdc.entities.User;
@@ -22,24 +20,9 @@ public class UserServiceImpl implements UserService {
         this.queryVariableToArrayList = queryVariableToArrayList;
     }
 
-    // @Override
-    // public Boolean authenticateByEmailAndPassword(String bannerid, String
-    // password) {
-    // ArrayList<Object> valuesList =
-    // CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerid,
-    // password);
-    // try {
-    // return userDao.authenticateByEmailAndPassword(valuesList);
-    // } catch (SQLException e) {
-    // e.printStackTrace();
-    // }
-    // //
-    // return Boolean.FALSE;
-    // }
-
     @Override
     public boolean isUserExists(User user) {
-        // TODO Auto-generated method stub
+
         return userDao.isUserExists(user);
     }
 
@@ -57,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsersByCourse(int courseId) {
-        // TODO Auto-generated method stub
+
         return userDao.getAllUsersByCourse(courseId);
     }
 
@@ -69,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption) {
-        //
+
         ArrayList<Object> criteriaList = queryVariableToArrayList
                 .convertQueryVariablesToArrayList(userObj.getBannerId());
         ArrayList<Object> valueList = queryVariableToArrayList
@@ -86,23 +69,23 @@ public class UserServiceImpl implements UserService {
 
     }
 
-	@Override
-	public User getCurrentUser() {
-		
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String bannerid="";
-		if (principal instanceof UserDetails) {
-			bannerid = ((UserDetails) principal).getUsername();
-			//System.out.println(((UserDetails) principal).getAuthorities());
-		} else {
-			bannerid = principal.toString();
-			//System.out.println(principal.);
-		}
-		User currentUser=null;
-		if(bannerid!=null) {
-			currentUser=this.getUserById(bannerid);
-		}
-		return currentUser;
-	}
+    @Override
+    public User getCurrentUser() {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String bannerid = "";
+        if (principal instanceof UserDetails) {
+            bannerid = ((UserDetails) principal).getUsername();
+
+        } else {
+            bannerid = principal.toString();
+
+        }
+        User currentUser = null;
+        if (bannerid != null) {
+            currentUser = this.getUserById(bannerid);
+        }
+        return currentUser;
+    }
 
 }

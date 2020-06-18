@@ -22,19 +22,16 @@ public class HistoryConstraintPolicy implements IPasswordPolicy {
 
     @Override
     public void validate(String bannerId, String password) throws PasswordPolicyException {
-        //
+
         ArrayList<PasswordHistory> passwordHistoryList = passwordHistoryService.getPasswordHistory(bannerId,
                 numberOfHistoryRecords);
-        //
         for (PasswordHistory eachPasswordHistory : passwordHistoryList) {
             String eachPassword = eachPasswordHistory.getPassword();
-            //
             if (passwordEncryption.matches(password, eachPassword)) {
                 throw new PasswordPolicyException(
                         "Password matches with one of the old " + numberOfHistoryRecords + " passwords");
             }
         }
-        //
 
     }
 

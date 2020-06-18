@@ -85,7 +85,6 @@ public class User implements UserInterface {
 
 	public static void isPasswordValid(String password, IBasePasswordPolicyManager passwordPolicyManager)
 			throws PasswordPolicyException {
-		//
 		passwordPolicyManager.validatePassword(password);
 	}
 
