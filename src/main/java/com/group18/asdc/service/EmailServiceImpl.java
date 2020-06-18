@@ -2,8 +2,6 @@ package com.group18.asdc.service;
 
 import java.util.Properties;
 
-import com.group18.asdc.util.IJavaMailSenderConfiguration;
-
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

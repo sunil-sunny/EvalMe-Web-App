@@ -1,7 +1,6 @@
 package com.group18.asdc;
 
 import com.group18.asdc.dao.AdminDao;
-
 import com.group18.asdc.dao.AdminDaoImpl;
 import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.dao.CourseDetailsDaoImpl;
@@ -35,10 +34,12 @@ import com.group18.asdc.service.CourseRolesService;
 import com.group18.asdc.service.CourseRolesServiceImpl;
 import com.group18.asdc.service.CreateQuestionService;
 import com.group18.asdc.service.CreateQuestionServiceImpl;
+import com.group18.asdc.service.DefaultMailSenderConfiguration;
 import com.group18.asdc.service.DeleteQuestionService;
 import com.group18.asdc.service.DeleteQuestionServiceImpl;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.EmailServiceImpl;
+import com.group18.asdc.service.IJavaMailSenderConfiguration;
 import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.PasswordHistoryServiceImpl;
 import com.group18.asdc.service.RegisterService;
@@ -48,9 +49,7 @@ import com.group18.asdc.service.UserServiceImpl;
 import com.group18.asdc.service.ViewQuestionsService;
 import com.group18.asdc.service.ViewQuestionsServiceImpl;
 import com.group18.asdc.util.CustomStringUtils;
-import com.group18.asdc.util.DefaultMailSenderConfiguration;
 import com.group18.asdc.util.ICustomStringUtils;
-import com.group18.asdc.util.IJavaMailSenderConfiguration;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 import com.group18.asdc.util.IRandomStringGenerator;
 import com.group18.asdc.util.QueryVariableToArraylist;
@@ -89,22 +88,20 @@ public class SystemConfig {
 	private PasswordHistoryService passwordHistoryService;
 	private CourseRolesDao theCourseRolesDao;
 
-	
 	private SystemConfig() {
 
 		this.javaMailSenderConfiguration = new DefaultMailSenderConfiguration();
 		this.customStringUtils = new CustomStringUtils();
-		//Instantiating Service Objects
-		this.theAdminService=new AdminServiceImpl();
-		this.theCourseDetailsService=new CourseDetailsServiceImpl();
-		this.theEmailService=new EmailServiceImpl(this.javaMailSenderConfiguration);
-		this.theRegisterService=new RegisterServiceImpl();
-		this.theCreateQuestionService=new CreateQuestionServiceImpl();
-		this.theViewQuestionsService=new ViewQuestionsServiceImpl();
-		this.theDeleteQuestionService=new DeleteQuestionServiceImpl();
-		this.theCourseRolesService=new CourseRolesServiceImpl();
-		
-		//Instantiating Dao objects
+
+		this.theAdminService = new AdminServiceImpl();
+		this.theCourseDetailsService = new CourseDetailsServiceImpl();
+		this.theEmailService = new EmailServiceImpl(this.javaMailSenderConfiguration);
+		this.theRegisterService = new RegisterServiceImpl();
+		this.theCreateQuestionService = new CreateQuestionServiceImpl();
+		this.theViewQuestionsService = new ViewQuestionsServiceImpl();
+		this.theDeleteQuestionService = new DeleteQuestionServiceImpl();
+		this.theCourseRolesService = new CourseRolesServiceImpl();
+
 		this.queryVariableToArrayList = new QueryVariableToArraylist();
 		this.theUserService = new UserServiceImpl(this.queryVariableToArrayList);
 		this.theAdminDao = new AdminDaoImpl();
@@ -114,16 +111,16 @@ public class SystemConfig {
 		this.theRegisterDao = new RegisterDaoImpl();
 		this.passwordEncryption = new BCryptPasswordEncryption();
 		this.databaseConfiguration = new DefaultDatabaseConfiguration();
-		this.theCreateQuestionDao=new CreateQuestionDaoImpl();
-		this.theViewQuestionsDao=new ViewQuestionsDaoImpl();
-		this.theDeleteQuestionDao=new DeleteQuestionDaoImpl();
-		this.theRegisterDao=new RegisterDaoImpl();
+		this.theCreateQuestionDao = new CreateQuestionDaoImpl();
+		this.theViewQuestionsDao = new ViewQuestionsDaoImpl();
+		this.theDeleteQuestionDao = new DeleteQuestionDaoImpl();
+		this.theRegisterDao = new RegisterDaoImpl();
 		this.passwordPolicyDB = new PasswordPolicyDB();
 		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB);
 		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB);
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
-		this.theCourseRolesDao=new CourseRolesDaoImpl();
+		this.theCourseRolesDao = new CourseRolesDaoImpl();
 
 	}
 
@@ -163,10 +160,6 @@ public class SystemConfig {
 	public RegisterService getTheRegisterservice() {
 		return theRegisterService;
 	}
-
-//	public void setTheRegisterservice(RegisterServiceImpl theRegisterservice) {
-//		this.theRegisterService = theRegisterservice;
-//	}
 
 	public UserService getTheUserService() {
 		return theUserService;
