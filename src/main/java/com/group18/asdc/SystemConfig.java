@@ -89,6 +89,7 @@ public class SystemConfig {
 	private IRandomStringGenerator randomStringGenerator;
 	private ICustomStringUtils customStringUtils;
 	private PasswordHistoryService passwordHistoryService;
+	private CourseRolesDao theCourseRolesDao;
 
 	private SystemConfig() {
 		
@@ -124,6 +125,7 @@ public class SystemConfig {
 		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
+		this.theCourseRolesDao = new CourseRolesDaoImpl();
 
 	}
 
