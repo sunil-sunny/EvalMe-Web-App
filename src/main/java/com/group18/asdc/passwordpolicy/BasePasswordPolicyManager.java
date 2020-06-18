@@ -6,31 +6,45 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
+import javax.xml.crypto.Data;
+
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.util.ICustomStringUtils;
 
 public class BasePasswordPolicyManager implements IBasePasswordPolicyManager {
 
-    // private static HashMap<String, String> VALUE_VS_CLASSNAMES_MAP = new
-    // HashMap<String, String>();
     private ArrayList<HashMap> enabledPasswordPolicies = null;
     private IPasswordPolicyDB passwordPolicyDB = null;
+    private ICustomStringUtils customStringUtils = null;
 
-    // static {
-    // VALUE_VS_CLASSNAMES_MAP.put("MinLength", MinlengthPolicy.class.getName());
-    // VALUE_VS_CLASSNAMES_MAP.put("MaxLength", MaxlengthPolicy.class.getName());
-    // }
+    private enum DatabasePolicyName {
+        MIN_LENGTH_POLICY("MinLength"), MAX_LENGTH_POLICY("MaxLength"), MIN_LOWERCASE_POLICY("MinLowercase"),
+        MIN_UPPERCASE_POLICY("MinUppercase"), MIN_SPECIALCASE_POLICY("MinSpecialCharacter"),
+        CHARACTERS_NOT_ALLOWED("CharactersNotAllowed");
 
-    public BasePasswordPolicyManager(IPasswordPolicyDB passwordPolicyDB) {
+        private final String policyName;
+
+        private DatabasePolicyName(String policyName) {
+            this.policyName = policyName;
+        }
+
+        @Override
+        public String toString() {
+            return policyName;
+        }
+
+    };
+
+    public BasePasswordPolicyManager(IPasswordPolicyDB passwordPolicyDB, ICustomStringUtils customStringUtils) {
         // load default configurations
         this.passwordPolicyDB = passwordPolicyDB;
+        this.customStringUtils = customStringUtils;
     }
 
     private void loadDefaultConfigurations() {
         //
         if (enabledPasswordPolicies == null) {
-            System.out.println("DB called");
             enabledPasswordPolicies = passwordPolicyDB.loadBasePoliciesFromDB();
         }
         //
@@ -42,38 +56,22 @@ public class BasePasswordPolicyManager implements IBasePasswordPolicyManager {
         loadDefaultConfigurations();
 
         IBasePasswordPolicy passwordPolicy = null;
-        ICustomStringUtils customStringUtils = SystemConfig.getSingletonInstance().getCustomStringUtils();
-        // for (String eachClass : enabledPasswordPolicies) {
-        // //
-        // try {
-        //
-        // passwordPolicy = (IBasePasswordPolicy)
-        // Class.forName(VALUE_VS_CLASSNAMES_MAP.get(eachClass))
-        // .getConstructor().newInstance();
-        // passwordPolicy.validate(password);
-        // } catch (InstantiationException | IllegalAccessException |
-        // IllegalArgumentException
-        // | InvocationTargetException | NoSuchMethodException | SecurityException
-        // | ClassNotFoundException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        //
+
         for (HashMap eachEnabledPolicy : enabledPasswordPolicies) {
             //
             String policyName = (String) eachEnabledPolicy.get("POLICY_NAME");
             String policyValue = (String) eachEnabledPolicy.get("POLICY_VALUE");
-            if (policyName.equals("MinLength")) {
+            if (policyName.equals(DatabasePolicyName.MIN_LENGTH_POLICY.toString())) {
                 passwordPolicy = new MinlengthPolicy(policyValue);
-            } else if (policyName.equals("MaxLength")) {
+            } else if (policyName.equals(DatabasePolicyName.MAX_LENGTH_POLICY.toString())) {
                 passwordPolicy = new MaxlengthPolicy(policyValue);
-            } else if (policyName.equals("MinLowercase")) {
+            } else if (policyName.equals(DatabasePolicyName.MIN_LOWERCASE_POLICY.toString())) {
                 passwordPolicy = new MinLowercasePolicy(policyValue, customStringUtils);
-            } else if (policyName.equals("MinUppercase")) {
+            } else if (policyName.equals(DatabasePolicyName.MIN_UPPERCASE_POLICY.toString())) {
                 passwordPolicy = new MinUppercasePolicy(policyValue, customStringUtils);
-            } else if (policyName.equals("MinSpecialCharacter")) {
+            } else if (policyName.equals(DatabasePolicyName.MIN_SPECIALCASE_POLICY.toString())) {
                 passwordPolicy = new MinSpecialcharPolicy(policyValue, customStringUtils);
-            } else if (policyName.equals("CharactersNotAllowed")) {
+            } else if (policyName.equals(DatabasePolicyName.CHARACTERS_NOT_ALLOWED.toString())) {
                 passwordPolicy = new CharsNotAllowedPolicy(policyValue, customStringUtils);
             }
             //
@@ -83,4 +81,25 @@ public class BasePasswordPolicyManager implements IBasePasswordPolicyManager {
 
     }
 
+    // private static HashMap<String, String> VALUE_VS_CLASSNAMES_MAP = new
+    // HashMap<String, String>();
+    // static {
+    // VALUE_VS_CLASSNAMES_MAP.put("MinLength", MinlengthPolicy.class.getName());
+    // VALUE_VS_CLASSNAMES_MAP.put("MaxLength", MaxlengthPolicy.class.getName());
+    // }
+    // for (String eachClass : enabledPasswordPolicies) {
+    // try {
+    //
+    // passwordPolicy = (IBasePasswordPolicy)
+    // Class.forName(VALUE_VS_CLASSNAMES_MAP.get(eachClass))
+    // .getConstructor().newInstance();
+    // passwordPolicy.validate(password);
+    // } catch (InstantiationException | IllegalAccessException |
+    // IllegalArgumentException
+    // | InvocationTargetException | NoSuchMethodException | SecurityException
+    // | ClassNotFoundException e) {
+    // e.printStackTrace();
+    // }
+    //
+    
 }

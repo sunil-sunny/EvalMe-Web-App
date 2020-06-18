@@ -48,7 +48,9 @@ import com.group18.asdc.service.UserServiceImpl;
 import com.group18.asdc.service.ViewQuestionsService;
 import com.group18.asdc.service.ViewQuestionsServiceImpl;
 import com.group18.asdc.util.CustomStringUtils;
+import com.group18.asdc.util.DefaultMailSenderConfiguration;
 import com.group18.asdc.util.ICustomStringUtils;
+import com.group18.asdc.util.IJavaMailSenderConfiguration;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 import com.group18.asdc.util.IRandomStringGenerator;
 import com.group18.asdc.util.QueryVariableToArraylist;
@@ -61,6 +63,7 @@ public class SystemConfig {
 	// Below are the instance objects for service layer
 	private AdminService theAdminService;
 	private CourseDetailsService theCourseDetailsService;
+	private IJavaMailSenderConfiguration javaMailSenderConfiguration;
 	private EmailService theEmailService;
 	private RegisterService theRegisterService;
 	private UserService theUserService;
@@ -89,10 +92,13 @@ public class SystemConfig {
 
 	private SystemConfig() {
 		
+		//
+		this.javaMailSenderConfiguration = new DefaultMailSenderConfiguration();
+		this.customStringUtils = new CustomStringUtils();
 		//Instantiating Service Objects
 		this.theAdminService=new AdminServiceImpl();
 		this.theCourseDetailsService=new CourseDetailsServiceImpl();
-		this.theEmailService=new EmailServiceImpl();
+		this.theEmailService=new EmailServiceImpl(this.javaMailSenderConfiguration);
 		this.theRegisterService=new RegisterServiceImpl();
 		this.theCreateQuestionService=new CreateQuestionServiceImpl();
 		this.theViewQuestionsService=new ViewQuestionsServiceImpl();
@@ -114,10 +120,9 @@ public class SystemConfig {
 		this.theDeleteQuestionDao=new DeleteQuestionDaoImpl();
 		//this.theRegisterDao=new RegisterDaoImpl();
 		this.passwordPolicyDB = new PasswordPolicyDB();
-		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB);
-		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB);
+		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
+		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
 		this.randomStringGenerator = new RandomStringGenerator();
-		this.customStringUtils = new CustomStringUtils();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
 
 	}

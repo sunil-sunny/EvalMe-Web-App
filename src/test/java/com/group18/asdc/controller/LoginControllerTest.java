@@ -5,6 +5,7 @@
 // import static org.mockito.Mockito.doAnswer;
 // import static org.mockito.Mockito.mock;
 // import static org.mockito.Mockito.when;
+// import static org.mockito.BDDMockito.*;
 // import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 // import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 // import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,14 +17,16 @@
 // import javax.servlet.http.HttpSession;
 // import javax.sql.DataSource;
 
+// import com.group18.asdc.SystemConfig;
 // import com.group18.asdc.entities.User;
+// import com.group18.asdc.security.IPasswordEncryption;
 // import com.group18.asdc.service.EmailService;
 // import com.group18.asdc.service.UserService;
-// import com.group18.asdc.util.CommonUtil;
 
 // import org.junit.Before;
 // import org.junit.Test;
 // import org.junit.runner.RunWith;
+// import org.mockito.InjectMocks;
 // import org.mockito.Mock;
 // import org.mockito.MockitoAnnotations;
 // import org.springframework.beans.factory.annotation.Autowired;
@@ -44,17 +47,20 @@
 //     @MockBean
 //     UserService userService;
 
+//     @Mock
+//     IPasswordEncryption passwordEncryption;
+
+//     @InjectMocks
+//     LoginController loginController;
+
 //     @MockBean
 //     EmailService emailService;
 
-//     @MockBean
-//     DataSource dataSource;
-
-//     @Mock
-//     CommonUtil commonUtil;
-
 //     @Mock
 //     User userObj;
+
+//     @Mock
+//     SystemConfig systemConfig;
 
 //     @Before
 //     public void init() {
@@ -78,26 +84,29 @@
 //     @Test
 //     public void resetPasswordTest() throws Exception {
 
-//         doAnswer(invocation -> {
+//         willAnswer(invocation -> {
 //             String arg0 = invocation.getArgument(0);
 //             User arg1 = invocation.getArgument(1);
-
+//             System.out.println("qqqqqqqqq");
 //             arg1.setEmail("justin@dal.ca");
 //             arg1.setBannerId("B00838575");
 //             assertEquals("B00838575", arg0);
 //             return null;
-//         }).when(userService).loadUserWithBannerId(isA(String.class), isA(User.class));
+//         }).given(userService).loadUserWithBannerId(isA(String.class), isA(User.class));
+//         //
+        
+//         //
 
-//         doAnswer(invocation -> {
+//         willAnswer(invocation -> {
 //             String arg0 = invocation.getArgument(0);
 //             String arg1 = invocation.getArgument(1);
 //             String arg2 = invocation.getArgument(1);
 
 //             assertEquals("justin@dal.ca", arg0);
 //             return null;
-//         }).when(emailService).sendSimpleMessage(isA(String.class), isA(String.class), isA(String.class));
+//         }).given(emailService).sendSimpleMessage(isA(String.class), isA(String.class), isA(String.class));
 
-//         mockMvc.perform(get("/resetPassword").param("username", "B00838575")).andExpect(status().isOk())
+//         mockMvc.perform(get("/resetPassword").param("username", "B00838515")).andExpect(status().isOk())
 //                 .andExpect(model().attribute("sentEmail", "justin@dal.ca"));
 
 //     }
@@ -121,7 +130,7 @@
 //     public void verifyResetPasswordTest() throws Exception {
 
 //         //
-//         when(userService.updatePassword(isA(User.class))).thenReturn(Boolean.TRUE);
+//         given(userService.updatePassword(isA(User.class) , isA(IPasswordEncryption.class))).willReturn(Boolean.TRUE);
 
 //         //
 //         mockMvc.perform(post("/resetPassword")
@@ -140,7 +149,7 @@
 //     public void verifyResetPasswordFailTest() throws Exception {
 
 //         //
-//         when(userService.updatePassword(isA(User.class))).thenReturn(Boolean.TRUE);
+//         given(userService.updatePassword(isA(User.class),isA(IPasswordEncryption.class))).willReturn(Boolean.TRUE);
 
 //         //
 //         mockMvc.perform(post("/resetPassword")
@@ -155,18 +164,23 @@
 
 //     }
 
+    
+
 //     @Test
 //     public void verifyResetPasswordmatchErrorTest() throws Exception {
 
 //         //
-//         when(userService.updatePassword(isA(User.class))).thenReturn(Boolean.TRUE);
+//         // when(systemConfig.getSingletonInstance()).thenReturn(systemConfig);
+//         when(systemConfig.getTheUserService()).thenReturn(userService);
+//         given(userService.updatePassword(isA(User.class),isA(IPasswordEncryption.class))).willReturn(Boolean.FALSE);
+//         willDoNothing().given(userService).loadUserWithBannerId(isA(String.class), isA(User.class));
 
 //         //
 //         mockMvc.perform(post("/resetPassword")
 //             .param("bannerId","B00838575")
 //             .param("generatedPassword","PASSWORD")
 //             .param("newPassword","NEWPASSWORD")
-//             .param("confirmNewPassword","PASSWORD")
+//             .param("confirmNewPassword","NEWPASSWORD")
 //             .sessionAttr("RESET_PASSWORD", "PASSWORD")
 //             .with(csrf()))
 //             .andExpect(model().attribute("confirmPasswordError", true));
@@ -178,7 +192,7 @@
 //     public void verifyResetPasswordupdateErrorTest() throws Exception {
 
 //         //
-//         when(userService.updatePassword(isA(User.class))).thenReturn(Boolean.FALSE);
+//         given(userService.updatePassword(isA(User.class),isA(IPasswordEncryption.class))).willReturn(Boolean.FALSE);
 
 //         //
 //         mockMvc.perform(post("/resetPassword")
