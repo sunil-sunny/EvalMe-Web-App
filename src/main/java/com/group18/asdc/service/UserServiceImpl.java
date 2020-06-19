@@ -1,95 +1,91 @@
 package com.group18.asdc.service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import com.group18.asdc.dao.UserDao;
+import com.group18.asdc.dao.UserDaoImpl;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.service.UserService;
-import com.group18.asdc.util.CommonUtil;
+import com.group18.asdc.security.IPasswordEncryption;
+import com.group18.asdc.util.IQueryVariableToArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-@Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserDao userDao;
+    private IQueryVariableToArrayList queryVariableToArrayList;
 
-    // @Override
-    // public Boolean authenticateByEmailAndPassword(String bannerid, String password) {
-    //     ArrayList<Object> valuesList = CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerid, password);
-    //     try {
-    //         return userDao.authenticateByEmailAndPassword(valuesList);
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    //     //
-    //     return Boolean.FALSE;
-    // }
-    
-    @Override
-	public boolean isUserExists(User user) {
-		// TODO Auto-generated method stub
-		return userDao.isUserExists(user);
-	}
-    
-    @Override
-	public User getUserById(String bannerId) {
-		
-		return userDao.getUserById(bannerId);
-	}
-    
-    @Override
-	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
-		
-		
-		return userDao.filterEligibleUsersForCourse(studentList, courseId);
-	}
+    public UserServiceImpl(IQueryVariableToArrayList queryVariableToArrayList) {
+        userDao = new UserDaoImpl();
+        this.queryVariableToArrayList = queryVariableToArrayList;
+    }
 
-	@Override
-	public List<User> getAllUsersByCourse(int courseId) {
-		// TODO Auto-generated method stub
-		return userDao.getAllUsersByCourse(courseId);
-	}
+    @Override
+    public boolean isUserExists(User user) {
+
+        return userDao.isUserExists(user);
+    }
+
+    @Override
+    public User getUserById(String bannerId) {
+
+        return userDao.getUserById(bannerId);
+    }
+
+    @Override
+    public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
+
+        return userDao.filterEligibleUsersForCourse(studentList, courseId);
+    }
+
+    @Override
+    public List<User> getAllUsersByCourse(int courseId) {
+
+        return userDao.getAllUsersByCourse(courseId);
+    }
 
     @Override
     public void loadUserWithBannerId(String bannerId, User userObj) {
-        ArrayList<Object> valuesList = CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerId);
-        try {
-            userDao.loadUserWithBannerId(valuesList, userObj);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ArrayList<Object> valuesList = queryVariableToArrayList.convertQueryVariablesToArrayList(bannerId);
+        userDao.loadUserWithBannerId(valuesList, userObj);
     }
 
     @Override
-    public Boolean updatePassword(User userObj) {
-        ArrayList<Object> criteriaList = CommonUtil.getInstance().convertQueryVariablesToArrayList(userObj.getBannerId());
-        ArrayList<Object> valueList = CommonUtil.getInstance().convertQueryVariablesToArrayList(userObj.getPassword());
-        try {
-            return userDao.updatePassword(criteriaList, valueList);
-        } catch (SQLException e) {
-            // e.printStackTrace();
-        }
-        return Boolean.FALSE;
+    public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption) {
+
+        ArrayList<Object> criteriaList = queryVariableToArrayList
+                .convertQueryVariablesToArrayList(userObj.getBannerId());
+        ArrayList<Object> valueList = queryVariableToArrayList
+                .convertQueryVariablesToArrayList(passwordEncryption.encryptPassword(userObj.getPassword()));
+        return userDao.updatePassword(criteriaList, valueList);
     }
 
-    // @Override
-    // public ArrayList getUserRoles(String bannerid) {
-        
-    //     ArrayList rolesList = new ArrayList<>();
-    //     ArrayList<Object> criteriaList = CommonUtil.getInstance().convertQueryVariablesToArrayList(bannerid);
-    //     try{
-    //         return userDao.getUserRoles(criteriaList);
-    //     }
-    //     catch(SQLException e)
-    //     {
-    //         e.printStackTrace();
-    //     }
-    //     return rolesList;
-    // }
+    @Override
+    public ArrayList getUserRoles(User userObj) {
+
+        ArrayList<Object> criteriaList = queryVariableToArrayList
+                .convertQueryVariablesToArrayList(userObj.getBannerId());
+        return userDao.getUserRoles(criteriaList);
+
+    }
+
+    @Override
+    public User getCurrentUser() {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String bannerid = "";
+        if (principal instanceof UserDetails) {
+            bannerid = ((UserDetails) principal).getUsername();
+
+        } else {
+            bannerid = principal.toString();
+
+        }
+        User currentUser = null;
+        if (bannerid != null) {
+            currentUser = this.getUserById(bannerid);
+        }
+        return currentUser;
+    }
 
 }
