@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.entities.UserRegistartionDetails;
+import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.util.DataBaseQueriesUtil;
@@ -49,7 +50,16 @@ public class RegisterServiceImpl implements RegisterService {
 		if(!isBannerIdExists && !isEmailExits) {	
 			registerResult=registerDao.registeruser(userDetails);
 		}
-		if(registerResult) {	
+		if(registerResult) {
+			// insert new password to history is registration is successful
+			PasswordHistory passwordHistory = new PasswordHistory();
+			passwordHistory.setBannerID(userDetails.getBannerid());
+			passwordHistory.setPassword(userDetails.getPassword());
+			passwordHistory.setDate(System.currentTimeMillis());
+			PasswordHistoryService passwordHistoryService = SystemConfig.getSingletonInstance()
+					.getPasswordHistoryService();
+			passwordHistoryService.insertPassword(passwordHistory,
+					SystemConfig.getSingletonInstance().getPasswordEncryption());	
 			return "Success";
 		}
 		return "User not Registered";
