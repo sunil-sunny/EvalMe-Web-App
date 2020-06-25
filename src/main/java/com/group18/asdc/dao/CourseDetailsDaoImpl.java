@@ -68,7 +68,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				allCourses.add(course);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.info("SQL Exception occured while getting all courses");
 		} finally {
 			try {
 				if (getCourses != null) {
@@ -89,8 +89,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				log.info("closing all the data connections in after getting all courses");
 
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info("Error while closing the connection and statements after getting all courses");
 			}
 		}
 
@@ -121,8 +120,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				getCoursesAsStudent.add(course);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.info("SQL Exception occured while getting courses where user is student");
 		} finally {
 			try {
 				if (connection != null) {
@@ -136,8 +134,8 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				}
 				log.info("Closing connection after getting all courses where user is Student");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info(" SQL Exception while closing the connection and statements");
+
 			}
 
 		}
@@ -169,8 +167,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				getCoursesAsInstructor.add(course);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.info("SQL Exception while getting courses where user is instructor");
 		} finally {
 			try {
 				if (connection != null) {
@@ -183,8 +180,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 					resultset.close();
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 				log.info("closing connection after getting all courses where user is Instructor");
 			}
 		}
@@ -215,8 +210,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				getCoursesAsTA.add(course);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.info("SQL Exception occuered while getting the courses where user is TA");
 		} finally {
 			try {
 				if (connection != null) {
@@ -229,8 +223,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 					resultset.close();
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 				log.info("Closed connection after getting all courses where user is TA");
 			}
 		}

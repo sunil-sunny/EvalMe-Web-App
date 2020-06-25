@@ -38,7 +38,7 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 				allQuestions.add(theQuestionMetaData);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.info("SQL Exception while getting all the question");
 		} finally {
 
 			try {
@@ -53,8 +53,7 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 				}
 				log.info("closing connection after getting all questions");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info("SQL Exception while closing the connection and statement after getting all the question");
 			}
 		}
 
@@ -82,7 +81,7 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 				allQuestionsSortByDate.add(theQuestionMetaData);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.info("SQL Exception while getting all the question sort by date");
 		} finally {
 			try {
 				if (theResultSet != null) {
@@ -96,8 +95,9 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 				}
 				log.info("closing connection after getting all questions sort by date");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info(
+						"SQL Exception while closing the connection and statement after getting all the question sort by date");
+
 			}
 		}
 
@@ -125,7 +125,7 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 				allQuestionsSortByTitle.add(theQuestionMetaData);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.info("SQL Exception while getting all the question sort by title");
 		} finally {
 
 			try {
@@ -140,8 +140,8 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 				}
 				log.info("closing connection after getting all questions sort by title");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info(
+						"SQL Exception while closing the connection and statement after getting all the question sort by title");
 			}
 		}
 

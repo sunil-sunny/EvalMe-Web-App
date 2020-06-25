@@ -12,10 +12,7 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 	@Override
 	public boolean allocateTa(int courseId, User user) {
 
-		// inserting user in a list since the filter users methods takes the arraylist
-		// as input
 		List<User> taAsList = new ArrayList<User>();
-		// User user = userService.getUserById(bannerId);
 		List<User> eligibleUser = null;
 		CourseRolesDao courseRolesDao = SystemConfig.getSingletonInstance().getTheCourseRolesDao();
 		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
@@ -33,6 +30,7 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 
 	@Override
 	public boolean enrollStuentsIntoCourse(List<User> studentList, int courseId) {
+		
 		CourseRolesDao courseRolesDao = SystemConfig.getSingletonInstance().getTheCourseRolesDao();
 		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
 		RegisterService theRegisterService = SystemConfig.getSingletonInstance().getTheRegisterservice();

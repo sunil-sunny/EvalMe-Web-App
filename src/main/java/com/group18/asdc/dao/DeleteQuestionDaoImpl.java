@@ -11,6 +11,7 @@ import com.group18.asdc.util.DataBaseQueriesUtil;
 public class DeleteQuestionDaoImpl implements DeleteQuestionDao {
 
 	private Logger log=Logger.getLogger(DeleteQuestionDaoImpl.class.getName());
+	
 	@Override
 	public boolean deleteQuestion(int questionId) {
 		Connection connection = null;
@@ -26,7 +27,7 @@ public class DeleteQuestionDaoImpl implements DeleteQuestionDao {
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.info("SQL Exception while deleting the question");
 		} finally {
 
 			try {
@@ -38,8 +39,7 @@ public class DeleteQuestionDaoImpl implements DeleteQuestionDao {
 				}
 				log.info("closing connection after deleting the question");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info("SQL Exception while closing the connection and statements after deleting the question");
 			}
 		}
 		return isQuestionDeleted;

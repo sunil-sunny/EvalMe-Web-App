@@ -53,7 +53,6 @@ public class RegisterController {
 		} else if (registrationStatus.contains("passwordPolicyException")) {
 			return "redirect:/registration?" + registrationStatus;
 		} else {
-			// insert new password to history is registration is successful
 			PasswordHistory passwordHistory = new PasswordHistory();
 			passwordHistory.setBannerID(bean.getBannerid());
 			passwordHistory.setPassword(bean.getPassword());

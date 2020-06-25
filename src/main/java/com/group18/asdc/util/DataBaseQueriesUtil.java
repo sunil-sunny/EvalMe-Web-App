@@ -2,13 +2,15 @@ package com.group18.asdc.util;
 
 public class DataBaseQueriesUtil {
 
+	public final static String insertUser = "insert into user values(?,?,?,?,?);";
+	public final static String allocateSystemRole = "insert into systemrole(roleid,bannerid) values(?,?);";
+	public final static String checkUserWithEmail = "select * from user where emailid=?;";
+	public final static String checkUserWithBannerId = "select * from user where bannerid=?;";
 	public final static String getAllCourses = "SELECT * FROM course;";
 	public final static String getCourseDetails = "SELECT a.courseid,a.bannerid,b.rolename FROM courserole as a inner join role as b\r\n"
 			+ "on a.roleid=b.roleid where a.courseid=?;";
 	public final static String getUserById = "SELECT * FROM user where bannerid=?;";
 
-	public final static String emailRegex = "^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@\"\r\n"
-			+ "        + \"[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$";
 	public final static String allocateTa = "insert into courserole (roleid,courseid,bannerid) values (4,?,?);";
 	public final static String getAlluserRelatedToCourse = "SELECT c.bannerid,c.lastname,c.firstname,c.emailid FROM courserole as a\r\n"
 			+ "inner join role as b on a.roleid=b.roleid\r\n"
@@ -27,8 +29,6 @@ public class DataBaseQueriesUtil {
 
 	public final static String getCoursesWhereUserIsTA = "SELECT b.* from courserole as a inner join course as \r\n"
 			+ "b on a.courseid=b.courseid where a.roleid=4 and a.bannerid=?;";
-
-	public final static String passwordTag = "!dal";
 
 	public final static String isUserExists = "select * from user where bannerid= ?;";
 
