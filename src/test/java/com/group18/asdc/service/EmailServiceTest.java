@@ -3,9 +3,6 @@ package com.group18.asdc.service;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.group18.asdc.util.IJavaMailSenderConfiguration;
-import com.group18.asdc.util.JavaMailSenderConfigurationMock;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
