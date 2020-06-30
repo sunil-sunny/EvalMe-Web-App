@@ -1,8 +1,4 @@
-package com.group18.asdc.util;
-
-import java.util.Properties;
-
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+package com.group18.asdc.service;
 
 public class DefaultMailSenderConfiguration implements IJavaMailSenderConfiguration {
 
@@ -19,5 +15,4 @@ public class DefaultMailSenderConfiguration implements IJavaMailSenderConfigurat
         return password;
     }
 
-    
 }

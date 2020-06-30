@@ -3,9 +3,6 @@ package com.group18.asdc.service;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.group18.asdc.util.IJavaMailSenderConfiguration;
-import com.group18.asdc.util.JavaMailSenderConfigurationMock;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -35,7 +32,7 @@ public class EmailServiceTest {
     @Test
     public void checkEmails() {
         emailService.sendSimpleMessage("kr630601@dal.ca", "Reset", "Your Password");
-        //
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo("kr630601@dal.ca");
         message.setSubject("Reset");

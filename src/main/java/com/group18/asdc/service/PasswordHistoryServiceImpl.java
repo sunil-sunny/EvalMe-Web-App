@@ -21,10 +21,10 @@ public class PasswordHistoryServiceImpl implements PasswordHistoryService {
 
     @Override
     public Object insertPassword(PasswordHistory passwordHistory, IPasswordEncryption passwordEncryption) {
-        //
+
         ArrayList valuesList = queryVariableToArrayList.convertQueryVariablesToArrayList(passwordHistory.getBannerID(),
                 passwordEncryption.encryptPassword(passwordHistory.getPassword()), passwordHistory.getDate());
-        //
+
         return passwordHistoryDao.insertPasswordHistory(valuesList);
 
     }
@@ -34,15 +34,12 @@ public class PasswordHistoryServiceImpl implements PasswordHistoryService {
         ArrayList criteriaList = queryVariableToArrayList.convertQueryVariablesToArrayList(bannerId, numberOfRecords);
         ArrayList<PasswordHistory> resultList = new ArrayList<PasswordHistory>();
         for (HashMap<String, Object> eachRow : passwordHistoryDao.getPasswordHistory(criteriaList)) {
-            //
             PasswordHistory passwordHistory = new PasswordHistory();
-            //
             passwordHistory.setBannerID((String) eachRow.get("bannerid"));
             passwordHistory.setPassword((String) eachRow.get("password"));
-            //
             resultList.add(passwordHistory);
         }
-        //
+
         return resultList;
     }
 

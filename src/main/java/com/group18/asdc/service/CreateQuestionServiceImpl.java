@@ -34,7 +34,6 @@ public class CreateQuestionServiceImpl implements CreateQuestionService {
 		if (!isQuestionExist) {
 			return theCreateQuestionDao.createMultipleChoiceQuestion(theMultipleChoiceChoose, theUser);
 		}
-
 		return false;
 	}
 

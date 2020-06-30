@@ -1,7 +1,6 @@
 package com.group18.asdc;
 
 import com.group18.asdc.dao.AdminDao;
-
 import com.group18.asdc.dao.AdminDaoImpl;
 import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.dao.CourseDetailsDaoImpl;
@@ -32,25 +31,25 @@ import com.group18.asdc.service.AdminServiceImpl;
 import com.group18.asdc.service.CourseDetailsService;
 import com.group18.asdc.service.CourseDetailsServiceImpl;
 import com.group18.asdc.service.CourseRolesService;
-
+import com.group18.asdc.service.CourseRolesServiceImpl;
 import com.group18.asdc.service.CreateQuestionService;
 import com.group18.asdc.service.CreateQuestionServiceImpl;
+import com.group18.asdc.service.DefaultMailSenderConfiguration;
 import com.group18.asdc.service.DeleteQuestionService;
 import com.group18.asdc.service.DeleteQuestionServiceImpl;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.EmailServiceImpl;
+import com.group18.asdc.service.IJavaMailSenderConfiguration;
 import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.PasswordHistoryServiceImpl;
 import com.group18.asdc.service.RegisterService;
-
+import com.group18.asdc.service.RegisterServiceImpl;
 import com.group18.asdc.service.UserService;
 import com.group18.asdc.service.UserServiceImpl;
 import com.group18.asdc.service.ViewQuestionsService;
 import com.group18.asdc.service.ViewQuestionsServiceImpl;
 import com.group18.asdc.util.CustomStringUtils;
-import com.group18.asdc.util.DefaultMailSenderConfiguration;
 import com.group18.asdc.util.ICustomStringUtils;
-import com.group18.asdc.util.IJavaMailSenderConfiguration;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 import com.group18.asdc.util.IRandomStringGenerator;
 import com.group18.asdc.util.QueryVariableToArraylist;
@@ -60,7 +59,6 @@ public class SystemConfig {
 
 	private static SystemConfig singletonInstance = null;
 
-	// Below are the instance objects for service layer
 	private AdminService theAdminService;
 	private CourseDetailsService theCourseDetailsService;
 	private IJavaMailSenderConfiguration javaMailSenderConfiguration;
@@ -72,7 +70,6 @@ public class SystemConfig {
 	private DeleteQuestionService theDeleteQuestionService;
 	private CourseRolesService theCourseRolesService;
 
-	// Below are the instance objects for Dao layer
 	private AdminDao theAdminDao;
 	private CourseDetailsDao theCourseDetailsDao;
 	private RegisterDao theRegisterDao;
@@ -91,56 +88,50 @@ public class SystemConfig {
 	private PasswordHistoryService passwordHistoryService;
 	private CourseRolesDao theCourseRolesDao;
 
-	
 	private SystemConfig() {
-		
-		//
+
 		this.javaMailSenderConfiguration = new DefaultMailSenderConfiguration();
 		this.customStringUtils = new CustomStringUtils();
-		//Instantiating Service Objects
-		this.theAdminService=new AdminServiceImpl();
-		this.theCourseDetailsService=new CourseDetailsServiceImpl();
-		this.theEmailService=new EmailServiceImpl(this.javaMailSenderConfiguration);
-		this.theRegisterService=new RegisterServiceImpl();
-		this.theCreateQuestionService=new CreateQuestionServiceImpl();
-		this.theViewQuestionsService=new ViewQuestionsServiceImpl();
-		this.theDeleteQuestionService=new DeleteQuestionServiceImpl();
-		//this.theCourseRolesService=new CourseRolesServiceImpl();
-		
-		//Instantiating Dao objects
+
+		this.theAdminService = new AdminServiceImpl();
+		this.theCourseDetailsService = new CourseDetailsServiceImpl();
+		this.theEmailService = new EmailServiceImpl(this.javaMailSenderConfiguration);
+		this.theRegisterService = new RegisterServiceImpl();
+		this.theCreateQuestionService = new CreateQuestionServiceImpl();
+		this.theViewQuestionsService = new ViewQuestionsServiceImpl();
+		this.theDeleteQuestionService = new DeleteQuestionServiceImpl();
+		this.theCourseRolesService = new CourseRolesServiceImpl();
+
 		this.queryVariableToArrayList = new QueryVariableToArraylist();
-		this.theUserService=new UserServiceImpl(this.queryVariableToArrayList);
-		this.theAdminDao=new AdminDaoImpl();
-		this.theUserDao=new UserDaoImpl();
-		this.theCourseDetailsDao=new CourseDetailsDaoImpl();
-		this.theUserDao=new UserDaoImpl();
-		this.theRegisterDao=new RegisterDaoImpl();
+		this.theUserService = new UserServiceImpl(this.queryVariableToArrayList);
+		this.theAdminDao = new AdminDaoImpl();
+		this.theUserDao = new UserDaoImpl();
+		this.theCourseDetailsDao = new CourseDetailsDaoImpl();
+		this.theUserDao = new UserDaoImpl();
+		this.theRegisterDao = new RegisterDaoImpl();
 		this.passwordEncryption = new BCryptPasswordEncryption();
 		this.databaseConfiguration = new DefaultDatabaseConfiguration();
-		this.theCreateQuestionDao=new CreateQuestionDaoImpl();
-		this.theViewQuestionsDao=new ViewQuestionsDaoImpl();
-		this.theDeleteQuestionDao=new DeleteQuestionDaoImpl();
-		this.theRegisterDao=new RegisterDaoImpl();
+		this.theCreateQuestionDao = new CreateQuestionDaoImpl();
+		this.theViewQuestionsDao = new ViewQuestionsDaoImpl();
+		this.theDeleteQuestionDao = new DeleteQuestionDaoImpl();
+		this.theRegisterDao = new RegisterDaoImpl();
 		this.passwordPolicyDB = new PasswordPolicyDB();
-		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
-		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB, this.customStringUtils);
+		this.basePasswordPolicyManager = new BasePasswordPolicyManager(this.passwordPolicyDB);
+		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB);
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
-		this.theCourseRolesDao=new CourseRolesDaoImpl();
+		this.theCourseRolesDao = new CourseRolesDaoImpl();
 
 	}
 
 	public static SystemConfig getSingletonInstance() {
-		
-		if (null == singletonInstance)
-		{
+
+		if (null == singletonInstance) {
 			singletonInstance = new SystemConfig();
 		}
 
 		return singletonInstance;
 	}
-
-	
 
 	public AdminService getTheAdminService() {
 		return theAdminService;
@@ -169,10 +160,6 @@ public class SystemConfig {
 	public RegisterService getTheRegisterservice() {
 		return theRegisterService;
 	}
-
-//	public void setTheRegisterservice(RegisterServiceImpl theRegisterservice) {
-//		this.theRegisterService = theRegisterservice;
-//	}
 
 	public UserService getTheUserService() {
 		return theUserService;
@@ -206,12 +193,11 @@ public class SystemConfig {
 		this.theUserDao = theUserDao;
 	}
 
-	public IPasswordEncryption getPasswordEncryption(){
+	public IPasswordEncryption getPasswordEncryption() {
 		return passwordEncryption;
 	}
 
-	public IDatabaseConfiguration getDatabaseConfiguration()
-	{
+	public IDatabaseConfiguration getDatabaseConfiguration() {
 		return databaseConfiguration;
 	}
 
@@ -250,14 +236,6 @@ public class SystemConfig {
 	public void setTheCourseRolesService(CourseRolesService theCourseRolesService) {
 		this.theCourseRolesService = theCourseRolesService;
 	}
-//
-//	public CourseRolesDao getTheCourseRolesDao() {
-//		return theCourseRolesDao;
-//	}
-//
-//	public void setTheCourseRolesDao(CourseRolesDao theCourseRolesDao) {
-//		this.theCourseRolesDao = theCourseRolesDao;
-//	}
 
 	public void setTheCreateQuestionService(CreateQuestionService theCreateQuestionService) {
 		this.theCreateQuestionService = theCreateQuestionService;
@@ -265,6 +243,46 @@ public class SystemConfig {
 
 	public CreateQuestionDao getTheCreateQuestionDao() {
 		return theCreateQuestionDao;
+	}
+
+	public IJavaMailSenderConfiguration getJavaMailSenderConfiguration() {
+		return javaMailSenderConfiguration;
+	}
+
+	public void setJavaMailSenderConfiguration(IJavaMailSenderConfiguration javaMailSenderConfiguration) {
+		this.javaMailSenderConfiguration = javaMailSenderConfiguration;
+	}
+
+	public IQueryVariableToArrayList getQueryVariableToArrayList() {
+		return queryVariableToArrayList;
+	}
+
+	public void setQueryVariableToArrayList(IQueryVariableToArrayList queryVariableToArrayList) {
+		this.queryVariableToArrayList = queryVariableToArrayList;
+	}
+
+	public CourseRolesDao getTheCourseRolesDao() {
+		return theCourseRolesDao;
+	}
+
+	public void setTheCourseRolesDao(CourseRolesDao theCourseRolesDao) {
+		this.theCourseRolesDao = theCourseRolesDao;
+	}
+
+	public void setPasswordPolicyDB(IPasswordPolicyDB passwordPolicyDB) {
+		this.passwordPolicyDB = passwordPolicyDB;
+	}
+
+	public void setRandomStringGenerator(IRandomStringGenerator randomStringGenerator) {
+		this.randomStringGenerator = randomStringGenerator;
+	}
+
+	public void setCustomStringUtils(ICustomStringUtils customStringUtils) {
+		this.customStringUtils = customStringUtils;
+	}
+
+	public void setPasswordHistoryService(PasswordHistoryService passwordHistoryService) {
+		this.passwordHistoryService = passwordHistoryService;
 	}
 
 	public DeleteQuestionService getTheDeleteQuestionService() {
@@ -302,47 +320,40 @@ public class SystemConfig {
 	public void setTheViewQuestionsDao(ViewQuestionsDao theViewQuestionsDao) {
 		this.theViewQuestionsDao = theViewQuestionsDao;
 	}
-	
-	public IPasswordPolicyDB getPasswordPolicyDB(){
+
+	public IPasswordPolicyDB getPasswordPolicyDB() {
 		return passwordPolicyDB;
 	}
 
-	public void setBasePasswordPolicyManager(IBasePasswordPolicyManager basePasswordPolicyManager)
-	{
+	public void setBasePasswordPolicyManager(IBasePasswordPolicyManager basePasswordPolicyManager) {
 		this.basePasswordPolicyManager = basePasswordPolicyManager;
 	}
 
-	public IBasePasswordPolicyManager getBasePasswordPolicyManager()
-	{
+	public IBasePasswordPolicyManager getBasePasswordPolicyManager() {
 		return basePasswordPolicyManager;
 	}
 
-	public void setPasswordPolicyManager(IPasswordPolicyManager passwordPolicyManager)
-	{
+	public void setPasswordPolicyManager(IPasswordPolicyManager passwordPolicyManager) {
 		this.passwordPolicyManager = passwordPolicyManager;
 	}
 
-	public IPasswordPolicyManager getPasswordPolicyManager()
-	{
+	public IPasswordPolicyManager getPasswordPolicyManager() {
 		return passwordPolicyManager;
 	}
 
-	public IQueryVariableToArrayList getQueryVariableToArrayListConverter()
-	{
+	public IQueryVariableToArrayList getQueryVariableToArrayListConverter() {
 		return queryVariableToArrayList;
 	}
 
-	public IRandomStringGenerator getRandomStringGenerator(){
+	public IRandomStringGenerator getRandomStringGenerator() {
 		return randomStringGenerator;
 	}
 
-	public ICustomStringUtils getCustomStringUtils()
-	{
+	public ICustomStringUtils getCustomStringUtils() {
 		return customStringUtils;
 	}
 
-	public PasswordHistoryService getPasswordHistoryService()
-	{
+	public PasswordHistoryService getPasswordHistoryService() {
 		return this.passwordHistoryService;
 	}
 }

@@ -19,8 +19,8 @@ import com.group18.asdc.service.UserService;
 
 @Controller
 public class CourseController {
-	
-	private Logger log=Logger.getLogger(CourseController.class.getName());
+
+	private Logger log = Logger.getLogger(CourseController.class.getName());
 
 	/*
 	 * user home end point directs all the user except admin to the page where list
@@ -30,7 +30,7 @@ public class CourseController {
 	public String getHomePage(Model theModel) {
 
 		log.info("in course controller");
-		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
+		CourseDetailsService courseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		List<Course> coursesList = courseDetailsService.getAllCourses();
 		theModel.addAttribute("coursesList", coursesList);
 		return "guesthome";
@@ -44,12 +44,16 @@ public class CourseController {
 	@RequestMapping(value = "/enrolledcourses")
 	public String getEnrolledCourses(Model theModel) {
 
-		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
-		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
-		User user=userService.getCurrentUser();
-		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsStudent(user);
-		theModel.addAttribute("coursesList", coursesList);
-		return "enrolledcourses";
+		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
+		CourseDetailsService courseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
+		User user = userService.getCurrentUser();
+		if (null == user) {
+			return "error";
+		} else {
+			List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsStudent(user);
+			theModel.addAttribute("coursesList", coursesList);
+			return "enrolledcourses";
+		}
 	}
 
 	/*
@@ -59,15 +63,16 @@ public class CourseController {
 
 	@GetMapping("/tacourses")
 	public String getTACourses(Model theModel) {
-
-		
-		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
-		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
-		User user=userService.getCurrentUser();
-		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsTA(user);
-		theModel.addAttribute("coursesList", coursesList);
-
-		return "tacourses";
+		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
+		CourseDetailsService courseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
+		User user = userService.getCurrentUser();
+		if (null == user) {
+			return "error";
+		} else {
+			List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsTA(user);
+			theModel.addAttribute("coursesList", coursesList);
+			return "tacourses";
+		}
 	}
 
 	/*
@@ -77,13 +82,16 @@ public class CourseController {
 
 	@RequestMapping(value = "/instructedcourses", method = RequestMethod.GET)
 	public String getInstructedCourses(Model theModel) {
-		
-		UserService userService=SystemConfig.getSingletonInstance().getTheUserService();
-		CourseDetailsService courseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
-		User user=userService.getCurrentUser();
-		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsInstrcutor(user);
-		theModel.addAttribute("coursesList", coursesList);
-		return "teachingcourses";
+		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
+		CourseDetailsService courseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
+		User user = userService.getCurrentUser();
+		if (null == user) {
+			return "error";
+		} else {
+			List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsInstrcutor(user);
+			theModel.addAttribute("coursesList", coursesList);
+			return "teachingcourses";
+		}
 	}
 
 	/*
@@ -92,7 +100,6 @@ public class CourseController {
 
 	@RequestMapping(value = "/coursepage", method = RequestMethod.GET)
 	public String getCoursePage(Model theModel, HttpServletRequest request) {
-
 		String courseId = request.getParameter("id");
 		String courseName = request.getParameter("name");
 		theModel.addAttribute("courseId", courseId);
@@ -105,16 +112,10 @@ public class CourseController {
 	 */
 	@RequestMapping(value = "/coursepageInstrcutor", method = RequestMethod.GET)
 	public String getCoursePageForInstrcutorOrTA(Model theModel, HttpServletRequest request) {
-
 		String courseId = request.getParameter("id");
 		String courseName = request.getParameter("name");
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
 		return "instrcutorcoursehome";
 	}
-
-	/*
-	 * Below endpoint allocates particulat user as TA
-	 */
-	
 }

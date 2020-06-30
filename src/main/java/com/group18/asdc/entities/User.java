@@ -1,6 +1,5 @@
 package com.group18.asdc.entities;
 
-import com.group18.asdc.SystemConfig;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.IPasswordPolicyManager;
@@ -86,7 +85,6 @@ public class User implements UserInterface {
 
 	public static void isPasswordValid(String password, IBasePasswordPolicyManager passwordPolicyManager)
 			throws PasswordPolicyException {
-		//
 		passwordPolicyManager.validatePassword(password);
 	}
 

@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 public interface PasswordHistoryDao {
 
-    public Object insertPasswordHistory(ArrayList valuesList);
+	public Object insertPasswordHistory(ArrayList valuesList);
 
-    public ArrayList<HashMap> getPasswordHistory(ArrayList criteriaList);
+	public ArrayList<HashMap> getPasswordHistory(ArrayList criteriaList);
 
 }

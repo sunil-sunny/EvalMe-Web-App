@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.group18.asdc.entities.User;
+import com.group18.asdc.service.CourseRolesService;
 
 public class CourseRolesServiceImplTest {
 
@@ -25,10 +26,8 @@ public class CourseRolesServiceImplTest {
 	@Test
 	public void enrollStudentsIntoCourseTestTwo() {
 
-		CourseRolesServiceMock theCourseRolesServiceMock = new CourseRolesServiceMock();
-
+		CourseRolesService theCourseRolesServiceMock = new CourseRolesServiceMock();
 		List<User> studentsList = new ArrayList<User>();
-
 		boolean isEnrolled = theCourseRolesServiceMock.enrollStuentsIntoCourse(studentsList, 9);
 		assertFalse(isEnrolled);
 	}
@@ -39,11 +38,10 @@ public class CourseRolesServiceImplTest {
 	@Test
 	public void allocateTaTestOne() {
 
-		CourseRolesServiceMock theCourseRolesServiceMock = new CourseRolesServiceMock();
+		CourseRolesService theCourseRolesServiceMock = new CourseRolesServiceMock();
 		User studentsList = new User();
 		boolean isEnrolled = theCourseRolesServiceMock.allocateTa(2, studentsList);
 		assertTrue(isEnrolled);
-
 	}
 
 	/*
@@ -52,7 +50,7 @@ public class CourseRolesServiceImplTest {
 	@Test
 	public void allocateTaTestTwo() {
 
-		CourseRolesServiceMock theCourseRolesServiceMock = new CourseRolesServiceMock();
+		CourseRolesService theCourseRolesServiceMock = new CourseRolesServiceMock();
 		User studentsList = new User("Rahul", "Chahar", "B09898157", "chahar@dal.ca");
 		boolean isEnrolled = theCourseRolesServiceMock.allocateTa(2, studentsList);
 		assertTrue(isEnrolled);

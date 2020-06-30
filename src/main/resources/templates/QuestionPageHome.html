@@ -11,14 +11,14 @@ h1 {
 }
 </style>
 <script>
-function alert() {
-  var txt;
-  if (confirm("Delete question")) {
-    return true;
-  } else {
-    return false;
-  }
-}
+	function alert() {
+		var txt;
+		if (confirm("Delete question")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 </script>
 </head>
 <body>
@@ -31,6 +31,14 @@ function alert() {
 		</div>
 		<hr>
 		<div class="row justify-content-center">
+
+			<div class="col-3">
+
+				<a class="btn btn-primary"
+					th:href="@{/questionpage/getCreateQuestionHome}"
+					style="color: white; width: 80%;">Create Question</a>
+
+			</div>
 			<div class="col-3">
 
 				<a class="btn btn-primary" th:href="@{/viewQuestions/sortByTitle}"
@@ -45,13 +53,7 @@ function alert() {
 
 			</div>
 
-			<div class="col-3">
 
-				<a class="btn btn-primary"
-					th:href="@{/questionpage/getCreateQuestionHome}"
-					style="color: white; width: 80%;">Create Question</a>
-
-			</div>
 		</div>
 	</div>
 	<hr>
@@ -78,7 +80,7 @@ function alert() {
 						<input type="hidden" th:value="${prod.questionId}" name="id" />
 
 						<td><input type="submit" value="Delete Question"
-							class="btn btn-danger" onclick="return alert()"/></td>
+							class="btn btn-danger" onclick="return alert()" /></td>
 					</tr>
 				</form>
 			</tbody>

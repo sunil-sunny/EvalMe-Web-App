@@ -7,9 +7,8 @@ public class DeleteQuestionServiceImpl implements DeleteQuestionService {
 
 	@Override
 	public boolean deleteQuestion(int questionId) {
-		
-		DeleteQuestionDao theDeleteQuestionDao=SystemConfig.getSingletonInstance().getTheDeleteQuestionDao();
+
+		DeleteQuestionDao theDeleteQuestionDao = SystemConfig.getSingletonInstance().getTheDeleteQuestionDao();
 		return theDeleteQuestionDao.deleteQuestion(questionId);
 	}
-
 }
