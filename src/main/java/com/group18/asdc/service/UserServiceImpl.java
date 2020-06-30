@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
+import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.util.IQueryVariableToArrayList;
@@ -32,12 +34,6 @@ public class UserServiceImpl implements UserService {
 	public User getUserById(String bannerId) {
 
 		return userDao.getUserById(bannerId);
-	}
-
-	@Override
-	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
-
-		return userDao.filterEligibleUsersForCourse(studentList, courseId);
 	}
 
 	@Override
@@ -87,6 +83,12 @@ public class UserServiceImpl implements UserService {
 			currentUser = this.getUserById(bannerid);
 		}
 		return currentUser;
+	}
+
+	@Override
+	public boolean isUserInstructor(Course course) {
+		UserDao theUserDao = SystemConfig.getSingletonInstance().getTheUserDao();
+		return theUserDao.isUserInstructor(course);
 	}
 
 }

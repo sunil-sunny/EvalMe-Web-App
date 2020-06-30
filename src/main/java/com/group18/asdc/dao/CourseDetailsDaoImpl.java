@@ -15,6 +15,7 @@ import com.group18.asdc.SystemConfig;
 import com.group18.asdc.controller.CourseController;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
+import com.group18.asdc.entities.Role;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.DataBaseQueriesUtil;
 
@@ -51,14 +52,11 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				while (resultSetAllCourseRoles.next()) {
 					String role = resultSetAllCourseRoles.getString("rolename");
 					String bannerId = resultSetAllCourseRoles.getString("bannerid");
-					if (role.equalsIgnoreCase("INSTRUCTOR")) {
-
+					if (role.equalsIgnoreCase(Role.instructor)) {
 						course.setInstructorName(userDao.getUserById(bannerId));
-					} else if (role.equalsIgnoreCase("STUDENT")) {
-
+					} else if (role.equalsIgnoreCase(Role.student)) {
 						students.add(userDao.getUserById(bannerId));
-					} else if (role.equalsIgnoreCase("TA")) {
-
+					} else if (role.equalsIgnoreCase(Role.ta)) {
 						taList.add(userDao.getUserById(bannerId));
 					}
 				}
@@ -87,7 +85,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 					resultSetAllCourseRoles.close();
 				}
 				log.info("closing all the data connections in after getting all courses");
-
 			} catch (SQLException e) {
 				log.info("Error while closing the connection and statements after getting all courses");
 			}
@@ -99,7 +96,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Override
 	public List<Course> getCoursesWhereUserIsStudent(User user) {
 
-		UserDao userDao = SystemConfig.getSingletonInstance().getTheUserDao();
+		CourseDetailsDao theCourseDetailsDao = SystemConfig.getSingletonInstance().getTheCourseDetailsDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultset = null;
@@ -116,7 +113,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
-				course.setInstructorName(userDao.getInstructorForCourse(courseid));
+				course.setInstructorName(theCourseDetailsDao.getInstructorForCourse(courseid));
 				getCoursesAsStudent.add(course);
 			}
 		} catch (SQLException e) {
@@ -146,7 +143,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Override
 	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
 
-		UserDao userDao = SystemConfig.getSingletonInstance().getTheUserDao();
+		CourseDetailsDao theCourseDetailsDao = SystemConfig.getSingletonInstance().getTheCourseDetailsDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultset = null;
@@ -163,7 +160,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
-				course.setInstructorName(userDao.getInstructorForCourse(courseid));
+				course.setInstructorName(theCourseDetailsDao.getInstructorForCourse(courseid));
 				getCoursesAsInstructor.add(course);
 			}
 		} catch (SQLException e) {
@@ -189,7 +186,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCoursesWhereUserIsTA(User user) {
-		UserDao userDao = SystemConfig.getSingletonInstance().getTheUserDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultset = null;
@@ -206,7 +202,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
-				course.setInstructorName(userDao.getInstructorForCourse(courseid));
+				course.setInstructorName(this.getInstructorForCourse(courseid));
 				getCoursesAsTA.add(course);
 			}
 		} catch (SQLException e) {
@@ -228,4 +224,130 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		}
 		return getCoursesAsTA;
 	}
+
+	@Override
+	public boolean isCourseExists(Course course) {
+
+		boolean courseIdExists = false;
+		boolean courseNameExists = false;
+		boolean returnValue = false;
+		int courseId = course.getCourseId();
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultset = null;
+		try {
+			connection = ConnectionManager.getInstance().getDBConnection();
+			statement = connection.prepareStatement(DataBaseQueriesUtil.isCourseIdExists);
+			statement.setInt(1, courseId);
+			resultset = statement.executeQuery();
+			if (resultset.next()) {
+				courseIdExists = true;
+				returnValue = true;
+			}
+			statement.close();
+			resultset.close();
+			if (null != course.getCourseName()) {
+				String courseName = course.getCourseName();
+				statement = connection.prepareStatement(DataBaseQueriesUtil.isCourseNameExists);
+				statement.setString(1, courseName);
+				resultset = statement.executeQuery();
+				if (resultset.next()) {
+					courseNameExists = true;
+				}
+				if (courseIdExists && courseNameExists) {
+					returnValue = true;
+				}
+			}
+		} catch (SQLException e) {
+			log.info("SQL Exception. Please check connection");
+		} finally {
+
+			try {
+				if (null != statement) {
+					statement.close();
+				}
+				if (null != resultset) {
+					resultset.close();
+				}
+				if (null != connection) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				log.info("Error closing connection.");
+			}
+		}
+		return returnValue;
+	}
+
+	@Override
+	public User getInstructorForCourse(int courseId) {
+
+		UserDao theUserDao = SystemConfig.getSingletonInstance().getTheUserDao();
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		User instructor = null;
+		try {
+			connection = ConnectionManager.getInstance().getDBConnection();
+			preparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getInstructorForCourse);
+			preparedStatement.setInt(1, courseId);
+			resultSet = preparedStatement.executeQuery();
+			String bannerId = null;
+			log.info("In user dao for getting Instructor for course id");
+			while (resultSet.next()) {
+				bannerId = resultSet.getString("bannerid");
+			}
+			if (bannerId != null) {
+				instructor = theUserDao.getUserById(bannerId);
+			}
+
+		} catch (SQLException e) {
+			log.info("SQL Exception while getting the instructor for course");
+		} finally {
+
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+
+				if (resultSet != null) {
+					preparedStatement.close();
+				}
+				log.info("closing connection after getting instructor for a course");
+			} catch (SQLException e) {
+				log.info(
+						"SQL Exception while closing the connections and statements after getting the instructor for course");
+			}
+
+		}
+
+		return instructor;
+	}
+
+	@Override
+	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
+
+		UserDao theUserDao = SystemConfig.getSingletonInstance().getTheUserDao();
+		List<User> eligibleStudents = new ArrayList<User>();
+		List<User> existingStudentsOfCourse = theUserDao.getAllUsersByCourse(courseId);
+		log.info("In User Dao to get filterEligible ");
+		for (User student : studentList) {
+			boolean isExists = false;
+			for (User existingStudent : existingStudentsOfCourse) {
+				if (student.getBannerId().equalsIgnoreCase(existingStudent.getBannerId())) {
+					isExists = true;
+					break;
+				}
+			}
+			if (!isExists) {
+				eligibleStudents.add(student);
+			}
+		}
+		return eligibleStudents;
+	}
+
 }

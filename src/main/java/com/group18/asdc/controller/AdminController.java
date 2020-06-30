@@ -18,11 +18,13 @@ public class AdminController {
 	public String adminHome() {
 		return "adminhome";
 	}
+	
 	@GetMapping("/adminadd")
 	public String adminAddDisplay(Model model) {
 		model.addAttribute("course", new Course());
 		return "adminaddcourse";
 	}
+	
 	@PostMapping("/adminadd")
 	public String adminAddForm(@ModelAttribute("course") Course course, BindingResult bindingresult) {
 

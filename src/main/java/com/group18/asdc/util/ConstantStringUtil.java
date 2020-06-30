@@ -39,8 +39,6 @@ public class ConstantStringUtil {
 
 	public static String getEmailmessageheader() {
 		return emailMessageHeader;
-	}
-	
-	
+	}	
 }
 

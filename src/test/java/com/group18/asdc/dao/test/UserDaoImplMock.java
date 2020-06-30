@@ -95,32 +95,6 @@ public class UserDaoImplMock implements UserDao {
 	}
 
 	@Override
-	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
-
-		// Returns the list of eligible users to get enrolled in the course.
-
-		List<User> eligibleStudents = new ArrayList<User>();
-		List<User> existingStudentsOfCourse = this.getAllUsersByCourse(courseId);
-
-		for (User student : studentList) {
-
-			boolean isExists = false;
-			for (User existingStudent : existingStudentsOfCourse) {
-
-				if (student.getBannerId().equalsIgnoreCase(existingStudent.getBannerId())) {
-					isExists = true;
-					break;
-				}
-			}
-			if (!isExists) {
-				eligibleStudents.add(student);
-			}
-		}
-
-		return eligibleStudents;
-	}
-
-	@Override
 	public List<User> getAllUsersByCourse(int courseId) {
 
 		List<User> userList = new ArrayList<User>();
@@ -137,22 +111,8 @@ public class UserDaoImplMock implements UserDao {
 	}
 
 	@Override
-	public User getInstructorForCourse(int courseId) {
-
-		User instrUser = null;
-		for (Course theCourse : UserDaoImplMock.coursesDetails) {
-
-			if (theCourse.getCourseId() == courseId) {
-				instrUser = theCourse.getInstructorName();
-			}
-
-		}
-		return instrUser;
-	}
-
-	@Override
 	public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) {
-		
+
 		for (User theUser : UserDaoImplMock.userList) {
 			if (theUser.getBannerId() == "B00123456") {
 				userObj = theUser;
@@ -162,7 +122,7 @@ public class UserDaoImplMock implements UserDao {
 	}
 
 	@Override
-	public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valuesList){
+	public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valuesList) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -173,6 +133,16 @@ public class UserDaoImplMock implements UserDao {
 		return null;
 	}
 
-	
+	@Override
+	public boolean isUserInstructor(Course course) {
+
+		User instructor = new User();
+		Course theCourse = new Course();
+		theCourse.setInstructorName(instructor);
+		if (null == theCourse.getInstructorName()) {
+			return false;
+		}
+		return true;
+	}
 
 }

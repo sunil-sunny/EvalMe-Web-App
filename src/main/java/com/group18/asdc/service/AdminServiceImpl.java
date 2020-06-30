@@ -7,6 +7,7 @@ import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
+import com.group18.asdc.util.ConstantStringUtil;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -33,12 +34,13 @@ public class AdminServiceImpl implements AdminService {
 	public boolean iscreateCourseParametersValid(Course course) {
 
 		UserService theUserService=SystemConfig.getSingletonInstance().getTheUserService();
+		CourseDetailsService theCourseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		log.info("Acceesing admin service impl");
 		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
 		if (!isCourseIdValid(course)) {
 			return false;
 		}
-		if (admindao.isCourseExists(course)) {
+		if (theCourseDetailsService.isCourseExists(course)) {
 			return false;
 		}
 		String instructorId = course.getInstructorName().getBannerId();
@@ -46,10 +48,10 @@ public class AdminServiceImpl implements AdminService {
 		if(instructor==null) {
 			return false;
 		}
-		if (instructorId.length() != 9 || !instructorId.matches("B00(.*)")) {
+		if (instructorId.length() != 9 || !instructorId.matches(ConstantStringUtil.getBanneridpatterncheck())) {
 			return false;
 		}
-		if (true == admindao.isUserInstructor(course)) {
+		if (true == theUserService.isUserInstructor(course)) {
 			return false;
 		}
 		return true;

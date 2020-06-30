@@ -40,4 +40,20 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 		return courseDetailsDao.getCoursesWhereUserIsTA(user);
 	}
 
+	@Override
+	public boolean isCourseExists(Course course) {
+		if (null == course) {
+			return false;
+		} else {
+			CourseDetailsDao courseDetailsDao = SystemConfig.getSingletonInstance().getTheCourseDetailsDao();
+			return courseDetailsDao.isCourseExists(course);
+		}
+	}
+
+	@Override
+	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
+		CourseDetailsDao courseDetailsDao = SystemConfig.getSingletonInstance().getTheCourseDetailsDao();
+		return courseDetailsDao.filterEligibleUsersForCourse(studentList, courseId);
+	}
+
 }
