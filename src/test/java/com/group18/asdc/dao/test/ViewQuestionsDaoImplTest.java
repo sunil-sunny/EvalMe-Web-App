@@ -7,7 +7,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.group18.asdc.dao.ViewQuestionsDao;
 import com.group18.asdc.entities.QuestionMetaData;
+import com.group18.asdc.entities.User;
 
 @SpringBootTest
 public class ViewQuestionsDaoImplTest {
@@ -16,20 +18,19 @@ public class ViewQuestionsDaoImplTest {
 	@Test
 	public void getAllQuestionsTest() {
 		
-		ViewQuestionsDaoImplMock theViewQuestionsDaoImplMock=new ViewQuestionsDaoImplMock();
-		List<QuestionMetaData> theQuestionList=theViewQuestionsDaoImplMock.getAllQuestions();
+		ViewQuestionsDao theViewQuestionsDaoImplMock=new ViewQuestionsDaoImplMock();
+		List<QuestionMetaData> theQuestionList=theViewQuestionsDaoImplMock.getAllQuestions(new User());
 		boolean assertValue=false;
 		if(theQuestionList.size()>0) {
 			assertValue=true;
 		}
-		assertTrue(assertValue);
-		
+		assertTrue(assertValue);		
 	}
 
 	@Test
 	public void getAllQuestionsSortByDateTest() {
-		ViewQuestionsDaoImplMock theViewQuestionsDaoImplMock=new ViewQuestionsDaoImplMock();
-		List<QuestionMetaData> theQuestionList=theViewQuestionsDaoImplMock.getAllQuestionsSortByDate();
+		ViewQuestionsDao theViewQuestionsDaoImplMock=new ViewQuestionsDaoImplMock();
+		List<QuestionMetaData> theQuestionList=theViewQuestionsDaoImplMock.getAllQuestionsSortByDate(new User());
 		boolean assertValue=false;
 		if(theQuestionList.size()>0) {
 			assertValue=true;
@@ -41,14 +42,12 @@ public class ViewQuestionsDaoImplTest {
 	
 	@Test
 	public void getAllQuestionsSortByTitleTest() {
-		ViewQuestionsDaoImplMock theViewQuestionsDaoImplMock=new ViewQuestionsDaoImplMock();
-		List<QuestionMetaData> theQuestionList=theViewQuestionsDaoImplMock.getAllQuestionsSortByTitle();
+		ViewQuestionsDao theViewQuestionsDaoImplMock=new ViewQuestionsDaoImplMock();
+		List<QuestionMetaData> theQuestionList=theViewQuestionsDaoImplMock.getAllQuestionsSortByTitle(new User());
 		boolean assertValue=false;
 		if(theQuestionList.size()>0) {
 			assertValue=true;
 		}
-		assertTrue(assertValue);
-		
+		assertTrue(assertValue);	
 	}
-
 }

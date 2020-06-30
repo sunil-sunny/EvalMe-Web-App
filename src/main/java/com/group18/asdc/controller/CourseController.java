@@ -47,9 +47,13 @@ public class CourseController {
 		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
 		CourseDetailsService courseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		User user = userService.getCurrentUser();
-		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsStudent(user);
-		theModel.addAttribute("coursesList", coursesList);
-		return "enrolledcourses";
+		if (null == user) {
+			return "error";
+		} else {
+			List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsStudent(user);
+			theModel.addAttribute("coursesList", coursesList);
+			return "enrolledcourses";
+		}
 	}
 
 	/*
@@ -62,9 +66,13 @@ public class CourseController {
 		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
 		CourseDetailsService courseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		User user = userService.getCurrentUser();
-		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsTA(user);
-		theModel.addAttribute("coursesList", coursesList);
-		return "tacourses";
+		if (null == user) {
+			return "error";
+		} else {
+			List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsTA(user);
+			theModel.addAttribute("coursesList", coursesList);
+			return "tacourses";
+		}
 	}
 
 	/*
@@ -77,9 +85,13 @@ public class CourseController {
 		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
 		CourseDetailsService courseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		User user = userService.getCurrentUser();
-		List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsInstrcutor(user);
-		theModel.addAttribute("coursesList", coursesList);
-		return "teachingcourses";
+		if (null == user) {
+			return "error";
+		} else {
+			List<Course> coursesList = courseDetailsService.getCoursesWhereUserIsInstrcutor(user);
+			theModel.addAttribute("coursesList", coursesList);
+			return "teachingcourses";
+		}
 	}
 
 	/*

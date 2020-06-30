@@ -9,4 +9,5 @@ public interface CourseRolesService {
 	public boolean allocateTa(int courseId, User user);
 
 	public boolean enrollStuentsIntoCourse(List<User> studentList, int courseId);
+
 }

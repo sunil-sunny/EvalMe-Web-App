@@ -122,7 +122,7 @@ public class CreateQuestionController {
 			log.info("Created multiple choice questions success");
 			return "QuestionCreateSuccess";
 		} else {
-			log.info("Error in Created multiple choice questions success");
+			log.info("Error in Created multiple choice questions");
 			return "error";
 		}
 	}

@@ -10,8 +10,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
-
+import com.group18.asdc.service.UserService;
 
 @SpringBootTest
 public class UserServiceImplTest {
@@ -20,35 +21,30 @@ public class UserServiceImplTest {
 	@Test
 	public void isUserExistsTestOne() {
 
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
+		UserService UserServiceImplMock = new UserServiceImplMock();
 		User user = null;
 		boolean isExist = UserServiceImplMock.isUserExists(user);
 		assertFalse(isExist);
-		// assertTrue(isExist);
-
 	}
 
 	@Test
 	public void isUserExistsTestTwo() {
 
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
+		UserService UserServiceImplMock = new UserServiceImplMock();
 		User user = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
 		boolean isExist = UserServiceImplMock.isUserExists(user);
 		assertTrue(isExist);
-
 	}
 
 	@Test
 	public void isUserExistsTestThree() {
 
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
+		UserService UserServiceImplMock = new UserServiceImplMock();
 		User user = new User("Sachin", "Tendulkar", "B00999999", "sachin@dal.ca");
 		boolean isExist = UserServiceImplMock.isUserExists(user);
 		assertFalse(isExist);
-
 	}
 
-	// test for getUserById method
 	/*
 	 * First test is to send banner id which not exists and it should return null
 	 * object
@@ -57,10 +53,9 @@ public class UserServiceImplTest {
 	@Test
 	public void getUserByIdTestOne() {
 
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
+		UserService UserServiceImplMock = new UserServiceImplMock();
 		User user = UserServiceImplMock.getUserById("B00111111");
 		assertNull(user);
-
 	}
 
 	/*
@@ -69,10 +64,9 @@ public class UserServiceImplTest {
 	@Test
 	public void getUserByIdTestTwo() {
 
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
+		UserService UserServiceImplMock = new UserServiceImplMock();
 		User user = UserServiceImplMock.getUserById("");
 		assertNull(user);
-
 	}
 
 	/*
@@ -82,50 +76,9 @@ public class UserServiceImplTest {
 	@Test
 	public void getUserByIdTestThree() {
 
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
+		UserService UserServiceImplMock = new UserServiceImplMock();
 		User user = UserServiceImplMock.getUserById("B00123456");
 		assertNotNull(user);
-
-	}
-
-	// send an user who is instructor and student in course and we should get zero
-	@Test
-	public void filterEligibleUsersForCourseTestOne() {
-
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
-		User instructorOne = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
-		User studentFive = new User("Shane", "Warne", "B00654194", "shane@dal.ca");
-		List<User> userList = Arrays.asList(instructorOne, studentFive);
-		List<User> eligiList = UserServiceImplMock.filterEligibleUsersForCourse(userList, 1);
-		assertEquals(0, eligiList.size());
-	}
-
-	/*
-	 * sending two users where one is eligible and the other is not eligible and we
-	 * should only get one user
-	 */
-
-	@Test
-	public void filterEligibleUsersForCourseTestTwo() {
-
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
-		User instructorOne = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
-		User studentThree = new User("Brett", "Lee", "B00852693", "ricky@dal.ca");
-		List<User> userList = Arrays.asList(instructorOne, studentThree);
-		List<User> eligiList = UserServiceImplMock.filterEligibleUsersForCourse(userList, 1);
-		assertEquals(1, eligiList.size());
-	}
-
-	// sending both eligible users and we should get both
-	@Test
-	public void filterEligibleUsersForCourseTestThree() {
-
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
-		User studentTwo = new User("Glenn", "Maxwell", "B00753159", "glenn@dal.ca");
-		User studentThree = new User("Brett", "Lee", "B00852693", "ricky@dal.ca");
-		List<User> userList = Arrays.asList(studentTwo, studentThree);
-		List<User> eligiList = UserServiceImplMock.filterEligibleUsersForCourse(userList, 1);
-		assertEquals(2, eligiList.size());
 	}
 
 	/*
@@ -136,7 +89,7 @@ public class UserServiceImplTest {
 	@Test
 	public void getAllUsersByCourseTestOne() {
 
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
+		UserService UserServiceImplMock = new UserServiceImplMock();
 		List<User> allUsers = UserServiceImplMock.getAllUsersByCourse(1);
 		assertEquals(5, allUsers.size());
 	}
@@ -148,18 +101,22 @@ public class UserServiceImplTest {
 	@Test
 	public void getAllUsersByCourseTestTwo() {
 
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
+		UserService UserServiceImplMock = new UserServiceImplMock();
 		List<User> allUsers = UserServiceImplMock.getAllUsersByCourse(10);
 		assertEquals(0, allUsers.size());
 	}
-	
-	
+
 	@Test
 	public void getCurrentUserTest() {
-	
-		UserServiceImplMock UserServiceImplMock = new UserServiceImplMock();
-		User user=UserServiceImplMock.getCurrentUser();
+
+		UserService UserServiceImplMock = new UserServiceImplMock();
+		User user = UserServiceImplMock.getCurrentUser();
 		assertNotNull(user);
+	}
+
+	public void isUserInstructorTest() {
+		UserService theUserService = new UserServiceImplMock();
+		assertTrue(theUserService.isUserInstructor(new Course()));
 	}
 
 }

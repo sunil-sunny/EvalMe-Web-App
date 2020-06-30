@@ -7,13 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
+import com.group18.asdc.service.CreateQuestionService;
 
 @SpringBootTest
 public class CreateQuestionServiceImplTest {
 
 	@Test
 	public void createNumericOrTextQuestionTest() {
-		CreateQuestionServiceImplMock theCreateQuestionServiceImplMock = new CreateQuestionServiceImplMock();
+		CreateQuestionService theCreateQuestionServiceImplMock = new CreateQuestionServiceImplMock();
 		BasicQuestionData basicQuestionData = new BasicQuestionData();
 		boolean isCreated = theCreateQuestionServiceImplMock.createNumericOrTextQuestion(basicQuestionData);
 		assertTrue(isCreated);
@@ -21,7 +22,7 @@ public class CreateQuestionServiceImplTest {
 
 	@Test
 	public void createMultipleQuestion() {
-		CreateQuestionServiceImplMock theCreateQuestionServiceImplMock = new CreateQuestionServiceImplMock();
+		CreateQuestionService theCreateQuestionServiceImplMock = new CreateQuestionServiceImplMock();
 		MultipleChoiceQuestion theMultipleChoiceChoose = new MultipleChoiceQuestion();
 		boolean isCreated = theCreateQuestionServiceImplMock.createMultipleQuestion(theMultipleChoiceChoose);
 		assertTrue(isCreated);

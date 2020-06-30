@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.group18.asdc.dao.CourseRolesDao;
 import com.group18.asdc.entities.User;
 
 public class CourseRolesDaoImplTest {
@@ -19,7 +20,7 @@ public class CourseRolesDaoImplTest {
 	@Test
 	public void enrollStudentsIntoCourseTestOne() {
 
-		CourseRolesDaoMock theCourseRolesDaoMock = new CourseRolesDaoMock();
+		CourseRolesDao theCourseRolesDaoMock = new CourseRolesDaoMock();
 		User user = new User("Rahul", "Dravid", "B09896157", "dravid@dal.ca");
 		User userOne = new User("Rahul", "Chahar", "B09898157", "chahar@dal.ca");
 		List<User> studentsList = new ArrayList<User>();
@@ -36,10 +37,8 @@ public class CourseRolesDaoImplTest {
 	@Test
 	public void enrollStudentsIntoCourseTestTwo() {
 
-		CourseRolesDaoMock theCourseRolesDaoMock = new CourseRolesDaoMock();
-
+		CourseRolesDao theCourseRolesDaoMock = new CourseRolesDaoMock();
 		List<User> studentsList = new ArrayList<User>();
-
 		boolean isEnrolled = theCourseRolesDaoMock.enrollStudentsIntoCourse(studentsList, 9);
 		assertFalse(isEnrolled);
 	}
@@ -50,7 +49,7 @@ public class CourseRolesDaoImplTest {
 	@Test
 	public void allocateTaTestOne() {
 
-		CourseRolesDaoMock theCourseRolesDaoMock = new CourseRolesDaoMock();
+		CourseRolesDao theCourseRolesDaoMock = new CourseRolesDaoMock();
 		User studentsList = null;
 		boolean isEnrolled = theCourseRolesDaoMock.allocateTa(2, studentsList);
 		assertFalse(isEnrolled);
@@ -63,9 +62,8 @@ public class CourseRolesDaoImplTest {
 	@Test
 	public void allocateTaTestTwo() {
 
-		CourseRolesDaoMock theCourseRolesDaoMock = new CourseRolesDaoMock();
+		CourseRolesDao theCourseRolesDaoMock = new CourseRolesDaoMock();
 		User studentsList = new User("Rahul", "Chahar", "B09898157", "chahar@dal.ca");
-		;
 		boolean isEnrolled = theCourseRolesDaoMock.allocateTa(2, studentsList);
 		assertTrue(isEnrolled);
 

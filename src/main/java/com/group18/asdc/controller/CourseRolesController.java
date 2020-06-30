@@ -21,6 +21,7 @@ import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.CourseRolesService;
 import com.group18.asdc.service.UserService;
+import com.group18.asdc.util.ConstantStringUtil;
 
 @Controller
 public class CourseRolesController {
@@ -69,7 +70,8 @@ public class CourseRolesController {
 		System.out.println("The Course id is " + courseId);
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
-		// System.out.println("Course id: "+courseId);
+
+		System.out.println("In controller allocating student");
 		CourseRolesService courseRolesService = SystemConfig.getSingletonInstance().getTheCourseRolesService();
 		if (courseId.length() == 0) {
 			log.info("Error in loading file !! user will be prompted to upload file again");
@@ -97,8 +99,8 @@ public class CourseRolesController {
 							String bannerId = userDetails[2];
 							String email = userDetails[3];
 
-							if (!bannerId.matches("B00(.*)") || bannerId.length() != 9
-									|| !email.matches("(.*)@dal.ca")) {
+							if (!bannerId.matches(ConstantStringUtil.getBanneridpatterncheck()) || bannerId.length() != 9
+									|| !email.matches(ConstantStringUtil.getEmailpatterncheck())) {
 								inValidUsers.add(user);
 
 							} else {
@@ -111,7 +113,7 @@ public class CourseRolesController {
 							}
 
 						} else {
-							log.info("Rows which has invalid details are ignored");
+							log.info("Rows which has invalid details are ignored while reading the student list");
 							theModel.addAttribute("fileDetailsErrors", "Rows which has invalid details are ignored");
 						}
 					}
@@ -131,8 +133,8 @@ public class CourseRolesController {
 					}
 					br.close();
 				} catch (IOException e) {
-
-					e.printStackTrace();
+					log.info(
+							"IO Exception while reading the multi part file file while enrolling students in particular course");
 				}
 
 			}

@@ -1,6 +1,6 @@
 package com.group18.asdc.entities;
 
-import com.group18.asdc.util.DataBaseQueriesUtil;
+import com.group18.asdc.util.ConstantStringUtil;
 
 public class UserRegistartionDetails {
 
@@ -82,7 +82,7 @@ public class UserRegistartionDetails {
 		this.firstname = user.getFirstName();
 		this.lastname = user.getLastName();
 		this.emailid = user.getEmail();
-		this.password = user.getBannerId() + DataBaseQueriesUtil.passwordTag;
+		this.password = user.getBannerId() + ConstantStringUtil.getPasswordtag();
 
 	}
 

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.group18.asdc.dao.CourseDetailsDao;
+import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 
@@ -14,13 +15,11 @@ public class CourseDaoImplMock implements CourseDetailsDao {
 	private static List<User> userList = new ArrayList<User>();
 
 	public CourseDaoImplMock() {
-		// declaring the courses
+
 		Course firstCourse = null;
 		Course secondCourse = null;
 		Course thirdCourse = null;
 		Course fourthCourse = null;
-
-		// declaring the users i.e students, ta and instructors.
 		User instructorOne = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
 		userList.add(instructorOne);
 		User instructorTwo = new User("Don", "Bradman", "B00741399", "don@dal.com");
@@ -65,8 +64,6 @@ public class CourseDaoImplMock implements CourseDetailsDao {
 
 		return CourseDaoImplMock.coursesDetails;
 	}
-
-	
 
 	@Override
 	public List<Course> getCoursesWhereUserIsStudent(User user) {
@@ -130,6 +127,52 @@ public class CourseDaoImplMock implements CourseDetailsDao {
 
 		return course;
 
+	}
+
+	@Override
+	public boolean isCourseExists(Course course) {
+		Course newCourse = new Course();
+		CourseDaoImplMock.coursesDetails.add(newCourse);
+		return true;
+	}
+
+	@Override
+	public User getInstructorForCourse(int courseId) {
+
+		User instrUser = null;
+		for (Course theCourse : CourseDaoImplMock.coursesDetails) {
+
+			if (theCourse.getCourseId() == courseId) {
+				instrUser = theCourse.getInstructorName();
+			}
+
+		}
+		return instrUser;
+	}
+
+	@Override
+	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
+
+		UserDao theUserDao = new UserDaoImplMock();
+		List<User> eligibleStudents = new ArrayList<User>();
+		List<User> existingStudentsOfCourse = theUserDao.getAllUsersByCourse(courseId);
+
+		for (User student : studentList) {
+
+			boolean isExists = false;
+			for (User existingStudent : existingStudentsOfCourse) {
+
+				if (student.getBannerId().equalsIgnoreCase(existingStudent.getBannerId())) {
+					isExists = true;
+					break;
+				}
+			}
+			if (!isExists) {
+				eligibleStudents.add(student);
+			}
+		}
+
+		return eligibleStudents;
 	}
 
 }

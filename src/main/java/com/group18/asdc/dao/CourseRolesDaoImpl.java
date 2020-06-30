@@ -32,8 +32,7 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 				return false;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.info("SQL Exception while allocating user as TA");
 		} finally {
 			try {
 				if (connection != null) {
@@ -42,12 +41,10 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 				if (statement != null) {
 					statement.close();
 				}
-
+				log.info("Closing the connections after allocating TA");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info("SQL Exception while closing connection after allocating user as TA");
 			}
-			log.info("Closing the connections after allocating TA");
 		}
 
 		return false;
@@ -55,7 +52,6 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 
 	@Override
 	public boolean enrollStudentsIntoCourse(List<User> studentList, int courseId) {
-
 		Connection connection = null;
 		PreparedStatement queryToEnrollStudent = null;
 		boolean enrollStatus = false;
@@ -74,8 +70,7 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.info("SQL Exception occuered while enrolling the students into course");
 		} finally {
 
 			try {
@@ -87,12 +82,9 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 				}
 				log.info("Closed after enrolling students into course");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info("SQL Exception while closing connection and statements after enrolling students into course");
 			}
-
 		}
-
 		return enrollStatus;
 	}
 }
