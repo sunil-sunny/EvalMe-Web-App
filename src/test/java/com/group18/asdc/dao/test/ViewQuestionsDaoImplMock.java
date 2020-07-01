@@ -2,7 +2,6 @@ package com.group18.asdc.dao.test;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.group18.asdc.dao.ViewQuestionsDao;
 import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.User;
@@ -34,5 +33,4 @@ public class ViewQuestionsDaoImplMock implements ViewQuestionsDao {
 		ViewQuestionsDaoImplMock.questionList.size();
 		return ViewQuestionsDaoImplMock.questionList;
 	}
-
 }

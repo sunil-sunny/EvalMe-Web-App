@@ -2,7 +2,6 @@ package com.group18.asdc.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.CourseRolesDao;
 import com.group18.asdc.entities.User;
@@ -11,7 +10,6 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 
 	@Override
 	public boolean allocateTa(int courseId, User user) {
-
 		CourseDetailsService theCourseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		List<User> taAsList = new ArrayList<User>();
 		List<User> eligibleUser = null;
@@ -21,16 +19,13 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 			eligibleUser = theCourseDetailsService.filterEligibleUsersForCourse(taAsList, courseId);
 		}
 		if (eligibleUser != null && eligibleUser.size() != 0) {
-
 			return courseRolesDao.allocateTa(courseId, user);
 		}
-
 		return false;
 	}
 
 	@Override
 	public boolean enrollStuentsIntoCourse(List<User> studentList, int courseId) {
-
 		CourseRolesDao courseRolesDao = SystemConfig.getSingletonInstance().getTheCourseRolesDao();
 		CourseDetailsService theCourseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		RegisterService theRegisterService = SystemConfig.getSingletonInstance().getTheRegisterservice();

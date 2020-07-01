@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
-
 import org.springframework.stereotype.Repository;
-
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.database.SQLMethods;
 import com.group18.asdc.database.SQLQueries;
@@ -37,10 +35,8 @@ public class UserDaoImpl implements UserDao {
 			if (resultSet.next()) {
 				return true;
 			} else {
-
 				return false;
 			}
-
 		} catch (SQLException e) {
 			log.info("SQL Exception occured while checking if user exists or not");
 		} finally {
@@ -56,17 +52,15 @@ public class UserDaoImpl implements UserDao {
 				}
 				log.info("closing connection after having a check if user exists or not");
 			} catch (SQLException e) {
-				log.info(
-						"SQL Exception occured while closing the connections and statements after checking if user exists or not");
+				log.info("SQL Exception occured while closing the connections "
+						+ "and statements after checking if user exists or not");
 			}
 		}
 		return false;
-
 	}
 
 	@Override
 	public User getUserById(String bannerId) {
-
 		Connection connection = null;
 		ResultSet resultSet = null;
 		PreparedStatement getUser = null;
@@ -78,15 +72,12 @@ public class UserDaoImpl implements UserDao {
 			getUser.setString(1, bannerId);
 			log.info("In User Dao to get the user for given banner id");
 			resultSet = getUser.executeQuery();
-
 			while (resultSet.next()) {
-
 				user = new User();
 				user.setBannerId(resultSet.getString("bannerid"));
 				user.setEmail(resultSet.getString("emailid"));
 				user.setFirstName(resultSet.getString("firstname"));
 				user.setLastName(resultSet.getString("lastname"));
-
 			}
 
 		} catch (SQLException e) {
@@ -107,27 +98,22 @@ public class UserDaoImpl implements UserDao {
 				log.info("SQL Exception while closing the connections and statements after getting user by banner id");
 			}
 		}
-
 		return user;
 	}
 
-	
 	@Override
 	public List<User> getAllUsersByCourse(int courseId) {
-
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSetForStudentList = null;
 		List<User> studentList = new ArrayList<User>();
 		User user = null;
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			preparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getAlluserRelatedToCourse);
 			log.info("In users dao getting all users based on course id");
 			preparedStatement.setInt(1, courseId);
 			resultSetForStudentList = preparedStatement.executeQuery();
-
 			while (resultSetForStudentList.next()) {
 				user = new User();
 				user.setBannerId(resultSetForStudentList.getString("bannerid"));
@@ -136,10 +122,8 @@ public class UserDaoImpl implements UserDao {
 				user.setLastName(resultSetForStudentList.getString("lastname"));
 				studentList.add(user);
 			}
-
 		} catch (SQLException e) {
 			log.info("SQL Exception while getting all the users realted to course");
-
 		} finally {
 			try {
 				if (connection != null) {
@@ -152,18 +136,14 @@ public class UserDaoImpl implements UserDao {
 					preparedStatement.close();
 				}
 				log.info("Closing connections after getting users based on course");
-
 			} catch (SQLException e) {
-				log.info(
-						"SQL Exception while closing the connections and statements after getting all the users realted to course");
+				log.info("SQL Exception while closing the connections "
+						+ "and statements after getting all the users realted to course");
 			}
-
 		}
-
 		return studentList;
 	}
 
-	
 	@Override
 	public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) {
 		SQLMethods sqlImplementation = null;
@@ -171,10 +151,8 @@ public class UserDaoImpl implements UserDao {
 			sqlImplementation = new SQLMethods();
 			ArrayList<HashMap<String, Object>> rowsList = sqlImplementation
 					.selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), valueList);
-			//
 			if (rowsList.size() > 0) {
 				HashMap<String, Object> valuesMap = rowsList.get(0);
-				//
 				userObj.setBannerId((String) valuesMap.get("bannerid"));
 				userObj.setEmail((String) valuesMap.get("emailid"));
 				userObj.setFirstName((String) valuesMap.get("firstname"));
@@ -216,7 +194,6 @@ public class UserDaoImpl implements UserDao {
 			sqlImplementation = new SQLMethods();
 			ArrayList<HashMap<String, Object>> valuesList = sqlImplementation
 					.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
-			//
 			if (valuesList != null && valuesList.size() > 0) {
 				for (HashMap valueMap : valuesList) {
 					rolesList.add(valueMap.get("rolename"));
@@ -229,13 +206,11 @@ public class UserDaoImpl implements UserDao {
 				sqlImplementation.cleanup();
 			}
 		}
-		//
 		return rolesList;
 	}
 
 	@Override
 	public boolean isUserInstructor(Course course) {
-
 		boolean returnValue = true;
 		String instructorId = course.getInstructorName().getBannerId();
 		int courseId = course.getCourseId();
@@ -251,7 +226,6 @@ public class UserDaoImpl implements UserDao {
 			if (null == resultset) {
 				returnValue = false;
 			} else {
-
 				resultset.close();
 				statement = connection.prepareStatement(DataBaseQueriesUtil.isInstructorStudent);
 				statement.setString(1, instructorId);
@@ -261,11 +235,9 @@ public class UserDaoImpl implements UserDao {
 					returnValue = false;
 				}
 			}
-
 		} catch (SQLException e) {
 			log.info("Error closing connection.");
 		} finally {
-
 			try {
 				if (null != statement) {
 					statement.close();
@@ -280,8 +252,6 @@ public class UserDaoImpl implements UserDao {
 				log.info("Error closing connection.");
 			}
 		}
-
 		return returnValue;
 	}
-
 }

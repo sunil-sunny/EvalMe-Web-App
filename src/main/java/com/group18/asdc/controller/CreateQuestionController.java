@@ -3,9 +3,7 @@ package com.group18.asdc.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
@@ -35,7 +32,6 @@ public class CreateQuestionController {
 
 	@ModelAttribute("multiplequestion")
 	public MultipleChoiceQuestion setMultipleChoiceQuestion() {
-
 		return new MultipleChoiceQuestion();
 	}
 
@@ -46,7 +42,6 @@ public class CreateQuestionController {
 
 	@PostMapping("/getQuestionConfirm")
 	public String getQuestionConfirmPage(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model) {
-
 		log.info("confirming questions based on type");
 		model.addAttribute("BasicQuestion", basicQuestionData);
 		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.numericType)
@@ -57,7 +52,6 @@ public class CreateQuestionController {
 				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.multipleChooseOne)) {
 			return "MultipleChoiceQuestion";
 		}
-
 		return "error";
 	}
 
@@ -70,11 +64,9 @@ public class CreateQuestionController {
 		boolean isQuestionCreated = theCreateQuestionService.createNumericOrTextQuestion(basicQuestionData);
 		if (isQuestionCreated) {
 			log.info("Numeric or text question created");
-
 			return "QuestionCreateSuccess";
 		} else {
 			log.info("Error creating numeric or text question");
-
 			return "error";
 		}
 	}
@@ -82,8 +74,8 @@ public class CreateQuestionController {
 	@RequestMapping(value = "/createMultipleChoiceQuestion", method = RequestMethod.POST)
 	public String createMultipleChoiceQuestion(@ModelAttribute("question") BasicQuestionData theBasicQuestionData,
 			HttpServletRequest request, Model model, RedirectAttributes theRedirectAttributes) {
-		CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
-				.getTheCreateQuestionService();
+		CreateQuestionService theCreateQuestionService = 
+				SystemConfig.getSingletonInstance().getTheCreateQuestionService();
 		MultipleChoiceQuestion theMultipleChoiceQuestion = new MultipleChoiceQuestion();
 		theMultipleChoiceQuestion.setQuestionTitle(theBasicQuestionData.getQuestionTitle());
 		theMultipleChoiceQuestion.setQuestionText(theBasicQuestionData.getQuestionText());
@@ -108,13 +100,10 @@ public class CreateQuestionController {
 			iterativeNumber++;
 		}
 		if (optionList.size() == 0) {
-
 			model.addAttribute("BasicQuestion", theBasicQuestionData);
 			model.addAttribute("error", "Enter Options to proceed");
-
 			return "MultipleChoiceQuestion";
 		} else {
-
 			theMultipleChoiceQuestion.setOptionList(optionList);
 		}
 		boolean isQuestionCreated = theCreateQuestionService.createMultipleQuestion(theMultipleChoiceQuestion);
@@ -126,5 +115,4 @@ public class CreateQuestionController {
 			return "error";
 		}
 	}
-
 }

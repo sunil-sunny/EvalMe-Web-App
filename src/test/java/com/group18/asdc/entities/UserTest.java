@@ -4,9 +4,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
-
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.passwordpolicy.BasePasswordPolicyManagerMock;
 import com.group18.asdc.passwordpolicy.CharsNotAllowedPolicy;
@@ -20,7 +18,6 @@ import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.util.CustomStringUtils;
 import com.group18.asdc.util.ICustomStringUtils;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -41,7 +38,6 @@ public class UserTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-
 	}
 
 	@Test(expected = PasswordPolicyException.class)
@@ -65,7 +61,6 @@ public class UserTest {
 	@Test
 	public void validateMaxLengthPasswordTest() throws PasswordPolicyException {
 		BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(new MaxlengthPolicy("12"));
-
 		obj.validatePassword("karthikk");
 	}
 
@@ -87,7 +82,6 @@ public class UserTest {
 	public void validateMinLengthlowerPasswordErrorTest() throws PasswordPolicyException {
 		BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(
 				new MinLowercasePolicy("8", customStringUtils));
-
 		obj.validatePassword("KARTHIKK");
 	}
 
@@ -95,7 +89,6 @@ public class UserTest {
 	public void validateMinLengthlowerPasswordTest() throws PasswordPolicyException {
 		BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(
 				new MinLowercasePolicy("8", customStringUtils));
-
 		obj.validatePassword("karthikk");
 	}
 
@@ -103,7 +96,6 @@ public class UserTest {
 	public void validateMinLengthSpecialCharsPasswordErrorTest() throws PasswordPolicyException {
 		BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(
 				new MinSpecialcharPolicy("3", customStringUtils));
-
 		obj.validatePassword("k@#arthikk");
 	}
 
@@ -111,7 +103,6 @@ public class UserTest {
 	public void validateMinLengthSpecialCharsPasswordTest() throws PasswordPolicyException {
 		BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(
 				new MinSpecialcharPolicy("3", customStringUtils));
-
 		obj.validatePassword("k@#$arthikk");
 	}
 
@@ -119,7 +110,6 @@ public class UserTest {
 	public void validateCharsNotAllowedPasswordTest() throws PasswordPolicyException {
 		BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(
 				new CharsNotAllowedPolicy("@!#", customStringUtils));
-
 		obj.validatePassword("kar@thikk");
 	}
 
@@ -127,13 +117,11 @@ public class UserTest {
 	public void validateCharsNotAllowedPasswordErrorTest() throws PasswordPolicyException {
 		BasePasswordPolicyManagerMock obj = new BasePasswordPolicyManagerMock(
 				new CharsNotAllowedPolicy("@!#", customStringUtils));
-
 		obj.validatePassword("kar*()thikk");
 	}
 
 	private ArrayList returnPasswordHistoryList() {
 		ArrayList resulList = new ArrayList<>();
-
 		PasswordHistory passwordHistory = new PasswordHistory();
 		passwordHistory.setPassword("encrypted");
 		resulList.add(passwordHistory);
@@ -143,35 +131,28 @@ public class UserTest {
 		passwordHistory = new PasswordHistory();
 		passwordHistory.setPassword("encrypted");
 		resulList.add(passwordHistory);
-
 		return resulList;
-
 	}
 
 	@Test
 	public void validateHistoricalPasswordTest() throws PasswordPolicyException {
-
 		when(passwordHistoryService.getPasswordHistory(isA(String.class), isA(Integer.class)))
-				.thenReturn(returnPasswordHistoryList());
+		.thenReturn(returnPasswordHistoryList());
 		when(passwordEncryption.matches(isA(String.class), isA(String.class))).thenReturn(Boolean.FALSE);
 		HistoryConstraintPolicy policyObj = new HistoryConstraintPolicy("5", passwordHistoryService,
 				passwordEncryption);
 		policyObj.validate("B00838575", "karthi@76");
 		verify(passwordHistoryService, times(1)).getPasswordHistory("B00838575", 5);
 		verify(passwordEncryption, times(3)).matches("karthi@76", "encrypted");
-
 	}
 
 	@Test(expected = PasswordPolicyException.class)
 	public void validateHistoricalPasswordErrorTest() throws PasswordPolicyException {
-
 		when(passwordHistoryService.getPasswordHistory(isA(String.class), isA(Integer.class)))
-				.thenReturn(returnPasswordHistoryList());
+		.thenReturn(returnPasswordHistoryList());
 		when(passwordEncryption.matches(isA(String.class), isA(String.class))).thenReturn(Boolean.TRUE);
 		HistoryConstraintPolicy policyObj = new HistoryConstraintPolicy("5", passwordHistoryService,
 				passwordEncryption);
 		policyObj.validate("B00838575", "karthi@76");
-
 	}
-
 }

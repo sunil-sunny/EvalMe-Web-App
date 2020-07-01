@@ -4,5 +4,5 @@ public interface IJavaMailSenderConfiguration {
 
 	public String getEmail();
 	public String getPassword();
-    
+
 }

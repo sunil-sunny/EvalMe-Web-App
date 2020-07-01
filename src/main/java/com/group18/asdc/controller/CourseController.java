@@ -2,15 +2,12 @@ package com.group18.asdc.controller;
 
 import java.util.List;
 import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
@@ -22,10 +19,6 @@ public class CourseController {
 
 	private Logger log = Logger.getLogger(CourseController.class.getName());
 
-	/*
-	 * user home end point directs all the user except admin to the page where list
-	 * of all courses are present
-	 */
 	@GetMapping("/userhome")
 	public String getHomePage(Model theModel) {
 
@@ -35,11 +28,6 @@ public class CourseController {
 		theModel.addAttribute("coursesList", coursesList);
 		return "guesthome";
 	}
-
-	/*
-	 * courpage redirects user to page which contain courses where he/she is
-	 * enrolled as student
-	 */
 
 	@RequestMapping(value = "/enrolledcourses")
 	public String getEnrolledCourses(Model theModel) {
@@ -56,11 +44,6 @@ public class CourseController {
 		}
 	}
 
-	/*
-	 * Below endpoint redirects users to page which contains courses where he/she is
-	 * having a role as TA.
-	 */
-
 	@GetMapping("/tacourses")
 	public String getTACourses(Model theModel) {
 		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
@@ -74,11 +57,6 @@ public class CourseController {
 			return "tacourses";
 		}
 	}
-
-	/*
-	 * Below endpoint redirects users to page which contains courses where he/she is
-	 * having a role as Instructor
-	 */
 
 	@RequestMapping(value = "/instructedcourses", method = RequestMethod.GET)
 	public String getInstructedCourses(Model theModel) {
@@ -94,10 +72,6 @@ public class CourseController {
 		}
 	}
 
-	/*
-	 * Below endpoint refers student version of course home page.
-	 */
-
 	@RequestMapping(value = "/coursepage", method = RequestMethod.GET)
 	public String getCoursePage(Model theModel, HttpServletRequest request) {
 		String courseId = request.getParameter("id");
@@ -107,9 +81,6 @@ public class CourseController {
 		return "studentcoursehome";
 	}
 
-	/*
-	 * Below endpoint refers TA or instructor version of course home page.
-	 */
 	@RequestMapping(value = "/coursepageInstrcutor", method = RequestMethod.GET)
 	public String getCoursePageForInstrcutorOrTA(Model theModel, HttpServletRequest request) {
 		String courseId = request.getParameter("id");
