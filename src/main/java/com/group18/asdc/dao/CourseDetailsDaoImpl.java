@@ -8,9 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
 import org.springframework.stereotype.Repository;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.controller.CourseController;
 import com.group18.asdc.database.ConnectionManager;
@@ -89,13 +87,11 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				log.info("Error while closing the connection and statements after getting all courses");
 			}
 		}
-
 		return allCourses;
 	}
 
 	@Override
 	public List<Course> getCoursesWhereUserIsStudent(User user) {
-
 		CourseDetailsDao theCourseDetailsDao = SystemConfig.getSingletonInstance().getTheCourseDetailsDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -132,17 +128,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				log.info("Closing connection after getting all courses where user is Student");
 			} catch (SQLException e) {
 				log.info(" SQL Exception while closing the connection and statements");
-
 			}
-
 		}
-
 		return getCoursesAsStudent;
 	}
 
 	@Override
 	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
-
 		CourseDetailsDao theCourseDetailsDao = SystemConfig.getSingletonInstance().getTheCourseDetailsDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -180,7 +172,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				log.info("closing connection after getting all courses where user is Instructor");
 			}
 		}
-
 		return getCoursesAsInstructor;
 	}
 
@@ -227,7 +218,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public boolean isCourseExists(Course course) {
-
 		boolean courseIdExists = false;
 		boolean courseNameExists = false;
 		boolean returnValue = false;
@@ -261,7 +251,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		} catch (SQLException e) {
 			log.info("SQL Exception. Please check connection");
 		} finally {
-
 			try {
 				if (null != statement) {
 					statement.close();
@@ -281,7 +270,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public User getInstructorForCourse(int courseId) {
-
 		UserDao theUserDao = SystemConfig.getSingletonInstance().getTheUserDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -300,37 +288,30 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			if (bannerId != null) {
 				instructor = theUserDao.getUserById(bannerId);
 			}
-
 		} catch (SQLException e) {
 			log.info("SQL Exception while getting the instructor for course");
 		} finally {
-
 			try {
 				if (connection != null) {
 					connection.close();
 				}
-
 				if (preparedStatement != null) {
 					preparedStatement.close();
 				}
-
 				if (resultSet != null) {
 					preparedStatement.close();
 				}
 				log.info("closing connection after getting instructor for a course");
 			} catch (SQLException e) {
-				log.info(
-						"SQL Exception while closing the connections and statements after getting the instructor for course");
+				log.info("SQL Exception while closing the connections and "
+						+ "statements after getting the instructor for course");
 			}
-
 		}
-
 		return instructor;
 	}
 
 	@Override
 	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
-
 		UserDao theUserDao = SystemConfig.getSingletonInstance().getTheUserDao();
 		List<User> eligibleStudents = new ArrayList<User>();
 		List<User> existingStudentsOfCourse = theUserDao.getAllUsersByCourse(courseId);
@@ -349,5 +330,4 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		}
 		return eligibleStudents;
 	}
-
 }

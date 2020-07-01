@@ -2,21 +2,14 @@ package com.group18.asdc.dao.test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
-
 import com.group18.asdc.dao.CourseRolesDao;
 import com.group18.asdc.entities.User;
 
 public class CourseRolesDaoImplTest {
 
-	/*
-	 * Below test send set of students and ideally the result will be true if they
-	 * are added.
-	 */
 	@Test
 	public void enrollStudentsIntoCourseTestOne() {
 
@@ -30,10 +23,6 @@ public class CourseRolesDaoImplTest {
 		assertTrue(isEnrolled);
 	}
 
-	/*
-	 * Below test send set of empty students and ideally the result will be false if
-	 * they are added.
-	 */
 	@Test
 	public void enrollStudentsIntoCourseTestTwo() {
 
@@ -43,9 +32,6 @@ public class CourseRolesDaoImplTest {
 		assertFalse(isEnrolled);
 	}
 
-	/*
-	 * Below test passes the invalid users and get false from method
-	 */
 	@Test
 	public void allocateTaTestOne() {
 
@@ -53,12 +39,8 @@ public class CourseRolesDaoImplTest {
 		User studentsList = null;
 		boolean isEnrolled = theCourseRolesDaoMock.allocateTa(2, studentsList);
 		assertFalse(isEnrolled);
-
 	}
 
-	/*
-	 * Below test passes the valid users and get true from method
-	 */
 	@Test
 	public void allocateTaTestTwo() {
 
@@ -66,6 +48,5 @@ public class CourseRolesDaoImplTest {
 		User studentsList = new User("Rahul", "Chahar", "B09898157", "chahar@dal.ca");
 		boolean isEnrolled = theCourseRolesDaoMock.allocateTa(2, studentsList);
 		assertTrue(isEnrolled);
-
 	}
 }

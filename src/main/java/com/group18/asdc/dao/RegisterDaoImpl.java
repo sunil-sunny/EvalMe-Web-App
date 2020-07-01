@@ -5,9 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.UserRegistartionDetails;
 import com.group18.asdc.util.DataBaseQueriesUtil;
@@ -52,7 +50,6 @@ public class RegisterDaoImpl implements RegisterDao {
 		} catch (SQLException e) {
 			log.info("SQL Exception occured while Registering the user");
 		} finally {
-
 			try {
 				if (connection != null) {
 					connection.close();
@@ -88,7 +85,6 @@ public class RegisterDaoImpl implements RegisterDao {
 		} catch (SQLException e) {
 			log.info("SQL Exception while checking the user with email");
 		} finally {
-
 			try {
 				if (connection != null) {
 					connection.close();
@@ -103,7 +99,6 @@ public class RegisterDaoImpl implements RegisterDao {
 			} catch (SQLException e) {
 				log.info("SQL Exception occured while closing the statement and connection after checking the user with email");
 			}
-
 		}
 		return isUserExists;
 	}
@@ -126,7 +121,6 @@ public class RegisterDaoImpl implements RegisterDao {
 		} catch (SQLException e) {
 			log.info("SQL Exception occured while checking the user with banner id");
 		} finally {
-
 			try {
 				if (connection != null) {
 					connection.close();

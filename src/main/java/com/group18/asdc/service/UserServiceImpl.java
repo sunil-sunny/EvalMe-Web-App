@@ -2,10 +2,8 @@ package com.group18.asdc.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
@@ -26,19 +24,16 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean isUserExists(User user) {
-
 		return userDao.isUserExists(user);
 	}
 
 	@Override
 	public User getUserById(String bannerId) {
-
 		return userDao.getUserById(bannerId);
 	}
 
 	@Override
 	public List<User> getAllUsersByCourse(int courseId) {
-
 		return userDao.getAllUsersByCourse(courseId);
 	}
 
@@ -50,7 +45,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption) {
-
 		ArrayList<Object> criteriaList = queryVariableToArrayList
 				.convertQueryVariablesToArrayList(userObj.getBannerId());
 		ArrayList<Object> valueList = queryVariableToArrayList
@@ -60,21 +54,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ArrayList getUserRoles(User userObj) {
-
 		ArrayList<Object> criteriaList = queryVariableToArrayList
 				.convertQueryVariablesToArrayList(userObj.getBannerId());
 		return userDao.getUserRoles(criteriaList);
-
 	}
 
 	@Override
 	public User getCurrentUser() {
-
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String bannerid = "";
 		if (principal instanceof UserDetails) {
 			bannerid = ((UserDetails) principal).getUsername();
-
 		} else {
 			bannerid = principal.toString();
 		}
@@ -90,5 +80,4 @@ public class UserServiceImpl implements UserService {
 		UserDao theUserDao = SystemConfig.getSingletonInstance().getTheUserDao();
 		return theUserDao.isUserInstructor(course);
 	}
-
 }

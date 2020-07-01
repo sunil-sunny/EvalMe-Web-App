@@ -1,7 +1,6 @@
 package com.group18.asdc.service;
 
 import java.util.List;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.ViewQuestionsDao;
 import com.group18.asdc.entities.QuestionMetaData;
@@ -32,5 +31,4 @@ public class ViewQuestionsServiceImpl implements ViewQuestionsService {
 		User currentUser=theUserService.getCurrentUser();
 		return theViewQuestionsDao.getAllQuestionsSortByTitle(currentUser);
 	}
-
 }

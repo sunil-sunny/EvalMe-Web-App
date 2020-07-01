@@ -58,7 +58,6 @@ import com.group18.asdc.util.RandomStringGenerator;
 public class SystemConfig {
 
 	private static SystemConfig singletonInstance = null;
-
 	private AdminService theAdminService;
 	private CourseDetailsService theCourseDetailsService;
 	private IJavaMailSenderConfiguration javaMailSenderConfiguration;
@@ -69,7 +68,6 @@ public class SystemConfig {
 	private ViewQuestionsService theViewQuestionsService;
 	private DeleteQuestionService theDeleteQuestionService;
 	private CourseRolesService theCourseRolesService;
-
 	private AdminDao theAdminDao;
 	private CourseDetailsDao theCourseDetailsDao;
 	private RegisterDao theRegisterDao;
@@ -89,10 +87,8 @@ public class SystemConfig {
 	private CourseRolesDao theCourseRolesDao;
 
 	private SystemConfig() {
-
 		this.javaMailSenderConfiguration = new DefaultMailSenderConfiguration();
 		this.customStringUtils = new CustomStringUtils();
-
 		this.theAdminService = new AdminServiceImpl();
 		this.theCourseDetailsService = new CourseDetailsServiceImpl();
 		this.theEmailService = new EmailServiceImpl(this.javaMailSenderConfiguration);
@@ -101,7 +97,6 @@ public class SystemConfig {
 		this.theViewQuestionsService = new ViewQuestionsServiceImpl();
 		this.theDeleteQuestionService = new DeleteQuestionServiceImpl();
 		this.theCourseRolesService = new CourseRolesServiceImpl();
-
 		this.queryVariableToArrayList = new QueryVariableToArraylist();
 		this.theUserService = new UserServiceImpl(this.queryVariableToArrayList);
 		this.theAdminDao = new AdminDaoImpl();
@@ -121,15 +116,12 @@ public class SystemConfig {
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
 		this.theCourseRolesDao = new CourseRolesDaoImpl();
-
 	}
 
 	public static SystemConfig getSingletonInstance() {
-
 		if (null == singletonInstance) {
 			singletonInstance = new SystemConfig();
 		}
-
 		return singletonInstance;
 	}
 

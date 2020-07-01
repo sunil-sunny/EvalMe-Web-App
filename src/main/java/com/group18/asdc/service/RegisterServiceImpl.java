@@ -2,9 +2,7 @@ package com.group18.asdc.service;
 
 import java.util.List;
 import java.util.logging.Logger;
-
 import org.springframework.stereotype.Repository;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.entities.User;
@@ -19,13 +17,12 @@ public class RegisterServiceImpl implements RegisterService {
 
 	@Override
 	public String registeruser(UserRegistartionDetails userDetails) {
-
-		if (!userDetails.getBannerid().matches(ConstantStringUtil.getBanneridpatterncheck())) {
+		if (false == userDetails.getBannerid().matches(ConstantStringUtil.getBanneridpatterncheck())) {
 			return "invalid bannerid";
 		} else if (userDetails.getBannerid().length() != 9) {
 			return "invalid bannerid2";
 		}
-		if (!userDetails.getEmailid().matches(ConstantStringUtil.getEmailpatterncheck())) {
+		if (false == userDetails.getEmailid().matches(ConstantStringUtil.getEmailpatterncheck())) {
 			return "invalidemailid";
 		}
 		try {
@@ -44,7 +41,7 @@ public class RegisterServiceImpl implements RegisterService {
 			return "Email already exists";
 		}
 		boolean registerResult = false;
-		if (!isBannerIdExists && !isEmailExits) {
+		if (false == isBannerIdExists && false == isEmailExits) {
 			registerResult = registerDao.registeruser(userDetails);
 		}
 		if (registerResult) {
@@ -55,12 +52,11 @@ public class RegisterServiceImpl implements RegisterService {
 
 	@Override
 	public boolean registerStudents(List<User> studentList) {
-
 		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
 		EmailService emailService = null;
 		boolean isAllStudentsRegistered = false;
 		for (User user : studentList) {
-			if (!userService.isUserExists(user)) {
+			if (false == userService.isUserExists(user)) {
 				String result = this.registeruser(new UserRegistartionDetails(user));
 				if (result.equalsIgnoreCase("success")) {
 					isAllStudentsRegistered = true;

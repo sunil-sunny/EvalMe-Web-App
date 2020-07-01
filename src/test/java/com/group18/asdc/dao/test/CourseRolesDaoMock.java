@@ -3,24 +3,22 @@ package com.group18.asdc.dao.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import com.group18.asdc.dao.CourseRolesDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 
 public class CourseRolesDaoMock implements CourseRolesDao{
-	
+
 	private static List<Course> coursesDetails = new ArrayList<Course>();
 	private static List<User> userList = new ArrayList<User>();
 
 	public CourseRolesDaoMock() {
-		// declaring the courses
+
 		Course firstCourse = null;
 		Course secondCourse = null;
 		Course thirdCourse = null;
 		Course fourthCourse = null;
 
-		// declaring the users i.e students, ta and instructors.
 		User instructorOne = new User("Justin", "Langer", "B00123456", "justin@dal.ca");
 		userList.add(instructorOne);
 		User instructorTwo = new User("Don", "Bradman", "B00741399", "don@dal.com");
@@ -44,7 +42,6 @@ public class CourseRolesDaoMock implements CourseRolesDao{
 		User studentFive = new User("Shane", "Warne", "B00654194", "shane@dal.ca");
 		userList.add(studentFive);
 
-		// Adding users to the courses
 		firstCourse = new Course(1, "Machine Learning", instructorOne, Arrays.asList(taOne, taThree),
 				Arrays.asList(studentFive, studentOne));
 		secondCourse = new Course(2, "Mobile Computing", instructorThree, Arrays.asList(taTwo, studentFour),
@@ -63,14 +60,12 @@ public class CourseRolesDaoMock implements CourseRolesDao{
 	@Override
 	public boolean allocateTa(int courseId, User user) {
 		if (user != null) {
-
 			Course theCourse=new Course();
 			theCourse.setCourseId(courseId);
 			theCourse.setTaList(Arrays.asList(user));
 			if(theCourse.getTaList().size()>0) {
 				return true;
 			}
-			
 			return false;
 		}
 		return false;
@@ -78,15 +73,12 @@ public class CourseRolesDaoMock implements CourseRolesDao{
 
 	@Override
 	public boolean enrollStudentsIntoCourse(List<User> studentList, int courseId) {
-
 		Course theCourse=new Course();
 		theCourse.setCourseId(courseId);
 		theCourse.setStudentList(studentList);
 		if(theCourse.getStudentList().size()>0) {
 			return true;
 		}
-		
 		return false;
 	}
-
 }

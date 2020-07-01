@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.logging.Logger;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.BasicQuestionData;
@@ -31,7 +30,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.createQuestion);
 			thePreparedStatement.setString(1, theUser.getBannerId());
 			int questionTypeId = this.getIdForQuestionType(theBasicQuestionData.getQuestionType());
-
 			if (questionTypeId == 0) {
 				isQuestionCreated = false;
 			} else {
@@ -45,13 +43,10 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 					isQuestionCreated = true;
 				}
 			}
-
 		} catch (SQLException e) {
 			log.info("SQL Exception while creating the Numeric or Text Question");
 		} finally {
-
 			try {
-
 				if (connection != null) {
 					connection.close();
 				}
@@ -60,8 +55,8 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				}
 				log.info("closing connection after creating a numeric or text question");
 			} catch (SQLException e) {
-				log.info(
-						"SQL Exception while closing connections and statements after creating Numeric or Text Question");
+				log.info("SQL Exception while closing connections and "
+						+ "statements after creating Numeric or Text Question");
 			}
 		}
 		return isQuestionCreated;
@@ -122,7 +117,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		} catch (SQLException e) {
 			log.info("SQL Exception while creating Multiple choice question");
 		} finally {
-
 			try {
 				if (theResultSet != null) {
 					theResultSet.close();
@@ -163,7 +157,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		} catch (SQLException e) {
 			log.info("SQL Exception while getting ID for question type");
 		} finally {
-
 			try {
 				if (theResultSet != null) {
 					theResultSet.close();
@@ -179,7 +172,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				log.info("SQL Exception while closing connection and statements after getting the id for title");
 			}
 		}
-
 		return typeId;
 	}
 
@@ -204,7 +196,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		} catch (SQLException e) {
 			log.info("SQL Exception while checking whether the question exists or not");
 		} finally {
-
 			try {
 				if (theResultSet != null) {
 					theResultSet.close();
@@ -222,5 +213,4 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		}
 		return isQuestionExists;
 	}
-
 }

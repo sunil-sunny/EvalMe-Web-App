@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
-
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.DataBaseQueriesUtil;
@@ -16,7 +15,6 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 
 	@Override
 	public boolean allocateTa(int courseId, User user) {
-
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
@@ -46,7 +44,6 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 				log.info("SQL Exception while closing connection after allocating user as TA");
 			}
 		}
-
 		return false;
 	}
 
@@ -68,11 +65,9 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 				}
 				queryToEnrollStudent.close();
 			}
-
 		} catch (SQLException e) {
 			log.info("SQL Exception occuered while enrolling the students into course");
 		} finally {
-
 			try {
 				if (connection != null) {
 					connection.close();

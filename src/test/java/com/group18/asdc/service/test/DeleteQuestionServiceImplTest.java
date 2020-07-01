@@ -1,10 +1,8 @@
 package com.group18.asdc.service.test;
 
 import static org.junit.Assert.assertTrue;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import com.group18.asdc.service.DeleteQuestionService;
 
 @SpringBootTest

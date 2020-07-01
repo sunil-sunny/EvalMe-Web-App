@@ -6,7 +6,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.service.AdminService;
@@ -27,9 +26,7 @@ public class AdminController {
 	
 	@PostMapping("/adminadd")
 	public String adminAddForm(@ModelAttribute("course") Course course, BindingResult bindingresult) {
-
 		AdminService theAdminService = SystemConfig.getSingletonInstance().getTheAdminService();
-
 		if (bindingresult.hasErrors()) {
 			return "redirect:/adminadd?error";
 		}
@@ -55,7 +52,7 @@ public class AdminController {
 			return "redirect:/admindelete?error";
 		}
 		boolean result = theAdminService.deleteCourse(course);
-		if (!result) {
+		if (false == result) {
 			return "redirect:/admindelete?error";
 		} else {
 			return "admindeletecourseresult";
