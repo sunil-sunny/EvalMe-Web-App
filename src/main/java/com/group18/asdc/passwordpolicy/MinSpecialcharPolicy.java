@@ -8,9 +8,6 @@ public class MinSpecialcharPolicy implements IBasePasswordPolicy {
 	private Integer minSpecialChars = null;
 	private ICustomStringUtils customStringUtils = null;
 
-	public MinSpecialcharPolicy() {
-	}
-
 	public MinSpecialcharPolicy(String minSpecialChars, ICustomStringUtils customStringUtils) {
 		this.minSpecialChars = Integer.parseInt(minSpecialChars);
 		this.customStringUtils = customStringUtils;

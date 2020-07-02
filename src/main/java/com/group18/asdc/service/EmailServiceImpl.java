@@ -1,5 +1,6 @@
 package com.group18.asdc.service;
 
+import java.util.Enumeration;
 import java.util.Properties;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,14 +17,17 @@ public class EmailServiceImpl implements EmailService {
 
 	private JavaMailSender getJavaMailSender(IJavaMailSenderConfiguration mailSenderConfiguration) {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("smtp.gmail.com");
-		mailSender.setPort(587);
+		mailSender.setHost(mailSenderConfiguration.getHost());
+		mailSender.setPort(mailSenderConfiguration.getPort());
 		mailSender.setUsername(mailSenderConfiguration.getEmail());
 		mailSender.setPassword(mailSenderConfiguration.getPassword());
 		Properties props = mailSender.getJavaMailProperties();
-		props.put("mail.transport.protocol", "smtp");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
+		Properties defaultMailProperties = mailSenderConfiguration.getProperties();
+		Enumeration<?> customPropsEnumerator = defaultMailProperties.propertyNames();
+		while (customPropsEnumerator.hasMoreElements()) {
+			String key = (String) customPropsEnumerator.nextElement();
+			props.put(key, defaultMailProperties.getProperty(key));
+		}
 		return mailSender;
 	}
 

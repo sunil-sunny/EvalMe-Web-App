@@ -8,9 +8,6 @@ public class MinUppercasePolicy implements IBasePasswordPolicy {
 	private Integer minUpperCase = null;
 	private ICustomStringUtils customStringUtils = null;
 
-	public MinUppercasePolicy() {
-	}
-
 	public MinUppercasePolicy(String minUpperCase, ICustomStringUtils customStringUtils) {
 		this.minUpperCase = Integer.parseInt(minUpperCase);
 		this.customStringUtils = customStringUtils;

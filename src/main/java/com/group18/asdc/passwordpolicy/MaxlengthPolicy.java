@@ -6,9 +6,6 @@ public class MaxlengthPolicy implements IBasePasswordPolicy {
 
 	private Integer maxLength;
 
-	public MaxlengthPolicy() {
-	}
-
 	public MaxlengthPolicy(String maxLength) {
 		this.maxLength = Integer.parseInt(maxLength);
 	}

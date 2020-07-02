@@ -1,5 +1,6 @@
-package com.group18.asdc.passwordpolicy;
+package com.group18.asdc.database;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import com.group18.asdc.database.SQLMethods;
 import com.group18.asdc.database.SQLQueries;
@@ -11,7 +12,8 @@ public class PasswordPolicyDB implements IPasswordPolicyDB {
 		SQLMethods sqlImplementation = null;
 		ArrayList policiesList = new ArrayList<>();
 		try {
-			sqlImplementation = new SQLMethods();
+			Connection connection = ConnectionManager.getInstance().getDBConnection();
+			sqlImplementation = new SQLMethods(connection);
 			policiesList = sqlImplementation.selectQuery(SQLQueries.GET_BASEPASSWORD_POLICIES.toString(),
 					new ArrayList<>());
 		} catch (Exception e) {
@@ -29,7 +31,8 @@ public class PasswordPolicyDB implements IPasswordPolicyDB {
 		SQLMethods sqlImplementation = null;
 		ArrayList policiesList = new ArrayList<>();
 		try {
-			sqlImplementation = new SQLMethods();
+			Connection connection = ConnectionManager.getInstance().getDBConnection();
+			sqlImplementation = new SQLMethods(connection);
 			policiesList = sqlImplementation.selectQuery(SQLQueries.GET_HISTORYPASSWORD_POLICIES.toString(),
 					new ArrayList<>());
 		} catch (Exception e) {

@@ -14,13 +14,9 @@ public class SQLMethods {
 	private Connection connection;
 	private ResultSet rs;
 
-	public SQLMethods() throws SQLException {
+	public SQLMethods(Connection connection) throws SQLException {
 		rs = null;
-		openConnection();
-	}
-
-	private void openConnection() throws SQLException {
-		this.connection = ConnectionManager.getInstance().getDBConnection();
+		this.connection = connection;
 	}
 
 	private void replaceValuesInPreparedStmt(PreparedStatement preparedStmt, ArrayList values) throws SQLException {
@@ -60,7 +56,8 @@ public class SQLMethods {
 				if (!connection.isClosed()) {
 					connection.close();
 				}
-			} if (null != rs) {
+			}
+			if (null != rs) {
 				rs.close();
 			}
 		} catch (Exception e) {
@@ -68,13 +65,6 @@ public class SQLMethods {
 		}
 	}
 
-	/**
-	 * 
-	 * @param sqlQuery
-	 * @param values
-	 * @return
-	 * @throws SQLException
-	 */
 	public Object insertQuery(String sqlQuery, ArrayList<Object> values) throws SQLException {
 		Object resultObj = null;
 		PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, values);
@@ -88,13 +78,6 @@ public class SQLMethods {
 		return resultObj;
 	}
 
-	/**
-	 * 
-	 * @param sqlQuery
-	 * @param values
-	 * @return
-	 * @throws SQLException
-	 */
 	public ArrayList<HashMap<String, Object>> selectQuery(String sqlQuery, ArrayList<Object> values)
 			throws SQLException {
 		PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, values);
@@ -115,14 +98,6 @@ public class SQLMethods {
 		return resultRowList;
 	}
 
-	/**
-	 * 
-	 * @param sqlQuery
-	 * @param updateValueList
-	 * @param criteriaValueList
-	 * @return
-	 * @throws SQLException
-	 */
 	public Integer updateQuery(String sqlQuery, ArrayList updateValueList, ArrayList criteriaValueList)
 			throws SQLException {
 		updateValueList.addAll(criteriaValueList);
@@ -131,26 +106,12 @@ public class SQLMethods {
 		return rowCount;
 	}
 
-	/**
-	 * 
-	 * @param sqlQuery
-	 * @param criteriaList
-	 * @return
-	 * @throws SQLException
-	 */
 	public Integer deleteQuery(String sqlQuery, ArrayList criteriaList) throws SQLException {
 		PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, criteriaList);
 		Integer rowCount = preparedStatement.executeUpdate();
 		return rowCount;
 	}
 
-	/**
-	 * 
-	 * @param sqlQuery
-	 * @param valuesList
-	 * @return
-	 * @throws SQLException
-	 */
 	public Integer multipleInsertQuery(String sqlQuery, ArrayList<ArrayList> valuesList) throws SQLException {
 		PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, new ArrayList<>());
 		constructBatchInsertQuery(preparedStatement, valuesList);

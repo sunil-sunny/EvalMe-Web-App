@@ -7,10 +7,6 @@ public class MinlengthPolicy implements IBasePasswordPolicy {
 	private static final Integer DEFAULT_MIN_LENGTH = 8;
 	private Integer minLength;
 
-	public MinlengthPolicy() {
-		minLength = DEFAULT_MIN_LENGTH;
-	}
-
 	public MinlengthPolicy(String minLength) {
 		this.minLength = Integer.parseInt(minLength);
 	}

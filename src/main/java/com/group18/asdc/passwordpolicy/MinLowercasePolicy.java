@@ -8,9 +8,6 @@ public class MinLowercasePolicy implements IBasePasswordPolicy {
 	private Integer minLowerCase = null;
 	private ICustomStringUtils customStringUtils = null;
 
-	public MinLowercasePolicy() {
-	}
-
 	public MinLowercasePolicy(String minLowerCase, ICustomStringUtils customStringUtils) {
 		this.minLowerCase = Integer.parseInt(minLowerCase);
 		this.customStringUtils = customStringUtils;
