@@ -13,15 +13,15 @@ public class ConnectionManager {
 	private String dbUserName;
 	private String dbPassword;
 
-	public ConnectionManager(){
+	public ConnectionManager() {
 		IDatabaseConfiguration config = SystemConfig.getSingletonInstance().getDatabaseConfiguration();
 		dbURL = config.getDatabaseURL();
 		dbUserName = config.getDatabaseUserName();
 		dbPassword = config.getDatabasePassword();
 	}
 
-	public static ConnectionManager getInstance(){
-		if (null == uniqueInstance){
+	public static ConnectionManager getInstance() {
+		if (null == uniqueInstance) {
 			uniqueInstance = new ConnectionManager();
 		}
 		return uniqueInstance;

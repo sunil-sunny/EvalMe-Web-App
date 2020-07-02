@@ -26,6 +26,7 @@ public class UserDaoImpl implements UserDao {
 		Connection connection = null;
 		ResultSet resultSet = null;
 		PreparedStatement checkUser = null;
+		boolean isUserExits = false;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			checkUser = connection.prepareStatement(DataBaseQueriesUtil.isUserExists);
@@ -33,21 +34,21 @@ public class UserDaoImpl implements UserDao {
 			resultSet = checkUser.executeQuery();
 			log.info("In User Dao to check if user exists or not");
 			if (resultSet.next()) {
-				return true;
+				isUserExits = true;
 			} else {
-				return false;
+				isUserExits = false;
 			}
 		} catch (SQLException e) {
 			log.info("SQL Exception occured while checking if user exists or not");
 		} finally {
 			try {
-				if (resultSet != null) {
+				if (null != resultSet) {
 					resultSet.close();
 				}
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (checkUser != null) {
+				if (null != checkUser) {
 					checkUser.close();
 				}
 				log.info("closing connection after having a check if user exists or not");
@@ -56,7 +57,7 @@ public class UserDaoImpl implements UserDao {
 						+ "and statements after checking if user exists or not");
 			}
 		}
-		return false;
+		return isUserExits;
 	}
 
 	@Override
@@ -84,13 +85,13 @@ public class UserDaoImpl implements UserDao {
 			log.info("SQL Exception while getting user by banner id");
 		} finally {
 			try {
-				if (resultSet != null) {
+				if (null != resultSet) {
 					resultSet.close();
 				}
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (getUser != null) {
+				if (null != getUser) {
 					getUser.close();
 				}
 				log.info("closing the connection after getting user by banner id");
@@ -126,13 +127,13 @@ public class UserDaoImpl implements UserDao {
 			log.info("SQL Exception while getting all the users realted to course");
 		} finally {
 			try {
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (resultSetForStudentList != null) {
+				if (null != resultSetForStudentList) {
 					resultSetForStudentList.close();
 				}
-				if (preparedStatement != null) {
+				if (null != preparedStatement) {
 					preparedStatement.close();
 				}
 				log.info("Closing connections after getting users based on course");
@@ -163,7 +164,7 @@ public class UserDaoImpl implements UserDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if (sqlImplementation != null) {
+			if (null != sqlImplementation) {
 				sqlImplementation.cleanup();
 			}
 		}
@@ -181,7 +182,7 @@ public class UserDaoImpl implements UserDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if (sqlImplementation != null) {
+			if (null != sqlImplementation) {
 				sqlImplementation.cleanup();
 			}
 		}
@@ -205,7 +206,7 @@ public class UserDaoImpl implements UserDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if (sqlImplementation != null) {
+			if (null != sqlImplementation) {
 				sqlImplementation.cleanup();
 			}
 		}

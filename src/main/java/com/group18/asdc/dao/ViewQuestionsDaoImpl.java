@@ -40,13 +40,13 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 			log.info("SQL Exception while getting all the question");
 		} finally {
 			try {
-				if (theResultSet != null) {
+				if (null != theResultSet) {
 					theResultSet.close();
 				}
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (thePreparedStatement != null) {
+				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
 				log.info("closing connection after getting all questions");
@@ -81,13 +81,13 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 			log.info("SQL Exception while getting all the question sort by date");
 		} finally {
 			try {
-				if (theResultSet != null) {
+				if (null != theResultSet) {
 					theResultSet.close();
 				}
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (thePreparedStatement != null) {
+				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
 				log.info("closing connection after getting all questions sort by date");
@@ -123,13 +123,13 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 			log.info("SQL Exception while getting all the question sort by title");
 		} finally {
 			try {
-				if (theResultSet != null) {
+				if (null != theResultSet) {
 					theResultSet.close();
 				}
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (thePreparedStatement != null) {
+				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
 				log.info("closing connection after getting all questions sort by title");

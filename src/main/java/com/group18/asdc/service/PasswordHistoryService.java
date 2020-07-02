@@ -7,5 +7,6 @@ import com.group18.asdc.security.IPasswordEncryption;
 public interface PasswordHistoryService {
 
 	public Object insertPassword(PasswordHistory passwordHistory, IPasswordEncryption passwordEncryption);
-	public ArrayList<PasswordHistory> getPasswordHistory(String bannerId, Integer numberOfRecords);   
+
+	public ArrayList<PasswordHistory> getPasswordHistory(String bannerId, Integer numberOfRecords);
 }

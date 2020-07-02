@@ -31,8 +31,8 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public boolean iscreateCourseParametersValid(Course course) {
-		UserService theUserService=SystemConfig.getSingletonInstance().getTheUserService();
-		CourseDetailsService theCourseDetailsService=SystemConfig.getSingletonInstance().getTheCourseDetailsService();
+		UserService theUserService = SystemConfig.getSingletonInstance().getTheUserService();
+		CourseDetailsService theCourseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		log.info("Acceesing Admin Service Impl");
 		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
 		if (false == isCourseIdValid(course)) {
@@ -42,8 +42,8 @@ public class AdminServiceImpl implements AdminService {
 			return false;
 		}
 		String instructorId = course.getInstructorName().getBannerId();
-		User instructor=theUserService.getUserById(instructorId);
-		if(null == instructor) {
+		User instructor = theUserService.getUserById(instructorId);
+		if (null == instructor) {
 			return false;
 		}
 		if (instructorId.length() != 9 || false == instructorId.matches(ConstantStringUtil.getBanneridpatterncheck())) {

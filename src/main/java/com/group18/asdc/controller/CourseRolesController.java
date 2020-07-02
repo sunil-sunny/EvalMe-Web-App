@@ -7,13 +7,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.CourseRolesService;
@@ -42,13 +45,13 @@ public class CourseRolesController {
 		} else {
 			boolean isAllocated = courseRolesService.allocateTa(Integer.parseInt(courseId),
 					userService.getUserById(bannerId));
-			if (false == isAllocated) {
+			if (isAllocated) {
+				log.info("User has been allocated as TA role for the course");
+				theModel.addAttribute("result", "TA Allocated");
+			} else {
 				log.info("User is already realted to the course "
 						+ "i.e user might be already a instructor or TA or Student for the course");
 				theModel.addAttribute("result", "User is already a part of this course");
-			} else {
-				log.info("User has been allocated as TA role for the course");
-				theModel.addAttribute("result", "TA Allocated");
 			}
 			return "instrcutorcoursehome";
 		}
@@ -89,7 +92,8 @@ public class CourseRolesController {
 							String lastName = userDetails[1];
 							String bannerId = userDetails[2];
 							String email = userDetails[3];
-							if (!bannerId.matches(ConstantStringUtil.getBanneridpatterncheck()) || bannerId.length() != 9
+							if (!bannerId.matches(ConstantStringUtil.getBanneridpatterncheck())
+									|| bannerId.length() != 9
 									|| !email.matches(ConstantStringUtil.getEmailpatterncheck())) {
 								inValidUsers.add(user);
 							} else {
@@ -100,10 +104,8 @@ public class CourseRolesController {
 								validUsers.add(user);
 							}
 						} else {
-							log.info("Rows which has invalid details are ignored "
-									+ "while reading the student list");
-							theModel.addAttribute("fileDetailsErrors", 
-									"Rows which has invalid details are ignored");
+							log.info("Rows which has invalid details are ignored " + "while reading the student list");
+							theModel.addAttribute("fileDetailsErrors", "Rows which has invalid details are ignored");
 						}
 					}
 					if (validUsers.size() > 0) {
@@ -115,13 +117,14 @@ public class CourseRolesController {
 						} else {
 							log.info("Students has been enrolled to course and "
 									+ "Users who are already related to course are ignored");
-							theModel.addAttribute("resultEnrolling","Success!! "
-									+ "Users who are already related to course are ignored");
+							theModel.addAttribute("resultEnrolling",
+									"Success!! " + "Users who are already related to course are ignored");
 						}
 					}
 					br.close();
 				} catch (IOException e) {
-					log.info("IO Exception while reading the multi part file file while enrolling students in particular course");
+					log.info(
+							"IO Exception while reading the multi part file file while enrolling students in particular course");
 				}
 			}
 		}

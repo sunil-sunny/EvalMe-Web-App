@@ -3,7 +3,9 @@ package com.group18.asdc.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
@@ -74,8 +77,8 @@ public class CreateQuestionController {
 	@RequestMapping(value = "/createMultipleChoiceQuestion", method = RequestMethod.POST)
 	public String createMultipleChoiceQuestion(@ModelAttribute("question") BasicQuestionData theBasicQuestionData,
 			HttpServletRequest request, Model model, RedirectAttributes theRedirectAttributes) {
-		CreateQuestionService theCreateQuestionService = 
-				SystemConfig.getSingletonInstance().getTheCreateQuestionService();
+		CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
+				.getTheCreateQuestionService();
 		MultipleChoiceQuestion theMultipleChoiceQuestion = new MultipleChoiceQuestion();
 		theMultipleChoiceQuestion.setQuestionTitle(theBasicQuestionData.getQuestionTitle());
 		theMultipleChoiceQuestion.setQuestionText(theBasicQuestionData.getQuestionText());
@@ -89,7 +92,7 @@ public class CreateQuestionController {
 			theOption = new Option();
 			displayOption = request.getParameter("optiontext-" + iterativeNumber + "");
 			storedOption = request.getParameter("optionstored-" + iterativeNumber + "");
-			if ((displayOption == null) || (storedOption == null)) {
+			if ((null == displayOption) || (null == storedOption)) {
 				break;
 			}
 			if (displayOption.length() > 0) {

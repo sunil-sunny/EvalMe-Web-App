@@ -67,19 +67,19 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			log.info("SQL Exception occured while getting all courses");
 		} finally {
 			try {
-				if (getCourses != null) {
+				if (null != getCourses) {
 					getCourses.close();
 				}
-				if (con != null) {
+				if (null != con) {
 					con.close();
 				}
-				if (getCourseRoles != null) {
+				if (null != getCourseRoles) {
 					getCourseRoles.close();
 				}
-				if (resultSetAllCourses != null) {
+				if (null != resultSetAllCourses) {
 					resultSetAllCourses.close();
 				}
-				if (resultSetAllCourseRoles != null) {
+				if (null != resultSetAllCourseRoles) {
 					resultSetAllCourseRoles.close();
 				}
 				log.info("closing all the data connections in after getting all courses");
@@ -116,13 +116,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			log.info("SQL Exception occured while getting courses where user is student");
 		} finally {
 			try {
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (preparedStatement != null) {
+				if (null != preparedStatement) {
 					preparedStatement.close();
 				}
-				if (resultset != null) {
+				if (null != resultset) {
 					resultset.close();
 				}
 				log.info("Closing connection after getting all courses where user is Student");
@@ -159,13 +159,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			log.info("SQL Exception while getting courses where user is instructor");
 		} finally {
 			try {
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (preparedStatement != null) {
+				if (null != preparedStatement) {
 					preparedStatement.close();
 				}
-				if (resultset != null) {
+				if (null != resultset) {
 					resultset.close();
 				}
 			} catch (SQLException e) {
@@ -200,13 +200,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			log.info("SQL Exception occuered while getting the courses where user is TA");
 		} finally {
 			try {
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (preparedStatement != null) {
+				if (null != preparedStatement) {
 					preparedStatement.close();
 				}
-				if (resultset != null) {
+				if (null != resultset) {
 					resultset.close();
 				}
 			} catch (SQLException e) {
@@ -292,13 +292,13 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			log.info("SQL Exception while getting the instructor for course");
 		} finally {
 			try {
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (preparedStatement != null) {
+				if (null != preparedStatement) {
 					preparedStatement.close();
 				}
-				if (resultSet != null) {
+				if (null != resultSet) {
 					preparedStatement.close();
 				}
 				log.info("closing connection after getting instructor for a course");
