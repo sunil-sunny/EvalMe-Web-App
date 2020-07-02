@@ -8,9 +8,6 @@ public class CharsNotAllowedPolicy implements IBasePasswordPolicy {
 	private String charsNotAllowed = null;
 	private ICustomStringUtils customStringUtils = null;
 
-	public CharsNotAllowedPolicy() {
-	}
-
 	public CharsNotAllowedPolicy(String charsNotAllowed, ICustomStringUtils customStringUtils) {
 		this.charsNotAllowed = charsNotAllowed;
 		this.customStringUtils = customStringUtils;

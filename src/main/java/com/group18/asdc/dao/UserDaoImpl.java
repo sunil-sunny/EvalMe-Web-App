@@ -148,7 +148,8 @@ public class UserDaoImpl implements UserDao {
 	public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) {
 		SQLMethods sqlImplementation = null;
 		try {
-			sqlImplementation = new SQLMethods();
+			Connection connection = ConnectionManager.getInstance().getDBConnection();
+			sqlImplementation = new SQLMethods(connection);
 			ArrayList<HashMap<String, Object>> rowsList = sqlImplementation
 					.selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), valueList);
 			if (rowsList.size() > 0) {
@@ -172,7 +173,8 @@ public class UserDaoImpl implements UserDao {
 	public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valueList) {
 		SQLMethods sqlImplementation = null;
 		try {
-			sqlImplementation = new SQLMethods();
+			Connection connection = ConnectionManager.getInstance().getDBConnection();
+			sqlImplementation = new SQLMethods(connection);
 			Integer rowCount = sqlImplementation.updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valueList,
 					criteriaList);
 			return rowCount > 0;
@@ -191,7 +193,8 @@ public class UserDaoImpl implements UserDao {
 		ArrayList rolesList = new ArrayList<>();
 		SQLMethods sqlImplementation = null;
 		try {
-			sqlImplementation = new SQLMethods();
+			Connection connection = ConnectionManager.getInstance().getDBConnection();
+			sqlImplementation = new SQLMethods(connection);
 			ArrayList<HashMap<String, Object>> valuesList = sqlImplementation
 					.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
 			if (valuesList != null && valuesList.size() > 0) {

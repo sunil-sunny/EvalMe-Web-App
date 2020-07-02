@@ -3,6 +3,7 @@ package com.group18.asdc.passwordpolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import com.group18.asdc.SystemConfig;
+import com.group18.asdc.database.IPasswordPolicyDB;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 
 public class PasswordPolicyManager extends BasePasswordPolicyManager implements IPasswordPolicyManager {

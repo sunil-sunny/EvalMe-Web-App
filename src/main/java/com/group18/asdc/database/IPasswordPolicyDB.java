@@ -1,4 +1,4 @@
-package com.group18.asdc.passwordpolicy;
+package com.group18.asdc.database;
 
 import java.util.ArrayList;
 

@@ -42,5 +42,5 @@ public class ResetPassword {
 
 	public void setbannerId(String bannerId) {
 		this.bannerId = bannerId;
-	}  
+	}
 }
