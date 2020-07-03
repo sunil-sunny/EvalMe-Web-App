@@ -30,7 +30,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.createQuestion);
 			thePreparedStatement.setString(1, theUser.getBannerId());
 			int questionTypeId = this.getIdForQuestionType(theBasicQuestionData.getQuestionType());
-			if (questionTypeId == 0) {
+			if (0 == questionTypeId) {
 				isQuestionCreated = false;
 			} else {
 				thePreparedStatement.setInt(2, questionTypeId);
@@ -76,7 +76,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 					PreparedStatement.RETURN_GENERATED_KEYS);
 			preparedStatementForQuestionCreation.setString(1, theUser.getBannerId());
 			int questionTypeId = this.getIdForQuestionType(theMultipleChoiceQuestion.getQuestionType());
-			if (questionTypeId == 0) {
+			if (0 == questionTypeId) {
 				isQuestionCreated = false;
 			} else {
 				preparedStatementForQuestionCreation.setInt(2, questionTypeId);
@@ -98,7 +98,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 						preparedStatementForOptionCreation.setString(2, theOption.getDisplayText());
 						preparedStatementForOptionCreation.setInt(3, theOption.getStoredData());
 						int createdResult = preparedStatementForOptionCreation.executeUpdate();
-						if (createdResult == 0) {
+						if (0 == createdResult) {
 							isQuestionCreated = false;
 							break;
 						} else {

@@ -1,6 +1,5 @@
 package com.group18.asdc.controller;
 
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,14 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.entities.UserRegistartionDetails;
 import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.RegisterService;
 import com.group18.asdc.util.RegistrationStatus;
-
 
 @Controller
 @RequestMapping("/registration")
@@ -40,9 +37,7 @@ public class RegisterController {
 		}
 		JSONObject resultObject = theRegisterService.registeruser(bean);
 		Integer registrationStatus = resultObject.optInt("STATUS");
-		if (registrationStatus == null) {
-			return "registration";
-		} else if (registrationStatus == RegistrationStatus.INVALID_BANNER_PATTERN) {
+		if (registrationStatus == RegistrationStatus.INVALID_BANNER_PATTERN) {
 			return "redirect:/registration?invalidbannerid";
 		} else if (registrationStatus == RegistrationStatus.INVALID_BANNER_LENGTH) {
 			return "redirect:/registration?invalidbannerid2";
