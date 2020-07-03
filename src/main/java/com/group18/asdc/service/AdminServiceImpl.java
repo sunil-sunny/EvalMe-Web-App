@@ -20,8 +20,6 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public boolean isCourseIdValid(Course course) {
-		log.info("Acceesing Admin Service Impl");
-		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
 		int courseId = course.getCourseId();
 		if (0 >= courseId || 4 != String.valueOf(courseId).length()) {
 			return false;
@@ -63,6 +61,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public boolean createCourse(Course course) {
 		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
+		log.info("Acceesing Admin Service Impl");
 		if (iscreateCourseParametersValid(course)) {
 			return admindao.addCourse(course);
 		}
@@ -72,6 +71,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public boolean deleteCourse(Course course) {
 		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
+		log.info("Accessing Admin Service Impl");
 		if (isCourseIdValid(course)) {
 			return admindao.deleteCourse(course);
 		}
