@@ -25,44 +25,50 @@ public class RegisterServiceImpl implements RegisterService {
 		try {
 			resultObj.put("STATUS", RegistrationStatus.UNSUCCESSFUL);
 			boolean isError = false;
-			if (false == userDetails.getBannerid().matches(ConstantStringUtil.getBanneridpatterncheck())) {
+			if (userDetails.getBannerid().matches(ConstantStringUtil.getBanneridpatterncheck())) {
+				if (9 != userDetails.getBannerid().length()) {
+					isError = true;
+					resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_LENGTH);
+				}
+			} else {
 				isError = true;
 				resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_PATTERN);
-			} else if (userDetails.getBannerid().length() != 9) {
-				isError = true;
-				resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_LENGTH);
 			}
-			if (false == userDetails.getEmailid().matches(ConstantStringUtil.getEmailpatterncheck())) {
+			if (userDetails.getEmailid().matches(ConstantStringUtil.getEmailpatterncheck())) {
+
+				try {
+					User.isPasswordValid(userDetails.getPassword(),
+							SystemConfig.getSingletonInstance().getBasePasswordPolicyManager());
+				} catch (PasswordPolicyException e) {
+					isError = true;
+					resultObj.put("STATUS", RegistrationStatus.PASSWORD_POLICY_ERROR);
+					resultObj.put("MESSAGE", e.getMessage());
+				}
+				if (isError) {
+					return resultObj;
+				}
+				RegisterDao registerDao = SystemConfig.getSingletonInstance().getTheRegisterDao();
+				boolean isEmailExits = registerDao.checkUserWithEmail(userDetails.getEmailid());
+				boolean isBannerIdExists = registerDao.checkUserWithEmail(userDetails.getBannerid());
+				if (isBannerIdExists) {
+					resultObj.put("STATUS", RegistrationStatus.EXISTING_BANNER_ID);
+				}
+				if (isEmailExits) {
+					resultObj.put("STATUS", RegistrationStatus.EXISTING_EMAIL_ID);
+				}
+				boolean registerResult = false;
+				if (isBannerIdExists && isEmailExits) {
+					if (registerResult) {
+						resultObj.put("STATUS", RegistrationStatus.SUCCESS);
+					}
+				} else {
+					registerResult = registerDao.registeruser(userDetails);
+				}
+			} else {
 				isError = true;
 				resultObj.put("STATUS", RegistrationStatus.INVALID_EMAIL_PATTERN);
 			}
-			try {
-				User.isPasswordValid(userDetails.getPassword(),
-						SystemConfig.getSingletonInstance().getBasePasswordPolicyManager());
-			} catch (PasswordPolicyException e) {
-				isError = true;
-				resultObj.put("STATUS", RegistrationStatus.PASSWORD_POLICY_ERROR);
-				resultObj.put("MESSAGE", e.getMessage());
-			}
-			if (isError) {
-				return resultObj;
-			}
-			RegisterDao registerDao = SystemConfig.getSingletonInstance().getTheRegisterDao();
-			boolean isEmailExits = registerDao.checkUserWithEmail(userDetails.getEmailid());
-			boolean isBannerIdExists = registerDao.checkUserWithEmail(userDetails.getBannerid());
-			if (isBannerIdExists) {
-				resultObj.put("STATUS", RegistrationStatus.EXISTING_BANNER_ID);
-			}
-			if (isEmailExits) {
-				resultObj.put("STATUS", RegistrationStatus.EXISTING_EMAIL_ID);
-			}
-			boolean registerResult = false;
-			if (false == isBannerIdExists && false == isEmailExits) {
-				registerResult = registerDao.registeruser(userDetails);
-			}
-			if (registerResult) {
-				resultObj.put("STATUS", RegistrationStatus.SUCCESS);
-			}
+
 		} catch (JSONException e) {
 			log.severe("user registration error");
 		}
