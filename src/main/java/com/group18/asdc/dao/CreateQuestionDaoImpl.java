@@ -91,7 +91,6 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				if (theResultSet.next()) {
 					long id = theResultSet.getLong(1);
 					int questionId = (int) id;
-					System.out.println(questionId);
 					for (Option theOption : theMultipleChoiceQuestion.getOptionList()) {
 						preparedStatementForOptionCreation = connection
 								.prepareStatement(DataBaseQueriesUtil.createOptions);
