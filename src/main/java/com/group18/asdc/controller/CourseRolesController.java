@@ -62,12 +62,10 @@ public class CourseRolesController {
 			HttpServletRequest request) {
 		String courseId = request.getParameter("courseid");
 		String courseName = request.getParameter("coursename");
-		System.out.println("The Course id is " + courseId);
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
-		System.out.println("In controller allocating student");
 		CourseRolesService courseRolesService = SystemConfig.getSingletonInstance().getTheCourseRolesService();
-		if (courseId.length() == 0) {
+		if (0 == courseId.length()) {
 			log.info("Error in loading file !! user will be prompted to upload file again");
 			theModel.addAttribute("resultEnrolling", "Error in loading file !! please try again");
 		} else {
