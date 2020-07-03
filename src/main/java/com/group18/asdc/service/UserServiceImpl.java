@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 			bannerid = principal.toString();
 		}
 		User currentUser = null;
-		if (bannerid != null) {
+		if (null != bannerid) {
 			currentUser = this.getUserById(bannerid);
 		}
 		return currentUser;

@@ -18,7 +18,7 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 			taAsList.add(user);
 			eligibleUser = theCourseDetailsService.filterEligibleUsersForCourse(taAsList, courseId);
 		}
-		if (null != eligibleUser && eligibleUser.size() != 0) {
+		if (null != eligibleUser && 0 != eligibleUser.size()) {
 			return courseRolesDao.allocateTa(courseId, user);
 		}
 		return false;
@@ -32,7 +32,7 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 		boolean isStudentsRegistered = theRegisterService.registerStudents(studentList);
 		if (isStudentsRegistered) {
 			List<User> eligibleStudents = theCourseDetailsService.filterEligibleUsersForCourse(studentList, courseId);
-			if (eligibleStudents.size() == 0) {
+			if (0 == eligibleStudents.size()) {
 				return false;
 			} else {
 				return courseRolesDao.enrollStudentsIntoCourse(eligibleStudents, courseId);

@@ -285,7 +285,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			while (resultSet.next()) {
 				bannerId = resultSet.getString("bannerid");
 			}
-			if (bannerId != null) {
+			if (null != bannerId) {
 				instructor = theUserDao.getUserById(bannerId);
 			}
 		} catch (SQLException e) {
@@ -324,7 +324,9 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 					break;
 				}
 			}
-			if (!isExists) {
+			if (isExists) {
+				continue;
+			} else {
 				eligibleStudents.add(student);
 			}
 		}
