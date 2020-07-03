@@ -14,10 +14,11 @@ public class CreateQuestionsDaoImplTest {
 
 	@Test
 	public void createNumericOrTextQuestionTest() {
-		BasicQuestionData theBasicQuestionData=new BasicQuestionData();
+		BasicQuestionData theBasicQuestionData = new BasicQuestionData();
 		User theUser = new User();
 		CreateQuestionDao theCreateQuestionsDaoImplMock = new CreateQuestionsDaoImplMock();
-		boolean isQuestionCreated = theCreateQuestionsDaoImplMock.createNumericOrTextQuestion(theBasicQuestionData,theUser);
+		boolean isQuestionCreated = theCreateQuestionsDaoImplMock.createNumericOrTextQuestion(theBasicQuestionData,
+				theUser);
 		assertTrue(isQuestionCreated);
 	}
 
@@ -25,7 +26,7 @@ public class CreateQuestionsDaoImplTest {
 	public void createMultipleChoiceQuestionTest() {
 		MultipleChoiceQuestion theMultipleChoiceQuestion = new MultipleChoiceQuestion();
 		User theUser = new User();
-		CreateQuestionDao theCreateQuestionsDaoImplMock=new CreateQuestionsDaoImplMock();
+		CreateQuestionDao theCreateQuestionsDaoImplMock = new CreateQuestionsDaoImplMock();
 		boolean isQuestionCreated = theCreateQuestionsDaoImplMock
 				.createMultipleChoiceQuestion(theMultipleChoiceQuestion, theUser);
 		assertTrue(isQuestionCreated);
@@ -36,7 +37,7 @@ public class CreateQuestionsDaoImplTest {
 		CreateQuestionDao theCreateQuestionsDaoImplMock = new CreateQuestionsDaoImplMock();
 		int id = theCreateQuestionsDaoImplMock.getIdForQuestionType("freetext");
 		boolean gotQuestionTitle = false;
-		if(id > 0) {
+		if (id > 0) {
 			gotQuestionTitle = true;
 		}
 		assertFalse(gotQuestionTitle);

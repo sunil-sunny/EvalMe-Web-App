@@ -15,9 +15,10 @@ public class CreateQuestionServiceImpl implements CreateQuestionService {
 		User theUser = theUserService.getCurrentUser();
 		boolean isQuestionExist = theCreateQuestionDao.isQuestionExists(theBasicQuestionData);
 		if (false == isQuestionExist) {
+			return false;
+		} else {
 			return theCreateQuestionDao.createNumericOrTextQuestion(theBasicQuestionData, theUser);
 		}
-		return false;
 	}
 
 	@Override
@@ -30,9 +31,10 @@ public class CreateQuestionServiceImpl implements CreateQuestionService {
 		theBasicQuestionData.setQuestionText(theMultipleChoiceChoose.getQuestionText());
 		theBasicQuestionData.setQuestionType(theMultipleChoiceChoose.getQuestionType());
 		boolean isQuestionExist = theCreateQuestionDao.isQuestionExists(theBasicQuestionData);
-		if (false == isQuestionExist) {
+		if (isQuestionExist) {
+			return false;
+		} else {
 			return theCreateQuestionDao.createMultipleChoiceQuestion(theMultipleChoiceChoose, theUser);
 		}
-		return false;
 	}
 }

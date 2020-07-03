@@ -17,6 +17,7 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 	public boolean allocateTa(int courseId, User user) {
 		Connection connection = null;
 		PreparedStatement statement = null;
+		boolean isAllocated = false;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			log.info("In Course Dao allocating TA");
@@ -25,18 +26,18 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 			statement.setString(2, user.getBannerId());
 			int taAllocated = statement.executeUpdate();
 			if (taAllocated > 0) {
-				return true;
+				isAllocated = true;
 			} else {
-				return false;
+				isAllocated = false;
 			}
 		} catch (SQLException e) {
 			log.info("SQL Exception while allocating user as TA");
 		} finally {
 			try {
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (statement != null) {
+				if (null != statement) {
 					statement.close();
 				}
 				log.info("Closing the connections after allocating TA");
@@ -44,7 +45,7 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 				log.info("SQL Exception while closing connection after allocating user as TA");
 			}
 		}
-		return false;
+		return isAllocated;
 	}
 
 	@Override
@@ -69,10 +70,10 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 			log.info("SQL Exception occuered while enrolling the students into course");
 		} finally {
 			try {
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (queryToEnrollStudent != null) {
+				if (null != queryToEnrollStudent) {
 					queryToEnrollStudent.close();
 				}
 				log.info("Closed after enrolling students into course");
