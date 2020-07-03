@@ -82,7 +82,9 @@ public class AdminDaoImpl implements AdminDao {
 			statement = connection.prepareStatement(DataBaseQueriesUtil.isCourseIdExists);
 			statement.setInt(1, courseId);
 			resultset = statement.executeQuery();
-			if (false == resultset.next()) {
+			if (resultset.next()) {
+				returnValue = false;
+			} else {
 				returnValue = true;
 			}
 		} catch (SQLException e) {

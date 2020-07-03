@@ -50,12 +50,13 @@ public class AdminController {
 		AdminService theAdminService = SystemConfig.getSingletonInstance().getTheAdminService();
 		if (bindingresult.hasErrors()) {
 			return "redirect:/admindelete?error";
-		}
-		boolean result = theAdminService.deleteCourse(course);
-		if (false == result) {
-			return "redirect:/admindelete?error";
 		} else {
-			return "admindeletecourseresult";
+			boolean result = theAdminService.deleteCourse(course);
+			if (result) {
+				return "admindeletecourseresult";
+			} else {
+				return "redirect:/admindelete?error";
+			}
 		}
 	}
 }

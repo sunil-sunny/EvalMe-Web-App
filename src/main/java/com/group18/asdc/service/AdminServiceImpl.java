@@ -23,7 +23,7 @@ public class AdminServiceImpl implements AdminService {
 		log.info("Acceesing Admin Service Impl");
 		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
 		int courseId = course.getCourseId();
-		if (0 >= courseId || String.valueOf(courseId).length() != 4) {
+		if (0 >= courseId || 4 != String.valueOf(courseId).length()) {
 			return false;
 		}
 		return true;
@@ -35,21 +35,26 @@ public class AdminServiceImpl implements AdminService {
 		CourseDetailsService theCourseDetailsService = SystemConfig.getSingletonInstance().getTheCourseDetailsService();
 		log.info("Acceesing Admin Service Impl");
 		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
-		if (false == isCourseIdValid(course)) {
-			return false;
-		}
-		if (theCourseDetailsService.isCourseExists(course)) {
-			return false;
-		}
-		String instructorId = course.getInstructorName().getBannerId();
-		User instructor = theUserService.getUserById(instructorId);
-		if (null == instructor) {
-			return false;
-		}
-		if (instructorId.length() != 9 || false == instructorId.matches(ConstantStringUtil.getBanneridpatterncheck())) {
-			return false;
-		}
-		if (theUserService.isUserInstructor(course)) {
+		if (isCourseIdValid(course)) {
+			if (theCourseDetailsService.isCourseExists(course)) {
+				return false;
+			} else {
+				String instructorId = course.getInstructorName().getBannerId();
+				User instructor = theUserService.getUserById(instructorId);
+				if (null == instructor) {
+					return false;
+				} else {
+					if (9 == instructorId.length()
+							|| instructorId.matches(ConstantStringUtil.getBanneridpatterncheck())) {
+						if (theUserService.isUserInstructor(course)) {
+							return false;
+						}
+					} else {
+						return false;
+					}
+				}
+			}
+		} else {
 			return false;
 		}
 		return true;

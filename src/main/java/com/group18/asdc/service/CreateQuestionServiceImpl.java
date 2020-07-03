@@ -14,7 +14,7 @@ public class CreateQuestionServiceImpl implements CreateQuestionService {
 		UserService theUserService = SystemConfig.getSingletonInstance().getTheUserService();
 		User theUser = theUserService.getCurrentUser();
 		boolean isQuestionExist = theCreateQuestionDao.isQuestionExists(theBasicQuestionData);
-		if (false == isQuestionExist) {
+		if (isQuestionExist) {
 			return false;
 		} else {
 			return theCreateQuestionDao.createNumericOrTextQuestion(theBasicQuestionData, theUser);
