@@ -7,5 +7,6 @@ import com.group18.asdc.entities.User;
 public interface RegisterService {
 
 	public String registeruser(UserRegistartionDetails bean);
+
 	public boolean registerStudents(List<User> studentList);
 }

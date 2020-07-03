@@ -51,13 +51,13 @@ public class RegisterDaoImpl implements RegisterDao {
 			log.info("SQL Exception occured while Registering the user");
 		} finally {
 			try {
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (registerUserStatement != null) {
+				if (null != registerUserStatement) {
 					registerUserStatement.close();
 				}
-				if (assignRoleStatement != null) {
+				if (null != assignRoleStatement) {
 					assignRoleStatement.close();
 				}
 				log.info("Closng connections after registering the user");
@@ -86,18 +86,19 @@ public class RegisterDaoImpl implements RegisterDao {
 			log.info("SQL Exception while checking the user with email");
 		} finally {
 			try {
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (thePreparedStatement != null) {
+				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				if (theResultSet != null) {
+				if (null != theResultSet) {
 					theResultSet.close();
 				}
 				log.info("Closed Connections after checking user with email");
 			} catch (SQLException e) {
-				log.info("SQL Exception occured while closing the statement and connection after checking the user with email");
+				log.info(
+						"SQL Exception occured while closing the statement and connection after checking the user with email");
 			}
 		}
 		return isUserExists;
@@ -109,26 +110,26 @@ public class RegisterDaoImpl implements RegisterDao {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
-		boolean isUserExists=false;
+		boolean isUserExists = false;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.checkUserWithBannerId);
 			thePreparedStatement.setString(1, bannerId);
 			theResultSet = thePreparedStatement.executeQuery();
 			if (theResultSet.next()) {
-				isUserExists= true;
+				isUserExists = true;
 			}
 		} catch (SQLException e) {
 			log.info("SQL Exception occured while checking the user with banner id");
 		} finally {
 			try {
-				if (connection != null) {
+				if (null != connection) {
 					connection.close();
 				}
-				if (thePreparedStatement != null) {
+				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				if (theResultSet != null) {
+				if (null != theResultSet) {
 					theResultSet.close();
 				}
 				log.info("Closing the connection after checking the user with banner id");

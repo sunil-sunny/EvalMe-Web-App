@@ -13,34 +13,34 @@ public class ViewQuestionsDaoImplTest {
 
 	@Test
 	public void getAllQuestionsTest() {
-		ViewQuestionsDao theViewQuestionsDaoImplMock=new ViewQuestionsDaoImplMock();
-		List<QuestionMetaData> theQuestionList=theViewQuestionsDaoImplMock.getAllQuestions(new User());
-		boolean assertValue=false;
-		if(theQuestionList.size()>0) {
-			assertValue=true;
+		ViewQuestionsDao theViewQuestionsDaoImplMock = new ViewQuestionsDaoImplMock();
+		List<QuestionMetaData> theQuestionList = theViewQuestionsDaoImplMock.getAllQuestions(new User());
+		boolean assertValue = false;
+		if (theQuestionList.size() > 0) {
+			assertValue = true;
 		}
-		assertTrue(assertValue);		
+		assertTrue(assertValue);
 	}
 
 	@Test
 	public void getAllQuestionsSortByDateTest() {
-		ViewQuestionsDao theViewQuestionsDaoImplMock=new ViewQuestionsDaoImplMock();
-		List<QuestionMetaData> theQuestionList=theViewQuestionsDaoImplMock.getAllQuestionsSortByDate(new User());
-		boolean assertValue=false;
-		if(theQuestionList.size()>0) {
-			assertValue=true;
+		ViewQuestionsDao theViewQuestionsDaoImplMock = new ViewQuestionsDaoImplMock();
+		List<QuestionMetaData> theQuestionList = theViewQuestionsDaoImplMock.getAllQuestionsSortByDate(new User());
+		boolean assertValue = false;
+		if (theQuestionList.size() > 0) {
+			assertValue = true;
 		}
 		assertTrue(assertValue);
 	}
 
 	@Test
 	public void getAllQuestionsSortByTitleTest() {
-		ViewQuestionsDao theViewQuestionsDaoImplMock=new ViewQuestionsDaoImplMock();
-		List<QuestionMetaData> theQuestionList=theViewQuestionsDaoImplMock.getAllQuestionsSortByTitle(new User());
-		boolean assertValue=false;
-		if(theQuestionList.size()>0) {
-			assertValue=true;
+		ViewQuestionsDao theViewQuestionsDaoImplMock = new ViewQuestionsDaoImplMock();
+		List<QuestionMetaData> theQuestionList = theViewQuestionsDaoImplMock.getAllQuestionsSortByTitle(new User());
+		boolean assertValue = false;
+		if (theQuestionList.size() > 0) {
+			assertValue = true;
 		}
-		assertTrue(assertValue);	
+		assertTrue(assertValue);
 	}
 }

@@ -18,7 +18,8 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
 	private static final String ADMIN_BANNER_ID = "B-000000";
 
-	private Authentication checkAdmin(String password, User u, Authentication authentication) throws AuthenticationException {
+	private Authentication checkAdmin(String password, User u, Authentication authentication)
+			throws AuthenticationException {
 		if (password.equals(u.getPassword())) {
 			List<GrantedAuthority> rights = new ArrayList<GrantedAuthority>();
 			rights.add(new SimpleGrantedAuthority("ADMIN"));
@@ -31,18 +32,19 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 		}
 	}
 
-	private Authentication checkNormal(String password, User u, Authentication authentication) throws AuthenticationException {
+	private Authentication checkNormal(String password, User u, Authentication authentication)
+			throws AuthenticationException {
 
 		IPasswordEncryption passwordEncryption = SystemConfig.getSingletonInstance().getPasswordEncryption();
 		UserService userService = SystemConfig.getSingletonInstance().getTheUserService();
 		if (passwordEncryption.matches(password, u.getPassword())) {
 			List<GrantedAuthority> rights = new ArrayList<GrantedAuthority>();
 			for (Object eachRole : userService.getUserRoles(u)) {
-				rights.add(new SimpleGrantedAuthority((String)eachRole));
+				rights.add(new SimpleGrantedAuthority((String) eachRole));
 			}
 			UsernamePasswordAuthenticationToken token;
 			token = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(),
-					authentication.getCredentials(),rights);
+					authentication.getCredentials(), rights);
 			return token;
 		} else {
 			throw new BadCredentialsException("1000");
@@ -65,9 +67,8 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 			} else {
 				return checkNormal(password, u, authentication);
 			}
-		}
-		else {
+		} else {
 			throw new BadCredentialsException("1001");
-		}			
+		}
 	}
 }

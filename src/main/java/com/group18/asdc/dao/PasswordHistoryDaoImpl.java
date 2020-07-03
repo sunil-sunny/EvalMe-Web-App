@@ -17,7 +17,8 @@ public class PasswordHistoryDaoImpl implements PasswordHistoryDao {
 		try {
 			Connection connection = ConnectionManager.getInstance().getDBConnection();
 			sqlImplementation = new SQLMethods(connection);
-			Object primaryKey = sqlImplementation.insertQuery(SQLQueries.INSERT_PASSWORD_HISTORY.toString(),valuesList);
+			Object primaryKey = sqlImplementation.insertQuery(SQLQueries.INSERT_PASSWORD_HISTORY.toString(),
+					valuesList);
 			return primaryKey;
 		} catch (SQLException e) {
 			e.printStackTrace();

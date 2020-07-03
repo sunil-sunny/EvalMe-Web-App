@@ -65,7 +65,7 @@ public class AdminDaoImpl implements AdminDao {
 		}
 		return returnValue;
 	}
-	
+
 	@Override
 	public boolean deleteCourse(Course course) {
 		boolean returnValue = false;

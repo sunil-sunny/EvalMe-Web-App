@@ -17,6 +17,7 @@ public class BasePasswordPolicyManager implements IBasePasswordPolicyManager {
 		MIN_UPPERCASE_POLICY("MinUppercase"), MIN_SPECIALCASE_POLICY("MinSpecialCharacter"),
 		CHARACTERS_NOT_ALLOWED("CharactersNotAllowed");
 		private final String policyName;
+
 		private DatabasePolicyName(String policyName) {
 			this.policyName = policyName;
 		}

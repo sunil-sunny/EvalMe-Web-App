@@ -6,7 +6,7 @@ import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 
-public class AdminDaoImplMock implements AdminDao{
+public class AdminDaoImplMock implements AdminDao {
 
 	private static List<Course> courseList;
 	private static User user;

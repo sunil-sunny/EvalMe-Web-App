@@ -6,8 +6,8 @@ public class RandomStringGenerator implements IRandomStringGenerator {
 
 	@Override
 	public String generateRandomString() {
-		int leftLimit = 48; 
-		int rightLimit = 122; 
+		int leftLimit = 48;
+		int rightLimit = 122;
 		int targetStringLength = 10;
 		Random random = new Random();
 		String generatedString = random.ints(leftLimit, rightLimit + 1)
