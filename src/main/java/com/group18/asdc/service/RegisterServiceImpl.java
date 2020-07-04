@@ -93,7 +93,6 @@ public class RegisterServiceImpl implements RegisterService {
 				} else {
 					log.severe("user registration error");
 				}
-
 			}
 		}
 		return isAllStudentsRegistered;
