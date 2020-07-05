@@ -21,5 +21,7 @@ public interface SurveyService {
 	public boolean removeQuestionFromSurvey(QuestionMetaData theQuestionMetaData);
 	
 	public List<SurveyQuestion> getCurrentListOfSurveyQuestions();
+	
+	public boolean isSurveyPublishedForCourse(Course theCourse);
 
 }

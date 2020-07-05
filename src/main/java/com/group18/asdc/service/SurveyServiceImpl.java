@@ -78,4 +78,10 @@ public class SurveyServiceImpl implements SurveyService {
 		}
 		return isAdded;
 	}
+
+	@Override
+	public boolean isSurveyPublishedForCourse(Course theCourse) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

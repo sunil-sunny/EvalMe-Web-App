@@ -70,7 +70,6 @@ public class SurveyController {
 	public String addQuestionToList(Model theModel, HttpServletRequest httpServletRequest) {
 
 		String questionId = httpServletRequest.getParameter("selectedQuestion");
-		System.out.println("id is "+questionId);
 		ViewQuestionsService theViewQuestionsService = QuestionManagerConfig.getSingletonInstance()
 				.getTheViewQuestionsService();
 		SurveyService theSurveyService = SurveyConfig.getSingletonInstance().getTheSurveyService();
