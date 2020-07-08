@@ -67,6 +67,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			}
 		} catch (SQLException e) {
 			log.info("SQL Exception occured while getting all courses");
+			e.printStackTrace();
 		} finally {
 			try {
 				if (null != getCourses) {
