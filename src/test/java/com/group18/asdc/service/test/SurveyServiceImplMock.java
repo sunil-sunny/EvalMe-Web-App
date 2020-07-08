@@ -3,67 +3,74 @@ package com.group18.asdc.service.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.group18.asdc.dao.SurveyDao;
+import com.group18.asdc.dao.test.SurveyDaoImplMock;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
 import com.group18.asdc.errorhandling.QuestionExitsException;
+import com.group18.asdc.errorhandling.SavingSurveyException;
 import com.group18.asdc.errorhandling.SurveyAlreadyPublishedException;
 import com.group18.asdc.service.SurveyService;
 
-public class SurveyServiceImplMock implements SurveyService{
+public class SurveyServiceImplMock implements SurveyService {
 
 	@Override
 	public boolean addQuestionToSurvey(QuestionMetaData theQuestionMetaData) throws QuestionExitsException {
-		List<QuestionMetaData> questionList=new ArrayList<QuestionMetaData>();
-		questionList.add(theQuestionMetaData);
+		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		SurveyQuestion surveyQuestion = new SurveyQuestion();
+		surveyQuestion.setQuestionData(theQuestionMetaData);
+		List<SurveyQuestion> surveyQuestions=new ArrayList<SurveyQuestion>();
+		surveyMetaData.setSurveyQuestions(surveyQuestions);
+		surveyMetaData.getSurveyQuestions().add(surveyQuestion);
 		return true;
 	}
 
 	@Override
-	public List<SurveyQuestion> getAllSavedSurveyQuestions(Course course) {
-		List<SurveyQuestion> surveyQuestions=new ArrayList<SurveyQuestion>();
-		surveyQuestions.add(new SurveyQuestion());
-		surveyQuestions.add(new SurveyQuestion());
-		return surveyQuestions;
-	}
-
-	@Override
-	public boolean saveSurveyQuestions(List<SurveyQuestion> allSurveyQuestions) {
-		List<SurveyQuestion> surveyQuestions=new ArrayList<SurveyQuestion>();
-		surveyQuestions.addAll(allSurveyQuestions);
-		return true;
+	public boolean saveSurvey(SurveyMetaData surveyData) {
+		SurveyDao theSurveyDao = new SurveyDaoImplMock();
+		try {
+			return theSurveyDao.saveSurvey(surveyData);
+		} catch (SavingSurveyException e) {
+			return false;
+		}
 	}
 
 	@Override
 	public boolean publishSurvey() throws SurveyAlreadyPublishedException {
-		SurveyMetaData surveyMetaData=new SurveyMetaData();
-		surveyMetaData.setPublishedStatus(true);
-		return surveyMetaData.isPublishedStatus();
+		SurveyDao theSurveyDao = new SurveyDaoImplMock();
+		return theSurveyDao.publishSurvey(new SurveyMetaData());
 	}
 
 	@Override
 	public boolean removeQuestionFromSurvey(QuestionMetaData theQuestionMetaData) {
+		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		SurveyQuestion surveyQuestion = new SurveyQuestion();
+		surveyQuestion.setQuestionData(theQuestionMetaData);
 		List<SurveyQuestion> surveyQuestions=new ArrayList<SurveyQuestion>();
-		surveyQuestions.add(new SurveyQuestion());
-		surveyQuestions.add(new SurveyQuestion());
-		surveyQuestions.remove(1);
+		surveyMetaData.setSurveyQuestions(surveyQuestions);
+		surveyMetaData.getSurveyQuestions().add(surveyQuestion);
+		surveyMetaData.getSurveyQuestions().remove(0);
 		return true;
 	}
 
 	@Override
-	public List<SurveyQuestion> getCurrentListOfSurveyQuestions() {
-		List<SurveyQuestion> surveyQuestions=new ArrayList<SurveyQuestion>();
-		surveyQuestions.add(new SurveyQuestion());
-		surveyQuestions.add(new SurveyQuestion());
-		return surveyQuestions;
+	public boolean isSurveyPublishedForCourse(Course theCourse) {
+		SurveyDao theSurveyDao = new SurveyDaoImplMock();
+		return theSurveyDao.isSurveyPublished(theCourse);
 	}
 
 	@Override
-	public boolean isSurveyPublishedForCourse(Course theCourse) {
-		SurveyMetaData surveyMetaData=new SurveyMetaData();
-		surveyMetaData.setPublishedStatus(true);
-		return surveyMetaData.isPublishedStatus();
+	public SurveyMetaData getSavedSurvey(Course course) {
+		SurveyDao theSurveyDao = new SurveyDaoImplMock();
+		return theSurveyDao.getSavedSurvey(course);
+	}
+
+	@Override
+	public SurveyMetaData getCurrentSurvey() {
+		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		return surveyMetaData;
 	}
 
 }
