@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.logging.Logger;
 
-import com.group18.asdc.SystemConfig;
+import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
@@ -181,7 +181,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
-		UserService theUserService = SystemConfig.getSingletonInstance().getTheUserService();
+		UserService theUserService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
 		boolean isQuestionExists = false;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();

@@ -11,7 +11,8 @@ import java.util.logging.Logger;
 
 import org.springframework.stereotype.Repository;
 
-import com.group18.asdc.SystemConfig;
+import com.group18.asdc.CourseConfig;
+import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.Role;
@@ -26,7 +27,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Override
 	public List<Course> getAllCourses() {
 
-		UserDao userDao = SystemConfig.getSingletonInstance().getTheUserDao();
+		UserDao userDao = ProfileManagementConfig.getSingletonInstance().getTheUserDao();
 		Connection con = null;
 		Statement getCourses = null;
 		PreparedStatement getCourseRoles = null;
@@ -93,7 +94,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCoursesWhereUserIsStudent(User user) {
-		CourseDetailsDao theCourseDetailsDao = SystemConfig.getSingletonInstance().getTheCourseDetailsDao();
+		CourseDetailsDao theCourseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultset = null;
@@ -137,7 +138,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
-		CourseDetailsDao theCourseDetailsDao = SystemConfig.getSingletonInstance().getTheCourseDetailsDao();
+		CourseDetailsDao theCourseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultset = null;
@@ -274,7 +275,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public User getInstructorForCourse(int courseId) {
-		UserDao theUserDao = SystemConfig.getSingletonInstance().getTheUserDao();
+		UserDao theUserDao = ProfileManagementConfig.getSingletonInstance().getTheUserDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -316,7 +317,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
-		UserDao theUserDao = SystemConfig.getSingletonInstance().getTheUserDao();
+		UserDao theUserDao = ProfileManagementConfig.getSingletonInstance().getTheUserDao();
 		List<User> eligibleStudents = new ArrayList<User>();
 		List<User> existingStudentsOfCourse = theUserDao.getAllUsersByCourse(courseId);
 		log.info("In User Dao to get filterEligible ");
@@ -340,7 +341,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Override
 	public Course getCourseById(int courseId) {
 
-		UserDao userDao = SystemConfig.getSingletonInstance().getTheUserDao();
+		UserDao userDao = ProfileManagementConfig.getSingletonInstance().getTheUserDao();
 		Connection con = null;
 		PreparedStatement getCourseById = null;
 		PreparedStatement getCourseRoles = null;
