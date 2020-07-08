@@ -25,7 +25,7 @@ public class RegisterServiceImpl implements RegisterService {
 		try {
 			resultObj.put("STATUS", RegistrationStatus.UNSUCCESSFUL);
 			boolean isError = false;
-			if (userDetails.getBannerid().matches(ConstantStringUtil.getBanneridpatterncheck())) {
+			if (userDetails.getBannerid().matches(ConstantStringUtil.BANNER_ID_CHECK.toString())) {
 				if (9 != userDetails.getBannerid().length()) {
 					isError = true;
 					resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_LENGTH);
@@ -34,7 +34,7 @@ public class RegisterServiceImpl implements RegisterService {
 				isError = true;
 				resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_PATTERN);
 			}
-			if (userDetails.getEmailid().matches(ConstantStringUtil.getEmailpatterncheck())) {
+			if (userDetails.getEmailid().matches(ConstantStringUtil.EMAIL_PATTERN_CHECK.toString())) {
 
 				try {
 					User.isPasswordValid(userDetails.getPassword(),
@@ -86,9 +86,10 @@ public class RegisterServiceImpl implements RegisterService {
 				if (resultObject.optInt("STATUS") == RegistrationStatus.SUCCESS) {
 					isAllStudentsRegistered = true;
 					emailService = SystemConfig.getSingletonInstance().getTheEmailService();
-					String messageText = ConstantStringUtil.getEmailmessageheader() + user.getBannerId() + " "
-							+ user.getBannerId().concat(ConstantStringUtil.getPasswordtag());
-					emailService.sendSimpleMessage(user.getEmail(), ConstantStringUtil.getEmailsubject(), messageText);
+					String messageText = ConstantStringUtil.EMAIL_MESSAGE_HEADER.toString() + user.getBannerId() + " "
+							+ user.getBannerId().concat(ConstantStringUtil.PASSWORD_TAG.toString());
+					emailService.sendSimpleMessage(user.getEmail(), ConstantStringUtil.EMAIL_SUBJECT.toString(),
+							messageText);
 
 				} else {
 					log.severe("user registration error");

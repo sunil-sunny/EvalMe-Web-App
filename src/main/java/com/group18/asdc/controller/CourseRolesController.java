@@ -90,9 +90,9 @@ public class CourseRolesController {
 							String lastName = userDetails[1];
 							String bannerId = userDetails[2];
 							String email = userDetails[3];
-							if (!bannerId.matches(ConstantStringUtil.getBanneridpatterncheck())
+							if (!bannerId.matches(ConstantStringUtil.BANNER_ID_CHECK.toString())
 									|| bannerId.length() != 9
-									|| !email.matches(ConstantStringUtil.getEmailpatterncheck())) {
+									|| !email.matches(ConstantStringUtil.EMAIL_PATTERN_CHECK.toString())) {
 								inValidUsers.add(user);
 							} else {
 								user.setFirstName(firstName);
