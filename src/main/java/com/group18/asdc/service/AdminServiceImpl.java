@@ -43,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
 					return false;
 				} else {
 					if (9 == instructorId.length()
-							|| instructorId.matches(ConstantStringUtil.getBanneridpatterncheck())) {
+							|| instructorId.matches(ConstantStringUtil.BANNER_ID_CHECK.toString())) {
 						if (theUserService.isUserInstructor(course)) {
 							return false;
 						}
