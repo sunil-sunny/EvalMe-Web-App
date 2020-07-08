@@ -47,12 +47,12 @@ public class CreateQuestionController {
 	public String getQuestionConfirmPage(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model) {
 		log.info("confirming questions based on type");
 		model.addAttribute("BasicQuestion", basicQuestionData);
-		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.numericType)
-				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.freeText)) {
+		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.NUMERIC_TYPE.toString())
+				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.FREE_TEXT.toString())) {
 			return "NumericOrTextQuestion";
 		}
-		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.multipleChooseMore)
-				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.multipleChooseOne)) {
+		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.MULTIPLE_CHOOSE_ONE.toString())
+				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.MULTIPLE_CHOOSE_MORE.toString())) {
 			return "MultipleChoiceQuestion";
 		}
 		return "error";

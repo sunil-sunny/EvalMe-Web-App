@@ -13,6 +13,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.database.IPasswordPolicyDB;
 import com.group18.asdc.entities.PasswordHistory;
+import com.group18.asdc.entities.Role;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.handlingformsubmission.ResetPassword;
@@ -46,8 +47,8 @@ public class LoginController {
 	@RequestMapping("/login-success")
 	public RedirectView loginSuccess(Authentication authentication) {
 		String systemRoleForCurrentUser = authentication.getAuthorities().iterator().next().toString();
-		String redirectURL = "/coursepage";
-		if (systemRoleForCurrentUser.equals("ADMIN")) {
+		String redirectURL = "/userhome";
+		if (systemRoleForCurrentUser.equals(Role.ADMIN.toString())) {
 			redirectURL = "/adminhome";
 		}
 		return new RedirectView(redirectURL);
@@ -67,7 +68,8 @@ public class LoginController {
 			model.addAttribute("BANNER_ID_NOT_EXIST", Boolean.TRUE);
 			return "forgot-password.html";
 		} else {
-			String genPassword = ProfileManagementConfig.getSingletonInstance().getRandomStringGenerator().generateRandomString();
+			String genPassword = ProfileManagementConfig.getSingletonInstance().getRandomStringGenerator()
+					.generateRandomString();
 			session.setAttribute("RESET_PASSWORD", genPassword);
 			model.addAttribute("resetForm", new ResetPassword(bannerId));
 			model.addAttribute("sentEmail", userObj.getEmail());
@@ -145,7 +147,8 @@ public class LoginController {
 		IPasswordPolicyDB passwordPolicyDB = ProfileManagementConfig.getSingletonInstance().getPasswordPolicyDB();
 		ProfileManagementConfig.getSingletonInstance()
 				.setBasePasswordPolicyManager(new BasePasswordPolicyManager(passwordPolicyDB));
-		ProfileManagementConfig.getSingletonInstance().setPasswordPolicyManager(new PasswordPolicyManager(passwordPolicyDB));
+		ProfileManagementConfig.getSingletonInstance()
+				.setPasswordPolicyManager(new PasswordPolicyManager(passwordPolicyDB));
 		return "policyReset";
 	}
 }
