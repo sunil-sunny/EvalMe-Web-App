@@ -52,11 +52,11 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				while (resultSetAllCourseRoles.next()) {
 					String role = resultSetAllCourseRoles.getString("rolename");
 					String bannerId = resultSetAllCourseRoles.getString("bannerid");
-					if (role.equalsIgnoreCase(Role.instructor)) {
+					if (role.equalsIgnoreCase(Role.INSTRUCTOR.toString())) {
 						course.setInstructorName(userDao.getUserById(bannerId));
-					} else if (role.equalsIgnoreCase(Role.student)) {
+					} else if (role.equalsIgnoreCase(Role.STUDENT.toString())) {
 						students.add(userDao.getUserById(bannerId));
-					} else if (role.equalsIgnoreCase(Role.ta)) {
+					} else if (role.equalsIgnoreCase(Role.TA.toString())) {
 						taList.add(userDao.getUserById(bannerId));
 					}
 				}
@@ -282,7 +282,8 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		User instructor = null;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
-			preparedStatement = connection.prepareStatement(CourseDataBaseQueriesUtil.GET_INSTRUCTOR_FOR_COURSE.toString());
+			preparedStatement = connection
+					.prepareStatement(CourseDataBaseQueriesUtil.GET_INSTRUCTOR_FOR_COURSE.toString());
 			preparedStatement.setInt(1, courseId);
 			resultSet = preparedStatement.executeQuery();
 			String bannerId = null;
@@ -366,11 +367,11 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				while (resultSetCourseRoles.next()) {
 					String role = resultSetCourseRoles.getString("rolename");
 					String bannerId = resultSetCourseRoles.getString("bannerid");
-					if (role.equalsIgnoreCase(Role.instructor)) {
+					if (role.equalsIgnoreCase(Role.INSTRUCTOR.toString())) {
 						course.setInstructorName(userDao.getUserById(bannerId));
-					} else if (role.equalsIgnoreCase(Role.student)) {
+					} else if (role.equalsIgnoreCase(Role.STUDENT.toString())) {
 						students.add(userDao.getUserById(bannerId));
-					} else if (role.equalsIgnoreCase(Role.ta)) {
+					} else if (role.equalsIgnoreCase(Role.TA.toString())) {
 						taList.add(userDao.getUserById(bannerId));
 					}
 				}
