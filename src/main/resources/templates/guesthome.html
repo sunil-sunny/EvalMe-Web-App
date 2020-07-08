@@ -7,7 +7,7 @@
 <link th:href="@{/public/bootstrap.min.css}" rel="stylesheet">
 <style>
 h1 {
-    text-align: center;
+	text-align: center;
 }
 </style>
 </head>
@@ -15,24 +15,27 @@ h1 {
 
 	<div th:replace="fragments/courseheader :: header"></div>
 	<br>
-	<h1>Courses offered</h1>
-	<br>
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th scope="col">Course Id</th>
-				<th scope="col">Title</th>
-				<th scope="col">Name of Instructor</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="prod: ${coursesList}">
-				<td th:text="${prod.CourseId}" />
-				<td th:text="${prod.CourseName}" />
-				<td th:text="${prod.instructorName.firstName+ ' ' +prod.instructorName.lastName}" />
-			</tr>
-		</tbody>
-	</table>
+	<div class="container">
+		<h1>Courses offered</h1>
+		<br>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">Course Id</th>
+					<th scope="col">Title</th>
+					<th scope="col">Name of Instructor</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="prod: ${coursesList}">
+					<td th:text="${prod.CourseId}" />
+					<td th:text="${prod.CourseName}" />
+					<td
+						th:text="${prod.instructorName.firstName+ ' ' +prod.instructorName.lastName}" />
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
 </body>
 </html>
