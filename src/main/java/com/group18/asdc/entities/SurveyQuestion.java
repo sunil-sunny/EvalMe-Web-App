@@ -1,11 +1,12 @@
 package com.group18.asdc.entities;
 
-public class SurveyQuestion{
+public class SurveyQuestion {
 
 	private int surveyQuestionId;
 	private String logicDetail;
 	private int logicConstraint;
 	private QuestionMetaData questionData;
+	private int priority;
 
 	public String getLogicDetail() {
 		return logicDetail;
@@ -37,6 +38,14 @@ public class SurveyQuestion{
 
 	public void setQuestionData(QuestionMetaData questionData) {
 		this.questionData = questionData;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 
 }

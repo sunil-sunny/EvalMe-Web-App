@@ -117,7 +117,7 @@ public class SurveyController {
 		try {
 			isSaved = surveyService.saveSurvey(surveyData);
 			if (isSaved) {
-				theModel.addAttribute("success", "Survey Saved Success");
+				theModel.addAttribute("success", "Survey Saved");
 				SurveyMetaData savedSurvey = surveyService.getSavedSurvey(surveyData.getTheCourse());
 				theModel.addAttribute("survey", savedSurvey);
 				theModel.addAttribute("existingQuestions", theViewQuestionsService.getAllQuestions());
