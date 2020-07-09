@@ -1,5 +1,6 @@
 package com.group18.asdc.dao;
 
+import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
-
 import com.group18.asdc.QuestionManagerConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
@@ -59,6 +59,7 @@ public class SurveyDaoImpl implements SurveyDao {
 					theSurveyQuestion.setLogicConstraint(theResultSet.getInt("logicvalue"));
 					theSurveyQuestion.setLogicDetail(theResultSet.getString("logicname"));
 					theSurveyQuestion.setSurveyQuestionId(theResultSet.getInt("surveyquestionid"));
+					theSurveyQuestion.setPriority(theResultSet.getInt("priority"));
 					theSurveyQuestion.setQuestionData(theQuestionMetaData);
 					allSavedQuestions.add(theSurveyQuestion);
 				}
@@ -112,6 +113,7 @@ public class SurveyDaoImpl implements SurveyDao {
 			} catch (SQLException e) {
 				throw new SavingSurveyException("Failure while deleting survey Questions");
 			} finally {
+
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
@@ -152,12 +154,19 @@ public class SurveyDaoImpl implements SurveyDao {
 						thePreparedStatement.setInt(4, Integer.parseInt(LogicDetail.Group_Similar.toString()));
 						thePreparedStatement.setInt(5, 0);
 					}
+					thePreparedStatement.setInt(6, surveyQuestion.getPriority());
 					thePreparedStatement.addBatch();
 				}
 
-				int surveyQuestionSaveStatus[] = thePreparedStatement.executeBatch();
-				if (surveyQuestionSaveStatus.length > 0) {
-					isSurveySaved = Boolean.TRUE;
+				if (surveyData.getSurveyQuestions().size() > 0) {
+					try {
+						int surveyQuestionSaveStatus[] = thePreparedStatement.executeBatch();
+						if (surveyQuestionSaveStatus.length > 0) {
+							isSurveySaved = Boolean.TRUE;
+						}
+					} catch (BatchUpdateException e) {
+						throw new SavingSurveyException("survey is already saved");
+					}
 				}
 			}
 			if (isSurveySaved) {
@@ -167,7 +176,7 @@ public class SurveyDaoImpl implements SurveyDao {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.severe("SQL Exception while saving the Survey");
 		} finally {
 			try {
 				if (null != theResultSet) {
