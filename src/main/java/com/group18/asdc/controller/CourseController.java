@@ -82,6 +82,11 @@ public class CourseController {
 		return "studentcoursehome";
 	}
 
+	@RequestMapping(value = "/coursepage", method = RequestMethod.POST)
+	public String submitSurveyAnswers(Model model) {
+		return "surveyanswersubmitresult";
+	}
+	
 	@RequestMapping(value = "/coursepageInstrcutor", method = RequestMethod.GET)
 	public String getCoursePageForInstrcutorOrTA(Model theModel, HttpServletRequest request) {
 		String courseId = request.getParameter("id");
