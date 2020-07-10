@@ -83,12 +83,12 @@ public class User implements UserInterface {
 		this.password = password;
 	}
 
-	public static void isPasswordValid(String password, IBasePasswordPolicyManager passwordPolicyManager)
+	public static void validatePassword(String password, IBasePasswordPolicyManager passwordPolicyManager)
 			throws PasswordPolicyException {
 		passwordPolicyManager.validatePassword(password);
 	}
 
-	public void isPasswordValid(IPasswordPolicyManager passwordPolicyManager) throws PasswordPolicyException {
+	public void validatePassword(IPasswordPolicyManager passwordPolicyManager) throws PasswordPolicyException {
 		passwordPolicyManager.validatePassword(bannerId, password);
 	}
 }
