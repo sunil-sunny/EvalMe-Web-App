@@ -5,6 +5,7 @@
 <meta charset="ISO-8859-1">
 <title>EvalMe</title>
 <link th:href="@{/public/bootstrap.min.css}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 .center {
 	text-align: center;
@@ -40,7 +41,6 @@
 
 		var selected = document.getElementById("question type").value;
 		console.log(selected)
-		/* document.getElementById("myBtn").disabled = true; */
 	}
 </script>
 </head>
@@ -51,7 +51,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-6">
-				<h1>Survey Details</h1>
+				<h1 th:text="'Survey Details for '+${survey.theCourse.CourseName}+' ('+${survey.theCourse.courseId}+')'"></h1>
 			</div>
 
 			<div class="col-4" th:if="${survey.publishedStatus}"
@@ -254,10 +254,12 @@
 										</p></td>
 									</div>
 									
-									<td><a
-										th:href="@{'/survey/removeQuestion/'+${prod.questionData.questionId}}"
+									<td>
+									
+									<a th:href="@{'/survey/removeQuestion/'+${prod.questionData.questionId}}"
 										th:if="${!survey.publishedStatus}" class="btn btn-danger"
-										onclick="return alert()">Remove Question</a></td>
+										onclick="return alert()" style=" color: white;">Remove <i class="fa fa-trash"></i></a>
+									</td>
 								</tr>
 							</tbody>
 						</table>

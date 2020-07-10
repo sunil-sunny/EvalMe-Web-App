@@ -28,8 +28,7 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item active"><a class="nav-link"
-						th:href="@{/userhome}">Course List <span class="sr-only">(current)</span></a>
-					</li>
+						th:href="@{/userhome}">Course List <span class="sr-only">(current)</span></a></li>
 
 					<li class="nav-item"><a class="nav-link"
 						sec:authorize="hasAuthority('STUDENT')"
@@ -40,13 +39,24 @@
 						th:href="@{/instructedcourses}">Courses as Instructor</a></li>
 
 					<li class="nav-item"><a class="nav-link"
-						sec:authorize="hasAuthority('TA')" th:href="@{/tacourses}">Courses
-							as TA</a></li>
+						sec:authorize="hasAuthority('TA')" th:href="@{/tacourses}"
+						style="color: white;">Courses as TA</a></li>
 
-					<li class="nav-item" id="logout"><a class="nav-link pull-right"
-						th:href="@{/logout}">Logout</a></li>
-
+					<li class="nav-item" id="logout"><a
+						class="nav-link pull-right" th:href="@{/logout}">Logout</a></li>
 				</ul>
+
+
+
+				<form class="form-inline my-2 my-lg-0">
+				<a
+						class="nav-link pull-right" th:href="@{/logout}">Logout</a>
+					<div style="padding-right:10px;"><span style="color: white;">User Id: <span
+						sec:authentication="name"></span> </div><div style="color: white;">
+						Roles:  <span
+						sec:authentication="authorities"></span></span>
+						</div>
+				</form>
 			</div>
 		</nav>
 
