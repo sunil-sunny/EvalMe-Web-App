@@ -255,9 +255,12 @@ public class SurveyDaoImpl implements SurveyDao {
 				}
 			}
 		} catch (SQLException e) {
-			log.severe("SQL Exception which Creating Survey");
+			log.severe("SQL Exception while Creating Survey");
 		} finally {
 			try {
+				if (null != theResultSet) {
+					theResultSet.close();
+				}
 				if (null != connection) {
 					connection.close();
 				}
@@ -269,19 +272,52 @@ public class SurveyDaoImpl implements SurveyDao {
 				log.severe("SQL Exception while closing the connection and statement after Creating Survey");
 			}
 		}
-
 		return surveyId;
 	}
 
 	@Override
 	public boolean isSurveyPublished(Course course) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		Connection connection = null;
+		PreparedStatement thePreparedStatement = null;
+		ResultSet theResultSet = null;
+		int columnIndex = 1;
+		int surveyPublished = 1;
+		boolean isSurveyPublished = Boolean.FALSE;
+		
+		try {
+			connection = ConnectionManager.getInstance().getDBConnection();
+			thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.IS_SURVEY_PUBLISHED.toString());
+			theResultSet = thePreparedStatement.executeQuery();
+			if(theResultSet.next()) {
+				if(theResultSet.getInt(columnIndex)==surveyPublished) {
+					isSurveyPublished = Boolean.TRUE;
+				}
+			}
+		}catch (SQLException e) {
+			log.severe("SQL Exception while checking status of Survey.");
+		} finally {
+			try {
+				if (null != theResultSet) {
+					theResultSet.close();
+				}
+				if (null != connection) {
+					connection.close();
+				}
+				if (null != thePreparedStatement) {
+					thePreparedStatement.close();
+				}
+				log.info("Closing connection after checking status of Survey");
+			} catch (SQLException e) {
+				log.severe("SQL Exception while closing the connection and statement after checking status of Survey");
+			}
+		}
+		return isSurveyPublished;
 	}
 
 	@Override
 	public boolean publishSurvey(SurveyMetaData surveyMetaData) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 }

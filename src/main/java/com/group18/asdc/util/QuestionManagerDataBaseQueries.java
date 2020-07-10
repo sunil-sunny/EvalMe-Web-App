@@ -21,7 +21,7 @@ public enum QuestionManagerDataBaseQueries {
 	DELETE_QUESTION("delete from questions where questionid=?;");
 
 	private final String sqlQuery;
-
+	
 	private QuestionManagerDataBaseQueries(String sqlQuery) {
 		this.sqlQuery = sqlQuery;
 	}
@@ -30,5 +30,4 @@ public enum QuestionManagerDataBaseQueries {
 	public String toString() {
 		return sqlQuery;
 	}
-
 }
