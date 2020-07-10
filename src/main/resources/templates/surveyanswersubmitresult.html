@@ -12,19 +12,11 @@ h1 {
 </style>
 </head>
 <body>
-
-	<div th:replace="fragments/courseheader :: header"></div>
-
-	<br>
-
-	<div class="container">
-		<h1 th:text="${coursename}"></h1>
-		<br>
-	</div>
-	
 	<div>
-		<!-- Display Survey Questions -->
+		<h1>Survey Submitted! </h1>
+		<form th:action="@{/coursepage}" method="get">
+			<button class="primary" th:href="@{coursepage}">Course Home</button>
+		</form>
 	</div>
-
 </body>
 </html>

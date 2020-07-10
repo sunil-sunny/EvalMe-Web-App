@@ -3,17 +3,10 @@ package com.group18.asdc.entities;
 public class SurveyQuestion {
 
 	private int surveyQuestionId;
-	private QuestionMetaData questionData;
 	private String logicDetail;
 	private int logicConstraint;
-
-	public QuestionMetaData getQuestionData() {
-		return questionData;
-	}
-
-	public void setQuestionData(QuestionMetaData questionData) {
-		this.questionData = questionData;
-	}
+	private QuestionMetaData questionData;
+	private int priority;
 
 	public String getLogicDetail() {
 		return logicDetail;
@@ -39,9 +32,20 @@ public class SurveyQuestion {
 		this.surveyQuestionId = surveyQuestionId;
 	}
 
-	@Override
-	public String toString() {
-		return "SurveyQuestion [surveyQuestionId=" + surveyQuestionId + ", questionData=" + questionData
-				+ ", logicDetail=" + logicDetail + ", logicConstraint=" + logicConstraint + "]";
+	public QuestionMetaData getQuestionData() {
+		return questionData;
 	}
+
+	public void setQuestionData(QuestionMetaData questionData) {
+		this.questionData = questionData;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.group18.asdc.SystemConfig;
+import com.group18.asdc.QuestionManagerConfig;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
 import com.group18.asdc.entities.Option;
@@ -47,12 +47,12 @@ public class CreateQuestionController {
 	public String getQuestionConfirmPage(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model) {
 		log.info("confirming questions based on type");
 		model.addAttribute("BasicQuestion", basicQuestionData);
-		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.numericType)
-				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.freeText)) {
+		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.NUMERIC_TYPE.toString())
+				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.FREE_TEXT.toString())) {
 			return "NumericOrTextQuestion";
 		}
-		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.multipleChooseMore)
-				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.multipleChooseOne)) {
+		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.MULTIPLE_CHOOSE_ONE.toString())
+				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.MULTIPLE_CHOOSE_MORE.toString())) {
 			return "MultipleChoiceQuestion";
 		}
 		return "error";
@@ -62,7 +62,7 @@ public class CreateQuestionController {
 	public String createNumericOrQuestion(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model,
 			RedirectAttributes theRedirectAttributes) {
 		log.info("creating Numeric question");
-		CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
+		CreateQuestionService theCreateQuestionService = QuestionManagerConfig.getSingletonInstance()
 				.getTheCreateQuestionService();
 		boolean isQuestionCreated = theCreateQuestionService.createNumericOrTextQuestion(basicQuestionData);
 		if (isQuestionCreated) {
@@ -77,7 +77,7 @@ public class CreateQuestionController {
 	@RequestMapping(value = "/createMultipleChoiceQuestion", method = RequestMethod.POST)
 	public String createMultipleChoiceQuestion(@ModelAttribute("question") BasicQuestionData theBasicQuestionData,
 			HttpServletRequest request, Model model, RedirectAttributes theRedirectAttributes) {
-		CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
+		CreateQuestionService theCreateQuestionService = QuestionManagerConfig.getSingletonInstance()
 				.getTheCreateQuestionService();
 		MultipleChoiceQuestion theMultipleChoiceQuestion = new MultipleChoiceQuestion();
 		theMultipleChoiceQuestion.setQuestionTitle(theBasicQuestionData.getQuestionTitle());

@@ -3,7 +3,7 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="ISO-8859-1">
-<title>Home Page</title>
+<title>EvalMe</title>
 <link th:href="@{/public/bootstrap.min.css}" rel="stylesheet">
 <style>
 h1 {
@@ -14,17 +14,16 @@ h1 {
 <body>
 
 	<div th:replace="fragments/courseheader :: header"></div>
-
 	<br>
-
 	<div class="container">
-		<h1 th:text="${coursename}"></h1>
-		<br>
+		<div class="row">
+			<h1 th:text="${message}"></h1>
+		</div>
+		<hr>
+		<div class="row">
+			<a th:href="@{/survey/getSurveyPage}" class="btn btn-primary">Get
+				Back to Survey Page</a>
+		</div>
 	</div>
-	
-	<div>
-		<!-- Display Survey Questions -->
-	</div>
-
 </body>
 </html>

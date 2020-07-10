@@ -1,6 +1,7 @@
 package com.group18.asdc;
 
 import com.group18.asdc.dao.CreateQuestionDao;
+import com.group18.asdc.dao.CreateQuestionDaoImpl;
 import com.group18.asdc.dao.DeleteQuestionDao;
 import com.group18.asdc.dao.DeleteQuestionDaoImpl;
 import com.group18.asdc.dao.ViewQuestionsDao;
@@ -28,7 +29,7 @@ public class QuestionManagerConfig {
 		this.theDeleteQuestionService = new DeleteQuestionServiceImpl();
 		this.theViewQuestionsDao = new ViewQuestionsDaoImpl();
 		this.theDeleteQuestionDao = new DeleteQuestionDaoImpl();
-
+		this.theCreateQuestionDao = new CreateQuestionDaoImpl();
 	}
 
 	public static QuestionManagerConfig getSingletonInstance() {
