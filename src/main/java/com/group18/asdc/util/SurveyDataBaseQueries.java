@@ -11,7 +11,8 @@ public enum SurveyDataBaseQueries {
 	SAVE_SURVEY_QUESTION(
 			"insert into survey_questions (surveyid,questionid,datequestionadded,logicid,logicvalue,priority) values (?,?,?,?,?,?);"),
 
-	UPDATE_GROUP_SIZE("update survey set groupsize=? where surveyid=?;");
+	UPDATE_GROUP_SIZE("update survey set groupsize=? where surveyid=?;"),
+	IS_SURVEY_PUBLISHED("select state from survey where courseid=?;");
 	private final String sqlQuery;
 
 	private SurveyDataBaseQueries(String sqlQuery) {
