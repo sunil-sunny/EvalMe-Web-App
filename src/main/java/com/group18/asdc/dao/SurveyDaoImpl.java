@@ -107,9 +107,10 @@ public class SurveyDaoImpl implements SurveyDao {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.UPDARE_GROUP_SIZE.toString());
+				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.UPDATE_GROUP_SIZE.toString());
 				thePreparedStatement.setInt(1, surveyData.getGroupSize());
 				thePreparedStatement.setInt(2, surveyData.getSurveyId());
+				thePreparedStatement.execute();
 			} catch (SQLException e) {
 				throw new SavingSurveyException("Failure while deleting survey Questions");
 			} finally {
@@ -120,10 +121,9 @@ public class SurveyDaoImpl implements SurveyDao {
 			}
 
 			try {
-				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.UPDARE_GROUP_SIZE.toString());
+				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.UPDATE_GROUP_SIZE.toString());
 				thePreparedStatement.setInt(1, surveyData.getGroupSize());
 				thePreparedStatement.setInt(2, surveyData.getSurveyId());
-				thePreparedStatement.execute();
 			} catch (SQLException e) {
 				throw new SavingSurveyException("Failure while updating group size for survey");
 			} finally {
