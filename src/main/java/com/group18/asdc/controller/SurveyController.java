@@ -37,8 +37,15 @@ public class SurveyController {
 		} else {
 			SurveyService theSurveyService = SurveyConfig.getSingletonInstance().getTheSurveyService();
 			SurveyMetaData surveyMetaData = theSurveyService.getSavedSurvey(theCourse);
-			theModel.addAttribute("survey", surveyMetaData);
-			theModel.addAttribute("existingQuestions", theViewQuestionsService.getAllQuestions());
+			if(surveyMetaData.getSurveyQuestions().size() == 0) {
+				theModel.addAttribute("survey", surveyMetaData);
+				theModel.addAttribute("existingQuestions", theViewQuestionsService.getAllQuestions());
+				theModel.addAttribute("message", "Survey is not yet created !! create survey");
+			}
+			else {
+				theModel.addAttribute("survey", surveyMetaData);
+				theModel.addAttribute("existingQuestions", theViewQuestionsService.getAllQuestions());
+			}		
 			return "createSurvey";
 		}
 	}

@@ -36,14 +36,9 @@ public class RegisterServiceImpl implements RegisterService {
 			}
 			if (userDetails.getEmailid().matches(ConstantStringUtil.EMAIL_PATTERN_CHECK.toString())) {
 
-				try {
-					User.isPasswordValid(userDetails.getPassword(),
-							ProfileManagementConfig.getSingletonInstance().getBasePasswordPolicyManager());
-				} catch (PasswordPolicyException e) {
-					isError = true;
-					resultObj.put("STATUS", RegistrationStatus.PASSWORD_POLICY_ERROR);
-					resultObj.put("MESSAGE", e.getMessage());
-				}
+				User.validatePassword(userDetails.getPassword(),
+						ProfileManagementConfig.getSingletonInstance().getBasePasswordPolicyManager());
+
 				if (isError) {
 					return resultObj;
 				}
@@ -69,6 +64,13 @@ public class RegisterServiceImpl implements RegisterService {
 				resultObj.put("STATUS", RegistrationStatus.INVALID_EMAIL_PATTERN);
 			}
 
+		} catch (PasswordPolicyException e) {
+			try {
+				resultObj.put("STATUS", RegistrationStatus.PASSWORD_POLICY_ERROR);
+				resultObj.put("MESSAGE", e.getMessage());
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
 		} catch (JSONException e) {
 			log.severe("user registration error");
 		}
