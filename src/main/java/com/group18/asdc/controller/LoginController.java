@@ -91,7 +91,7 @@ public class LoginController {
 			if (resetForm.getnewPassword().equals(resetForm.getconfirmNewPassword())) {
 				try {
 					userObj.setPassword(resetForm.getconfirmNewPassword());
-					userObj.isPasswordValid(ProfileManagementConfig.getSingletonInstance().getPasswordPolicyManager());
+					userObj.validatePassword(ProfileManagementConfig.getSingletonInstance().getPasswordPolicyManager());
 					if (userService.updatePassword(userObj,
 							ProfileManagementConfig.getSingletonInstance().getPasswordEncryption())) {
 
