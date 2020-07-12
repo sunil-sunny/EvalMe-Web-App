@@ -22,5 +22,6 @@ public interface SurveyService {
 	public SurveyMetaData getCurrentSurvey();
 	
 	public boolean isSurveyPublishedForCourse(Course theCourse);
+	
 
 }

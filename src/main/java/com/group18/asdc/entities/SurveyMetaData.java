@@ -9,6 +9,7 @@ public class SurveyMetaData {
 	private boolean publishedStatus;
 	private int groupSize;
 	private Course theCourse;
+	
 	public int getSurveyId() {
 		return surveyId;
 	}
