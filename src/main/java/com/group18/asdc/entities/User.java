@@ -14,20 +14,18 @@ public class User implements UserInterface {
 	private String password;
 
 	public User() {
-		super();
+		bannerId = null;
+		firstName = null;
+		lastName = null;
+		email = null;
+		password = null;
 	}
 
 	public User(String firstName, String lastName, String bannerId, String email) {
-		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.bannerId = bannerId;
 		this.email = email;
-	}
-
-	public User(String bannerId, UserService userService) {
-		super();
-		userService.loadUserWithBannerId(bannerId, this);
 	}
 
 	public Boolean isValidUser() {

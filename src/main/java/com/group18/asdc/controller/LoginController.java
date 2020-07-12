@@ -1,6 +1,9 @@
 package com.group18.asdc.controller;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,12 +41,6 @@ public class LoginController {
 		return "login.html";
 	}
 
-	@RequestMapping("/login-error")
-	public String loginError(Model model) {
-		model.addAttribute("loginError", Boolean.TRUE);
-		return "login.html";
-	}
-
 	@RequestMapping("/login-success")
 	public RedirectView loginSuccess(Authentication authentication) {
 		String systemRoleForCurrentUser = authentication.getAuthorities().iterator().next().toString();
@@ -63,7 +60,8 @@ public class LoginController {
 	public String sendResetRequest(@RequestParam(name = "username", required = true) String bannerId, Model model,
 			HttpSession session) {
 		UserService userService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
-		User userObj = new User(bannerId, userService);
+		User userObj = new User();
+		userService.loadUserWithBannerId(bannerId, userObj);
 		if (userObj.getEmail() == null || userObj.getEmail().isEmpty()) {
 			model.addAttribute("BANNER_ID_NOT_EXIST", Boolean.TRUE);
 			return "forgot-password.html";
@@ -86,7 +84,8 @@ public class LoginController {
 		String redirectURL = "login-success";
 		Boolean isError = false;
 		userService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
-		User userObj = new User(resetForm.getbannerId(), userService);
+		User userObj = new User();
+		userService.loadUserWithBannerId(resetForm.getbannerId(), userObj);
 		if (resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD"))) {
 			if (resetForm.getnewPassword().equals(resetForm.getconfirmNewPassword())) {
 				try {
