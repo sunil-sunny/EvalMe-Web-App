@@ -2,9 +2,11 @@ package com.group18.asdc.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.group18.asdc.SurveyConfig;
 import com.group18.asdc.dao.SurveyDao;
+import com.group18.asdc.dao.SurveyDaoImpl;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;
@@ -15,6 +17,8 @@ import com.group18.asdc.errorhandling.SurveyAlreadyPublishedException;
 
 public class SurveyServiceImpl implements SurveyService {
 
+	private final Logger log = Logger.getLogger(SurveyServiceImpl.class.getName());
+	
 	private static SurveyMetaData surveyMetaData = new SurveyMetaData();
 
 	@Override
@@ -82,8 +86,8 @@ public class SurveyServiceImpl implements SurveyService {
 
 	@Override
 	public boolean isSurveyPublishedForCourse(Course theCourse) {
-		// TODO Auto-generated method stub
-		return false;
+		SurveyDao theSurveyDao = SurveyConfig.getSingletonInstance().getTheSurveyDao();
+		return theSurveyDao.isSurveyPublished(theCourse);
 	}
 
 	@Override

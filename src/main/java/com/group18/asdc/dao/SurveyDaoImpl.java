@@ -107,9 +107,10 @@ public class SurveyDaoImpl implements SurveyDao {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.UPDARE_GROUP_SIZE.toString());
+				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.UPDATE_GROUP_SIZE.toString());
 				thePreparedStatement.setInt(1, surveyData.getGroupSize());
 				thePreparedStatement.setInt(2, surveyData.getSurveyId());
+				thePreparedStatement.execute();
 			} catch (SQLException e) {
 				throw new SavingSurveyException("Failure while deleting survey Questions");
 			} finally {
@@ -120,10 +121,9 @@ public class SurveyDaoImpl implements SurveyDao {
 			}
 
 			try {
-				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.UPDARE_GROUP_SIZE.toString());
+				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.UPDATE_GROUP_SIZE.toString());
 				thePreparedStatement.setInt(1, surveyData.getGroupSize());
 				thePreparedStatement.setInt(2, surveyData.getSurveyId());
-				thePreparedStatement.execute();
 			} catch (SQLException e) {
 				throw new SavingSurveyException("Failure while updating group size for survey");
 			} finally {
@@ -281,18 +281,20 @@ public class SurveyDaoImpl implements SurveyDao {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
-		int columnIndex = 1;
 		int surveyPublished = 1;
+		int columnIndex = 0;
 		boolean isSurveyPublished = Boolean.FALSE;
 		
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.IS_SURVEY_PUBLISHED.toString());
+			thePreparedStatement.setInt(1, course.getCourseId());
 			theResultSet = thePreparedStatement.executeQuery();
 			if(theResultSet.next()) {
-				if(theResultSet.getInt(columnIndex)==surveyPublished) {
-					isSurveyPublished = Boolean.TRUE;
-				}
+				columnIndex = Integer.parseInt(theResultSet.getString(1));
+			}
+			if(columnIndex==surveyPublished) {
+				isSurveyPublished = Boolean.TRUE;
 			}
 		}catch (SQLException e) {
 			log.severe("SQL Exception while checking status of Survey.");
@@ -319,5 +321,11 @@ public class SurveyDaoImpl implements SurveyDao {
 	public boolean publishSurvey(SurveyMetaData surveyMetaData) {
 		
 		return false;
+	}
+
+	@Override
+	public List<SurveyQuestion> getQuestionList(Course course) {
+		
+		return null;
 	}
 }
