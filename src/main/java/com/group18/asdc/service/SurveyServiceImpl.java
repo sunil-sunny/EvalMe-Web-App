@@ -33,7 +33,7 @@ public class SurveyServiceImpl implements SurveyService {
 	@Override
 	public boolean removeQuestionFromSurvey(QuestionMetaData theQuestionMetaData) {
 
-		boolean isDeleted = false;
+		boolean isDeleted = Boolean.FALSE;
 		SurveyQuestion exitingQuestion = null;
 		for (SurveyQuestion theSurveyQuestion : surveyMetaData.getSurveyQuestions()) {
 			if (theSurveyQuestion.getQuestionData().getQuestionId() == theQuestionMetaData.getQuestionId()) {
@@ -106,7 +106,13 @@ public class SurveyServiceImpl implements SurveyService {
 
 	@Override
 	public boolean publishSurvey() throws SurveyAlreadyPublishedException {
-
-		return false;
+		SurveyDao theSurveyDao = SurveyConfig.getSingletonInstance().getTheSurveyDao();
+		if (theSurveyDao.isSurveyPublished(surveyMetaData.getTheCourse())) {
+			throw new SurveyAlreadyPublishedException("Survey Already Published");
+		} else {
+			boolean isPublished = theSurveyDao.publishSurvey(surveyMetaData);
+			surveyMetaData.setPublishedStatus(isPublished);
+			return isPublished;
+		}
 	}
 }

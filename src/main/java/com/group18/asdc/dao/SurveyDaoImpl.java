@@ -19,6 +19,7 @@ import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
 import com.group18.asdc.errorhandling.SavingSurveyException;
+import com.group18.asdc.errorhandling.SurveyAlreadyPublishedException;
 import com.group18.asdc.service.ViewQuestionsService;
 import com.group18.asdc.util.ConstantStringUtil;
 import com.group18.asdc.util.SurveyDataBaseQueries;
@@ -247,7 +248,6 @@ public class SurveyDaoImpl implements SurveyDao {
 			thePreparedStatement.setInt(1, course.getCourseId());
 			thePreparedStatement.setBoolean(2, Boolean.FALSE);
 			int result = thePreparedStatement.executeUpdate();
-			System.out.println("created result" + result);
 			if (result > 0) {
 				theResultSet = thePreparedStatement.getGeneratedKeys();
 				while (theResultSet.next()) {
@@ -277,24 +277,23 @@ public class SurveyDaoImpl implements SurveyDao {
 
 	@Override
 	public boolean isSurveyPublished(Course course) {
-		
+
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
 		int columnIndex = 1;
 		int surveyPublished = 1;
 		boolean isSurveyPublished = Boolean.FALSE;
-		
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.IS_SURVEY_PUBLISHED.toString());
 			theResultSet = thePreparedStatement.executeQuery();
-			if(theResultSet.next()) {
-				if(theResultSet.getInt(columnIndex)==surveyPublished) {
+			if (theResultSet.next()) {
+				if (theResultSet.getInt(columnIndex) == surveyPublished) {
 					isSurveyPublished = Boolean.TRUE;
 				}
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.severe("SQL Exception while checking status of Survey.");
 		} finally {
 			try {
@@ -316,8 +315,42 @@ public class SurveyDaoImpl implements SurveyDao {
 	}
 
 	@Override
-	public boolean publishSurvey(SurveyMetaData surveyMetaData) {
-		
-		return false;
+	public boolean publishSurvey(SurveyMetaData surveyMetaData) throws SurveyAlreadyPublishedException {
+		Connection connection = null;
+		PreparedStatement thePreparedStatement = null;
+		ResultSet theResultSet = null;
+		boolean isSurveyPublished = Boolean.FALSE;
+		try {
+			connection = ConnectionManager.getInstance().getDBConnection();
+			thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.PUBLICH_SURVEY.toString(),
+					Statement.RETURN_GENERATED_KEYS);
+			thePreparedStatement.setBoolean(1, Boolean.TRUE);
+			thePreparedStatement.setInt(2, surveyMetaData.getSurveyId());
+			int result = thePreparedStatement.executeUpdate();
+			theResultSet = thePreparedStatement.getGeneratedKeys();
+			if (result > 0) {
+				isSurveyPublished = Boolean.TRUE;
+			} else {
+				isSurveyPublished = Boolean.FALSE;
+			}
+		} catch (SQLException e) {
+			throw new SurveyAlreadyPublishedException("Survey is not published ! Try again");
+		} finally {
+			try {
+				if (null != theResultSet) {
+					theResultSet.close();
+				}
+				if (null != connection) {
+					connection.close();
+				}
+				if (null != thePreparedStatement) {
+					thePreparedStatement.close();
+				}
+				log.info("Closing connection after checking status of Survey");
+			} catch (SQLException e) {
+				log.severe("SQL Exception while closing the connection and statement after checking status of Survey");
+			}
+		}
+		return isSurveyPublished;
 	}
 }
