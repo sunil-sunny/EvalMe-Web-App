@@ -280,7 +280,7 @@ public class SurveyDaoImpl implements SurveyDao {
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
 		int surveyPublished = 1;
-		int columnIndex = 0;
+		int columnIndex = 1;
 		boolean isSurveyPublished = Boolean.FALSE;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
