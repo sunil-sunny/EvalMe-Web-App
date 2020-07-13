@@ -1,10 +1,8 @@
 package com.group18.asdc.dao;
 
-import java.util.List;
-
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.SurveyMetaData;
-import com.group18.asdc.entities.SurveyQuestion;
+import com.group18.asdc.errorhandling.PublishSurveyException;
 import com.group18.asdc.errorhandling.SavingSurveyException;
 
 public interface SurveyDao {
@@ -19,7 +17,6 @@ public interface SurveyDao {
 
 	public boolean isSurveyPublished(Course course);
 
-	public boolean publishSurvey(SurveyMetaData surveyMetaData);
-	
-	public List<SurveyQuestion> getQuestionList(Course course);
+	public boolean publishSurvey(SurveyMetaData surveyMetaData) throws PublishSurveyException;
+
 }

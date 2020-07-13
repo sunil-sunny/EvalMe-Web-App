@@ -1,7 +1,6 @@
 package com.group18.asdc.dao.test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.group18.asdc.dao.SurveyDao;
 import com.group18.asdc.entities.Course;
@@ -39,7 +38,7 @@ public class SurveyDaoImplMock implements SurveyDao {
 
 	@Override
 	public boolean isSurveyPublished(Course course) {
-		SurveyMetaData survey=new SurveyMetaData();
+		SurveyMetaData survey = new SurveyMetaData();
 		survey.setPublishedStatus(Boolean.FALSE);
 		return survey.isPublishedStatus();
 	}
@@ -49,11 +48,4 @@ public class SurveyDaoImplMock implements SurveyDao {
 		surveyMetaData.setPublishedStatus(Boolean.TRUE);
 		return surveyMetaData.isPublishedStatus();
 	}
-
-	@Override
-	public List<SurveyQuestion> getQuestionList(Course course) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
