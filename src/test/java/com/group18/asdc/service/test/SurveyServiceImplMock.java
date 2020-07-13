@@ -11,7 +11,7 @@ import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
 import com.group18.asdc.errorhandling.QuestionExitsException;
 import com.group18.asdc.errorhandling.SavingSurveyException;
-import com.group18.asdc.errorhandling.SurveyAlreadyPublishedException;
+import com.group18.asdc.errorhandling.PublishSurveyException;
 import com.group18.asdc.service.SurveyService;
 
 public class SurveyServiceImplMock implements SurveyService {
@@ -38,7 +38,7 @@ public class SurveyServiceImplMock implements SurveyService {
 	}
 
 	@Override
-	public boolean publishSurvey() throws SurveyAlreadyPublishedException {
+	public boolean publishSurvey() throws PublishSurveyException {
 		SurveyDao theSurveyDao = new SurveyDaoImplMock();
 		return theSurveyDao.publishSurvey(new SurveyMetaData());
 	}

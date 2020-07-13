@@ -5,6 +5,10 @@
 <meta charset="ISO-8859-1">
 <title>EvalMe</title>
 <link th:href="@{/public/bootstrap.min.css}" rel="stylesheet">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style>
 #logout {
 	float: right;
@@ -44,18 +48,17 @@
 
 					<li class="nav-item" id="logout"><a
 						class="nav-link pull-right" th:href="@{/logout}">Logout</a></li>
+
 				</ul>
-
-
-
 				<form class="form-inline my-2 my-lg-0">
-				<a
-						class="nav-link pull-right" th:href="@{/logout}">Logout</a>
-					<div style="padding-right:10px;"><span style="color: white;">User Id: <span
-						sec:authentication="name"></span> </div><div style="color: white;">
-						Roles:  <span
-						sec:authentication="authorities"></span></span>
-						</div>
+					<a class="nav-link pull-right" th:href="@{/logout}">Logout</a>
+					<div style="padding-right: 10px;">
+						<span style="color: white;">User Id: <span
+							sec:authentication="name"></span></span>
+					</div>
+					<div style="color: white;">
+						Roles: <span sec:authentication="authorities"></span>
+					</div>
 				</form>
 			</div>
 		</nav>
