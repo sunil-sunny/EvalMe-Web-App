@@ -38,9 +38,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void loadUserWithBannerId(String bannerId, User userObj) {
+	public int loadUserWithBannerId(String bannerId, User userObj) {
 		ArrayList<Object> valuesList = queryVariableToArrayList.convertQueryVariablesToArrayList(bannerId);
-		userDao.loadUserWithBannerId(valuesList, userObj);
+		return userDao.loadUserWithBannerId(valuesList, userObj);
 	}
 
 	@Override

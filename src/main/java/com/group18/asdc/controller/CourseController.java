@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.group18.asdc.CourseConfig;
 import com.group18.asdc.ProfileManagementConfig;
+import com.group18.asdc.SurveyConfig;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.CourseDetailsService;
+import com.group18.asdc.service.SurveyService;
 import com.group18.asdc.service.UserService;
 
 @Controller
@@ -76,10 +78,21 @@ public class CourseController {
 	@RequestMapping(value = "/coursepage", method = RequestMethod.GET)
 	public String getCoursePage(Model theModel, HttpServletRequest request) {
 		String courseId = request.getParameter("id");
+		int courseID = Integer.parseInt(courseId);
 		String courseName = request.getParameter("name");
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
-		return "studentcoursehome";
+		
+		CourseDetailsService courseDetailsService = CourseConfig.getSingletonInstance().getTheCourseDetailsService();
+		SurveyService surveyService = SurveyConfig.getSingletonInstance().getTheSurveyService();
+		boolean isSurveyPublished = surveyService.isSurveyPublishedForCourse(courseDetailsService.getCourseById(courseID));
+		
+		if(isSurveyPublished) {
+			return "studentcoursehomesurveypublished";
+		}
+		else {
+			return "studentcoursehomesurveynotpublished";
+		}	
 	}
 
 	@RequestMapping(value = "/coursepage", method = RequestMethod.POST)

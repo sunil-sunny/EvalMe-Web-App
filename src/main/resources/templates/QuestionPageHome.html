@@ -71,7 +71,6 @@ h1 {
 			<tbody>
 				<form th:each="prod: ${allquestions}" th:action="@{/deleteQuestion}"
 					method="get">
-
 					<tr>
 						<td th:text="${prod.basicQuestionData.questionTitle}" />
 						<td th:text="${prod.basicQuestionData.questionText}" />

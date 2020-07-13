@@ -279,12 +279,13 @@ public class SurveyDaoImpl implements SurveyDao {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
-		int columnIndex = 1;
 		int surveyPublished = 1;
+		int columnIndex = 0;
 		boolean isSurveyPublished = Boolean.FALSE;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 			thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.IS_SURVEY_PUBLISHED.toString());
+			thePreparedStatement.setInt(1, course.getCourseId());
 			theResultSet = thePreparedStatement.executeQuery();
 			if (theResultSet.next()) {
 				if (theResultSet.getInt(columnIndex) == surveyPublished) {
