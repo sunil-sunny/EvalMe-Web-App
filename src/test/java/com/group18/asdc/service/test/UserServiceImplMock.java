@@ -30,11 +30,11 @@ public class UserServiceImplMock implements UserService {
 	}
 
 	@Override
-	public void loadUserWithBannerId(String bannerId, User userObj) {
+	public int loadUserWithBannerId(String bannerId, User userObj) {
 		UserDaoImplMock theDaoImplMock = new UserDaoImplMock();
 		ArrayList valueList = new ArrayList<>();
 		valueList.add(bannerId);
-		theDaoImplMock.loadUserWithBannerId(valueList, userObj);
+		return theDaoImplMock.loadUserWithBannerId(valueList, userObj);
 	}
 
 	@Override
