@@ -17,7 +17,7 @@ import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.errorhandling.QuestionExitsException;
 import com.group18.asdc.errorhandling.SavingSurveyException;
-import com.group18.asdc.errorhandling.SurveyAlreadyPublishedException;
+import com.group18.asdc.errorhandling.PublishSurveyException;
 import com.group18.asdc.service.CourseDetailsService;
 import com.group18.asdc.service.SurveyService;
 import com.group18.asdc.service.ViewQuestionsService;
@@ -120,19 +120,21 @@ public class SurveyController {
 		SurveyService surveyService = SurveyConfig.getSingletonInstance().getTheSurveyService();
 		ViewQuestionsService theViewQuestionsService = QuestionManagerConfig.getSingletonInstance()
 				.getTheViewQuestionsService();
+		CourseDetailsService theCourseDetailsService = CourseConfig.getSingletonInstance().getTheCourseDetailsService();
 		boolean isSaved;
 		try {
 			isSaved = surveyService.saveSurvey(surveyData);
 			if (isSaved) {
+				Course theCourse = theCourseDetailsService.getCourseById(surveyData.getTheCourse().getCourseId());
 				theModel.addAttribute("success", "Survey Saved");
-				SurveyMetaData savedSurvey = surveyService.getSavedSurvey(surveyData.getTheCourse());
+				SurveyMetaData savedSurvey = surveyService.getSavedSurvey(theCourse);
 				theModel.addAttribute("survey", savedSurvey);
 				theModel.addAttribute("existingQuestions", theViewQuestionsService.getAllQuestions());
 			}
 			return "createSurvey";
 		} catch (SavingSurveyException e) {
 			theModel.addAttribute("message", e.getMessage());
-			SurveyMetaData savedSurvey = surveyService.getSavedSurvey(surveyData.getTheCourse());
+			SurveyMetaData savedSurvey = surveyService.getCurrentSurvey();
 			theModel.addAttribute("survey", savedSurvey);
 			theModel.addAttribute("existingQuestions", theViewQuestionsService.getAllQuestions());
 			return "createSurvey";
@@ -157,9 +159,10 @@ public class SurveyController {
 				theModel.addAttribute("message", "Issue while publishing survey !! Try again");
 			}
 			return "createSurvey";
-		} catch (SurveyAlreadyPublishedException e) {
+		} catch (PublishSurveyException e) {
 			SurveyMetaData savedSurvey = surveyService.getCurrentSurvey();
 			theModel.addAttribute("survey", savedSurvey);
+			theModel.addAttribute("existingQuestions", theViewQuestionsService.getAllQuestions());
 			theModel.addAttribute("message", e.getMessage());
 			return "createSurvey";
 		}

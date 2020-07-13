@@ -19,7 +19,7 @@ import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
 import com.group18.asdc.errorhandling.SavingSurveyException;
-import com.group18.asdc.errorhandling.SurveyAlreadyPublishedException;
+import com.group18.asdc.errorhandling.PublishSurveyException;
 import com.group18.asdc.service.ViewQuestionsService;
 import com.group18.asdc.util.ConstantStringUtil;
 import com.group18.asdc.util.SurveyDataBaseQueries;
@@ -115,12 +115,10 @@ public class SurveyDaoImpl implements SurveyDao {
 			} catch (SQLException e) {
 				throw new SavingSurveyException("Failure while deleting survey Questions");
 			} finally {
-
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
 			}
-
 			try {
 				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.UPDATE_GROUP_SIZE.toString());
 				thePreparedStatement.setInt(1, surveyData.getGroupSize());
@@ -315,7 +313,7 @@ public class SurveyDaoImpl implements SurveyDao {
 	}
 
 	@Override
-	public boolean publishSurvey(SurveyMetaData surveyMetaData) throws SurveyAlreadyPublishedException {
+	public boolean publishSurvey(SurveyMetaData surveyMetaData) throws PublishSurveyException {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
@@ -334,7 +332,7 @@ public class SurveyDaoImpl implements SurveyDao {
 				isSurveyPublished = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			throw new SurveyAlreadyPublishedException("Survey is not published ! Try again");
+			throw new PublishSurveyException("Survey is not published ! Try again");
 		} finally {
 			try {
 				if (null != theResultSet) {

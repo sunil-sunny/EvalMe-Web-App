@@ -10,7 +10,7 @@ import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.errorhandling.QuestionExitsException;
 import com.group18.asdc.errorhandling.SavingSurveyException;
-import com.group18.asdc.errorhandling.SurveyAlreadyPublishedException;
+import com.group18.asdc.errorhandling.PublishSurveyException;
 import com.group18.asdc.service.SurveyService;
 
 @SpringBootTest
@@ -46,7 +46,7 @@ public class SurveyServiceImplTest {
 		boolean isPublished;
 		try {
 			isPublished = surveyService.publishSurvey();
-		} catch (SurveyAlreadyPublishedException e) {
+		} catch (PublishSurveyException e) {
 			isPublished = Boolean.FALSE;
 		}
 		assertTrue(isPublished);

@@ -10,7 +10,7 @@ import com.group18.asdc.dao.SurveyDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.errorhandling.SavingSurveyException;
-import com.group18.asdc.errorhandling.SurveyAlreadyPublishedException;
+import com.group18.asdc.errorhandling.PublishSurveyException;
 
 @SpringBootTest
 public class SurveyDaoImplTest {
@@ -49,7 +49,7 @@ public class SurveyDaoImplTest {
 		boolean isPublished;
 		try {
 			isPublished = theSurveyDao.publishSurvey(new SurveyMetaData());
-		} catch (SurveyAlreadyPublishedException e) {
+		} catch (PublishSurveyException e) {
 			isPublished = Boolean.FALSE;
 		}
 		assertTrue(isPublished);
