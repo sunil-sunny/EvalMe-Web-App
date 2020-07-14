@@ -1,7 +1,6 @@
 package com.group18.asdc.controller;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +48,7 @@ public class SurveyController {
 			return "createSurvey";
 		}
 	}
-
+	
 	@GetMapping("/removeQuestion/{questionid}")
 	public String removeQuestionFromList(@PathVariable("questionid") int questionId, Model theModel) {
 
