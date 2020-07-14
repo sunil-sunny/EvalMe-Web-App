@@ -80,46 +80,40 @@ public class CourseController {
 
 	@RequestMapping(value = "/coursepage", method = RequestMethod.GET)
 	public String getCoursePage(Model theModel, HttpServletRequest request) {
-		
+
 		Course course = new Course();
 		SurveyMetaData surveyMetaData = new SurveyMetaData();
 		List<SurveyQuestion> questionList = new ArrayList<SurveyQuestion>();
-		
 		String courseId = request.getParameter("id");
 		int courseID = Integer.parseInt(courseId);
 		String courseName = request.getParameter("name");
-		
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
-		
 		course.setCourseId(courseID);
 		course.setCourseName(courseName);
-		
 		CourseDetailsService courseDetailsService = CourseConfig.getSingletonInstance().getTheCourseDetailsService();
 		SurveyService surveyService = SurveyConfig.getSingletonInstance().getTheSurveyService();
-		boolean isSurveyPublished = surveyService.isSurveyPublishedForCourse(courseDetailsService.getCourseById(courseID));
-		
-		if(isSurveyPublished) {
+		boolean isSurveyPublished = surveyService
+				.isSurveyPublishedForCourse(courseDetailsService.getCourseById(courseID));
+		if (isSurveyPublished) {
 			surveyMetaData = surveyService.getSavedSurvey(course);
 			questionList = surveyMetaData.getSurveyQuestions();
-			if(null == questionList) {
+			if (null == questionList) {
 				return "error";
-			}
-			else {
+			} else {
 				theModel.addAttribute("questionlist", questionList);
 				return "studentcoursehomesurveypublished";
 			}
-		}
-		else {
+		} else {
 			return "studentcoursehomesurveynotpublished";
-		}	
+		}
 	}
 
 	@RequestMapping(value = "/coursepage", method = RequestMethod.POST)
 	public String submitSurveyAnswers(Model model) {
 		return "surveyanswersubmitresult";
 	}
-	
+
 	@RequestMapping(value = "/coursepageInstrcutor", method = RequestMethod.GET)
 	public String getCoursePageForInstrcutorOrTA(Model theModel, HttpServletRequest request) {
 		String courseId = request.getParameter("id");
