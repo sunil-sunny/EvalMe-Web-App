@@ -30,33 +30,34 @@ h1 {
 		</p>
 	</div>
 
-	<!-- <div>
+	<div>
 		<table>
 			<tbody>
+				<div th:each="group, stats: ${survey}">
 
-				<div>
-					Iterate Groups
-
-					<tr>Group ID, Group Name
+					<tr>
+						<h2 th:text="${group.groupId}" style="font-variant: small-caps"></h2>
+					</tr>
+					<tr>
+						<h4 th:text="${group.groupName}" style="font-variant: small-caps"></h4>
 					</tr>
 
-					<div>
-						Iterate Members
-
-						<tr>Group Member Name, Group Member BannerID
+					<th:block th:each="${member, stats1: group.groupMembers}"
+						style="font-variant: small-caps">
+						<tr>
+							<h4 th:text="${member.firstName}"
+								style="font-variant: small-caps"></h4>
+							<h7 th:text="${member.lastName}" style="font-variant:small-caps"></h7>
+						</tr>
+						<tr>
+							<h7 th:text="${member.bannerId}" style="font-variant:small-caps"></h7>
 						</tr>
 
-					</div>
-
+					</th:block>
 				</div>
-
 			</tbody>
 
 		</table>
-	</div> -->
-
-
-	<br>
-
+	</div>
 </body>
 </html>
