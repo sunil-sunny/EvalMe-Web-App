@@ -6,5 +6,5 @@ import com.group18.asdc.entities.SurveyGroups;
 public interface GroupFormationService {
 	
 	public SurveyGroups getGroupFormationResults(Course course);
-
+	
 }

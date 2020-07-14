@@ -16,7 +16,7 @@ h1 {
 	<br>
 
 	<div class="col-4"
-		th:class="${'container justify-content-center alert alert-success'}"
+		th:class="${'container justify-content-center alert alert-primary'}"
 		style="width: 100%; text-align: center; font-variant: small-caps;">
 		<h1>Group Formation Results</h1>
 
@@ -30,10 +30,10 @@ h1 {
 		</p>
 	</div>
 
-	<div>
+	<div th:class="${'container justify-content-center alert'}">
 		<table>
 			<tbody>
-				<div th:each="group, stats: ${survey}">
+				<div th:each="group, stats: ${survey.surveyGroups}" >
 
 					<tr>
 						<h2 th:text="${group.groupId}" style="font-variant: small-caps"></h2>
@@ -41,8 +41,10 @@ h1 {
 					<tr>
 						<h4 th:text="${group.groupName}" style="font-variant: small-caps"></h4>
 					</tr>
+					
+					<tr th:text="${group.groupMembers}"></tr>
 
-					<th:block th:each="${member, stats1: group.groupMembers}"
+					<!-- <th:block th:each="${member, stats1: group.groupMembers}"
 						style="font-variant: small-caps">
 						<tr>
 							<h4 th:text="${member.firstName}"
@@ -52,8 +54,7 @@ h1 {
 						<tr>
 							<h7 th:text="${member.bannerId}" style="font-variant:small-caps"></h7>
 						</tr>
-
-					</th:block>
+					</th:block> -->
 				</div>
 			</tbody>
 

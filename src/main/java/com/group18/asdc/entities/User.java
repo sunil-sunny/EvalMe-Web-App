@@ -5,8 +5,8 @@ import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.IPasswordPolicyManager;
 import com.group18.asdc.service.UserService;
 
-public class User implements UserInterface {
-
+public class User implements UserInterface{
+	
 	private String firstName;
 	private String lastName;
 	private String bannerId;
