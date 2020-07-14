@@ -134,7 +134,8 @@
 									style="color: white;" onClick="alertSave()">Publish Survey</a>
 							</div>
 							<div class="col-2">
-								<a th:if="${survey.publishedStatus}" class="btn btn-success"
+								<a th:if="${survey.publishedStatus}" class="btn btn-success" 
+								th:href="@{/groupformation/result?courseId=}+${courseid}"
 									style="color: white;">Form Groups</a>
 							</div>
 						</div>
