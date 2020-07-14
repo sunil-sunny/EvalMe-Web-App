@@ -2,6 +2,7 @@ package com.group18.asdc.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.group18.asdc.SurveyConfig;
@@ -17,7 +18,7 @@ import com.group18.asdc.errorhandling.PublishSurveyException;
 public class SurveyServiceImpl implements SurveyService {
 
 	private final Logger log = Logger.getLogger(SurveyServiceImpl.class.getName());
-	
+
 	private static SurveyMetaData surveyMetaData = new SurveyMetaData();
 
 	@Override
@@ -46,12 +47,12 @@ public class SurveyServiceImpl implements SurveyService {
 			}
 		}
 		if (null == exitingQuestion) {
-			isDeleted = false;
+			isDeleted = Boolean.FALSE;
 		} else {
 			List<SurveyQuestion> surveyQuestion = surveyMetaData.getSurveyQuestions();
 			surveyQuestion.remove(exitingQuestion);
 			surveyMetaData.setSurveyQuestions(surveyQuestion);
-			isDeleted = true;
+			isDeleted = Boolean.TRUE;
 		}
 		return isDeleted;
 	}
@@ -63,7 +64,7 @@ public class SurveyServiceImpl implements SurveyService {
 
 	@Override
 	public boolean addQuestionToSurvey(QuestionMetaData theQuestionMetaData) throws QuestionExitsException {
-		boolean isAdded = false;
+		boolean isAdded = Boolean.FALSE;
 		SurveyQuestion exitingQuestion = null;
 		for (SurveyQuestion theSurveyQuestion : surveyMetaData.getSurveyQuestions()) {
 			if (theSurveyQuestion.getQuestionData().getQuestionId() == theQuestionMetaData.getQuestionId()) {
@@ -77,8 +78,9 @@ public class SurveyServiceImpl implements SurveyService {
 			List<SurveyQuestion> surveyQuestion = surveyMetaData.getSurveyQuestions();
 			surveyQuestion.add(newQuestion);
 			surveyMetaData.setSurveyQuestions(surveyQuestion);
-			isAdded = true;
+			isAdded = Boolean.TRUE;
 		} else {
+			log.log(Level.FINE, "Survey already has the question with id " + theQuestionMetaData.getQuestionId());
 			throw new QuestionExitsException("Question Already Added");
 		}
 		return isAdded;
@@ -94,7 +96,6 @@ public class SurveyServiceImpl implements SurveyService {
 	public boolean saveSurvey(SurveyMetaData surveyData) throws SavingSurveyException {
 		SurveyDao theSurveyDao = SurveyConfig.getSingletonInstance().getTheSurveyDao();
 		surveyData.setSurveyId(surveyMetaData.getSurveyId());
-
 		if ((null != surveyData.getSurveyQuestions())) {
 			if (0 == surveyData.getSurveyQuestions().size()) {
 				throw new SavingSurveyException("Add questions before saving the survey");
@@ -109,7 +110,6 @@ public class SurveyServiceImpl implements SurveyService {
 						return isSaved;
 					}
 				} else {
-
 					int surveyId = theSurveyDao.createSurvey(surveyData.getTheCourse());
 					if (0 == surveyId) {
 						throw new SavingSurveyException("Exception while creating the Survey");
@@ -120,6 +120,7 @@ public class SurveyServiceImpl implements SurveyService {
 				}
 			}
 		} else {
+			log.log(Level.WARNING, "Survey is empty and questions need to be added");
 			throw new SavingSurveyException("Add questions before saving the survey");
 		}
 	}
