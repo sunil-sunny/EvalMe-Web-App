@@ -39,7 +39,7 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	@Override
 	public boolean isCourseExists(Course course) {
 		if (null == course) {
-			return false;
+			return Boolean.FALSE;
 		} else {
 			CourseDetailsDao courseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 			return courseDetailsDao.isCourseExists(course);

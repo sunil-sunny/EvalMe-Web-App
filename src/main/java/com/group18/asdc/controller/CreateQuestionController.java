@@ -2,7 +2,6 @@ package com.group18.asdc.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,8 +25,6 @@ import com.group18.asdc.service.CreateQuestionService;
 @Controller
 public class CreateQuestionController {
 
-	private Logger log = Logger.getLogger(CreateQuestionController.class.getName());
-
 	@ModelAttribute("question")
 	public BasicQuestionData setBasicQuestionBean() {
 		return new BasicQuestionData();
@@ -45,7 +42,6 @@ public class CreateQuestionController {
 
 	@PostMapping("/getQuestionConfirm")
 	public String getQuestionConfirmPage(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model) {
-		log.info("confirming questions based on type");
 		model.addAttribute("BasicQuestion", basicQuestionData);
 		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.NUMERIC_TYPE.toString())
 				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.FREE_TEXT.toString())) {
@@ -61,15 +57,12 @@ public class CreateQuestionController {
 	@RequestMapping(value = "/createNumericOrTextQuestion", method = RequestMethod.POST)
 	public String createNumericOrQuestion(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model,
 			RedirectAttributes theRedirectAttributes) {
-		log.info("creating Numeric question");
 		CreateQuestionService theCreateQuestionService = QuestionManagerConfig.getSingletonInstance()
 				.getTheCreateQuestionService();
 		boolean isQuestionCreated = theCreateQuestionService.createNumericOrTextQuestion(basicQuestionData);
 		if (isQuestionCreated) {
-			log.info("Numeric or text question created");
 			return "QuestionCreateSuccess";
 		} else {
-			log.info("Error creating numeric or text question");
 			return "error";
 		}
 	}
@@ -111,10 +104,8 @@ public class CreateQuestionController {
 		}
 		boolean isQuestionCreated = theCreateQuestionService.createMultipleQuestion(theMultipleChoiceQuestion);
 		if (isQuestionCreated) {
-			log.info("Created multiple choice questions success");
 			return "QuestionCreateSuccess";
 		} else {
-			log.info("Error in Created multiple choice questions");
 			return "error";
 		}
 	}

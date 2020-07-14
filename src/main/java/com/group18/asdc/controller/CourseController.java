@@ -2,13 +2,15 @@ package com.group18.asdc.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import com.group18.asdc.CourseConfig;
 import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.SurveyConfig;
@@ -23,12 +25,8 @@ import com.group18.asdc.service.UserService;
 @Controller
 public class CourseController {
 
-	private Logger log = Logger.getLogger(CourseController.class.getName());
-
 	@GetMapping("/userhome")
 	public String getHomePage(Model theModel) {
-
-		log.info("in course controller");
 		CourseDetailsService courseDetailsService = CourseConfig.getSingletonInstance().getTheCourseDetailsService();
 		List<Course> coursesList = courseDetailsService.getAllCourses();
 		theModel.addAttribute("coursesList", coursesList);

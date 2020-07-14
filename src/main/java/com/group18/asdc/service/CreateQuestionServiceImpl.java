@@ -16,7 +16,7 @@ public class CreateQuestionServiceImpl implements CreateQuestionService {
 		User theUser = theUserService.getCurrentUser();
 		boolean isQuestionExist = theCreateQuestionDao.isQuestionExists(theBasicQuestionData);
 		if (isQuestionExist) {
-			return false;
+			return Boolean.FALSE;
 		} else {
 			return theCreateQuestionDao.createNumericOrTextQuestion(theBasicQuestionData, theUser);
 		}
@@ -33,7 +33,7 @@ public class CreateQuestionServiceImpl implements CreateQuestionService {
 		theBasicQuestionData.setQuestionType(theMultipleChoiceChoose.getQuestionType());
 		boolean isQuestionExist = theCreateQuestionDao.isQuestionExists(theBasicQuestionData);
 		if (isQuestionExist) {
-			return false;
+			return Boolean.FALSE;
 		} else {
 			return theCreateQuestionDao.createMultipleChoiceQuestion(theMultipleChoiceChoose, theUser);
 		}

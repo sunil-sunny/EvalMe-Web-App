@@ -23,7 +23,7 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 		if (null != eligibleUser && 0 != eligibleUser.size()) {
 			return courseRolesDao.allocateTa(courseId, user);
 		}
-		return false;
+		return Boolean.FALSE;
 	}
 
 	@Override
@@ -35,12 +35,12 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 		if (isStudentsRegistered) {
 			List<User> eligibleStudents = theCourseDetailsService.filterEligibleUsersForCourse(studentList, courseId);
 			if (0 == eligibleStudents.size()) {
-				return false;
+				return Boolean.FALSE;
 			} else {
 				return courseRolesDao.enrollStudentsIntoCourse(eligibleStudents, courseId);
 			}
 		} else {
-			return false;
+			return Boolean.FALSE;
 		}
 	}
 }
