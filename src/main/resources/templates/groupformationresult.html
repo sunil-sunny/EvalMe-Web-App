@@ -34,19 +34,26 @@ h1 {
 		<table>
 			<tbody>
 				<div th:each="group, stats: ${survey}">
-					<tr>
-						<h2 th:text="Group + ${group.groupId}" style="font-variant:small-caps"></h2>
-					</tr>
-					<tr>
-						<h4 th:text="${group.groupName}" style="font-variant:small-caps"></h4>
-					</tr>
-					<tr>
-						<div th:each="member, stats: ${group.groupMembers}">
 
-							<tr><h7 th:text="${member.firstName}" style="font-variant:small-caps"></h7><h7 th:text="${member.lastName}" style="font-variant:small-caps"></h7></tr>
-							<tr><h7 th:text="${member.bannerId}" style="font-variant:small-caps"></h7></tr>
-						</div>
+					<tr>
+						<h2 th:text="${group.groupId}" style="font-variant: small-caps"></h2>
 					</tr>
+					<tr>
+						<h4 th:text="${group.groupName}" style="font-variant: small-caps"></h4>
+					</tr>
+
+					<th:block th:each="${member, stats1: group.groupMembers}"
+						style="font-variant: small-caps">
+						<tr>
+							<h4 th:text="${member.firstName}"
+								style="font-variant: small-caps"></h4>
+							<h7 th:text="${member.lastName}" style="font-variant:small-caps"></h7>
+						</tr>
+						<tr>
+							<h7 th:text="${member.bannerId}" style="font-variant:small-caps"></h7>
+						</tr>
+
+					</th:block>
 				</div>
 			</tbody>
 

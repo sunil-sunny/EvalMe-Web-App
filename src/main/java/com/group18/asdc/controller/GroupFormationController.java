@@ -1,5 +1,8 @@
 package com.group18.asdc.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.group18.asdc.CourseConfig;
 import com.group18.asdc.GroupFormationConfig;
 import com.group18.asdc.entities.Course;
+import com.group18.asdc.entities.Group;
 import com.group18.asdc.entities.SurveyGroups;
 import com.group18.asdc.service.CourseDetailsService;
 import com.group18.asdc.service.GroupFormationService;
@@ -33,10 +37,10 @@ public class GroupFormationController {
 		
 		GroupFormationService theGroupFormationService = GroupFormationConfig.getSingletonInstance().getTheGroupFormationService();
 		SurveyGroups theSurveyGroups = new SurveyGroups();
-		
 		theSurveyGroups = theGroupFormationService.getGroupFormationResults(course);
-		theModel.addAttribute("survey",theSurveyGroups.getSurveyGroups());
-		
+		List<Group> groupList = new ArrayList<Group>();
+		groupList = theSurveyGroups.getSurveyGroups();
+		theModel.addAttribute("survey",groupList);
 		return "groupformationresult";
 	}
 }
