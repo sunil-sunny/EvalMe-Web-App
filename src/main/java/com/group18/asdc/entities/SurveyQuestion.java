@@ -11,7 +11,7 @@ public class SurveyQuestion {
 	private QuestionMetaData questionData;
 	private int priority;
 	private List<Option> options = new ArrayList<Option>();
-	
+
 	public String getLogicDetail() {
 		return logicDetail;
 	}
@@ -51,7 +51,6 @@ public class SurveyQuestion {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-	
 
 	public List<Option> getOptions() {
 		return options;
