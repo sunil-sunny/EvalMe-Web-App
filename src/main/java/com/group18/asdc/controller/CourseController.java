@@ -1,5 +1,6 @@
 package com.group18.asdc.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import com.group18.asdc.CourseConfig;
 import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.SurveyConfig;
 import com.group18.asdc.entities.Course;
+import com.group18.asdc.entities.SurveyMetaData;
+import com.group18.asdc.entities.SurveyQuestion;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.CourseDetailsService;
 import com.group18.asdc.service.SurveyService;
@@ -77,18 +80,35 @@ public class CourseController {
 
 	@RequestMapping(value = "/coursepage", method = RequestMethod.GET)
 	public String getCoursePage(Model theModel, HttpServletRequest request) {
+		
+		Course course = new Course();
+		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		List<SurveyQuestion> questionList = new ArrayList<SurveyQuestion>();
+		
 		String courseId = request.getParameter("id");
 		int courseID = Integer.parseInt(courseId);
 		String courseName = request.getParameter("name");
+		
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
+		
+		course.setCourseId(courseID);
+		course.setCourseName(courseName);
 		
 		CourseDetailsService courseDetailsService = CourseConfig.getSingletonInstance().getTheCourseDetailsService();
 		SurveyService surveyService = SurveyConfig.getSingletonInstance().getTheSurveyService();
 		boolean isSurveyPublished = surveyService.isSurveyPublishedForCourse(courseDetailsService.getCourseById(courseID));
 		
 		if(isSurveyPublished) {
-			return "studentcoursehomesurveypublished";
+			surveyMetaData = surveyService.getSavedSurvey(course);
+			questionList = surveyMetaData.getSurveyQuestions();
+			if(null == questionList) {
+				return "error";
+			}
+			else {
+				theModel.addAttribute("questionlist", questionList);
+				return "studentcoursehomesurveypublished";
+			}
 		}
 		else {
 			return "studentcoursehomesurveynotpublished";
