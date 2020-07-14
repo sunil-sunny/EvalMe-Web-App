@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import com.group18.asdc.entities.LogicDetail;
 import com.group18.asdc.entities.QuestionType;
 
-public class ComputeDistance {
+public class ComputeDistance implements IComputeDistance {
 
     private ArrayList<HashMap> userAnswerList = null;
     private ArrayList<HashMap> questionsList = null;
@@ -26,7 +26,7 @@ public class ComputeDistance {
         logger.log(Level.INFO, "Questions list" + questionsList.toString());
     }
 
-    public void compute() {
+    public Float[][][] compute() {
         int questionsIterator = 0;
         for (HashMap eachQuestionMap : questionsList) {
             Integer questionId = (Integer) eachQuestionMap.get("QUESTION_ID");
@@ -93,6 +93,7 @@ public class ComputeDistance {
         }
         //
         logger.log(Level.INFO, "Computed distance list" + Arrays.deepToString(distanceMatrix));
+        return distanceMatrix;
     }
 
 }
