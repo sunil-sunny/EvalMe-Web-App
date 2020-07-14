@@ -7,14 +7,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import com.group18.asdc.QuestionManagerConfig;
 import com.group18.asdc.database.ConnectionManager;
+import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.LogicDetail;
+import com.group18.asdc.entities.Option;
 import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
@@ -27,22 +32,29 @@ import com.group18.asdc.util.SurveyDataBaseQueries;
 public class SurveyDaoImpl implements SurveyDao {
 
 	private final Logger log = Logger.getLogger(SurveyDaoImpl.class.getName());
+	private SimpleDateFormat dateFormat;  
 
 	@Override
 	public SurveyMetaData getSavedSurvey(Course course) {
 
 		ViewQuestionsService theViewQuestionsService = QuestionManagerConfig.getSingletonInstance()
 				.getTheViewQuestionsService();
+
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
+
+		dateFormat = new SimpleDateFormat(ConstantStringUtil.DATE_FORMAT.toString());
 		List<SurveyQuestion> allSavedQuestions = new ArrayList<SurveyQuestion>();
 		SurveyMetaData theSurvey = new SurveyMetaData();
+
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
+
 			thePreparedStatement = connection
 					.prepareStatement(SurveyDataBaseQueries.GET_ALL_SAVED_QUESTIONS.toString());
 			thePreparedStatement.setInt(1, course.getCourseId());
+
 			theResultSet = thePreparedStatement.executeQuery();
 			SurveyQuestion theSurveyQuestion = null;
 			theSurvey.setTheCourse(course);
@@ -66,21 +78,73 @@ public class SurveyDaoImpl implements SurveyDao {
 				}
 			}
 			theSurvey.setSurveyQuestions(allSavedQuestions);
+			thePreparedStatement.close();
+			theResultSet.close();
+
+			for(int i=0;i<allSavedQuestions.size();i++) {
+
+				int surveyQuestionId = allSavedQuestions.get(i).getSurveyQuestionId();
+
+				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_OPTIONS.toString());
+				thePreparedStatement.setInt(1, surveyQuestionId);
+				theResultSet = thePreparedStatement.executeQuery();
+
+				List<Option> options = new ArrayList<Option>();
+				Option option = null;
+
+				while(theResultSet.next()) {
+
+					option = new Option();
+					option.setDisplayText(theResultSet.getString(3));
+					option.setStoredData(theResultSet.getInt(4));
+					options.add(option);
+				}
+				theSurvey.getSurveyQuestions().get(i).setOptions(options);
+				thePreparedStatement.close();
+				theResultSet.close();
+
+				QuestionMetaData questionMetaData = new QuestionMetaData();
+				BasicQuestionData basicQuestionData = new BasicQuestionData();
+
+				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_DATA.toString());
+				thePreparedStatement.setInt(1, surveyQuestionId);
+				theResultSet = thePreparedStatement.executeQuery();
+
+				while(theResultSet.next()) {
+
+					try {
+						Date date = new Date();
+						date = dateFormat.parse(theResultSet.getString(5));
+						Timestamp dateTimeStamp=new Timestamp(date.getTime());
+						questionMetaData.setCreationDateTime(dateTimeStamp);
+						questionMetaData.setQuestionId(theResultSet.getInt(2));
+
+						basicQuestionData.setQuestionTitle(theResultSet.getString(3));
+						basicQuestionData.setQuestionText(theResultSet.getString(4));
+						basicQuestionData.setQuestionType(theResultSet.getString(6));
+
+						questionMetaData.setBasicQuestionData(basicQuestionData);
+						theSurvey.getSurveyQuestions().get(i).setQuestionData(questionMetaData);
+
+					} catch (ParseException e) {
+						log.severe("Parse Exception in creating TimeStamp for QuestionMetaData.");
+					}
+				}
+			}
 		} catch (SQLException e) {
-			log.info("SQL Exception while getting all the question");
-			e.printStackTrace();
+			log.info("SQL Exception while getting all the questions");
 		} finally {
 			try {
 				if (null != theResultSet) {
 					theResultSet.close();
 				}
-				if (null != connection) {
-					connection.close();
-				}
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				log.info("closing connection after getting all questions");
+				if (null != connection) {
+					connection.close();
+				}
+				log.info("Closing connection after getting all questions");
 			} catch (SQLException e) {
 				log.info("SQL Exception while closing the connection and statement after getting all the question");
 			}

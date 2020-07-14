@@ -1,5 +1,6 @@
 package com.group18.asdc.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SurveyQuestion {
@@ -9,7 +10,7 @@ public class SurveyQuestion {
 	private int logicConstraint;
 	private QuestionMetaData questionData;
 	private int priority;
-	private List<Option> optionText;
+	private List<Option> options = new ArrayList<Option>();
 	
 	public String getLogicDetail() {
 		return logicDetail;
@@ -52,11 +53,11 @@ public class SurveyQuestion {
 	}
 	
 
-	public List<Option> getOptionText() {
-		return optionText;
+	public List<Option> getOptions() {
+		return options;
 	}
 
-	public void setOptionText(List<Option> optionText) {
-		this.optionText = optionText;
+	public void setOptions(List<Option> options) {
+		this.options = options;
 	}
 }

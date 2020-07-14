@@ -84,7 +84,6 @@
 					<input type="submit" value="Add to Survey"
 						class="btn btn-primary mb-2" onClick="addQuestion()" />
 				</form>
-
 			</div>
 			<div th:if="${message}"
 				th:class="${'container justify-content-center alert alert-danger'}"
@@ -207,7 +206,6 @@
 										</select></td>
 									</div>
 
-
 									<td
 										th:if="${prod.questionData.basicQuestionData.questionType} == 'multiple-choice-choose-one' OR 
 									${prod.questionData.basicQuestionData.questionType} == 'multiple-choice-choose-more' OR 
@@ -247,14 +245,11 @@
 												<option value="10">10</option>
 										</select></td>
 									</div>
-									
 									<div th:if="${survey.publishedStatus}">
 										<td style="padding: 10px;"><p th:text="${prod.priority}">
 										</p></td>
 									</div>
-									
 									<td>
-									
 									<a th:href="@{'/survey/removeQuestion/'+${prod.questionData.questionId}}"
 										th:if="${!survey.publishedStatus}" class="btn btn-danger"
 										onclick="return alert()" style=" color: white;">Remove <i class="fa fa-trash"></i></a>

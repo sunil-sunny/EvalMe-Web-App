@@ -13,7 +13,10 @@ public enum SurveyDataBaseQueries {
 
 	UPDATE_GROUP_SIZE("update survey set groupsize=? where surveyid=?;"),
 	IS_SURVEY_PUBLISHED("select state from survey where courseid=?;"),
-	PUBLICH_SURVEY("update survey set state=? where surveyid=?;");
+	PUBLICH_SURVEY("update survey set state=? where surveyid=?;"),
+	GET_SURVEYQUESTION_OPTIONS("select s.surveyquestionid, o.questionid, o.optiontext, o.optionlinenumber from survey_questions s, options o where s.questionid = o.questionid and s.surveyquestionid=? order by o.optionlinenumber;"),
+	GET_SURVEYQUESTION_DATA("select s.surveyquestionid, q.questionid, q.qtitle, q.question, q.datecreated, qt.questiontypename from survey_questions s, questions q, questiontype qt where s.questionid = q.questionid and q.questiontypeid = qt.questiontypeid and s.surveyquestionid=?;");
+	
 	private final String sqlQuery;
 
 	private SurveyDataBaseQueries(String sqlQuery) {

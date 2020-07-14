@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import com.group18.asdc.SurveyConfig;
 import com.group18.asdc.dao.SurveyDao;
-import com.group18.asdc.dao.SurveyDaoImpl;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;

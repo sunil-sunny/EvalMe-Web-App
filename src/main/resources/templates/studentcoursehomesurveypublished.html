@@ -14,17 +14,117 @@ h1 {
 <body>
 	<div th:replace="fragments/courseheader :: header"></div>
 	<br>
-	<div class="container">
-		<h1 th:text="${coursename}"></h1>
+	<div class="container" style="align-content: center;">
+		<h1 th:text="${coursename}" style="font-variant: small-caps;"></h1>
 		<br>
 	</div>
-		
-	<div style="text-align: center;">
-		<p style="text-align: center;"><h3>Hello, Survey is published! Wait for the questions to load....</h3></p>
-	</div>
 	<div>
+		<p>
+		<div class="col-4"
+			th:class="${'container justify-content-center alert alert-success'}"
+			style="width: 100%;">
+			<p>
+			<h3 style="text-align: center">The Survey for this course is
+				published!</h3>
+			<br>
+			<h5>Things to keep in mind:</h5>
+			<ul>
+				<li>Make sure you answer ALL questions</li>
+				<li>This survey will be the basis on which groups for this
+					course will be formed</li>
+				<li>Contact the Instructor or any of the TAs for this course,
+					if you have any questions</li>
+			</ul>
+			</p>
+		</div>
+		</p>
+	</div>
+
 	
+	<div class="col-4"
+			th:class="${'container justify-content-center alert alert-primary'}" 
+			style="width: 100%; padding:50px;">
 	
+	<form >
+	
+		<table class="table table-hover">
+			<tbody>
+				<span th:each="question, stats : ${questionlist}"> 
+			<br><br>
+				<tr><h1 class="label" th:text="Question + ${ stats.index+1}" style="font-variant: small-caps;"></h1> </tr>
+						
+					<tr>
+					<h3 th:text="${question.questionData.basicQuestionData.questionTitle}"
+						style="font-variant: small-caps;" > </h3>
+					</tr> 
+					<tr>
+					<h6 th:text="${question.questionData.basicQuestionData.questionText}" >
+					</h6>	
+					</tr>
+				
+				
+				<!-- ANSWER INPUT TYPE -->
+					<tr>
+					<!-- FREE TEXT -->
+
+					<span th:if="${question.questionData.basicQuestionData.questionType == 'freetext'}">
+		
+					<textarea rows="10" cols="50" placeholder="Write a brief answer here."></textarea>
+					
+					</span>
+				
+					
+					<!-- NUMERIC -->
+
+					<span th:if="${question.questionData.basicQuestionData.questionType == 'numeric'}">
+					
+					<input type="number" min="1" max="10"></input>
+					
+					</span>
+					
+					
+					<!-- 	MULTIPLE CHOICE CHOOSE ONE -->
+			
+					<span
+						th:if="${question.questionData.basicQuestionData.questionType == 'multiple-choice-choose-one'}">
+
+						<select>
+						<option selected disabled hidden>Select one</option>
+							<span th:each="option, stats : ${question.options}">
+								<option value="${stats.index+1}" th:text="${option.displayText}"></option>
+							</span>
+						</select>
+						<br>
+					</span>
+				
+					
+					<!-- 	MULTIPLE CHOICE CHOOSE MANY -->
+
+					<span th:if="${question.questionData.basicQuestionData.questionType == 'multiple-choice-choose-more'}">
+					
+						<span th:each="option, stats : ${question.options}">
+							<input type="checkbox" id="${stats.index+1}" name="${stats.index+1}">
+							<label for="${stats.index+1}" th:text="${option.displayText}"></label>
+							<br>
+						</span>
+						
+						</div>
+					
+					</span>
+					
+				</tr>
+				</span>
+				<tr>
+					<br>
+					<a class="btn btn-primary" 
+					style="color: white; width: 100%; height: 10%">Submit Survey</a>
+				</tr>
+				
+			</tbody>
+		</table>
+		
+		
+		</form>
 	</div>
 </body>
 </html>

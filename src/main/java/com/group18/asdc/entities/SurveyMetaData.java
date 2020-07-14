@@ -1,11 +1,12 @@
 package com.group18.asdc.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SurveyMetaData {
 
 	private int surveyId;
-	private List<SurveyQuestion> surveyQuestions;
+	private List<SurveyQuestion> surveyQuestions = new ArrayList<SurveyQuestion>();
 	private boolean publishedStatus;
 	private int groupSize;
 	private Course theCourse;
