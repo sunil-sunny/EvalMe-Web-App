@@ -32,6 +32,7 @@ public class SurveyController {
 		ViewQuestionsService theViewQuestionsService = QuestionManagerConfig.getSingletonInstance()
 				.getTheViewQuestionsService();
 		Course theCourse = theCourseDetailsService.getCourseById(Integer.parseInt(courseId));
+		theModel.addAttribute("courseid",courseId);
 		if (null == theCourse) {
 			return "error";
 		} else {
