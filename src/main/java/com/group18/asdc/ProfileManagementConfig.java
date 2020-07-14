@@ -26,6 +26,8 @@ import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.PasswordHistoryServiceImpl;
 import com.group18.asdc.service.RegisterService;
 import com.group18.asdc.service.RegisterServiceImpl;
+import com.group18.asdc.service.ResetPasswordService;
+import com.group18.asdc.service.ResetPasswordServiceImpl;
 import com.group18.asdc.service.UserService;
 import com.group18.asdc.service.UserServiceImpl;
 import com.group18.asdc.util.CustomStringUtils;
@@ -55,6 +57,7 @@ public class ProfileManagementConfig {
 	private IRandomStringGenerator randomStringGenerator;
 	private ICustomStringUtils customStringUtils;
 	private PasswordHistoryService passwordHistoryService;
+	private ResetPasswordService resetPasswordService;
 
 	private ProfileManagementConfig() {
 		this.javaMailSenderConfiguration = new DefaultMailSenderConfiguration();
@@ -76,6 +79,7 @@ public class ProfileManagementConfig {
 		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB);
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
+		this.resetPasswordService = new ResetPasswordServiceImpl();
 	}
 
 	public static ProfileManagementConfig getSingletonInstance() {
@@ -227,5 +231,10 @@ public class ProfileManagementConfig {
 
 	public PasswordHistoryService getPasswordHistoryService() {
 		return this.passwordHistoryService;
+	}
+
+	public ResetPasswordService getResetPasswordService()
+	{
+		return this.resetPasswordService;
 	}
 }

@@ -106,6 +106,16 @@
 			<version>3.10</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/net.sourceforge/javaml -->
+		<dependency>
+			<groupId>net.sourceforge</groupId>
+			<artifactId>javaml</artifactId>
+			<scope>system</scope>
+			<version>0.1.7</version>
+			<systemPath>${basedir}/src/main/resources/lib/javaml-0.1.7.jar</systemPath>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

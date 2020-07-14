@@ -50,7 +50,7 @@ public class CourseRolesController {
 				log.info("User has been allocated as TA role for the course");
 				theModel.addAttribute("result", "TA Allocated");
 			} else {
-				log.info("User is already realted to the course "
+				log.info("User is already related to the course "
 						+ "i.e user might be already a instructor or TA or Student for the course");
 				theModel.addAttribute("result", "User is already a part of this course");
 			}
@@ -71,7 +71,7 @@ public class CourseRolesController {
 			theModel.addAttribute("resultEnrolling", "Error in loading file !! please try again");
 		} else {
 			if (file.isEmpty()) {
-				log.info("The uploaded file is empty and user will be propmted to upload again");
+				log.info("The uploaded file is empty and user will be prompted to upload again");
 				theModel.addAttribute("resultEnrolling", "Upload file to continue");
 			} else {
 				try {
