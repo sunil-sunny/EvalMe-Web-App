@@ -2,14 +2,14 @@ package com.group18.asdc;
 
 import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.dao.AdminDaoImpl;
+import com.group18.asdc.dao.IPasswordPolicyDB;
+import com.group18.asdc.dao.PasswordPolicyDB;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.dao.RegisterDaoImpl;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
 import com.group18.asdc.database.DefaultDatabaseConfiguration;
 import com.group18.asdc.database.IDatabaseConfiguration;
-import com.group18.asdc.database.IPasswordPolicyDB;
-import com.group18.asdc.database.PasswordPolicyDB;
 import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.IPasswordPolicyManager;

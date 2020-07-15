@@ -1,4 +1,4 @@
-package com.group18.asdc.database;
+package com.group18.asdc.dao;
 
 import java.util.ArrayList;
 
