@@ -14,8 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ComputeDistanceTest {
 
-    
-
     @Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
@@ -30,19 +28,19 @@ public class ComputeDistanceTest {
 		ArrayList<HashMap> questionsList = new ArrayList<HashMap>();
 		HashMap userAnswerMap = new HashMap<>();
 		//
-		ArrayList answers = new ArrayList<>();
+		ArrayList<String> answers = new ArrayList<>();
 		//
-		answers.add(1);
+		answers.add("1");
 		userAnswerMap.put(1, answers);
 		//
 		answers = new ArrayList<>();
-		answers.add(1);
-		answers.add(2);
+		answers.add("1");
+		answers.add("2");
 		//
 		userAnswerMap.put(2, answers);
 		//
 		answers = new ArrayList<>();
-		answers.add(65);
+		answers.add("65");
 		//
 		userAnswerMap.put(3, answers);
 		//
@@ -51,17 +49,17 @@ public class ComputeDistanceTest {
 		answers = new ArrayList<>();
 		userAnswerMap = new HashMap<>();
 		//
-		answers.add(2);
+		answers.add("2");
 		userAnswerMap.put(1, answers);
 		//
 		answers = new ArrayList<>();
-		answers.add(1);
-		answers.add(2);
+		answers.add("1");
+		answers.add("2");
 		//
 		userAnswerMap.put(2, answers);
 		//
 		answers = new ArrayList<>();
-		answers.add(60);
+		answers.add("60");
 		//
 		userAnswerMap.put(3, answers);
 
@@ -74,6 +72,7 @@ public class ComputeDistanceTest {
 		questionMap.put("QUESTION_TYPE", QuestionType.MULTIPLE_CHOOSE_ONE.toString());
 		questionMap.put("QUESTION_LOGIC", LogicDetail.Group_Disimilar.toString() );
 		questionMap.put("QUESTION_OPTIONS", 4);
+		questionMap.put("QUESTION_PRIORITY", 4);
 		//
 		questionsList.add(questionMap);
 		//
@@ -82,6 +81,7 @@ public class ComputeDistanceTest {
 		questionMap.put("QUESTION_TYPE", QuestionType.MULTIPLE_CHOOSE_MORE.toString());
 		questionMap.put("QUESTION_LOGIC", LogicDetail.Group_Similar.toString() );
 		questionMap.put("QUESTION_OPTIONS", 4);
+		questionMap.put("QUESTION_PRIORITY", 4);
 		//
 		questionsList.add(questionMap);
 		//
@@ -90,6 +90,7 @@ public class ComputeDistanceTest {
 		questionMap.put("QUESTION_TYPE", QuestionType.NUMERIC_TYPE.toString());
 		questionMap.put("QUESTION_LOGIC", LogicDetail.Group_Similar.toString() );
 		questionMap.put("QUESTION_OPTIONS", 4);
+		questionMap.put("QUESTION_PRIORITY", 4);
 		questionsList.add(questionMap);
 		//
 		ComputeDistance computeDistance = new ComputeDistance(userAnswerList, questionsList);
