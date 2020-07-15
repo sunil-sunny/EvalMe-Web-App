@@ -21,6 +21,7 @@ import com.group18.asdc.service.GroupFormationService;
 @RequestMapping("/groupformation")
 public class GroupFormationController {
 
+	
 	@RequestMapping(value = "/result", method = RequestMethod.GET)
 	public String getSurveyPage(Model theModel, HttpServletRequest request) {
 		

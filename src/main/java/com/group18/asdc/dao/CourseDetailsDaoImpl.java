@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.springframework.stereotype.Repository;
-import com.group18.asdc.CourseConfig;
+
 import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
@@ -22,6 +23,7 @@ import com.group18.asdc.util.CourseDataBaseQueriesUtil;
 public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	private Logger log = Logger.getLogger(CourseDetailsDaoImpl.class.getName());
+	
 
 	@Override
 	public List<Course> getAllCourses() {
@@ -95,7 +97,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCoursesWhereUserIsStudent(User user) {
-		CourseDetailsDao theCourseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultset = null;
@@ -112,7 +113,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
-				course.setInstructorName(theCourseDetailsDao.getInstructorForCourse(courseid));
+				course.setInstructorName(this.getInstructorForCourse(courseid));
 				getCoursesAsStudent.add(course);
 			}
 			log.info("Number of courses where user as Student is " + getCoursesAsStudent.size());
@@ -142,7 +143,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
-		CourseDetailsDao theCourseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultset = null;
@@ -159,7 +159,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
-				course.setInstructorName(theCourseDetailsDao.getInstructorForCourse(courseid));
+				course.setInstructorName(this.getInstructorForCourse(courseid));
 				getCoursesAsInstructor.add(course);
 			}
 			log.info("Number of courses where user as Instructor is " + getCoursesAsInstructor.size());

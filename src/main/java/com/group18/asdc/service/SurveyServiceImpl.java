@@ -5,25 +5,26 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.group18.asdc.SurveyConfig;
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.SurveyDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
+import com.group18.asdc.errorhandling.PublishSurveyException;
 import com.group18.asdc.errorhandling.QuestionExitsException;
 import com.group18.asdc.errorhandling.SavingSurveyException;
-import com.group18.asdc.errorhandling.PublishSurveyException;
 
 public class SurveyServiceImpl implements SurveyService {
 
 	private final Logger log = Logger.getLogger(SurveyServiceImpl.class.getName());
-
 	private static SurveyMetaData surveyMetaData = new SurveyMetaData();
+	private static final SurveyDao theSurveyDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory()
+			.getSurveyDao();
 
 	@Override
 	public SurveyMetaData getSavedSurvey(Course course) {
-		SurveyDao theSurveyDao = SurveyConfig.getSingletonInstance().getTheSurveyDao();
+
 		surveyMetaData.setTheCourse(course);
 		boolean isSurveyExists = theSurveyDao.isSurveyExists(course);
 		if (isSurveyExists) {
@@ -88,13 +89,11 @@ public class SurveyServiceImpl implements SurveyService {
 
 	@Override
 	public boolean isSurveyPublishedForCourse(Course theCourse) {
-		SurveyDao theSurveyDao = SurveyConfig.getSingletonInstance().getTheSurveyDao();
 		return theSurveyDao.isSurveyPublished(theCourse);
 	}
 
 	@Override
 	public boolean saveSurvey(SurveyMetaData surveyData) throws SavingSurveyException {
-		SurveyDao theSurveyDao = SurveyConfig.getSingletonInstance().getTheSurveyDao();
 		surveyData.setSurveyId(surveyMetaData.getSurveyId());
 		if ((null != surveyData.getSurveyQuestions())) {
 			if (0 == surveyData.getSurveyQuestions().size()) {
@@ -127,7 +126,7 @@ public class SurveyServiceImpl implements SurveyService {
 
 	@Override
 	public boolean publishSurvey() throws PublishSurveyException {
-		SurveyDao theSurveyDao = SurveyConfig.getSingletonInstance().getTheSurveyDao();
+		
 		if (null == surveyMetaData.getSurveyQuestions()) {
 			throw new PublishSurveyException("Add questions before publishing the survey");
 		} else {

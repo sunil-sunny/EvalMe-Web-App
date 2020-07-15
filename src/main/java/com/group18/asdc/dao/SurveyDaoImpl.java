@@ -15,7 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.group18.asdc.QuestionManagerConfig;
+
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.Course;
@@ -24,8 +25,8 @@ import com.group18.asdc.entities.Option;
 import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
-import com.group18.asdc.errorhandling.SavingSurveyException;
 import com.group18.asdc.errorhandling.PublishSurveyException;
+import com.group18.asdc.errorhandling.SavingSurveyException;
 import com.group18.asdc.service.ViewQuestionsService;
 import com.group18.asdc.util.ConstantStringUtil;
 import com.group18.asdc.util.SurveyDataBaseQueries;
@@ -34,11 +35,12 @@ public class SurveyDaoImpl implements SurveyDao {
 
 	private final Logger log = Logger.getLogger(SurveyDaoImpl.class.getName());
 
+	private static final ViewQuestionsService theViewQuestionsService = SystemConfig.getSingletonInstance()
+			.getServiceAbstractFactory().getViewQuestionsService();
+
 	@Override
 	public SurveyMetaData getSavedSurvey(Course course) {
 
-		ViewQuestionsService theViewQuestionsService = QuestionManagerConfig.getSingletonInstance()
-				.getTheViewQuestionsService();
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
@@ -190,7 +192,9 @@ public class SurveyDaoImpl implements SurveyDao {
 			} catch (SQLException e) {
 				log.log(Level.SEVERE, "SQL Exception occured while saving group size of survey with id value"
 						+ surveyData.getSurveyId());
-				throw new SavingSurveyException("Failure while saving survey!! Try again");
+				throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
+						.getSavingSurveyException("Failure while saving survey!! Try again");
+
 			} finally {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
@@ -232,7 +236,8 @@ public class SurveyDaoImpl implements SurveyDao {
 					} catch (BatchUpdateException e) {
 						log.log(Level.SEVERE, "Batch exception which saving survey questions for survey id "
 								+ surveyData.getSurveyId());
-						throw new SavingSurveyException("An error occured while saving survey!! Please try again.");
+						throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
+								.getSavingSurveyException("An error occured while saving survey!! Please try again.");
 					}
 				}
 			}
@@ -240,7 +245,7 @@ public class SurveyDaoImpl implements SurveyDao {
 				connection.commit();
 			} else {
 				log.log(Level.WARNING, "Survey with id " + surveyData.getSurveyId() + " has not bee saved");
-				throw new SavingSurveyException("System Failure while Saving Survey !! Try again");
+				throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory().getSavingSurveyException("");
 			}
 
 		} catch (SQLException e) {
@@ -412,7 +417,8 @@ public class SurveyDaoImpl implements SurveyDao {
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception occuered while publish survey for the course with id "
 					+ surveyMetaData.getTheCourse().getCourseId());
-			throw new PublishSurveyException("Survey is not published ! Try again");
+			throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
+					.getPublishSurveyException("Survey is not published ! Try again");
 		} finally {
 			try {
 				if (null != theResultSet) {

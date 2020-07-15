@@ -1,9 +1,6 @@
 package com.group18.asdc.controller;
 
-import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpSession;
-
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 import com.group18.asdc.ProfileManagementConfig;
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.IPasswordPolicyDB;
 import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.entities.Role;
@@ -29,7 +27,10 @@ import com.group18.asdc.service.UserService;
 @Controller
 public class LoginController {
 
-	private UserService userService;
+	private static final UserService userService = SystemConfig.getSingletonInstance().getServiceAbstractFactory()
+			.getUserService();
+	private static final EmailService emailService = SystemConfig.getSingletonInstance().getServiceAbstractFactory()
+			.getEmailService();
 
 	@RequestMapping("/")
 	public RedirectView redirectPage() {
@@ -44,9 +45,11 @@ public class LoginController {
 	@RequestMapping("/login-success")
 	public RedirectView loginSuccess(Authentication authentication) {
 		String systemRoleForCurrentUser = authentication.getAuthorities().iterator().next().toString();
-		String redirectURL = "/userhome";
+		String redirectURL;
 		if (systemRoleForCurrentUser.equals(Role.ADMIN.toString())) {
 			redirectURL = "/adminhome";
+		} else {
+			redirectURL = "/userhome";
 		}
 		return new RedirectView(redirectURL);
 	}
@@ -59,7 +62,6 @@ public class LoginController {
 	@GetMapping("/resetPassword")
 	public String sendResetRequest(@RequestParam(name = "username", required = true) String bannerId, Model model,
 			HttpSession session) {
-		UserService userService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
 		User userObj = new User();
 		userService.loadUserWithBannerId(bannerId, userObj);
 		if (userObj.getEmail() == null || userObj.getEmail().isEmpty()) {
@@ -71,7 +73,6 @@ public class LoginController {
 			session.setAttribute("RESET_PASSWORD", genPassword);
 			model.addAttribute("resetForm", new ResetPassword(bannerId));
 			model.addAttribute("sentEmail", userObj.getEmail());
-			EmailService emailService = ProfileManagementConfig.getSingletonInstance().getTheEmailService();
 			emailService.sendSimpleMessage(userObj.getEmail(), "Reset Password",
 					"Your reset password is: " + genPassword);
 			return "resetPassword.html";
@@ -83,7 +84,6 @@ public class LoginController {
 
 		String redirectURL = "login-success";
 		Boolean isError = false;
-		userService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
 		User userObj = new User();
 		userService.loadUserWithBannerId(resetForm.getbannerId(), userObj);
 		if (resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD"))) {
