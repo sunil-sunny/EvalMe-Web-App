@@ -27,5 +27,7 @@ public interface ServiceAbstractFactory {
 	public ViewQuestionsService getViewQuestionsService();
 	
 	public SurveyService getSurveyService();
+	
+	public GroupFormationService getGroupFormationService();
 
 }

@@ -68,4 +68,9 @@ public class ServiceAbstractFactoryImpl implements ServiceAbstractFactory {
 	public SurveyService getSurveyService() {
 		return new SurveyServiceImpl();
 	}
+
+	@Override
+	public GroupFormationService getGroupFormationService() {
+		return new GroupFormationServiceImpl();
+	}
 }
