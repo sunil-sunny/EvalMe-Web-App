@@ -11,5 +11,7 @@ public interface ExceptionAbstractFactory {
 	public QuestionExitsException getQuestionExitsException(String message);
 
 	public SavingSurveyException getSavingSurveyException(String message);
+	
+	public EnrollingStudentException getEnrollingStudentException(String message);
 
 }

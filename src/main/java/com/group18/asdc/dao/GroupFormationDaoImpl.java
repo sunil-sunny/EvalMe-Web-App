@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
@@ -82,7 +83,7 @@ public class GroupFormationDaoImpl implements GroupFormationDao{
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				log.info("Closing connection after fetching Group Formation Results");
+				log.log(Level.INFO,"Closing connection after fetching Group Formation Results");
 			} catch (SQLException e) {
 				log.severe("SQL Exception while closing the connection and statement after fetching Group Formation Results");
 			}

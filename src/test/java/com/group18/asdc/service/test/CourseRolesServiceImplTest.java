@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.User;
+import com.group18.asdc.errorhandling.EnrollingStudentException;
 import com.group18.asdc.errorhandling.FileProcessingException;
 import com.group18.asdc.service.CourseRolesService;
 
@@ -29,13 +30,18 @@ public class CourseRolesServiceImplTest {
 	public void enrollStudentsIntoCourseTestTwo() {
 
 		List<User> studentsList = new ArrayList<User>();
-		boolean isEnrolled = theCourseRolesServiceMock.enrollStuentsIntoCourse(studentsList, 9);
+		boolean isEnrolled;
+		try {
+			isEnrolled = theCourseRolesServiceMock.enrollStuentsIntoCourse(studentsList, 9);
+		} catch (EnrollingStudentException e) {
+			isEnrolled = Boolean.FALSE;
+		}
 		assertFalse(isEnrolled);
 	}
 
 	@Test
 	public void allocateTaTestOne() {
-		
+
 		User studentsList = new User();
 		boolean isEnrolled = theCourseRolesServiceMock.allocateTa(2, studentsList);
 		assertTrue(isEnrolled);

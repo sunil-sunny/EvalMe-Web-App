@@ -364,7 +364,7 @@ public class SurveyDaoImpl implements SurveyDao {
 			thePreparedStatement.setInt(1, course.getCourseId());
 			theResultSet = thePreparedStatement.executeQuery();
 			if (theResultSet.next()) {
-				if (theResultSet.getBoolean("1")) {
+				if (theResultSet.getBoolean("state")) {
 					isSurveyPublished = Boolean.TRUE;
 				}
 			}
