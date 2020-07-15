@@ -1,4 +1,4 @@
-package com.group18.asdc.service;
+package com.group18.asdc.service.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -17,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.security.IPasswordEncryption;
+import com.group18.asdc.service.UserService;
+import com.group18.asdc.service.UserServiceImpl;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 
 @SpringBootTest

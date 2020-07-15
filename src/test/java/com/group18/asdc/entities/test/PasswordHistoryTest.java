@@ -1,9 +1,11 @@
-package com.group18.asdc.entities;
+package com.group18.asdc.entities.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.group18.asdc.entities.PasswordHistory;
 
 @SpringBootTest
 public class PasswordHistoryTest {
