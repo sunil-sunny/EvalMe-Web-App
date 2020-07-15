@@ -25,14 +25,14 @@ public class RegisterServiceImpl implements RegisterService {
 		JSONObject resultObj = new JSONObject();
 		try {
 			resultObj.put("STATUS", RegistrationStatus.UNSUCCESSFUL);
-			boolean isError = false;
+			boolean isError = Boolean.FALSE;
 			if (userDetails.getBannerid().matches(ConstantStringUtil.BANNER_ID_CHECK.toString())) {
 				if (9 != userDetails.getBannerid().length()) {
-					isError = true;
+					isError = Boolean.TRUE;
 					resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_LENGTH);
 				}
 			} else {
-				isError = true;
+				isError = Boolean.TRUE;
 				resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_PATTERN);
 			}
 			if (userDetails.getEmailid().matches(ConstantStringUtil.EMAIL_PATTERN_CHECK.toString())) {
@@ -52,7 +52,7 @@ public class RegisterServiceImpl implements RegisterService {
 				if (isEmailExits) {
 					resultObj.put("STATUS", RegistrationStatus.EXISTING_EMAIL_ID);
 				}
-				boolean registerResult = false;
+				boolean registerResult = Boolean.FALSE;
 				if (isBannerIdExists && isEmailExits) {
 					if (registerResult) {
 						resultObj.put("STATUS", RegistrationStatus.SUCCESS);
@@ -61,7 +61,7 @@ public class RegisterServiceImpl implements RegisterService {
 					registerResult = registerDao.registeruser(userDetails);
 				}
 			} else {
-				isError = true;
+				isError = Boolean.TRUE;
 				resultObj.put("STATUS", RegistrationStatus.INVALID_EMAIL_PATTERN);
 			}
 
@@ -76,7 +76,7 @@ public class RegisterServiceImpl implements RegisterService {
 
 			}
 		} catch (JSONException e) {
-			log.severe("user registration error");
+			log.log(Level.SEVERE, "JSON Exception while registering the user with id " + userDetails.getBannerid());
 		}
 		return resultObj;
 	}
@@ -85,20 +85,20 @@ public class RegisterServiceImpl implements RegisterService {
 	public boolean registerStudents(List<User> studentList) {
 		UserService userService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
 		EmailService emailService = null;
-		boolean isAllStudentsRegistered = false;
+		boolean isAllStudentsRegistered = Boolean.FALSE;
 		for (User user : studentList) {
-			if (false == userService.isUserExists(user)) {
+			if (userService.isUserExists(user)) {
+				isAllStudentsRegistered = Boolean.FALSE;
+			} else {
 				JSONObject resultObject = this.registeruser(new UserRegistartionDetails(user));
 				if (resultObject.optInt("STATUS") == RegistrationStatus.SUCCESS) {
-					isAllStudentsRegistered = true;
+					isAllStudentsRegistered = Boolean.TRUE;
 					emailService = ProfileManagementConfig.getSingletonInstance().getTheEmailService();
 					String messageText = ConstantStringUtil.EMAIL_MESSAGE_HEADER.toString() + user.getBannerId() + " "
 							+ user.getBannerId().concat(ConstantStringUtil.PASSWORD_TAG.toString());
 					emailService.sendSimpleMessage(user.getEmail(), ConstantStringUtil.EMAIL_SUBJECT.toString(),
 							messageText);
 
-				} else {
-					log.severe("user registration error");
 				}
 			}
 		}

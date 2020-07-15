@@ -10,7 +10,6 @@ public enum SurveyDataBaseQueries {
 	CREATE_SURVEY("insert into survey(courseid,state) value (?,?);"),
 	SAVE_SURVEY_QUESTION(
 			"insert into survey_questions (surveyid,questionid,datequestionadded,logicid,logicvalue,priority) values (?,?,?,?,?,?);"),
-
 	UPDATE_GROUP_SIZE("update survey set groupsize=? where surveyid=?;"),
 	IS_SURVEY_PUBLISHED("select state from survey where courseid=?;"),
 	PUBLICH_SURVEY("update survey set state=? where surveyid=?;"),

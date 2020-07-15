@@ -2,13 +2,15 @@ package com.group18.asdc.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import com.group18.asdc.CourseConfig;
 import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.SurveyConfig;
@@ -23,12 +25,8 @@ import com.group18.asdc.service.UserService;
 @Controller
 public class CourseController {
 
-	private Logger log = Logger.getLogger(CourseController.class.getName());
-
 	@GetMapping("/userhome")
 	public String getHomePage(Model theModel) {
-
-		log.info("in course controller");
 		CourseDetailsService courseDetailsService = CourseConfig.getSingletonInstance().getTheCourseDetailsService();
 		List<Course> coursesList = courseDetailsService.getAllCourses();
 		theModel.addAttribute("coursesList", coursesList);
@@ -80,46 +78,40 @@ public class CourseController {
 
 	@RequestMapping(value = "/coursepage", method = RequestMethod.GET)
 	public String getCoursePage(Model theModel, HttpServletRequest request) {
-		
+
 		Course course = new Course();
 		SurveyMetaData surveyMetaData = new SurveyMetaData();
 		List<SurveyQuestion> questionList = new ArrayList<SurveyQuestion>();
-		
 		String courseId = request.getParameter("id");
 		int courseID = Integer.parseInt(courseId);
 		String courseName = request.getParameter("name");
-		
 		theModel.addAttribute("courseId", courseId);
 		theModel.addAttribute("coursename", courseName);
-		
 		course.setCourseId(courseID);
 		course.setCourseName(courseName);
-		
 		CourseDetailsService courseDetailsService = CourseConfig.getSingletonInstance().getTheCourseDetailsService();
 		SurveyService surveyService = SurveyConfig.getSingletonInstance().getTheSurveyService();
-		boolean isSurveyPublished = surveyService.isSurveyPublishedForCourse(courseDetailsService.getCourseById(courseID));
-		
-		if(isSurveyPublished) {
+		boolean isSurveyPublished = surveyService
+				.isSurveyPublishedForCourse(courseDetailsService.getCourseById(courseID));
+		if (isSurveyPublished) {
 			surveyMetaData = surveyService.getSavedSurvey(course);
 			questionList = surveyMetaData.getSurveyQuestions();
-			if(null == questionList) {
+			if (null == questionList) {
 				return "error";
-			}
-			else {
+			} else {
 				theModel.addAttribute("questionlist", questionList);
 				return "studentcoursehomesurveypublished";
 			}
-		}
-		else {
+		} else {
 			return "studentcoursehomesurveynotpublished";
-		}	
+		}
 	}
 
 	@RequestMapping(value = "/coursepage", method = RequestMethod.POST)
 	public String submitSurveyAnswers(Model model) {
 		return "surveyanswersubmitresult";
 	}
-	
+
 	@RequestMapping(value = "/coursepageInstrcutor", method = RequestMethod.GET)
 	public String getCoursePageForInstrcutorOrTA(Model theModel, HttpServletRequest request) {
 		String courseId = request.getParameter("id");

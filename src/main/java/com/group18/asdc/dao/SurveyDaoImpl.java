@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.group18.asdc.QuestionManagerConfig;
 import com.group18.asdc.database.ConnectionManager;
@@ -32,22 +33,18 @@ import com.group18.asdc.util.SurveyDataBaseQueries;
 public class SurveyDaoImpl implements SurveyDao {
 
 	private final Logger log = Logger.getLogger(SurveyDaoImpl.class.getName());
-	private SimpleDateFormat dateFormat;  
 
 	@Override
 	public SurveyMetaData getSavedSurvey(Course course) {
 
 		ViewQuestionsService theViewQuestionsService = QuestionManagerConfig.getSingletonInstance()
 				.getTheViewQuestionsService();
-
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
-
-		dateFormat = new SimpleDateFormat(ConstantStringUtil.DATE_FORMAT.toString());
+		SimpleDateFormat dateFormat = new SimpleDateFormat(ConstantStringUtil.DATE_FORMAT.toString());
 		List<SurveyQuestion> allSavedQuestions = new ArrayList<SurveyQuestion>();
 		SurveyMetaData theSurvey = new SurveyMetaData();
-
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 
@@ -78,61 +75,62 @@ public class SurveyDaoImpl implements SurveyDao {
 				}
 			}
 			theSurvey.setSurveyQuestions(allSavedQuestions);
-			thePreparedStatement.close();
-			theResultSet.close();
-
-			for(int i=0;i<allSavedQuestions.size();i++) {
+			if (null != thePreparedStatement) {
+				thePreparedStatement.close();
+			}
+			if (null != theResultSet) {
+				theResultSet.close();
+			}
+			for (int i = 0; i < allSavedQuestions.size(); i++) {
 
 				int surveyQuestionId = allSavedQuestions.get(i).getSurveyQuestionId();
-
-				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_OPTIONS.toString());
+				thePreparedStatement = connection
+						.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_OPTIONS.toString());
 				thePreparedStatement.setInt(1, surveyQuestionId);
 				theResultSet = thePreparedStatement.executeQuery();
-
 				List<Option> options = new ArrayList<Option>();
 				Option option = null;
-
-				while(theResultSet.next()) {
-
+				while (theResultSet.next()) {
 					option = new Option();
 					option.setDisplayText(theResultSet.getString(3));
 					option.setStoredData(theResultSet.getInt(4));
 					options.add(option);
 				}
 				theSurvey.getSurveyQuestions().get(i).setOptions(options);
-				thePreparedStatement.close();
-				theResultSet.close();
-
+				if (null != thePreparedStatement) {
+					thePreparedStatement.close();
+				}
+				if (null != theResultSet) {
+					theResultSet.close();
+				}
 				QuestionMetaData questionMetaData = new QuestionMetaData();
 				BasicQuestionData basicQuestionData = new BasicQuestionData();
-
-				thePreparedStatement = connection.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_DATA.toString());
+				thePreparedStatement = connection
+						.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_DATA.toString());
 				thePreparedStatement.setInt(1, surveyQuestionId);
 				theResultSet = thePreparedStatement.executeQuery();
-
-				while(theResultSet.next()) {
-
+				while (theResultSet.next()) {
 					try {
 						Date date = new Date();
 						date = dateFormat.parse(theResultSet.getString(5));
-						Timestamp dateTimeStamp=new Timestamp(date.getTime());
+						Timestamp dateTimeStamp = new Timestamp(date.getTime());
 						questionMetaData.setCreationDateTime(dateTimeStamp);
 						questionMetaData.setQuestionId(theResultSet.getInt(2));
-
 						basicQuestionData.setQuestionTitle(theResultSet.getString(3));
 						basicQuestionData.setQuestionText(theResultSet.getString(4));
 						basicQuestionData.setQuestionType(theResultSet.getString(6));
-
 						questionMetaData.setBasicQuestionData(basicQuestionData);
 						theSurvey.getSurveyQuestions().get(i).setQuestionData(questionMetaData);
 
 					} catch (ParseException e) {
-						log.severe("Parse Exception in creating TimeStamp for QuestionMetaData.");
+						log.log(Level.SEVERE,
+								"Can not able to get the survey data for the course is = " + course.getCourseId());
 					}
 				}
 			}
 		} catch (SQLException e) {
-			log.info("SQL Exception while getting all the questions");
+			log.log(Level.SEVERE, "SQL Exception and Can not able to get the survey data for the course is = "
+					+ course.getCourseId());
 		} finally {
 			try {
 				if (null != theResultSet) {
@@ -144,9 +142,9 @@ public class SurveyDaoImpl implements SurveyDao {
 				if (null != connection) {
 					connection.close();
 				}
-				log.info("Closing connection after getting all questions");
 			} catch (SQLException e) {
-				log.info("SQL Exception while closing the connection and statement after getting all the question");
+				log.log(Level.SEVERE,
+						"SQL Exception while closing the connection and statement after getting all the question");
 			}
 		}
 		return theSurvey;
@@ -177,7 +175,9 @@ public class SurveyDaoImpl implements SurveyDao {
 				thePreparedStatement.setInt(2, surveyData.getSurveyId());
 				thePreparedStatement.execute();
 			} catch (SQLException e) {
-				throw new SavingSurveyException("Failure while deleting survey Questions");
+				log.log(Level.SEVERE,
+						"SQL Exception occured while saving survey with id value" + surveyData.getSurveyId());
+				throw new SavingSurveyException("Failure while Saving survey!! Try again");
 			} finally {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
@@ -188,7 +188,9 @@ public class SurveyDaoImpl implements SurveyDao {
 				thePreparedStatement.setInt(1, surveyData.getGroupSize());
 				thePreparedStatement.setInt(2, surveyData.getSurveyId());
 			} catch (SQLException e) {
-				throw new SavingSurveyException("Failure while updating group size for survey");
+				log.log(Level.SEVERE, "SQL Exception occured while saving group size of survey with id value"
+						+ surveyData.getSurveyId());
+				throw new SavingSurveyException("Failure while saving survey!! Try again");
 			} finally {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
@@ -228,18 +230,22 @@ public class SurveyDaoImpl implements SurveyDao {
 							isSurveySaved = Boolean.TRUE;
 						}
 					} catch (BatchUpdateException e) {
-						throw new SavingSurveyException("survey is already saved");
+						log.log(Level.SEVERE, "Batch exception which saving survey questions for survey id "
+								+ surveyData.getSurveyId());
+						throw new SavingSurveyException("An error occured while saving survey!! Please try again.");
 					}
 				}
 			}
 			if (isSurveySaved) {
 				connection.commit();
 			} else {
-				throw new SavingSurveyException("System Failure while saving survey questions");
+				log.log(Level.WARNING, "Survey with id " + surveyData.getSurveyId() + " has not bee saved");
+				throw new SavingSurveyException("System Failure while Saving Survey !! Try again");
 			}
 
 		} catch (SQLException e) {
-			log.severe("SQL Exception while saving the Survey");
+			log.log(Level.SEVERE,
+					"SQL Exception occuered while saving survey with id value " + surveyData.getSurveyId());
 		} finally {
 			try {
 				if (null != theResultSet) {
@@ -251,9 +257,8 @@ public class SurveyDaoImpl implements SurveyDao {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				log.info("closing connection after saving the questions");
 			} catch (SQLException e) {
-				log.severe(
+				log.log(Level.SEVERE,
 						"SQL Exception while closing the connection and statement after saving the survey questions");
 			}
 		}
@@ -273,10 +278,14 @@ public class SurveyDaoImpl implements SurveyDao {
 			theResultSet = thePreparedStatement.executeQuery();
 			if (theResultSet.next()) {
 				isSurveyExists = Boolean.TRUE;
+				log.log(Level.INFO, "Survey exists for Course with id " + course.getCourseId());
+			} else {
+				log.log(Level.FINE, "Survey doesnt exists for the course with id " + course.getCourseId());
+				isSurveyExists = Boolean.FALSE;
 			}
-
 		} catch (SQLException e) {
-			log.severe("SQL Exception which checking if survey exists or not");
+			log.log(Level.SEVERE, "SQL Exception which checking if survey exists or not for course with id value "
+					+ course.getCourseId());
 		} finally {
 			try {
 				if (null != theResultSet) {
@@ -288,9 +297,8 @@ public class SurveyDaoImpl implements SurveyDao {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				log.info("closing connection after checking if survey exists or not");
 			} catch (SQLException e) {
-				log.severe(
+				log.log(Level.SEVERE,
 						"SQL Exception while closing the connection and statement after checking if survey exists or not");
 			}
 		}
@@ -317,7 +325,7 @@ public class SurveyDaoImpl implements SurveyDao {
 				}
 			}
 		} catch (SQLException e) {
-			log.severe("SQL Exception while Creating Survey");
+			log.log(Level.SEVERE, "SQL Exception while Creating Survey for the course with id " + course.getCourseId());
 		} finally {
 			try {
 				if (null != theResultSet) {
@@ -329,9 +337,10 @@ public class SurveyDaoImpl implements SurveyDao {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				log.info("closing connection after Creating Survey");
 			} catch (SQLException e) {
-				log.severe("SQL Exception while closing the connection and statement after Creating Survey");
+				log.log(Level.SEVERE,
+						"SQL Exception while closing the connection and statement after Creating Survey with course id "
+								+ course.getCourseId());
 			}
 		}
 		return surveyId;
@@ -343,8 +352,6 @@ public class SurveyDaoImpl implements SurveyDao {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
-		int surveyPublished = 1;
-		int columnIndex = 1;
 		boolean isSurveyPublished = Boolean.FALSE;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
@@ -352,12 +359,13 @@ public class SurveyDaoImpl implements SurveyDao {
 			thePreparedStatement.setInt(1, course.getCourseId());
 			theResultSet = thePreparedStatement.executeQuery();
 			if (theResultSet.next()) {
-				if (theResultSet.getInt(columnIndex) == surveyPublished) {
+				if (theResultSet.getBoolean("1")) {
 					isSurveyPublished = Boolean.TRUE;
 				}
 			}
 		} catch (SQLException e) {
-			log.severe("SQL Exception while checking status of Survey.");
+			log.log(Level.SEVERE,
+					"SQL Exception while checking status of Survey for course with id " + course.getCourseId());
 		} finally {
 			try {
 				if (null != theResultSet) {
@@ -369,9 +377,10 @@ public class SurveyDaoImpl implements SurveyDao {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				log.info("Closing connection after checking status of Survey");
 			} catch (SQLException e) {
-				log.severe("SQL Exception while closing the connection and statement after checking status of Survey");
+				log.log(Level.SEVERE,
+						"SQL Exception while closing the connection and statement after checking status of Survey for the course with id "
+								+ course.getCourseId());
 			}
 		}
 		return isSurveyPublished;
@@ -392,11 +401,17 @@ public class SurveyDaoImpl implements SurveyDao {
 			int result = thePreparedStatement.executeUpdate();
 			theResultSet = thePreparedStatement.getGeneratedKeys();
 			if (result > 0) {
+				log.log(Level.INFO, "Survey for course with course id " + surveyMetaData.getTheCourse().getCourseId()
+						+ " has been published");
 				isSurveyPublished = Boolean.TRUE;
 			} else {
+				log.log(Level.WARNING, "Survey for course with course id " + surveyMetaData.getTheCourse().getCourseId()
+						+ " has not been published");
 				isSurveyPublished = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
+			log.log(Level.SEVERE, "SQL Exception occuered while publish survey for the course with id "
+					+ surveyMetaData.getTheCourse().getCourseId());
 			throw new PublishSurveyException("Survey is not published ! Try again");
 		} finally {
 			try {
@@ -409,9 +424,10 @@ public class SurveyDaoImpl implements SurveyDao {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				log.info("Closing connection after checking status of Survey");
 			} catch (SQLException e) {
-				log.severe("SQL Exception while closing the connection and statement after checking status of Survey");
+				log.log(Level.SEVERE,
+						"SQL Exception while closing the connection and statement after checking status of Survey for the course with id "
+								+ surveyMetaData.getTheCourse().getCourseId());
 			}
 		}
 		return isSurveyPublished;
