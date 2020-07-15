@@ -27,4 +27,9 @@ public class ExceptionAbstractionFactoryImpl implements ExceptionAbstractFactory
 		return new SavingSurveyException(message);
 	}
 
+	@Override
+	public EnrollingStudentException getEnrollingStudentException(String message) {
+		return new EnrollingStudentException(message);
+	}
+
 }

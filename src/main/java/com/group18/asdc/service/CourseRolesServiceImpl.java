@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.CourseRolesDao;
 import com.group18.asdc.entities.User;
+import com.group18.asdc.errorhandling.EnrollingStudentException;
 import com.group18.asdc.errorhandling.FileProcessingException;
 import com.group18.asdc.util.ConstantStringUtil;
 
@@ -40,13 +41,14 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 	}
 
 	@Override
-	public boolean enrollStuentsIntoCourse(List<User> studentList, int courseId) {
+	public boolean enrollStuentsIntoCourse(List<User> studentList, int courseId) throws EnrollingStudentException {
 
 		boolean isStudentsRegistered = theRegisterService.registerStudents(studentList);
 		if (isStudentsRegistered) {
 			List<User> eligibleStudents = theCourseDetailsService.filterEligibleUsersForCourse(studentList, courseId);
 			if (0 == eligibleStudents.size()) {
-				return Boolean.FALSE;
+				throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory().getEnrollingStudentException(
+						"All the Students are already part of the course with " + courseId);
 			} else {
 				return courseRolesDao.enrollStudentsIntoCourse(eligibleStudents, courseId);
 			}

@@ -56,7 +56,7 @@ public class ServiceAbstractFactoryImpl implements ServiceAbstractFactory {
 	
 	@Override
 	public UserService getUserService() {
-		return null;
+		return new UserServiceImpl();
 	}
 
 	@Override
