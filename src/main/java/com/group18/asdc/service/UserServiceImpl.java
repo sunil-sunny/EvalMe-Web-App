@@ -2,8 +2,13 @@ package com.group18.asdc.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
+
 import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
@@ -16,6 +21,7 @@ public class UserServiceImpl implements UserService {
 
 	private UserDao userDao;
 	private IQueryVariableToArrayList queryVariableToArrayList;
+	private Logger logger = Logger.getLogger(UserService.class.getName());
 
 	public UserServiceImpl(IQueryVariableToArrayList queryVariableToArrayList) {
 		userDao = new UserDaoImpl();
@@ -39,12 +45,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int loadUserWithBannerId(String bannerId, User userObj) {
+		logger.log(Level.INFO, "Fetching user data from database for user="+bannerId);
 		ArrayList<Object> valuesList = queryVariableToArrayList.convertQueryVariablesToArrayList(bannerId);
 		return userDao.loadUserWithBannerId(valuesList, userObj);
 	}
 
 	@Override
 	public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption) {
+		logger.log(Level.INFO, "Updating password for user="+userObj.getBannerId());
 		ArrayList<Object> criteriaList = queryVariableToArrayList
 				.convertQueryVariablesToArrayList(userObj.getBannerId());
 		ArrayList<Object> valueList = queryVariableToArrayList
@@ -54,6 +62,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ArrayList getUserRoles(User userObj) {
+		logger.log(Level.INFO, "Fetching user roles for user="+userObj.getBannerId());
 		ArrayList<Object> criteriaList = queryVariableToArrayList
 				.convertQueryVariablesToArrayList(userObj.getBannerId());
 		return userDao.getUserRoles(criteriaList);

@@ -2,6 +2,8 @@ package com.group18.asdc.security;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.database.SQLStatus;
@@ -21,10 +23,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class CustomAuthenticationManager implements AuthenticationManager {
 
 	private static final String ADMIN_BANNER_ID = "B-000000";
+	private Logger logger = Logger.getLogger(CustomAuthenticationManager.class.getName());
 
 	private Authentication checkAdmin(String password, User u, Authentication authentication)
 			throws AuthenticationException {
+		logger.log(Level.INFO, "Authenticating admin user");
 		if (password.equals(u.getPassword())) {
+			logger.log(Level.INFO, "Admin user authenticated user="+u.getBannerId());
 			List<GrantedAuthority> rights = new ArrayList<GrantedAuthority>();
 			rights.add(new SimpleGrantedAuthority("ADMIN"));
 			UsernamePasswordAuthenticationToken token;
@@ -32,6 +37,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 					authentication.getCredentials(), rights);
 			return token;
 		} else {
+			logger.log(Level.WARNING, "Admin user authentication failed user="+u.getBannerId());
 			throw new BadCredentialsException("1000");
 		}
 	}
@@ -41,6 +47,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
 		IPasswordEncryption passwordEncryption = ProfileManagementConfig.getSingletonInstance().getPasswordEncryption();
 		UserService userService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
+		logger.log(Level.INFO, "Authenticating user="+u.getBannerId());
 		if (passwordEncryption.matches(password, u.getPassword())) {
 			List<GrantedAuthority> rights = new ArrayList<GrantedAuthority>();
 			for (Object eachRole : userService.getUserRoles(u)) {
@@ -51,6 +58,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 					authentication.getCredentials(), rights);
 			return token;
 		} else {
+			logger.log(Level.WARNING, "User authentication failed user="+u.getBannerId());
 			throw new BadCredentialsException("1000");
 		}
 	}
@@ -58,20 +66,23 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String bannerID = authentication.getPrincipal().toString();
 		String password = authentication.getCredentials().toString();
+		logger.log(Level.INFO, "Validating user credentials for user="+bannerID);
 		UserService userDB = ProfileManagementConfig.getSingletonInstance().getTheUserService();
 		int statusCode;
 		User u = new User();
 		statusCode = userDB.loadUserWithBannerId(bannerID, u);
 		if (statusCode == SQLStatus.SUCCESSFUL && u.isValidUser()) {
-			if (bannerID.toUpperCase().equals(ADMIN_BANNER_ID)) {
+			if (bannerID.toUpperCase().equals(ADMIN_BANNER_ID)) {				
 				return checkAdmin(password, u, authentication);
 			} else {
 				return checkNormal(password, u, authentication);
 			}
 		} else if( statusCode == SQLStatus.SQL_ERROR) {
+			logger.log(Level.SEVERE, "SQL Exception while validating login for user="+bannerID);
 			throw new AuthenticationServiceException("1002");
 		}
 		else{
+			logger.log(Level.WARNING, "User not found for validating login user="+bannerID);
 			throw new UsernameNotFoundException("1001");
 		}
 	}

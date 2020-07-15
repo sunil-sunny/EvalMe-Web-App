@@ -1,18 +1,18 @@
 package com.group18.asdc.controller;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpSession;
 
 import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.dao.IPasswordPolicyDB;
-import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.entities.Role;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.handlingformsubmission.ResetPassword;
 import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.PasswordPolicyManager;
 import com.group18.asdc.service.EmailService;
-import com.group18.asdc.service.PasswordHistoryService;
+import com.group18.asdc.service.ResetPasswordService;
 import com.group18.asdc.service.UserService;
 
 import org.springframework.security.core.Authentication;
@@ -83,52 +83,33 @@ public class LoginController {
 		String redirectURL = "login-success";
 		Boolean isError = false;
 		userService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
-		User userObj = new User();
-		userService.loadUserWithBannerId(resetForm.getbannerId(), userObj);
+		HashMap resultMap = new HashMap<>();
+		String reason = null;
 		if (resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD"))) {
 			if (resetForm.getnewPassword().equals(resetForm.getconfirmNewPassword())) {
-				try {
-					userObj.setPassword(resetForm.getconfirmNewPassword());
-					userObj.validatePassword(ProfileManagementConfig.getSingletonInstance().getPasswordPolicyManager());
-					if (userService.updatePassword(userObj,
-							ProfileManagementConfig.getSingletonInstance().getPasswordEncryption())) {
 
-						PasswordHistory passwordHistory = new PasswordHistory();
-						passwordHistory.setBannerID(userObj.getBannerId());
-						passwordHistory.setPassword(userObj.getPassword());
-						passwordHistory.setDate(System.currentTimeMillis());
-						PasswordHistoryService passwordHistoryService = ProfileManagementConfig.getSingletonInstance()
-								.getPasswordHistoryService();
-						passwordHistoryService.insertPassword(passwordHistory,
-								ProfileManagementConfig.getSingletonInstance().getPasswordEncryption());
-
-					} else {
-
-						model.addAttribute("passwordResetError", Boolean.TRUE);
-						model.addAttribute("reason", "Error resetting password.");
-						isError = Boolean.TRUE;
-
-					}
-				} catch (PasswordPolicyException e) {
-					model.addAttribute("historyConstrainError", Boolean.TRUE);
-					model.addAttribute("reason", e.getMessage());
-					isError = Boolean.TRUE;
-				}
+				ResetPasswordService resetPasswordService = ProfileManagementConfig.getSingletonInstance()
+						.getResetPasswordService();
+				resultMap = resetPasswordService.resetPassword(userService, resetForm.getbannerId(),
+						resetForm.getconfirmNewPassword(),
+						ProfileManagementConfig.getSingletonInstance().getPasswordHistoryService(),
+						ProfileManagementConfig.getSingletonInstance().getPasswordPolicyManager(),
+						ProfileManagementConfig.getSingletonInstance().getPasswordEncryption());
+				isError = (Boolean) resultMap.get("IS_ERROR");
+				reason = (String) resultMap.get("REASON");
 			} else {
-				model.addAttribute("confirmPasswordError", Boolean.TRUE);
-				model.addAttribute("reason", "New password and confirm password does not match");
+				reason = "New password and confirm password does not match";
 				isError = Boolean.TRUE;
 			}
 		} else {
-			model.addAttribute("genPasswordError", Boolean.TRUE);
-			model.addAttribute("reason", "Password sent in mail does not match");
+			reason = "Password sent in mail does not match";
 			isError = Boolean.TRUE;
 		}
-
 		if (isError) {
 			model.addAttribute("resetForm", new ResetPassword(resetForm.getbannerId()));
 			model.addAttribute("isError", Boolean.TRUE);
-			model.addAttribute("sentEmail", userObj.getEmail());
+			model.addAttribute("sentEmail", resultMap.get("USER_EMAIL"));
+			model.addAttribute("reason", reason);
 			return "resetPassword";
 		} else {
 			return "redirect:" + redirectURL;
