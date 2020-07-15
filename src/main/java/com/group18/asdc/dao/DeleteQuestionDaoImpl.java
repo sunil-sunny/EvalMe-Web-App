@@ -26,7 +26,7 @@ public class DeleteQuestionDaoImpl implements DeleteQuestionDao {
 			int deleteQuestionStatus = thePreparedStatement.executeUpdate();
 			if (deleteQuestionStatus > 0) {
 				isQuestionDeleted = Boolean.TRUE;
-				log.info("Question with id " + questionId + "has been deleted");
+				log.log(Level.INFO,"Question with id " + questionId + "has been deleted");
 			} else {
 				isQuestionDeleted = Boolean.FALSE;
 				log.log(Level.WARNING, "Question with id " + questionId + "has not been deleted");

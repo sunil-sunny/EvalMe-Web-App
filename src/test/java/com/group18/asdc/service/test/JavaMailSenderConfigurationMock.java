@@ -1,6 +1,8 @@
-package com.group18.asdc.service;
+package com.group18.asdc.service.test;
 
 import java.util.Properties;
+
+import com.group18.asdc.service.IJavaMailSenderConfiguration;
 
 public class JavaMailSenderConfigurationMock implements IJavaMailSenderConfiguration {
 

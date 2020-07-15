@@ -15,23 +15,33 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.User;
+import com.group18.asdc.errorhandling.EnrollingStudentException;
 import com.group18.asdc.errorhandling.FileProcessingException;
 import com.group18.asdc.service.CourseRolesService;
 
 public class CourseRolesServiceImplTest {
 
+	private static final CourseRolesService theCourseRolesServiceMock = TestConfig.getTestSingletonIntance()
+			.getServiceTestAbstractFactory().getCourseRoleServiceTest();
+
 	@Test
 	public void enrollStudentsIntoCourseTestTwo() {
-		CourseRolesService theCourseRolesServiceMock = new CourseRolesServiceMock();
+
 		List<User> studentsList = new ArrayList<User>();
-		boolean isEnrolled = theCourseRolesServiceMock.enrollStuentsIntoCourse(studentsList, 9);
+		boolean isEnrolled;
+		try {
+			isEnrolled = theCourseRolesServiceMock.enrollStuentsIntoCourse(studentsList, 9);
+		} catch (EnrollingStudentException e) {
+			isEnrolled = Boolean.FALSE;
+		}
 		assertFalse(isEnrolled);
 	}
 
 	@Test
 	public void allocateTaTestOne() {
-		CourseRolesService theCourseRolesServiceMock = new CourseRolesServiceMock();
+
 		User studentsList = new User();
 		boolean isEnrolled = theCourseRolesServiceMock.allocateTa(2, studentsList);
 		assertTrue(isEnrolled);
@@ -39,7 +49,7 @@ public class CourseRolesServiceImplTest {
 
 	@Test
 	public void allocateTaTestTwo() {
-		CourseRolesService theCourseRolesServiceMock = new CourseRolesServiceMock();
+
 		User studentsList = new User("Rahul", "Chahar", "B09898157", "chahar@dal.ca");
 		boolean isEnrolled = theCourseRolesServiceMock.allocateTa(2, studentsList);
 		assertTrue(isEnrolled);
@@ -47,7 +57,6 @@ public class CourseRolesServiceImplTest {
 
 	@Test
 	public void extraxtValidStudentsFromFileTest() {
-		CourseRolesService theCourseRolesServiceMock = new CourseRolesServiceMock();
 		try {
 			File file = new File("");
 			FileInputStream inputStream = new FileInputStream(file);

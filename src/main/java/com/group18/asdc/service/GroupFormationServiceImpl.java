@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.group18.asdc.GroupFormationConfig;
-import com.group18.asdc.ProfileManagementConfig;
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.GroupFormationDao;
 import com.group18.asdc.entities.Answer;
 import com.group18.asdc.entities.Course;
@@ -26,10 +25,11 @@ import com.group18.asdc.util.IQueryVariableToArrayList;
 public class GroupFormationServiceImpl implements GroupFormationService {
 
 	private Logger logger = Logger.getLogger(GroupFormationService.class.getName());
+	private static final GroupFormationDao theGroupFormationDao = SystemConfig.getSingletonInstance()
+			.getDaoAbstractFactory().getGroupFormationDao();
 
 	@Override
 	public SurveyGroups getGroupFormationResults(Course course) {
-		GroupFormationDao theGroupFormationDao = GroupFormationConfig.getSingletonInstance().getTheGroupFormationDao();
 		return theGroupFormationDao.getGroupFormationResults(course);
 	}
 
@@ -57,7 +57,8 @@ public class GroupFormationServiceImpl implements GroupFormationService {
 		logger.log(Level.INFO,
 				"Fetch user information for displaying survey results userList=" + userIdList.toString());
 		HashMap<String, HashMap> userSurveyMap = new HashMap<>();
-		UserService userService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
+		UserService userService = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getUserService(
+				SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 		User user = null;
 		HashMap userMap = null;
 		ArrayList<SurveyQuestion> surveyQuestionList = (ArrayList) surveyMetaData.getSurveyQuestions();
@@ -87,7 +88,6 @@ public class GroupFormationServiceImpl implements GroupFormationService {
 							} else {
 								userAnswerList.add(eachAnswer.getAnswers());
 							}
-
 						}
 					}
 				}

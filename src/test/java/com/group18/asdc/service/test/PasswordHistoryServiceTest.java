@@ -1,4 +1,4 @@
-package com.group18.asdc.service;
+package com.group18.asdc.service.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.isA;
@@ -10,6 +10,8 @@ import java.util.HashMap;
 import com.group18.asdc.dao.PasswordHistoryDao;
 import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.security.IPasswordEncryption;
+import com.group18.asdc.service.PasswordHistoryService;
+import com.group18.asdc.service.PasswordHistoryServiceImpl;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 import org.junit.Before;
 import org.junit.Test;

@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.springframework.stereotype.Repository;
-import com.group18.asdc.CourseConfig;
+
 import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
@@ -62,8 +63,8 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				course.setStudentList(students);
 				resultSetAllCourseRoles.close();
 				allCourses.add(course);
-				log.info("Number of courses rereived is " + allCourses.size());
 			}
+			log.log(Level.INFO, "Number of courses rereived is " + allCourses.size());
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception while getting all the courses and the number of courses is ",
 					allCourses.size());
@@ -84,7 +85,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				if (null != resultSetAllCourseRoles) {
 					resultSetAllCourseRoles.close();
 				}
-				log.info("closing all the data connections in after getting all courses");
+				log.log(Level.INFO, "closing all the data connections in after getting all courses");
 			} catch (SQLException e) {
 				log.log(Level.SEVERE,
 						"SQL Exception while closing the connection and statements after getting all courses");
@@ -95,7 +96,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCoursesWhereUserIsStudent(User user) {
-		CourseDetailsDao theCourseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultset = null;
@@ -112,14 +112,14 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
-				course.setInstructorName(theCourseDetailsDao.getInstructorForCourse(courseid));
+				course.setInstructorName(this.getInstructorForCourse(courseid));
 				getCoursesAsStudent.add(course);
 			}
-			log.info("Number of courses where user as Student is " + getCoursesAsStudent.size());
+			log.log(Level.INFO, "Number of courses where user with id " + user.getBannerId() + " as Student is "
+					+ getCoursesAsStudent.size());
 		} catch (SQLException e) {
-			log.log(Level.SEVERE,
-					"SQL Exception occured while getting courses where user as student and received count is ",
-					getCoursesAsStudent.size());
+			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id " + user.getBannerId()
+					+ " as student and received count is ", getCoursesAsStudent.size());
 		} finally {
 			try {
 				if (null != connection) {
@@ -131,7 +131,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				if (null != resultset) {
 					resultset.close();
 				}
-				log.info("Closing connection after getting all courses where user is Student");
+				log.log(Level.INFO, "Closing connection after getting all courses where user is Student");
 			} catch (SQLException e) {
 				log.log(Level.SEVERE,
 						"SQL Exception while closing the connection and statements after getting courses where user is student");
@@ -142,7 +142,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
-		CourseDetailsDao theCourseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultset = null;
@@ -159,14 +158,14 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
-				course.setInstructorName(theCourseDetailsDao.getInstructorForCourse(courseid));
+				course.setInstructorName(this.getInstructorForCourse(courseid));
 				getCoursesAsInstructor.add(course);
 			}
-			log.info("Number of courses where user as Instructor is " + getCoursesAsInstructor.size());
+			log.log(Level.INFO, "Number of courses where user with id " + user.getBannerId() + " as Instructor is "
+					+ getCoursesAsInstructor.size());
 		} catch (SQLException e) {
-			log.log(Level.SEVERE,
-					"SQL Exception occured while getting courses where user as instructor and received count is",
-					getCoursesAsInstructor.size());
+			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id " + user.getBannerId()
+					+ " as instructor and received count is", getCoursesAsInstructor.size());
 		} finally {
 			try {
 				if (null != connection) {
@@ -207,10 +206,11 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				course.setInstructorName(this.getInstructorForCourse(courseid));
 				getCoursesAsTA.add(course);
 			}
-			log.info("Number of courses where user as TA is " + getCoursesAsTA.size());
-		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user as TA and received count is "
+			log.log(Level.INFO, "Number of courses where user with id " + user.getBannerId() + " as TA is "
 					+ getCoursesAsTA.size());
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id " + user.getBannerId()
+					+ " as TA and received count is " + getCoursesAsTA.size());
 		} finally {
 			try {
 				if (null != connection) {
@@ -328,7 +328,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		UserDao theUserDao = ProfileManagementConfig.getSingletonInstance().getTheUserDao();
 		List<User> eligibleStudents = new ArrayList<User>();
 		List<User> existingStudentsOfCourse = theUserDao.getAllUsersByCourse(courseId);
-		log.info("Filtering the Eligible for the course id " + courseId);
+		log.log(Level.INFO, "Filtering the Eligible for the course id " + courseId);
 		for (User student : studentList) {
 			boolean isExists = Boolean.FALSE;
 			for (User existingStudent : existingStudentsOfCourse) {
@@ -405,7 +405,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				if (null != resultSetCourseRoles) {
 					resultSetCourseRoles.close();
 				}
-				log.info("closing all the data connections in after getting course by Id");
+				log.log(Level.INFO, "closing all the data connections in after getting course by Id");
 			} catch (SQLException e) {
 				log.log(Level.SEVERE,
 						"Exception while closing the connection and statements after getting course for id ", courseId);

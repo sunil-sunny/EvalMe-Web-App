@@ -9,21 +9,27 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.group18.asdc.CourseConfig;
-import com.group18.asdc.ProfileManagementConfig;
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.CourseRolesDao;
 import com.group18.asdc.entities.User;
+import com.group18.asdc.errorhandling.EnrollingStudentException;
 import com.group18.asdc.errorhandling.FileProcessingException;
 import com.group18.asdc.util.ConstantStringUtil;
 
 public class CourseRolesServiceImpl implements CourseRolesService {
 
+	private static final CourseDetailsService theCourseDetailsService = SystemConfig.getSingletonInstance()
+			.getServiceAbstractFactory().getCourseDetailsService();
+	private static final CourseRolesDao courseRolesDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory()
+			.getCourseRolesDao();
+	private static final RegisterService theRegisterService = SystemConfig.getSingletonInstance()
+			.getServiceAbstractFactory().getRegisterService();
+
 	@Override
 	public boolean allocateTa(int courseId, User user) {
-		CourseDetailsService theCourseDetailsService = CourseConfig.getSingletonInstance().getTheCourseDetailsService();
+
 		List<User> taAsList = new ArrayList<User>();
 		List<User> eligibleUser = null;
-		CourseRolesDao courseRolesDao = CourseConfig.getSingletonInstance().getTheCourseRolesDao();
 		if (null != user) {
 			taAsList.add(user);
 			eligibleUser = theCourseDetailsService.filterEligibleUsersForCourse(taAsList, courseId);
@@ -35,15 +41,14 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 	}
 
 	@Override
-	public boolean enrollStuentsIntoCourse(List<User> studentList, int courseId) {
-		CourseRolesDao courseRolesDao = CourseConfig.getSingletonInstance().getTheCourseRolesDao();
-		CourseDetailsService theCourseDetailsService = CourseConfig.getSingletonInstance().getTheCourseDetailsService();
-		RegisterService theRegisterService = ProfileManagementConfig.getSingletonInstance().getTheRegisterservice();
+	public boolean enrollStuentsIntoCourse(List<User> studentList, int courseId) throws EnrollingStudentException {
+
 		boolean isStudentsRegistered = theRegisterService.registerStudents(studentList);
 		if (isStudentsRegistered) {
 			List<User> eligibleStudents = theCourseDetailsService.filterEligibleUsersForCourse(studentList, courseId);
 			if (0 == eligibleStudents.size()) {
-				return Boolean.FALSE;
+				throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory().getEnrollingStudentException(
+						"All the Students are already part of the course with " + courseId);
 			} else {
 				return courseRolesDao.enrollStudentsIntoCourse(eligibleStudents, courseId);
 			}
@@ -57,7 +62,8 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 		List<User> validUsers = new ArrayList<User>();
 		List<User> inValidUsers = new ArrayList<User>();
 		if (file.isEmpty()) {
-			throw new FileProcessingException("uploaded file is empty, Kindly upload valid file");
+			throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
+					.getFileProcessingException("uploaded file is empty, Kindly upload valid file");
 		} else {
 			try {
 				byte[] bytes = file.getBytes();
@@ -85,13 +91,15 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 							inValidUsers.add(user);
 						}
 					} else {
-						throw new FileProcessingException(
-								"Content in the file doesnt match the format kinldy rectify it ang upload again");
+						throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
+								.getFileProcessingException(
+										"Content in the file doesnt match the format kinldy rectify it ang upload again");
 					}
 				}
 				br.close();
 			} catch (IOException e) {
-				throw new FileProcessingException("File doesnt exist or it is invalid, Kinldy try again");
+				throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
+						.getFileProcessingException("File doesnt exist or it is invalid, Kinldy try again");
 			}
 		}
 		return validUsers;
