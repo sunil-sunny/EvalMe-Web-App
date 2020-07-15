@@ -1,63 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html xmlns:th="https://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
-<meta charset="ISO-8859-1">
-<title>EvalMe</title>
-<link th:href="@{/public/bootstrap.min.css}" rel="stylesheet">
-<style>
-h1 {
-	text-align: center;
-}
-</style>
+    <meta charset="ISO-8859-1">
+    <title>EvalMe</title>
+    <link th:href="@{/public/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
 </head>
+
 <body>
-	<div th:replace="fragments/courseheader :: header"></div>
-	<br>
+    <div th:replace="fragments/courseheader :: header"></div>
+    <br>
 
-	<div class="col-4"
-		th:class="${'container justify-content-center alert alert-success'}"
-		style="width: 100%; text-align: center; font-variant: small-caps;">
-		<h1>Group Formation Results</h1>
+    <div class="col-4" th:class="${'container justify-content-center alert alert-primary'}" style="width: 100%; text-align: center; font-variant: small-caps;">
+        <h1>Group Formation Results</h1>
 
-	</div>
+    </div>
 
-	<div class="container"
-		style="text-align: center; font-variant: small-caps;">
-		<p>
-		<h3 th:text="${coursename}"></h3>
-		<h3 th:text="${courseid}"></h3>
-		</p>
-	</div>
+    <div class="container" style="text-align: center; font-variant: small-caps;">
+        <p>
+            <h3 th:text="${coursename}"></h3>
+            <h3 th:text="${courseid}"></h3>
+        </p>
+    </div>
 
-	<div>
-		<table>
-			<tbody>
-				<div th:each="group, stats: ${survey}">
+    <div th:class="${'container justify-content-center alert'}">
+        <table>
+            <tbody>
+                <div th:each="groupMembers, stats: ${groupList}">
 
-					<tr>
-						<h2 th:text="${group.groupId}" style="font-variant: small-caps"></h2>
-					</tr>
-					<tr>
-						<h4 th:text="${group.groupName}" style="font-variant: small-caps"></h4>
-					</tr>
+                    <div th:each="eachMember, eachIter: ${groupMembers}">
 
-					<th:block th:each="${member, stats1: group.groupMembers}"
-						style="font-variant: small-caps">
-						<tr>
-							<h4 th:text="${member.firstName}"
-								style="font-variant: small-caps"></h4>
-							<h7 th:text="${member.lastName}" style="font-variant:small-caps"></h7>
-						</tr>
-						<tr>
-							<h7 th:text="${member.bannerId}" style="font-variant:small-caps"></h7>
-						</tr>
+                        <tr>
+                            <h2 th:text="${stats.index}" style="font-variant: small-caps"></h2>
+                        </tr>
+                        <tr>
+                            <h4 th:text="${userDataMap.get(eachMember).get('FIRST_NAME')}" style="font-variant: small-caps"></h4>
+                        </tr>
+                        <tr>
+                            <h4 th:text="${userDataMap.get(eachMember).get('LAST_NAME')}" style="font-variant: small-caps"></h4>
+                        </tr>
+                        <tr>
+                            <h4 th:text="${userDataMap.get(eachMember).get('ANSWERS')}" style="font-variant: small-caps"></h4>
+                        </tr>
 
-					</th:block>
-				</div>
-			</tbody>
+                    </div>
+                </div>
+            </tbody>
 
-		</table>
-	</div>
+        </table>
+    </div>
 </body>
+
 </html>

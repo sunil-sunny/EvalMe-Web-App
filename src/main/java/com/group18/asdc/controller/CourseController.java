@@ -24,7 +24,7 @@ import com.group18.asdc.service.UserService;
 public class CourseController {
 
 	private static final UserService userService = SystemConfig.getSingletonInstance().getServiceAbstractFactory()
-			.getUserService();
+			.getUserService(SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 	private static final CourseDetailsService courseDetailsService = SystemConfig.getSingletonInstance()
 			.getServiceAbstractFactory().getCourseDetailsService();
 	private static final SurveyService surveyService = SystemConfig.getSingletonInstance().getServiceAbstractFactory()

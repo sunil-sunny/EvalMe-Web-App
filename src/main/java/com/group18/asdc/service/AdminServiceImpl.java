@@ -13,7 +13,7 @@ public class AdminServiceImpl implements AdminService {
 	private static final AdminDao adminDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory().getAdminDao();
 
 	private static final UserService theUserService = SystemConfig.getSingletonInstance().getServiceAbstractFactory()
-			.getUserService();
+			.getUserService(SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 	private static final CourseDetailsService theCourseDetailsService = SystemConfig.getSingletonInstance()
 			.getServiceAbstractFactory().getCourseDetailsService();
 

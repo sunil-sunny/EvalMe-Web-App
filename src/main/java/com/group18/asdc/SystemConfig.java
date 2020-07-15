@@ -8,6 +8,10 @@ import com.group18.asdc.errorhandling.ExceptionAbstractFactory;
 import com.group18.asdc.errorhandling.ExceptionAbstractionFactoryImpl;
 import com.group18.asdc.service.ServiceAbstractFactory;
 import com.group18.asdc.service.ServiceAbstractFactoryImpl;
+import com.group18.asdc.util.UtilAbstractFactory;
+import com.group18.asdc.util.UtilAbstractFactoryImpl;
+
+import org.springframework.web.util.UriBuilder;
 
 public class SystemConfig {
 
@@ -16,6 +20,7 @@ public class SystemConfig {
 	private ServiceAbstractFactory serviceAbstractFactory;
 	private DaoAbstractFactory daoAbstractFactory;
 	private ExceptionAbstractFactory exceptionAbstractFactory;
+	private UtilAbstractFactory utilAbstractFactory;
 
 	private SystemConfig() {
 
@@ -23,6 +28,7 @@ public class SystemConfig {
 		this.daoAbstractFactory = new DaoAbstractFactoryImpl();
 		this.serviceAbstractFactory = new ServiceAbstractFactoryImpl();
 		this.exceptionAbstractFactory = new ExceptionAbstractionFactoryImpl();
+		this.utilAbstractFactory = new UtilAbstractFactoryImpl();
 	}
 
 	public static SystemConfig getSingletonInstance() {
@@ -64,5 +70,15 @@ public class SystemConfig {
 
 	public void setExceptionAbstractFactory(ExceptionAbstractFactory exceptionAbstractFactory) {
 		this.exceptionAbstractFactory = exceptionAbstractFactory;
+	}
+
+	public UtilAbstractFactory getUtilAbstractFactory()
+	{
+		return this.utilAbstractFactory;
+	}
+
+	public void setUtilAbstractFactory(UtilAbstractFactory utilAbstractFactory)
+	{
+		this.utilAbstractFactory = utilAbstractFactory;
 	}
 }

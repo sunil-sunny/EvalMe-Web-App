@@ -2,9 +2,8 @@ package com.group18.asdc.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.UserDao;
@@ -13,18 +12,18 @@ import com.group18.asdc.entities.User;
 import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 public class UserServiceImpl implements UserService {
 
 	private static final UserDao theUserDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory().getUserDao();
 	private IQueryVariableToArrayList queryVariableToArrayList;
+	private Logger logger = Logger.getLogger(UserService.class.getName());
 
 	public UserServiceImpl(IQueryVariableToArrayList queryVariableToArrayList) {
 		super();
 		this.queryVariableToArrayList = queryVariableToArrayList;
-	}
-
-	public UserServiceImpl() {
-		super();
 	}
 
 	@Override
@@ -44,12 +43,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int loadUserWithBannerId(String bannerId, User userObj) {
+		logger.log(Level.INFO, "Fetching user data from database for user="+bannerId);
 		ArrayList<Object> valuesList = queryVariableToArrayList.convertQueryVariablesToArrayList(bannerId);
 		return theUserDao.loadUserWithBannerId(valuesList, userObj);
 	}
 
 	@Override
 	public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption) {
+		logger.log(Level.INFO, "Updating password for user="+userObj.getBannerId());
 		ArrayList<Object> criteriaList = queryVariableToArrayList
 				.convertQueryVariablesToArrayList(userObj.getBannerId());
 		ArrayList<Object> valueList = queryVariableToArrayList
@@ -59,6 +60,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ArrayList getUserRoles(User userObj) {
+		logger.log(Level.INFO, "Fetching user roles for user="+userObj.getBannerId());
 		ArrayList<Object> criteriaList = queryVariableToArrayList
 				.convertQueryVariablesToArrayList(userObj.getBannerId());
 		return theUserDao.getUserRoles(criteriaList);

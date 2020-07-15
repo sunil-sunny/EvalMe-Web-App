@@ -1,21 +1,23 @@
 package com.group18.asdc.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.group18.asdc.ProfileManagementConfig;
+import com.group18.asdc.SurveyConfig;
+import com.group18.asdc.SystemConfig;
+import com.group18.asdc.entities.Course;
+import com.group18.asdc.service.CourseDetailsService;
+import com.group18.asdc.service.GroupFormationService;
+import com.group18.asdc.service.SurveyAnswersService;
+import com.group18.asdc.service.SurveyService;
+import com.group18.asdc.util.IQueryVariableToArrayList;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.group18.asdc.SystemConfig;
-import com.group18.asdc.entities.Course;
-import com.group18.asdc.entities.Group;
-import com.group18.asdc.entities.SurveyGroups;
-import com.group18.asdc.service.CourseDetailsService;
-import com.group18.asdc.service.GroupFormationService;
 
 @Controller
 @RequestMapping("/groupformation")
@@ -31,16 +33,21 @@ public class GroupFormationController {
 
 		String courseid = request.getParameter("courseId");
 		int courseId = Integer.parseInt(courseid);
+
 		Course course = new Course();
 		course = theCourseDetailsService.getCourseById(courseId);
 		String courseName = course.getCourseName();
 		theModel.addAttribute("courseid", courseId);
 		theModel.addAttribute("coursename", courseName);
-		SurveyGroups theSurveyGroups = new SurveyGroups();
-		theSurveyGroups = theGroupFormationService.getGroupFormationResults(course);
-		List<Group> groupList = new ArrayList<Group>();
-		groupList = theSurveyGroups.getSurveyGroups();
-		theModel.addAttribute("survey", groupList);
+
+		SurveyAnswersService surveyAnswersService = SurveyConfig.getSingletonInstance().getSurveyAnswersService();
+		SurveyService surveyService = SurveyConfig.getSingletonInstance().getTheSurveyService();
+		IQueryVariableToArrayList queryVariableToArraylist = ProfileManagementConfig.getSingletonInstance()
+				.getQueryVariableToArrayList();
+		HashMap resultMap = theGroupFormationService.formGroupsForSurvey(course, surveyAnswersService, surveyService,
+				queryVariableToArraylist);
+		theModel.addAttribute("userDataMap", resultMap.get("userDataMap"));
+		theModel.addAttribute("groupList", resultMap.get("groupList"));
 		return "groupformationresult";
 	}
 }

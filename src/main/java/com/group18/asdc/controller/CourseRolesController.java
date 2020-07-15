@@ -19,7 +19,7 @@ import com.group18.asdc.service.UserService;
 public class CourseRolesController {
 
 	private static final UserService userService = SystemConfig.getSingletonInstance().getServiceAbstractFactory()
-			.getUserService();
+			.getUserService(SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 	private static final CourseRolesService courseRolesService = SystemConfig.getSingletonInstance()
 			.getServiceAbstractFactory().getCourseRolesService();
 

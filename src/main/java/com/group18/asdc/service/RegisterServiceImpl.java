@@ -67,10 +67,13 @@ public class RegisterServiceImpl implements RegisterService {
 
 		} catch (PasswordPolicyException e) {
 			try {
+				log.log(Level.SEVERE, "Error updating password for the user=" + userDetails.getBannerid() + " password="
+						+ userDetails.getPassword());
 				resultObj.put("STATUS", RegistrationStatus.PASSWORD_POLICY_ERROR);
 				resultObj.put("MESSAGE", e.getMessage());
 			} catch (JSONException e1) {
-				e1.printStackTrace();
+				log.log(Level.SEVERE, "JSON exception, should analyze further on usage of JSON values", e1);
+
 			}
 		} catch (JSONException e) {
 			log.log(Level.SEVERE, "JSON Exception while registering the user with id " + userDetails.getBannerid());

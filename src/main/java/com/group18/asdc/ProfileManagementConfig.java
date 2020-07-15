@@ -2,14 +2,14 @@ package com.group18.asdc;
 
 import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.dao.AdminDaoImpl;
+import com.group18.asdc.dao.IPasswordPolicyDB;
+import com.group18.asdc.dao.PasswordPolicyDB;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.dao.RegisterDaoImpl;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.dao.UserDaoImpl;
 import com.group18.asdc.database.DefaultDatabaseConfiguration;
 import com.group18.asdc.database.IDatabaseConfiguration;
-import com.group18.asdc.database.IPasswordPolicyDB;
-import com.group18.asdc.database.PasswordPolicyDB;
 import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
 import com.group18.asdc.passwordpolicy.IPasswordPolicyManager;
@@ -26,6 +26,8 @@ import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.PasswordHistoryServiceImpl;
 import com.group18.asdc.service.RegisterService;
 import com.group18.asdc.service.RegisterServiceImpl;
+import com.group18.asdc.service.ResetPasswordService;
+import com.group18.asdc.service.ResetPasswordServiceImpl;
 import com.group18.asdc.service.UserService;
 import com.group18.asdc.service.UserServiceImpl;
 import com.group18.asdc.util.CustomStringUtils;
@@ -55,6 +57,7 @@ public class ProfileManagementConfig {
 	private IRandomStringGenerator randomStringGenerator;
 	private ICustomStringUtils customStringUtils;
 	private PasswordHistoryService passwordHistoryService;
+	private ResetPasswordService resetPasswordService;
 
 	private ProfileManagementConfig() {
 		this.javaMailSenderConfiguration = new DefaultMailSenderConfiguration();
@@ -76,6 +79,7 @@ public class ProfileManagementConfig {
 		this.passwordPolicyManager = new PasswordPolicyManager(this.passwordPolicyDB);
 		this.randomStringGenerator = new RandomStringGenerator();
 		this.passwordHistoryService = new PasswordHistoryServiceImpl(this.queryVariableToArrayList);
+		this.resetPasswordService = new ResetPasswordServiceImpl();
 	}
 
 	public static ProfileManagementConfig getSingletonInstance() {
@@ -227,5 +231,10 @@ public class ProfileManagementConfig {
 
 	public PasswordHistoryService getPasswordHistoryService() {
 		return this.passwordHistoryService;
+	}
+
+	public ResetPasswordService getResetPasswordService()
+	{
+		return this.resetPasswordService;
 	}
 }
