@@ -1,10 +1,12 @@
-package com.group18.asdc.entities;
+package com.group18.asdc.entities.test;
 
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
+
+import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.passwordpolicy.BasePasswordPolicyManagerMock;
 import com.group18.asdc.passwordpolicy.CharsNotAllowedPolicy;

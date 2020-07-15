@@ -1,4 +1,4 @@
-package com.group18.asdc.service;
+package com.group18.asdc.service.test;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -10,6 +10,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+
+import com.group18.asdc.service.EmailService;
+import com.group18.asdc.service.EmailServiceImpl;
+import com.group18.asdc.service.IJavaMailSenderConfiguration;
 
 @SpringBootTest
 public class EmailServiceTest {

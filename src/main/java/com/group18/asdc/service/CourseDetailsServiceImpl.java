@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.group18.asdc.CourseConfig;
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.CourseDetailsDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
@@ -12,27 +12,26 @@ import com.group18.asdc.entities.User;
 @Service
 public class CourseDetailsServiceImpl implements CourseDetailsService {
 
+	private static final CourseDetailsDao courseDetailsDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory()
+			.getCourseDetailsDao();
+
 	@Override
 	public List<Course> getAllCourses() {
-		CourseDetailsDao courseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		return courseDetailsDao.getAllCourses();
 	}
 
 	@Override
 	public List<Course> getCoursesWhereUserIsStudent(User user) {
-		CourseDetailsDao courseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		return courseDetailsDao.getCoursesWhereUserIsStudent(user);
 	}
 
 	@Override
 	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
-		CourseDetailsDao courseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		return courseDetailsDao.getCoursesWhereUserIsInstrcutor(user);
 	}
 
 	@Override
 	public List<Course> getCoursesWhereUserIsTA(User user) {
-		CourseDetailsDao courseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		return courseDetailsDao.getCoursesWhereUserIsTA(user);
 	}
 
@@ -41,20 +40,17 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 		if (null == course) {
 			return Boolean.FALSE;
 		} else {
-			CourseDetailsDao courseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 			return courseDetailsDao.isCourseExists(course);
 		}
 	}
 
 	@Override
 	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
-		CourseDetailsDao courseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		return courseDetailsDao.filterEligibleUsersForCourse(studentList, courseId);
 	}
 
 	@Override
 	public Course getCourseById(int courseId) {
-		CourseDetailsDao courseDetailsDao = CourseConfig.getSingletonInstance().getTheCourseDetailsDao();
 		return courseDetailsDao.getCourseById(courseId);
 	}
 }
