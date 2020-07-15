@@ -16,6 +16,7 @@ public class SurveyAnswerDaoImpl implements SurveyAnswerDao {
 
     @Override
     public ArrayList fetchAnswersForSurvey(ArrayList valueList) {
+        logger.log(Level.INFO, "Fetching answers for survey from Database survey=" + valueList.get(0));
         SQLMethods sqlImplementation = null;
         ArrayList answerList = new ArrayList<>();
         try {
@@ -30,7 +31,6 @@ public class SurveyAnswerDaoImpl implements SurveyAnswerDao {
                 sqlImplementation.cleanup();
             }
         }
-
         return answerList;
     }
 

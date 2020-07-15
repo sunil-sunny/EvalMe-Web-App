@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.group18.asdc.entities.Answer;
 import com.group18.asdc.entities.SurveyMetaData;
@@ -16,7 +18,9 @@ public class GroupFormationAdapterImpl implements GroupFormationAdapter {
     private ArrayList<Answer> answersList = null;
     private ArrayList<HashMap> userAnswerList = null;
     private ArrayList<HashMap> questionList = null;
-    private Set<String> usersList = null;
+    private Set<String> userSet = null;
+    private ArrayList<String> usersList = null;
+    private Logger logger = Logger.getLogger(GroupFormationAdapter.class.getName());
 
     public GroupFormationAdapterImpl(SurveyMetaData surveyMetaData, ArrayList<Answer> answersList) {
         this.surveyMetaData = surveyMetaData;
@@ -25,49 +29,43 @@ public class GroupFormationAdapterImpl implements GroupFormationAdapter {
     }
 
     private void processData() {
+        logger.log(Level.INFO, "Adapter - Tranforming model objects to list");
         ArrayList<SurveyQuestion> surveyQuestionList = (ArrayList) surveyMetaData.getSurveyQuestions();
-        //
         HashMap<String, Object> questionMap = null;
         questionList = new ArrayList<>();
         for (SurveyQuestion eachSurveyQuestion : surveyQuestionList) {
             questionMap = new HashMap<>();
-            //
             questionMap.put("QUESTION_ID", eachSurveyQuestion.getSurveyQuestionId());
             questionMap.put("QUESTION_TYPE",
                     eachSurveyQuestion.getQuestionData().getBasicQuestionData().getQuestionType());
             questionMap.put("QUESTION_LOGIC", eachSurveyQuestion.getLogicDetail());
             questionMap.put("QUESTION_OPTIONS", eachSurveyQuestion.getOptions().size());
             questionMap.put("QUESTION_PRIORITY", eachSurveyQuestion.getPriority());
-            //
             questionList.add(questionMap);
         }
 
-        //
         HashMap userAnswerMap = null;
         ArrayList<String> userAnswerOptionsList = null;
-        usersList = new HashSet();
+        userSet = new HashSet();
         userAnswerList = new ArrayList<>();
-        //
         for (Answer eachAnswer : answersList) {
-            usersList.add(eachAnswer.getBannerId());
+            userSet.add(eachAnswer.getBannerId());
         }
-        //
-        for (String eachUser : usersList) {
+        usersList = new ArrayList<>();
+        for (String eachUser : userSet) {
             userAnswerMap = new HashMap<>();
             for (Answer eachAnswer : answersList) {
                 if (eachUser.equals(eachAnswer.getBannerId())) {
                     userAnswerOptionsList = new ArrayList<>();
-                    //
                     String userAnswers = eachAnswer.getAnswers();
                     userAnswerOptionsList = new ArrayList(Arrays.asList(userAnswers.split(",")));
                     userAnswerMap.put(eachAnswer.getSurveyQuestionId(), userAnswerOptionsList);
-                    //
 
                 }
             }
             userAnswerList.add(userAnswerMap);
+            usersList.add(eachUser);
         }
-
     }
 
     @Override
@@ -83,7 +81,7 @@ public class GroupFormationAdapterImpl implements GroupFormationAdapter {
     }
 
     @Override
-    public Set<String> getUserList() {
+    public ArrayList<String> getUserList() {
 
         return this.usersList;
     }

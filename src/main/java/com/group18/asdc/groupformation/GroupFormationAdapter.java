@@ -7,5 +7,5 @@ public interface GroupFormationAdapter {
     
     public ArrayList getQuestionList();
     public ArrayList getUserAnswersList();
-    public Set<String> getUserList();
+    public ArrayList<String> getUserList();
 }

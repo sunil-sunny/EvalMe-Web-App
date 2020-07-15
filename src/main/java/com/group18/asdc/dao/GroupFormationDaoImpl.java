@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.Group;
@@ -14,33 +15,34 @@ import com.group18.asdc.entities.SurveyGroups;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.GroupFormationDataBaseQueries;
 
-public class GroupFormationDaoImpl implements GroupFormationDao{
-	
+public class GroupFormationDaoImpl implements GroupFormationDao {
+
 	private final Logger log = Logger.getLogger(GroupFormationDaoImpl.class.getName());
 
 	@Override
 	public SurveyGroups getGroupFormationResults(Course course) {
-		
+
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
-		SurveyGroups theSurveyGroup=null;
-		
+		SurveyGroups theSurveyGroup = null;
+
 		try {
-			
+
 			theSurveyGroup = new SurveyGroups();
-			Group group=null;
-			User user=null;
+			Group group = null;
+			User user = null;
 			List<Group> surveyGroups = new ArrayList<Group>();
 			List<User> groupMembers = new ArrayList<User>();
-			
+
 			connection = ConnectionManager.getInstance().getDBConnection();
-			
-			thePreparedStatement = connection.prepareStatement(GroupFormationDataBaseQueries.GET_SURVEY_GROUPS.toString());
+
+			thePreparedStatement = connection
+					.prepareStatement(GroupFormationDataBaseQueries.GET_SURVEY_GROUPS.toString());
 			thePreparedStatement.setInt(1, course.getCourseId());
 			theResultSet = thePreparedStatement.executeQuery();
-			
-			while(theResultSet.next()) {
+
+			while (theResultSet.next()) {
 				theSurveyGroup.setSurveyId(theResultSet.getInt(1));
 				group = new Group();
 				group.setGroupId(theResultSet.getInt(3));
@@ -50,14 +52,15 @@ public class GroupFormationDaoImpl implements GroupFormationDao{
 			theSurveyGroup.setSurveyGroups(surveyGroups);
 			thePreparedStatement.close();
 			theResultSet.close();
-			
-			for(int i=0;i<surveyGroups.size();i++) {
-				
-				thePreparedStatement = connection.prepareStatement(GroupFormationDataBaseQueries.GET_GROUP_MEMBERS.toString());
+
+			for (int i = 0; i < surveyGroups.size(); i++) {
+
+				thePreparedStatement = connection
+						.prepareStatement(GroupFormationDataBaseQueries.GET_GROUP_MEMBERS.toString());
 				thePreparedStatement.setInt(1, surveyGroups.get(i).getGroupId());
-				theResultSet = thePreparedStatement.executeQuery();	
-				
-				while(theResultSet.next()) {
+				theResultSet = thePreparedStatement.executeQuery();
+
+				while (theResultSet.next()) {
 					user = new User();
 					user.setBannerId(theResultSet.getString(2));
 					user.setFirstName(theResultSet.getString(3));
@@ -84,7 +87,8 @@ public class GroupFormationDaoImpl implements GroupFormationDao{
 				}
 				log.info("Closing connection after fetching Group Formation Results");
 			} catch (SQLException e) {
-				log.severe("SQL Exception while closing the connection and statement after fetching Group Formation Results");
+				log.severe(
+						"SQL Exception while closing the connection and statement after fetching Group Formation Results");
 			}
 		}
 		return theSurveyGroup;
