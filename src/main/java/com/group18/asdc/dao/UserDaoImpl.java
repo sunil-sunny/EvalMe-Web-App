@@ -38,15 +38,15 @@ public class UserDaoImpl implements UserDao {
 			ResultSet resultSet = checkUser.executeQuery();
 			if (resultSet.next()) {
 				isUserExits = Boolean.TRUE;
-				logger.log(Level.INFO, "User with id " + user.getBannerId() + " is exists");
+				logger.log(Level.INFO, "User with id=" + user.getBannerId() + " exists");
 			} else {
 				isUserExits = Boolean.FALSE;
-				logger.log(Level.FINE, "User with id " + user.getBannerId() + " is not exists");
+				logger.log(Level.FINE, "User with id=" + user.getBannerId() + " does not exist");
 			}
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE,
-					"SQL Exception occurred while checking if user exists or not for user id " + user.getBannerId());
-		}
+					"SQL Exception occurred while checking if user exists or not for user id=" + user.getBannerId());
+		} 
 		return isUserExits;
 	}
 
@@ -70,8 +70,8 @@ public class UserDaoImpl implements UserDao {
 			}
 
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception while getting user with banner id " + bannerId);
-		}
+			logger.log(Level.SEVERE, "SQL Exception while getting user with banner id=" + bannerId);
+		} 
 		return user;
 	}
 
@@ -97,8 +97,8 @@ public class UserDaoImpl implements UserDao {
 				studentList.add(user);
 			}
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception while getting all the users realted to course with id " + courseId);
-		}
+			logger.log(Level.SEVERE, "SQL Exception while getting all the users realted to course with id=" + courseId);
+		} 
 		return studentList;
 	}
 
@@ -123,7 +123,7 @@ public class UserDaoImpl implements UserDao {
 				sqlCodes = SQLStatus.SUCCESSFUL;
 			}
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception while loading user object", e);
+			logger.log(Level.SEVERE, "SQL Exception while loading user object ",e);
 			sqlCodes = SQLStatus.SQL_ERROR;
 		} finally {
 			/*
@@ -228,8 +228,8 @@ public class UserDaoImpl implements UserDao {
 
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE,
-					"SQL Exception while Checking the user as instructor or not for course " + course.getCourseId());
-		}
+					"SQL Exception while Checking the user as instructor or not for course=" + course.getCourseId());
+		} 
 		return returnValue;
 	}
 }

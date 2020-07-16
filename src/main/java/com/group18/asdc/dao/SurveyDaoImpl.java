@@ -116,12 +116,12 @@ public class SurveyDaoImpl implements SurveyDao {
 
 					} catch (ParseException e) {
 						log.log(Level.SEVERE,
-								"Can not able to get the survey data for the course is = " + course.getCourseId());
+								"Can not able to get the survey data for the course=" + course.getCourseId());
 					}
 				}
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception and Can not able to get the survey data for the course is = "
+			log.log(Level.SEVERE, "SQL Exception and Can not able to get the survey data for the course="
 					+ course.getCourseId());
 		}
 		return theSurvey;
@@ -148,7 +148,7 @@ public class SurveyDaoImpl implements SurveyDao {
 				isSurveyDeleted = Boolean.TRUE;
 			} catch (SQLException e) {
 				log.log(Level.SEVERE,
-						"SQL Exception occured while saving survey with id value" + surveyData.getSurveyId());
+						"SQL Exception occured while saving survey with id value=" + surveyData.getSurveyId());
 				throw new SavingSurveyException("Failure while Saving survey!! Try again");
 			}
 			try {
@@ -156,7 +156,7 @@ public class SurveyDaoImpl implements SurveyDao {
 				updateSize.setInt(2, surveyData.getSurveyId());
 				updateSize.execute();
 			} catch (SQLException e) {
-				log.log(Level.SEVERE, "SQL Exception occured while saving group size of survey with id value"
+				log.log(Level.SEVERE, "SQL Exception occured while saving group size of survey with id value="
 						+ surveyData.getSurveyId());
 				throw new SavingSurveyException("Failure while saving survey!! Try again");
 
@@ -192,7 +192,7 @@ public class SurveyDaoImpl implements SurveyDao {
 							isSurveySaved = Boolean.TRUE;
 						}
 					} catch (BatchUpdateException e) {
-						log.log(Level.SEVERE, "Batch exception which saving survey questions for survey id "
+						log.log(Level.SEVERE, "Batch exception which saving survey questions for survey id="
 								+ surveyData.getSurveyId());
 						throw new SavingSurveyException("An error occured while saving survey!! Please try again.");
 					}
@@ -201,7 +201,7 @@ public class SurveyDaoImpl implements SurveyDao {
 			if (isSurveySaved) {
 				connection.commit();
 			} else {
-				log.log(Level.WARNING, "Survey with id " + surveyData.getSurveyId() + " has not bee saved");
+				log.log(Level.WARNING, "Survey with id=" + surveyData.getSurveyId() + " has not been saved");
 				throw new SavingSurveyException("An error occured while saving survey!! Please try again");
 			}
 
@@ -226,13 +226,13 @@ public class SurveyDaoImpl implements SurveyDao {
 			theResultSet = thePreparedStatement.executeQuery();
 			if (theResultSet.next()) {
 				isSurveyExists = Boolean.TRUE;
-				log.log(Level.INFO, "Survey exists for Course with id " + course.getCourseId());
+				log.log(Level.INFO, "Survey exists for Course with id=" + course.getCourseId());
 			} else {
-				log.log(Level.FINE, "Survey doesnt exists for the course with id " + course.getCourseId());
+				log.log(Level.FINE, "Survey doesnt exists for the course with id=" + course.getCourseId());
 				isSurveyExists = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception which checking if survey exists or not for course with id value "
+			log.log(Level.SEVERE, "SQL Exception which checking if survey exists or not for course with id="
 					+ course.getCourseId());
 		}
 		return isSurveyExists;
@@ -258,7 +258,7 @@ public class SurveyDaoImpl implements SurveyDao {
 				}
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while Creating Survey for the course with id " + course.getCourseId());
+			log.log(Level.SEVERE, "SQL Exception while Creating Survey for the course with id=" + course.getCourseId());
 		}
 		return surveyId;
 	}
@@ -282,7 +282,7 @@ public class SurveyDaoImpl implements SurveyDao {
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE,
-					"SQL Exception while checking status of Survey for course with id " + course.getCourseId());
+					"SQL Exception while checking status of Survey for course with id=" + course.getCourseId());
 		}
 		return isSurveyPublished;
 	}
@@ -299,16 +299,16 @@ public class SurveyDaoImpl implements SurveyDao {
 			thePreparedStatement.setInt(2, surveyMetaData.getSurveyId());
 			int result = thePreparedStatement.executeUpdate();
 			if (result > 0) {
-				log.log(Level.INFO, "Survey for course with course id " + surveyMetaData.getTheCourse().getCourseId()
+				log.log(Level.INFO, "Survey for course with course id=" + surveyMetaData.getTheCourse().getCourseId()
 						+ " has been published");
 				isSurveyPublished = Boolean.TRUE;
 			} else {
-				log.log(Level.WARNING, "Survey for course with course id " + surveyMetaData.getTheCourse().getCourseId()
+				log.log(Level.WARNING, "Survey for course with course id=" + surveyMetaData.getTheCourse().getCourseId()
 						+ " has not been published");
 				isSurveyPublished = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occuered while publish survey for the course with id "
+			log.log(Level.SEVERE, "SQL Exception occuered while publish survey for the course with id="
 					+ surveyMetaData.getTheCourse().getCourseId());
 			throw new PublishSurveyException("Survey is not published ! Try again");
 		}

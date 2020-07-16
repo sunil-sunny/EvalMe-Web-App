@@ -49,9 +49,11 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				} else {
 					isQuestionCreated = Boolean.FALSE;
 				}
+				log.log(Level.INFO,"Created question=" + theBasicQuestionData.getQuestionType() + " and text="
+						+ theBasicQuestionData.getQuestionText() + " for the user=" + theUser.getBannerId());
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while creating the Numeric or Text Question for the user with id ",
+			log.log(Level.SEVERE, "SQL Exception while creating the Numeric or Text Question for the user with id=",
 					theUser.getBannerId());
 		}
 		return isQuestionCreated;
@@ -105,14 +107,14 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 			}
 			if (isQuestionCreated) {
 				connection.commit();
-				log.log(Level.INFO, "Created " + theMultipleChoiceQuestion.getQuestionType() + " question with text "
-						+ theMultipleChoiceQuestion.getQuestionText() + " for the user " + theUser.getBannerId());
+				log.log(Level.INFO,"Created question=" + theMultipleChoiceQuestion.getQuestionType() + " with text="
+						+ theMultipleChoiceQuestion.getQuestionText() + " for the user=" + theUser.getBannerId());
 			} else {
 				log.log(Level.WARNING,
-						"Not able to create multiple choice questionid for user with id " + theUser.getBannerId());
+						"Not able to create multiple choice questionid for user with id=" + theUser.getBannerId());
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while creating Multiple choice question for user id ",
+			log.log(Level.SEVERE, "SQL Exception while creating Multiple choice question for user id="+
 					theUser.getBannerId());
 		}
 		return isQuestionCreated;
@@ -133,8 +135,8 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				typeId = theResultSet.getInt("questiontypeid");
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while getting ID for question type ", questionType);
-		}
+			log.log(Level.SEVERE, "SQL Exception while getting ID for question type="+ questionType);
+		} 
 		return typeId;
 	}
 
@@ -158,14 +160,13 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 			ResultSet theResultSet = thePreparedStatement.executeQuery();
 			if (theResultSet.next()) {
 				isQuestionExists = Boolean.TRUE;
-				log.log(Level.INFO,
-						"Question with text " + theBasicQuestionData.getQuestionText() + " is already exists");
+				log.log(Level.INFO,"Question with text=" + theBasicQuestionData.getQuestionText() + " is already exists");
 			} else {
 				log.log(Level.FINE,
-						"Question with text " + theBasicQuestionData.getQuestionText() + " is doesn't exists");
+						"Question with text=" + theBasicQuestionData.getQuestionText() + " doesn't exists");
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while checking whether the question exists or not for text ",
+			log.log(Level.SEVERE, "SQL Exception while checking whether the question exists or not for text "+
 					theBasicQuestionData.getQuestionText());
 		}
 		return isQuestionExists;

@@ -28,7 +28,7 @@ public class PasswordHistoryDaoImpl implements PasswordHistoryDao {
 					.insertQuery(UserManagementDataBaseQueriesUtil.INSERT_PASSWORD_HISTORY.toString(), valuesList);
 			return primaryKey;
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception while inserting password history", e);
+			logger.log(Level.SEVERE, "SQL Exception while inserting password history",e);
 		} finally {
 			/*
 			 * Had a discussion with Professor Rob and this cannot be avoided without

@@ -48,7 +48,7 @@ public class AdminDaoImpl implements AdminDao {
 				returnValue = Boolean.TRUE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while adding the course",
+			log.log(Level.SEVERE, "SQL Exception while adding the course="+
 					course.getCourseId() + " " + course.getCourseName());
 		}
 		return returnValue;
@@ -77,7 +77,7 @@ public class AdminDaoImpl implements AdminDao {
 				returnValue = Boolean.TRUE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while deleting the course ",
+			log.log(Level.SEVERE, "SQL Exception while deleting the course="+
 					course.getCourseId() + " " + course.getCourseName());
 		}
 		return returnValue;

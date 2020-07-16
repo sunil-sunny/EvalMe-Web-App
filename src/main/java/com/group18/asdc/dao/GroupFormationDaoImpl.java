@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.group18.asdc.SystemConfig;
@@ -64,8 +65,9 @@ public class GroupFormationDaoImpl implements GroupFormationDao {
 				}
 				theSurveyGroup.getSurveyGroups().get(i).setGroupMembers(groupMembers);
 			}
+			log.log(Level.INFO,"Retrieved list of groups where number of groups="+surveyGroups.size());
 		} catch (SQLException e) {
-			log.severe("SQL Exception while fetching Group Formation Results");
+			log.log(Level.SEVERE, "SQL Exception while fetching group formation results",e);
 		} 
 		return theSurveyGroup;
 	}
