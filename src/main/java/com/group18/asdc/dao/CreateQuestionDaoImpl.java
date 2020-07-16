@@ -16,7 +16,6 @@ import com.group18.asdc.entities.MultipleChoiceQuestion;
 import com.group18.asdc.entities.Option;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.UserService;
-import com.group18.asdc.util.CourseDataBaseQueriesUtil;
 import com.group18.asdc.util.QuestionManagerDataBaseQueries;
 
 public class CreateQuestionDaoImpl implements CreateQuestionDao {

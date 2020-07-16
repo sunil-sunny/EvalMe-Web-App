@@ -8,7 +8,6 @@ import com.group18.asdc.entities.Answer;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.SurveyGroups;
 import com.group18.asdc.entities.SurveyMetaData;
-import com.group18.asdc.entities.User;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 
 public interface GroupFormationService {

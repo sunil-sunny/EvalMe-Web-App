@@ -19,7 +19,7 @@ public class CharsNotAllowedPolicy implements IBasePasswordPolicy {
 
 	@Override
 	public void validate(String password) throws PasswordPolicyException {
-		logger.log(Level.INFO, "Validating characters not allowed policy for the password=" + password);
+		logger.log(Level.INFO, "Validating characters not allowed policy for the password" );
 		if (customStringUtils.containsAnyCharacter(password, this.charsNotAllowed)) {
 			throw new PasswordPolicyException("Password contains restricted chars:" + charsNotAllowed);
 		}
