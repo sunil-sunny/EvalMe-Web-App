@@ -51,4 +51,9 @@ public class DaoTestAbstractFactoryImpl implements DaoTestAbstractFactory {
 	public ViewQuestionsDao getViewQuestionsDaoTest() {
 		return new ViewQuestionsDaoImplMock();
 	}
+
+	@Override
+	public RegisterDao getRegisterDaoTest() {
+		return new RegisterDaoMock();
+	}
 }
