@@ -50,5 +50,4 @@ public class DaoTestAbstractFactoryImpl implements DaoTestAbstractFactory {
 	public ViewQuestionsDao getViewQuestionsDaoTest() {
 		return new ViewQuestionsDaoImplMock();
 	}
-
 }
