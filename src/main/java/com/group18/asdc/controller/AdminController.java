@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.group18.asdc.SystemConfig;
+import com.group18.asdc.dao.IPasswordPolicyDB;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.service.AdminService;
 
@@ -60,5 +61,14 @@ public class AdminController {
 				return "redirect:/admindelete?error";
 			}
 		}
+	}
+
+	@GetMapping("/resetPasswordPolicies")
+	public String resetPasswordPolicies() {
+		IPasswordPolicyDB passwordPolicyDB = SystemConfig.getSingletonInstance().getDaoAbstractFactory()
+				.getPasswordPolicyDB();
+		SystemConfig.getSingletonInstance().setBasePasswordPolicyManager(passwordPolicyDB);
+		SystemConfig.getSingletonInstance().setPasswordPolicyManager(passwordPolicyDB);
+		return "policyReset";
 	}
 }

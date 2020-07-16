@@ -1,5 +1,12 @@
 package com.group18.asdc.controller;
 
+import com.group18.asdc.SystemConfig;
+import com.group18.asdc.entities.PasswordHistory;
+import com.group18.asdc.entities.UserRegistartionDetails;
+import com.group18.asdc.service.PasswordHistoryService;
+import com.group18.asdc.service.RegisterService;
+import com.group18.asdc.util.RegistrationStatus;
+
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,13 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.group18.asdc.ProfileManagementConfig;
-import com.group18.asdc.SystemConfig;
-import com.group18.asdc.entities.PasswordHistory;
-import com.group18.asdc.entities.UserRegistartionDetails;
-import com.group18.asdc.service.PasswordHistoryService;
-import com.group18.asdc.service.RegisterService;
-import com.group18.asdc.util.RegistrationStatus;
 
 @Controller
 @RequestMapping("/registration")
@@ -35,7 +35,7 @@ public class RegisterController {
 
 	@PostMapping
 	public String registerUserAccount(@ModelAttribute("user") UserRegistartionDetails bean, BindingResult result) {
-		
+
 		if (result.hasErrors()) {
 			return "registration";
 		}
@@ -56,10 +56,11 @@ public class RegisterController {
 			passwordHistory.setBannerID(bean.getBannerid());
 			passwordHistory.setPassword(bean.getPassword());
 			passwordHistory.setDate(System.currentTimeMillis());
-			PasswordHistoryService passwordHistoryService = ProfileManagementConfig.getSingletonInstance()
-					.getPasswordHistoryService();
+			PasswordHistoryService passwordHistoryService = SystemConfig.getSingletonInstance()
+					.getServiceAbstractFactory().getPasswordHistoryService(
+							SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 			passwordHistoryService.insertPassword(passwordHistory,
-					ProfileManagementConfig.getSingletonInstance().getPasswordEncryption());
+					SystemConfig.getSingletonInstance().getSecurityAbstractFactory().getPasswordEncryption());
 			return "redirect:/login?accountcreatedsuccessfully";
 		} else {
 			return "registration";

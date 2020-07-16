@@ -1,7 +1,7 @@
 package com.group18.asdc.entities;
 
 import com.group18.asdc.errorhandling.PasswordPolicyException;
-import com.group18.asdc.passwordpolicy.IPasswordPolicyManager;
+import com.group18.asdc.passwordpolicy.PasswordPolicyFactory;
 
 public interface IUser {
 
@@ -27,6 +27,6 @@ public interface IUser {
 
 	public void setPassword(String password);
 
-	public void validatePassword(IPasswordPolicyManager passwordPolicyManager) throws PasswordPolicyException;
+	public void validatePassword(PasswordPolicyFactory passwordPolicyManager) throws PasswordPolicyException;
 
 }

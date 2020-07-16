@@ -16,10 +16,6 @@ public class AdminDaoImpl implements AdminDao {
 
 	private Logger log = Logger.getLogger(AdminDaoImpl.class.getName());
 
-	public AdminDaoImpl() {
-		super();
-	}
-
 	@Override
 	public boolean addCourse(Course course) {
 		boolean returnValue = Boolean.TRUE;

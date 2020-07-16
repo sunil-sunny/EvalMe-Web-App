@@ -152,13 +152,14 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public int loadUserWithBannerId(ArrayList<Object> valueList, User userObj) {
+		logger.log(Level.INFO, "Loading user object values from db for user=" + valueList.get(0));
 		SQLMethods sqlImplementation = null;
 		int sqlCodes = SQLStatus.NO_DATA_AVAILABLE;
 		try {
 			Connection connection = ConnectionManager.getInstance().getDBConnection();
 			sqlImplementation = new SQLMethods(connection);
 			ArrayList<HashMap<String, Object>> rowsList = sqlImplementation
-					.selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), valueList);
+					.selectQuery(UserManagementDataBaseQueriesUtil.GET_USER_WITH_BANNER_ID.toString(), valueList);
 			if (rowsList.size() > 0) {
 				HashMap<String, Object> valuesMap = rowsList.get(0);
 				userObj.setBannerId((String) valuesMap.get("bannerid"));
@@ -169,9 +170,13 @@ public class UserDaoImpl implements UserDao {
 				sqlCodes = SQLStatus.SUCCESSFUL;
 			}
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception", e);
+			logger.log(Level.SEVERE, "SQL Exception while loading user object", e);
 			sqlCodes = SQLStatus.SQL_ERROR;
 		} finally {
+			/*
+			 * Had a discussion with Professor Rob and this cannot be avoided without
+			 * complicating the code
+			 */
 			if (null != sqlImplementation) {
 				sqlImplementation.cleanup();
 			}
@@ -181,17 +186,22 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valueList) {
+		logger.log(Level.INFO, "Updating password in the database for user=" + criteriaList.get(0));
 		SQLMethods sqlImplementation = null;
 		boolean isUpdateSuccessful = Boolean.FALSE;
 		try {
 			Connection connection = ConnectionManager.getInstance().getDBConnection();
 			sqlImplementation = new SQLMethods(connection);
-			Integer rowCount = sqlImplementation.updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valueList,
+			Integer rowCount = sqlImplementation.updateQuery(UserManagementDataBaseQueriesUtil.UPDATE_PASSWORD_FOR_USER.toString(), valueList,
 					criteriaList);
 			isUpdateSuccessful = rowCount > 0;
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception", e);
+			logger.log(Level.SEVERE, "SQL Exception while updating password", e);
 		} finally {
+			/*
+			 * Had a discussion with Professor Rob and this cannot be avoided without
+			 * complicating the code
+			 */
 			if (null != sqlImplementation) {
 				sqlImplementation.cleanup();
 			}
@@ -201,13 +211,14 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public ArrayList getUserRoles(ArrayList<Object> criteriaList) {
+		logger.log(Level.INFO, "Fetching user roles from the database for user=" + criteriaList.get(0));
 		ArrayList rolesList = new ArrayList<>();
 		SQLMethods sqlImplementation = null;
 		try {
 			Connection connection = ConnectionManager.getInstance().getDBConnection();
 			sqlImplementation = new SQLMethods(connection);
 			ArrayList<HashMap<String, Object>> valuesList = sqlImplementation
-					.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
+					.selectQuery(UserManagementDataBaseQueriesUtil.GET_USER_ROLES.toString(), criteriaList);
 			if (valuesList != null && valuesList.size() > 0) {
 				for (HashMap valueMap : valuesList) {
 					rolesList.add(valueMap.get("rolename"));
@@ -216,6 +227,10 @@ public class UserDaoImpl implements UserDao {
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE, "SQL Exception", e);
 		} finally {
+			/*
+			 * Had a discussion with Professor Rob and this cannot be avoided without
+			 * complicating the code
+			 */
 			if (null != sqlImplementation) {
 				sqlImplementation.cleanup();
 			}

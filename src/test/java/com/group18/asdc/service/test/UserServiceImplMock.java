@@ -16,6 +16,14 @@ public class UserServiceImplMock implements UserService {
 	private final static UserDao theDaoImplMock = TestConfig.getTestSingletonIntance().getDaoTestAbstractFactory()
 			.getUserDaoTest();
 
+	private void getDefaultUserObj(User userObj) {
+		userObj.setBannerId("B00838575");
+		userObj.setEmail("kr630601@dal.ca");
+		userObj.setFirstName("Karthikk");
+		userObj.setLastName("Tamil");
+		userObj.setPassword("karthikk");
+	}
+
 	@Override
 	public boolean isUserExists(User user) {
 		return theDaoImplMock.isUserExists(user);
@@ -34,18 +42,24 @@ public class UserServiceImplMock implements UserService {
 	@Override
 	public int loadUserWithBannerId(String bannerId, User userObj) {
 		ArrayList valueList = new ArrayList<>();
-		valueList.add(bannerId);
+		if( bannerId.equals("B00838575"))
+		{
+			getDefaultUserObj(userObj);
+		}
 		return theDaoImplMock.loadUserWithBannerId(valueList, userObj);
 	}
 
 	@Override
 	public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption) {
-		return null;
+		return Boolean.TRUE;
 	}
 
 	@Override
 	public ArrayList getUserRoles(User userObj) {
-		return null;
+		ArrayList rolesList = new ArrayList<>();
+		rolesList.add("ADMIN");
+		rolesList.add("USER");
+		return rolesList;
 	}
 
 	@Override

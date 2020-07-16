@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.group18.asdc.ProfileManagementConfig;
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
@@ -123,7 +123,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 						+ theMultipleChoiceQuestion.getQuestionText() + " for the user " + theUser.getBannerId());
 			} else {
 				log.log(Level.WARNING,
-						"Not able to create nultiple choice questiond for user with id " + theUser.getBannerId());
+						"Not able to create multiple choice questionid for user with id " + theUser.getBannerId());
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception while creating Multiple choice question for user id ",
@@ -193,7 +193,8 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		Connection connection = null;
 		PreparedStatement thePreparedStatement = null;
 		ResultSet theResultSet = null;
-		UserService theUserService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
+		UserService theUserService = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getUserService(
+			SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 		boolean isQuestionExists = Boolean.FALSE;
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();

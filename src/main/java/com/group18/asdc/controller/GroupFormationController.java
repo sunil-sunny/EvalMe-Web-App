@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.group18.asdc.ProfileManagementConfig;
-import com.group18.asdc.SurveyConfig;
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.service.CourseDetailsService;
@@ -40,14 +38,17 @@ public class GroupFormationController {
 		theModel.addAttribute("courseid", courseId);
 		theModel.addAttribute("coursename", courseName);
 
-		SurveyAnswersService surveyAnswersService = SurveyConfig.getSingletonInstance().getSurveyAnswersService();
-		SurveyService surveyService = SurveyConfig.getSingletonInstance().getTheSurveyService();
-		IQueryVariableToArrayList queryVariableToArraylist = ProfileManagementConfig.getSingletonInstance()
-				.getQueryVariableToArrayList();
-		HashMap resultMap = theGroupFormationService.formGroupsForSurvey(course, surveyAnswersService, surveyService,
-				queryVariableToArraylist);
-		theModel.addAttribute("userDataMap", resultMap.get("userDataMap"));
-		theModel.addAttribute("groupList", resultMap.get("groupList"));
+		SurveyAnswersService surveyAnswersService = SystemConfig.getSingletonInstance().getServiceAbstractFactory()
+				.getSurveyAnswersService();
+		SurveyService surveyService = SystemConfig.getSingletonInstance().getServiceAbstractFactory()
+				.getSurveyService();
+		IQueryVariableToArrayList queryVariableToArraylist = SystemConfig.getSingletonInstance()
+				.getUtilAbstractFactory().getQueryVariableToArrayList();
+		HashMap<String, Object> resultMap = theGroupFormationService.formGroupsForSurvey(course, surveyAnswersService,
+				surveyService, queryVariableToArraylist);
+
+		resultMap.forEach((key, value) -> theModel.addAttribute(key, value));
+
 		return "groupformationresult";
 	}
 }

@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.group18.asdc.SurveyConfig;
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.SurveyAnswerDao;
-import com.group18.asdc.dao.SurveyAnswerDaoImpl;
 import com.group18.asdc.entities.Answer;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 
@@ -17,9 +16,10 @@ public class SurveyAnswerServiceImpl implements SurveyAnswersService {
 
     @Override
     public ArrayList fetchAnswersForSurvey(int surveyId, IQueryVariableToArrayList queryVariableToArrayList) {
-        logger.log(Level.INFO, "Fetching answers for the survey="+surveyId);
+        logger.log(Level.INFO, "Fetching answers for the survey=" + surveyId);
         ArrayList<Answer> answersList = new ArrayList();
-        SurveyAnswerDao surveyAnswerDao = SurveyConfig.getSingletonInstance().getSurveyAnswerDao();
+        SurveyAnswerDao surveyAnswerDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory()
+                .getSurveyAnswerDao();
         ArrayList<Object> valuesList = queryVariableToArrayList.convertQueryVariablesToArrayList(surveyId);
         ArrayList<HashMap> resultList = surveyAnswerDao.fetchAnswersForSurvey(valuesList);
         for (HashMap eachAnswer : resultList) {

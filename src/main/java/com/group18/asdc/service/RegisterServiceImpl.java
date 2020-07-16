@@ -8,6 +8,7 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Repository;
 import com.group18.asdc.ProfileManagementConfig;
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.entities.UserRegistartionDetails;
@@ -30,15 +31,17 @@ public class RegisterServiceImpl implements RegisterService {
 				if (9 != userDetails.getBannerid().length()) {
 					isError = Boolean.TRUE;
 					resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_LENGTH);
+					log.log(Level.WARNING, "BannerId invalid");
 				}
 			} else {
 				isError = Boolean.TRUE;
 				resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_PATTERN);
+				log.log(Level.WARNING, "BannerId does not follow the specified pattern");
 			}
 			if (userDetails.getEmailid().matches(ConstantStringUtil.EMAIL_PATTERN_CHECK.toString())) {
 
 				User.validatePassword(userDetails.getPassword(),
-						ProfileManagementConfig.getSingletonInstance().getBasePasswordPolicyManager());
+						SystemConfig.getSingletonInstance().getBasePasswordPolicyManager());
 
 				if (isError) {
 					return resultObj;
@@ -48,9 +51,11 @@ public class RegisterServiceImpl implements RegisterService {
 				boolean isBannerIdExists = registerDao.checkUserWithEmail(userDetails.getBannerid());
 				if (isBannerIdExists) {
 					resultObj.put("STATUS", RegistrationStatus.EXISTING_BANNER_ID);
+					log.log(Level.WARNING, "BannerId already registered");
 				}
 				if (isEmailExits) {
 					resultObj.put("STATUS", RegistrationStatus.EXISTING_EMAIL_ID);
+					log.log(Level.WARNING, "Email is already registered");
 				}
 				boolean registerResult = Boolean.FALSE;
 				if (isBannerIdExists && isEmailExits) {
@@ -63,6 +68,7 @@ public class RegisterServiceImpl implements RegisterService {
 			} else {
 				isError = Boolean.TRUE;
 				resultObj.put("STATUS", RegistrationStatus.INVALID_EMAIL_PATTERN);
+				log.log(Level.WARNING, "EmailId does not follow the correct pattern");
 			}
 
 		} catch (PasswordPolicyException e) {
@@ -83,7 +89,8 @@ public class RegisterServiceImpl implements RegisterService {
 
 	@Override
 	public boolean registerStudents(List<User> studentList) {
-		UserService userService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
+		UserService userService = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getUserService(
+				SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 		EmailService emailService = null;
 		boolean isAllStudentsRegistered = Boolean.FALSE;
 		for (User user : studentList) {
@@ -93,7 +100,7 @@ public class RegisterServiceImpl implements RegisterService {
 				JSONObject resultObject = this.registeruser(new UserRegistartionDetails(user));
 				if (resultObject.optInt("STATUS") == RegistrationStatus.SUCCESS) {
 					isAllStudentsRegistered = Boolean.TRUE;
-					emailService = ProfileManagementConfig.getSingletonInstance().getTheEmailService();
+					emailService = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getEmailService();
 					String messageText = ConstantStringUtil.EMAIL_MESSAGE_HEADER.toString() + user.getBannerId() + " "
 							+ user.getBannerId().concat(ConstantStringUtil.PASSWORD_TAG.toString());
 					emailService.sendSimpleMessage(user.getEmail(), ConstantStringUtil.EMAIL_SUBJECT.toString(),

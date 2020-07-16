@@ -27,6 +27,8 @@ public class GroupFormationServiceImpl implements GroupFormationService {
 	private Logger logger = Logger.getLogger(GroupFormationService.class.getName());
 	private static final GroupFormationDao theGroupFormationDao = SystemConfig.getSingletonInstance()
 			.getDaoAbstractFactory().getGroupFormationDao();
+	private static final String USER_DATA_MAP = "userDataMap", GROUP_LIST = "groupList", FIRST_NAME = "FIRST_NAME",
+			LAST_NAME = "LAST_NAME", ANSWERS = "ANSWERS";
 
 	@Override
 	public SurveyGroups getGroupFormationResults(Course course) {
@@ -46,8 +48,8 @@ public class GroupFormationServiceImpl implements GroupFormationService {
 		IComputeDistance computeDistance = new ComputeDistance(userAnswersList, questionList);
 		IGroupFormation groupFormation = new GroupFormation(computeDistance.compute(), userList,
 				surveyQuestionData.getGroupSize());
-		resultMap.put("userDataMap", fetchGroupDetails(userList, surveyQuestionData, answerList));
-		resultMap.put("groupList", groupFormation.formGroups());
+		resultMap.put(USER_DATA_MAP, fetchGroupDetails(userList, surveyQuestionData, answerList));
+		resultMap.put(GROUP_LIST, groupFormation.formGroups());
 		return resultMap;
 	}
 
@@ -67,8 +69,8 @@ public class GroupFormationServiceImpl implements GroupFormationService {
 			user = new User();
 			userService.loadUserWithBannerId(bannerId, user);
 			if (user.isValidUser()) {
-				userMap.put("FIRST_NAME", user.getFirstName());
-				userMap.put("LAST_NAME", user.getLastName());
+				userMap.put(FIRST_NAME, user.getFirstName());
+				userMap.put(LAST_NAME, user.getLastName());
 				ArrayList userAnswerList = new ArrayList<>();
 				for (SurveyQuestion eachSurveyQuestion : surveyQuestionList) {
 					for (Answer eachAnswer : answerList) {
@@ -91,7 +93,7 @@ public class GroupFormationServiceImpl implements GroupFormationService {
 						}
 					}
 				}
-				userMap.put("ANSWERS", userAnswerList);
+				userMap.put(ANSWERS, userAnswerList);
 			}
 			userSurveyMap.put(bannerId, userMap);
 		}

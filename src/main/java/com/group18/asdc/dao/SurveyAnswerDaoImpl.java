@@ -27,6 +27,10 @@ public class SurveyAnswerDaoImpl implements SurveyAnswerDao {
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "SQL Exception while fetching answers for survey ", e);
         } finally {
+            /*
+             * Had a discussion with Professor Rob and this cannot be avoided without
+             * complicating the code
+             */
             if (sqlImplementation != null) {
                 sqlImplementation.cleanup();
             }

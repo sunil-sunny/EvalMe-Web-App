@@ -43,14 +43,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int loadUserWithBannerId(String bannerId, User userObj) {
-		logger.log(Level.INFO, "Fetching user data from database for user="+bannerId);
+		logger.log(Level.INFO, "Fetching user data from database for user=" + bannerId);
 		ArrayList<Object> valuesList = queryVariableToArrayList.convertQueryVariablesToArrayList(bannerId);
 		return theUserDao.loadUserWithBannerId(valuesList, userObj);
 	}
 
 	@Override
 	public Boolean updatePassword(User userObj, IPasswordEncryption passwordEncryption) {
-		logger.log(Level.INFO, "Updating password for user="+userObj.getBannerId());
+		logger.log(Level.INFO, "Updating password for user=" + userObj.getBannerId());
 		ArrayList<Object> criteriaList = queryVariableToArrayList
 				.convertQueryVariablesToArrayList(userObj.getBannerId());
 		ArrayList<Object> valueList = queryVariableToArrayList
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ArrayList getUserRoles(User userObj) {
-		logger.log(Level.INFO, "Fetching user roles for user="+userObj.getBannerId());
+		logger.log(Level.INFO, "Fetching user roles for user=" + userObj.getBannerId());
 		ArrayList<Object> criteriaList = queryVariableToArrayList
 				.convertQueryVariablesToArrayList(userObj.getBannerId());
 		return theUserDao.getUserRoles(criteriaList);
@@ -68,6 +68,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getCurrentUser() {
+		logger.log(Level.INFO, "Fetching logged in user information");
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String bannerid = "";
 		if (principal instanceof UserDetails) {
@@ -76,9 +77,10 @@ public class UserServiceImpl implements UserService {
 			bannerid = principal.toString();
 		}
 		User currentUser = null;
-		if (null != bannerid) {
-			currentUser = this.getUserById(bannerid);
+		if (null == bannerid) {
+			return currentUser;
 		}
+		currentUser = this.getUserById(bannerid);
 		return currentUser;
 	}
 
