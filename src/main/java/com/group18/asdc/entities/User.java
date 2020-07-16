@@ -28,10 +28,11 @@ public class User {
 	}
 
 	public Boolean isValidUser() {
-		if (bannerId != null && !bannerId.isEmpty()) {
+		if (bannerId == null && bannerId.isEmpty()) {
+			return Boolean.FALSE;
+		} else {
 			return Boolean.TRUE;
 		}
-		return Boolean.FALSE;
 	}
 
 	public String getFirstName() {

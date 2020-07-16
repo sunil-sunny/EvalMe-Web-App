@@ -42,7 +42,7 @@ public class CourseRolesServiceImplTest {
 	@Test
 	public void allocateTaTestOne() {
 
-		User studentsList = new User();
+		User studentsList = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		boolean isEnrolled = theCourseRolesServiceMock.allocateTa(2, studentsList);
 		assertTrue(isEnrolled);
 	}
@@ -50,7 +50,8 @@ public class CourseRolesServiceImplTest {
 	@Test
 	public void allocateTaTestTwo() {
 
-		User studentsList = new User("Rahul", "Chahar", "B09898157", "chahar@dal.ca");
+		User studentsList = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest("Rahul",
+				"Chahar", "B09898157", "chahar@dal.ca");
 		boolean isEnrolled = theCourseRolesServiceMock.allocateTa(2, studentsList);
 		assertTrue(isEnrolled);
 	}

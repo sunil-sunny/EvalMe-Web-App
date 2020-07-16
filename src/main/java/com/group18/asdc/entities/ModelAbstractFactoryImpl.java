@@ -68,4 +68,14 @@ public class ModelAbstractFactoryImpl implements ModelAbstractFactory {
 	public Group getGroup() {
 		return new Group();
 	}
+
+	@Override
+	public UserRegistartionDetails getIUserRegistartionDetails(User user) {
+		return new UserRegistartionDetails(user);
+	}
+
+	@Override
+	public Answer getAnswer(String answer, String bannerId, Integer surveyQuestionId) {
+		return new Answer(answer, bannerId, surveyQuestionId);
+	}
 }

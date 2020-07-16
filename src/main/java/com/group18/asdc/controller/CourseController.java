@@ -79,7 +79,8 @@ public class CourseController {
 	public String getCoursePage(Model theModel, HttpServletRequest request) {
 
 		Course course = SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
-		SurveyMetaData surveyMetaData = SystemConfig.getSingletonInstance().getModelAbstractFactory().getSurveyMetaData();
+		SurveyMetaData surveyMetaData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+				.getSurveyMetaData();
 		List<SurveyQuestion> questionList = new ArrayList<SurveyQuestion>();
 		String courseId = request.getParameter("id");
 		int courseID = Integer.parseInt(courseId);

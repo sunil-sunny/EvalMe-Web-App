@@ -72,7 +72,8 @@ public class CreateQuestionController {
 	public String createMultipleChoiceQuestion(@ModelAttribute("question") BasicQuestionData theBasicQuestionData,
 			HttpServletRequest request, Model model, RedirectAttributes theRedirectAttributes) {
 
-		MultipleChoiceQuestion theMultipleChoiceQuestion = new MultipleChoiceQuestion();
+		MultipleChoiceQuestion theMultipleChoiceQuestion = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+				.getMultipleChoiceQuestion();
 		theMultipleChoiceQuestion.setQuestionTitle(theBasicQuestionData.getQuestionTitle());
 		theMultipleChoiceQuestion.setQuestionText(theBasicQuestionData.getQuestionText());
 		theMultipleChoiceQuestion.setQuestionType(theBasicQuestionData.getQuestionType());
@@ -82,7 +83,7 @@ public class CreateQuestionController {
 		Option theOption = null;
 		int iterativeNumber = 1;
 		while (true) {
-			theOption = new Option();
+			theOption = SystemConfig.getSingletonInstance().getModelAbstractFactory().getOption();
 			displayOption = request.getParameter("optiontext-" + iterativeNumber + "");
 			storedOption = request.getParameter("optionstored-" + iterativeNumber + "");
 			if ((null == displayOption) || (null == storedOption)) {

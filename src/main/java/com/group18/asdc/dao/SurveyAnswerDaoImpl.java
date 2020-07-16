@@ -7,9 +7,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.group18.asdc.SystemConfig;
-import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.database.ISQLMethods;
-import com.group18.asdc.util.SurveyDataBaseQueries;
+import com.group18.asdc.database.SurveyDataBaseQueries;
 
 public class SurveyAnswerDaoImpl implements SurveyAnswerDao {
 
@@ -20,8 +19,8 @@ public class SurveyAnswerDaoImpl implements SurveyAnswerDao {
         logger.log(Level.INFO, "Fetching answers for survey from Database survey=" + valueList.get(0));
         ISQLMethods sqlImplementation = null;
         ArrayList answerList = new ArrayList<>();
-        try {
-            Connection connection = ConnectionManager.getInstance().getDBConnection();
+        try(Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();) {
             sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
 					.getSqlMethods(connection);
             answerList = sqlImplementation.selectQuery(SurveyDataBaseQueries.GET_SURVEY_ANSWERS_DATA.toString(),

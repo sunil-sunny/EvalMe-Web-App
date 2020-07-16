@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.group18.asdc.database.ConnectionManager;
+
+import com.group18.asdc.SystemConfig;
+import com.group18.asdc.database.UserManagementDataBaseQueriesUtil;
 import com.group18.asdc.entities.UserRegistartionDetails;
-import com.group18.asdc.util.UserManagementDataBaseQueriesUtil;
 
 public class RegisterDaoImpl implements RegisterDao {
 
@@ -20,7 +22,8 @@ public class RegisterDaoImpl implements RegisterDao {
 		boolean isUserRegisterd = Boolean.FALSE;
 		boolean isGuestRoleAssigned = Boolean.FALSE;
 		log.log(Level.INFO,"Registering new user into the database user="+registerDetails.getBannerid());
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+		.getConnectionManager().getDBConnection();
 				PreparedStatement registerUserStatement = connection
 						.prepareStatement(UserManagementDataBaseQueriesUtil.INSERT_USER.toString());
 				PreparedStatement assignRoleStatement = connection
@@ -64,7 +67,8 @@ public class RegisterDaoImpl implements RegisterDao {
 
 		boolean isUserExists = Boolean.FALSE;
 		
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement thePreparedStatement = connection
 						.prepareStatement(UserManagementDataBaseQueriesUtil.CHECK_USER_WITH_EMAIL.toString());){
 			
@@ -86,7 +90,8 @@ public class RegisterDaoImpl implements RegisterDao {
 
 		boolean isUserExists = Boolean.FALSE;
 	
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement thePreparedStatement = connection
 						.prepareStatement(UserManagementDataBaseQueriesUtil.CHECK_USER_WITH_BANNERID.toString());){
 			

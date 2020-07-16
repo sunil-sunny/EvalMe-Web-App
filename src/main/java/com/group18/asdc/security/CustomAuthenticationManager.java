@@ -73,7 +73,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 		UserService userDB = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getUserService(
 				SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 		int statusCode;
-		User u = new User();
+		User u = SystemConfig.getSingletonInstance().getModelAbstractFactory().getUser();
 		statusCode = userDB.loadUserWithBannerId(bannerID, u);
 		if (statusCode == SQLStatus.SUCCESSFUL && u.isValidUser()) {
 			if (bannerID.toUpperCase().equals(ADMIN_BANNER_ID)) {

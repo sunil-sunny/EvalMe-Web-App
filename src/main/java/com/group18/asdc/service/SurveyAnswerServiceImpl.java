@@ -32,5 +32,4 @@ public class SurveyAnswerServiceImpl implements SurveyAnswersService {
         }
         return answersList;
     }
-
 }
