@@ -25,7 +25,7 @@ public class RegisterController {
 
 	@ModelAttribute("user")
 	public UserRegistartionDetails bean() {
-		return new UserRegistartionDetails();
+		return SystemConfig.getSingletonInstance().getModelAbstractFactory().getIUserRegistartionDetails();
 	}
 
 	@GetMapping
@@ -52,7 +52,8 @@ public class RegisterController {
 		} else if (registrationStatus == RegistrationStatus.PASSWORD_POLICY_ERROR) {
 			return "redirect:/registration?passwordPolicyException=" + resultObject.optString("MESSAGE");
 		} else if (registrationStatus == RegistrationStatus.SUCCESS) {
-			PasswordHistory passwordHistory = new PasswordHistory();
+			PasswordHistory passwordHistory = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+					.getPasswordHistory();
 			passwordHistory.setBannerID(bean.getBannerid());
 			passwordHistory.setPassword(bean.getPassword());
 			passwordHistory.setDate(System.currentTimeMillis());

@@ -3,10 +3,12 @@ package com.group18.asdc;
 import com.group18.asdc.dao.DaoAbstractFactory;
 import com.group18.asdc.dao.DaoAbstractFactoryImpl;
 import com.group18.asdc.dao.IPasswordPolicyDB;
+import com.group18.asdc.database.DataBaseAbstractFactory;
+import com.group18.asdc.database.DataBaseAbstractFactoryImpl;
 import com.group18.asdc.entities.ModelAbstractFactory;
 import com.group18.asdc.entities.ModelAbstractFactoryImpl;
 import com.group18.asdc.errorhandling.ExceptionAbstractFactory;
-import com.group18.asdc.errorhandling.ExceptionAbstractionFactoryImpl;
+import com.group18.asdc.errorhandling.ExceptionAbstractFactoryImpl;
 import com.group18.asdc.passwordpolicy.BasePasswordPolicyFactory;
 import com.group18.asdc.passwordpolicy.PasswordPolicyFactory;
 import com.group18.asdc.security.SecurityAbstractFactory;
@@ -26,6 +28,8 @@ public class SystemConfig {
 	private BasePasswordPolicyFactory basePasswordPolicyFactory;
 	private SecurityAbstractFactory securityAbstractFactory;
 	private PasswordPolicyFactory passwordPolicyFactory;
+	private ExceptionAbstractFactory exceptionAbstractFactory;
+	private DataBaseAbstractFactory dataBaseAbstractFactory;
 
 	private SystemConfig() {
 
@@ -36,6 +40,8 @@ public class SystemConfig {
 		this.basePasswordPolicyFactory = BasePasswordPolicyFactory.instance(daoAbstractFactory.getPasswordPolicyDB());
 		this.securityAbstractFactory = new SecurityAbstractFactoryImpl();
 		this.passwordPolicyFactory = PasswordPolicyFactory.instance(daoAbstractFactory.getPasswordPolicyDB());
+		this.exceptionAbstractFactory = new ExceptionAbstractFactoryImpl();
+		this.dataBaseAbstractFactory=new DataBaseAbstractFactoryImpl();
 	}
 
 	public static SystemConfig getSingletonInstance() {
@@ -51,40 +57,20 @@ public class SystemConfig {
 		return modelAbstractFactory;
 	}
 
-	public void setModelAbstractFactory(ModelAbstractFactory modelAbstractFactory) {
-		this.modelAbstractFactory = modelAbstractFactory;
-	}
-
 	public ServiceAbstractFactory getServiceAbstractFactory() {
 		return serviceAbstractFactory;
-	}
-
-	public void setServiceAbstractFactory(ServiceAbstractFactory serviceAbstractFactory) {
-		this.serviceAbstractFactory = serviceAbstractFactory;
 	}
 
 	public DaoAbstractFactory getDaoAbstractFactory() {
 		return daoAbstractFactory;
 	}
 
-	public void setDaoAbstractFactory(DaoAbstractFactory daoAbstractFactory) {
-		this.daoAbstractFactory = daoAbstractFactory;
-	}
-
 	public ExceptionAbstractFactory getExceptionAbstractFactory() {
 		return exceptionAbstractFactory;
 	}
-
-	public void setExceptionAbstractFactory(ExceptionAbstractFactory exceptionAbstractFactory) {
-		this.exceptionAbstractFactory = exceptionAbstractFactory;
-	}
-
+	
 	public UtilAbstractFactory getUtilAbstractFactory() {
 		return this.utilAbstractFactory;
-	}
-
-	public void setUtilAbstractFactory(UtilAbstractFactory utilAbstractFactory) {
-		this.utilAbstractFactory = utilAbstractFactory;
 	}
 
 	public BasePasswordPolicyFactory getBasePasswordPolicyManager() {
@@ -105,5 +91,29 @@ public class SystemConfig {
 
 	public void setPasswordPolicyManager(IPasswordPolicyDB passwordPolicyDB) {
 		this.passwordPolicyFactory.resetInstance(passwordPolicyDB);
+	}
+
+	public BasePasswordPolicyFactory getBasePasswordPolicyFactory() {
+		return basePasswordPolicyFactory;
+	}
+
+	public void setBasePasswordPolicyFactory(BasePasswordPolicyFactory basePasswordPolicyFactory) {
+		this.basePasswordPolicyFactory = basePasswordPolicyFactory;
+	}
+
+	public DataBaseAbstractFactory getDataBaseAbstractFactory() {
+		return dataBaseAbstractFactory;
+	}
+
+	public void setDataBaseAbstractFactory(DataBaseAbstractFactory dataBaseAbstractFactory) {
+		this.dataBaseAbstractFactory = dataBaseAbstractFactory;
+	}
+
+	public void setSecurityAbstractFactory(SecurityAbstractFactory securityAbstractFactory) {
+		this.securityAbstractFactory = securityAbstractFactory;
+	}
+
+	public void setPasswordPolicyFactory(PasswordPolicyFactory passwordPolicyFactory) {
+		this.passwordPolicyFactory = passwordPolicyFactory;
 	}
 }
