@@ -28,11 +28,6 @@ public class DaoAbstractFactoryImpl implements DaoAbstractFactory {
 	}
 
 	@Override
-	public GroupFormationDao getGroupFormationDao() {
-		return new GroupFormationDaoImpl();
-	}
-
-	@Override
 	public PasswordHistoryDao getPasswordHistoryDao() {
 		return new PasswordHistoryDaoImpl();
 	}

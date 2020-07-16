@@ -7,12 +7,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.group18.asdc.SystemConfig;
-import com.group18.asdc.dao.GroupFormationDao;
 import com.group18.asdc.entities.Answer;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.ISurveyList;
 import com.group18.asdc.entities.Option;
-import com.group18.asdc.entities.SurveyGroups;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
 import com.group18.asdc.entities.User;
@@ -23,15 +21,11 @@ import com.group18.asdc.util.IQueryVariableToArrayList;
 public class GroupFormationServiceImpl implements GroupFormationService {
 
 	private Logger logger = Logger.getLogger(GroupFormationService.class.getName());
-	private static final GroupFormationDao theGroupFormationDao = SystemConfig.getSingletonInstance()
-			.getDaoAbstractFactory().getGroupFormationDao();
 	private static final String USER_DATA_MAP = "userDataMap", GROUP_LIST = "groupList", FIRST_NAME = "FIRST_NAME",
 			LAST_NAME = "LAST_NAME", ANSWERS = "ANSWERS";
-
-	@Override
-	public SurveyGroups getGroupFormationResults(Course course) {
-		return theGroupFormationDao.getGroupFormationResults(course);
-	}
+	private ISurveyList survey;
+	private IGroupFormationBuilder groupBuilder;
+	private IGroupFormationDirector director;
 
 	public HashMap formGroupsForSurvey(Course course, SurveyAnswersService surveyAnswersService,
 			SurveyService surveyService, IQueryVariableToArrayList queryVariableToArraylist) {
@@ -39,10 +33,9 @@ public class GroupFormationServiceImpl implements GroupFormationService {
 		SurveyMetaData surveyQuestionData = surveyService.getSavedSurvey(course);
 		ArrayList<Answer> answerList = surveyAnswersService.fetchAnswersForSurvey(surveyQuestionData.getSurveyId(),
 				queryVariableToArraylist);
-		ISurveyList survey = SystemConfig.getSingletonInstance().createSurveyAdapter(surveyQuestionData, answerList);
-		IGroupFormationBuilder groupBuilder = SystemConfig.getSingletonInstance().createGroupFormationBuilder();
-		IGroupFormationDirector director = SystemConfig.getSingletonInstance()
-				.createGroupFormationDirector(groupBuilder);
+		survey = SystemConfig.getSingletonInstance().createSurveyAdapter(surveyQuestionData, answerList);
+		groupBuilder = SystemConfig.getSingletonInstance().createGroupFormationBuilder();
+		director = SystemConfig.getSingletonInstance().createGroupFormationDirector(groupBuilder);
 		director.createGroup(survey, surveyQuestionData.getGroupSize());
 		List clusteredGroups = groupBuilder.getGroups();
 		resultMap.put(USER_DATA_MAP, fetchGroupDetails(survey.getUserList(), surveyQuestionData, answerList));

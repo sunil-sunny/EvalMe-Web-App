@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 
+import com.group18.asdc.TestConfig;
 import com.group18.asdc.dao.SurveyAnswerDao;
 import com.group18.asdc.dao.test.SurveyAnswerDaoMock;
 import com.group18.asdc.service.SurveyAnswerServiceImpl;
@@ -52,7 +53,7 @@ public class SurveyAnswerServiceTest {
     @Test
     public void testFetchAnswers()
     {
-        SurveyAnswerDao surveyAnswerDaoTest = new SurveyAnswerDaoMock();
+        SurveyAnswerDao surveyAnswerDaoTest = TestConfig.getTestSingletonIntance().getDaoTestAbstractFactory().getSurveyAnswerDao();
         Integer surveyId = 1;
         ArrayList valueList = new ArrayList<>();
         valueList.add(1);
