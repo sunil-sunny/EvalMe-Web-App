@@ -66,9 +66,9 @@ public class GroupFormationDaoImpl implements GroupFormationDao {
 				}
 				theSurveyGroup.getSurveyGroups().get(i).setGroupMembers(groupMembers);
 			}
-			log.log(Level.INFO,"The number of groups are: "+surveyGroups.size());
+			log.log(Level.INFO,"Retrieved list of groups where number of groups="+surveyGroups.size());
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while fetching group formation results "+e);
+			log.log(Level.SEVERE, "SQL Exception while fetching group formation results",e);
 		} 
 		return theSurveyGroup;
 	}

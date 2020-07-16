@@ -62,9 +62,9 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				resultSetAllCourseRoles.close();
 				allCourses.add(course);
 			}
-			log.log(Level.INFO, "Number of courses rereived is " + allCourses.size());
+			log.log(Level.INFO, "Number of courses retreived=" + allCourses.size());
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while getting all the courses and the number of courses is "+
+			log.log(Level.SEVERE, "SQL Exception while getting all the courses and the number of courses="+
 					allCourses.size());
 		} 
 		return allCourses;
@@ -90,11 +90,11 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				course.setInstructorName(this.getInstructorForCourse(courseid));
 				getCoursesAsStudent.add(course);
 			}
-			log.log(Level.INFO, "Number of courses where user with id " + user.getBannerId() + " as Student is "
+			log.log(Level.INFO, "Number of courses where user with id=" + user.getBannerId() + " for a Student="
 					+ getCoursesAsStudent.size());
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id " + user.getBannerId()
-					+ " as student and received count is "+ getCoursesAsStudent.size());
+			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id=" + user.getBannerId()
+					+ " as student and received count="+ getCoursesAsStudent.size());
 		}
 		return getCoursesAsStudent;
 	}
@@ -119,11 +119,11 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				course.setInstructorName(this.getInstructorForCourse(courseid));
 				getCoursesAsInstructor.add(course);
 			}
-			log.log(Level.INFO, "Number of courses where user with id " + user.getBannerId() + " as Instructor is "
+			log.log(Level.INFO, "Number of courses where user with id=" + user.getBannerId() + " for Instructor="
 					+ getCoursesAsInstructor.size());
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id " + user.getBannerId()
-					+ " as instructor and received count is "+ getCoursesAsInstructor.size());
+			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id=" + user.getBannerId()
+					+ " as instructor and received count="+ getCoursesAsInstructor.size());
 		}
 		return getCoursesAsInstructor;
 	}
@@ -148,11 +148,11 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				course.setInstructorName(this.getInstructorForCourse(courseid));
 				getCoursesAsTA.add(course);
 			}
-			log.log(Level.INFO, "Number of courses where user with id " + user.getBannerId() + " as TA is "
+			log.log(Level.INFO, "Number of courses where user with id=" + user.getBannerId() + " for TA="
 					+ getCoursesAsTA.size());
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id " + user.getBannerId()
-					+ " as TA and received count is " + getCoursesAsTA.size());
+			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id=" + user.getBannerId()
+					+ " as TA and received count=" + getCoursesAsTA.size());
 		} 
 		return getCoursesAsTA;
 	}
@@ -214,7 +214,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				instructor = userDao.getUserById(bannerId);
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while getting the instructor for course for courseid " + courseId);
+			log.log(Level.SEVERE, "SQL Exception while getting the instructor for course for courseid=" + courseId);
 		} 
 		return instructor;
 	}
@@ -223,7 +223,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
 		List<User> eligibleStudents = new ArrayList<User>();
 		List<User> existingStudentsOfCourse = userDao.getAllUsersByCourse(courseId);
-		log.log(Level.INFO, "Filtering the Eligible for the course id " + courseId);
+		log.log(Level.INFO, "Filtering the Eligible for the course id=" + courseId);
 		for (User student : studentList) {
 			boolean isExists = Boolean.FALSE;
 			for (User existingStudent : existingStudentsOfCourse) {
@@ -280,7 +280,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				resultSetCourseRoles.close();
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occured while getting course for id "+ courseId);
+			log.log(Level.SEVERE, "SQL Exception occured while getting course for id="+ courseId);
 		} 
 		return course;
 	}

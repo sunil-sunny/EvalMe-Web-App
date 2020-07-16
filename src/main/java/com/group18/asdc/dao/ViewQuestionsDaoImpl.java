@@ -44,7 +44,7 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE,
-					"SQL Exception while getting all the question for user with id " + currentUser.getBannerId());
+					"SQL Exception while getting all the question for user with id=" + currentUser.getBannerId());
 		} 
 		return allQuestions;
 	}
@@ -76,7 +76,7 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 				allQuestions.add(theQuestionMetaData);
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while getting all the questions sorted by date for user with id "
+			log.log(Level.SEVERE, "SQL Exception while getting all the questions sorted by date for user with id="
 					+ currentUser.getBannerId());
 		} 
 		return allQuestions;
@@ -107,7 +107,7 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 				allQuestionsSortByTitle.add(theQuestionMetaData);
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while getting all the question sorted by title for user with id "
+			log.log(Level.SEVERE, "SQL Exception while getting all the question sorted by title for user with id="
 					+ currentUser.getBannerId());
 		}
 		return allQuestionsSortByTitle;
@@ -136,7 +136,7 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 				theQuestionMetaData.setBasicQuestionData(thBasicQuestionData);
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while getting the question with id " + questionId);
+			log.log(Level.SEVERE, "SQL Exception while getting the question with id=" + questionId);
 		} 
 		return theQuestionMetaData;
 	}

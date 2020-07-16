@@ -48,14 +48,14 @@ public class RegisterDaoImpl implements RegisterDao {
 			}
 			if (isGuestRoleAssigned && isUserRegisterd) {
 				log.log(Level.INFO,
-						"User with id " + registerDetails.getBannerid() + " has been successfully registered");
+						"User with id=" + registerDetails.getBannerid() + " has been successfully registered");
 				connection.commit();
 			} else {
-				log.log(Level.WARNING, "User with id " + registerDetails.getBannerid() + " has not been registered");
+				log.log(Level.WARNING, "User with id=" + registerDetails.getBannerid() + " has not been registered");
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE,
-					"SQL Exception occured while Registering the user with id " + registerDetails.getBannerid());
+					"SQL Exception occured while Registering the user with id=" + registerDetails.getBannerid());
 		} 
 		return isUserRegisterd && isGuestRoleAssigned;
 	}
@@ -77,7 +77,7 @@ public class RegisterDaoImpl implements RegisterDao {
 				isUserExists = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while checking the user with email " + email);
+			log.log(Level.SEVERE, "SQL Exception while checking the user with email=" + email);
 		} 
 		return isUserExists;
 	}
@@ -99,7 +99,7 @@ public class RegisterDaoImpl implements RegisterDao {
 				isUserExists = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occured while checking the user with banner id " + bannerId);
+			log.log(Level.SEVERE, "SQL Exception occured while checking the user with banner id=" + bannerId);
 		}
 		return isUserExists;
 	}

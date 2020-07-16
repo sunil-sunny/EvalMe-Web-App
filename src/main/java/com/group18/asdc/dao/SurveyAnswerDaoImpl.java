@@ -28,7 +28,7 @@ public class SurveyAnswerDaoImpl implements SurveyAnswerDao {
             answerList = sqlImplementation.selectQuery(SurveyDataBaseQueries.GET_SURVEY_ANSWERS_DATA.toString(),
                     valueList);
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "SQL Exception while fetching answers for survey "+ e);
+            logger.log(Level.SEVERE, "SQL Exception while fetching answers for survey", e);
         } finally {
             /*
              * Had a discussion with Professor Rob and this cannot be avoided without
