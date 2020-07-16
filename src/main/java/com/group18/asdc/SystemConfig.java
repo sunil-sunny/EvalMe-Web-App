@@ -1,14 +1,23 @@
 package com.group18.asdc;
 
+import java.util.List;
+
 import com.group18.asdc.dao.DaoAbstractFactory;
 import com.group18.asdc.dao.DaoAbstractFactoryImpl;
 import com.group18.asdc.dao.IPasswordPolicyDB;
 import com.group18.asdc.database.DataBaseAbstractFactory;
 import com.group18.asdc.database.DataBaseAbstractFactoryImpl;
+import com.group18.asdc.entities.ISurveyList;
+import com.group18.asdc.entities.ISurveyMetaData;
 import com.group18.asdc.entities.ModelAbstractFactory;
 import com.group18.asdc.entities.ModelAbstractFactoryImpl;
 import com.group18.asdc.errorhandling.ExceptionAbstractFactory;
 import com.group18.asdc.errorhandling.ExceptionAbstractFactoryImpl;
+import com.group18.asdc.groupformation.BaseGroupFormationBuilder;
+import com.group18.asdc.groupformation.GroupFormationDirector;
+import com.group18.asdc.groupformation.IGroupFormationBuilder;
+import com.group18.asdc.groupformation.IGroupFormationDirector;
+import com.group18.asdc.groupformation.SurveyAdapter;
 import com.group18.asdc.passwordpolicy.BasePasswordPolicyFactory;
 import com.group18.asdc.passwordpolicy.PasswordPolicyFactory;
 import com.group18.asdc.security.SecurityAbstractFactory;
@@ -41,7 +50,7 @@ public class SystemConfig {
 		this.securityAbstractFactory = new SecurityAbstractFactoryImpl();
 		this.passwordPolicyFactory = PasswordPolicyFactory.instance(daoAbstractFactory.getPasswordPolicyDB());
 		this.exceptionAbstractFactory = new ExceptionAbstractFactoryImpl();
-		this.dataBaseAbstractFactory=new DataBaseAbstractFactoryImpl();
+		this.dataBaseAbstractFactory = new DataBaseAbstractFactoryImpl();
 	}
 
 	public static SystemConfig getSingletonInstance() {
@@ -68,7 +77,7 @@ public class SystemConfig {
 	public ExceptionAbstractFactory getExceptionAbstractFactory() {
 		return exceptionAbstractFactory;
 	}
-	
+
 	public UtilAbstractFactory getUtilAbstractFactory() {
 		return this.utilAbstractFactory;
 	}
@@ -91,6 +100,18 @@ public class SystemConfig {
 
 	public void setPasswordPolicyManager(IPasswordPolicyDB passwordPolicyDB) {
 		this.passwordPolicyFactory.resetInstance(passwordPolicyDB);
+	}
+
+	public ISurveyList createSurveyAdapter(ISurveyMetaData surveyQuestionData, List answerList) {
+		return new SurveyAdapter(surveyQuestionData, answerList);
+	}
+
+	public IGroupFormationBuilder createGroupFormationBuilder() {
+		return new BaseGroupFormationBuilder();
+	}
+
+	public IGroupFormationDirector createGroupFormationDirector(IGroupFormationBuilder groupBuilder) {
+		return new GroupFormationDirector(groupBuilder);
 	}
 
 	public BasePasswordPolicyFactory getBasePasswordPolicyFactory() {

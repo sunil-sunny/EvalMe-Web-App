@@ -3,7 +3,7 @@ package com.group18.asdc.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SurveyMetaData {
+public class SurveyMetaData implements ISurveyMetaData {
 
 	private int surveyId;
 	private List<SurveyQuestion> surveyQuestions = new ArrayList<SurveyQuestion>();

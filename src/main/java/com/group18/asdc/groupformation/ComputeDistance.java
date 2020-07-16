@@ -9,16 +9,17 @@ import java.util.logging.Logger;
 
 import com.group18.asdc.entities.QuestionType;
 import com.group18.asdc.util.ConstantStringUtil;
+import org.apache.commons.text.similarity.CosineDistance;
 
 public class ComputeDistance implements IComputeDistance {
 
-    private ArrayList<HashMap> userAnswerList = null;
-    private ArrayList<HashMap> questionsList = null;
+    private List<HashMap> userAnswerList = null;
+    private List<HashMap> questionsList = null;
     private Float[][][] intermediateDistanceMatrix = null;
     private Float[][] distanceMatrix = null;
     private Logger logger = Logger.getLogger(ComputeDistance.class.getName());
 
-    public ComputeDistance(ArrayList<HashMap> userAnswerList, ArrayList<HashMap> questionsList) {
+    public ComputeDistance(List<HashMap> userAnswerList, List<HashMap> questionsList) {
         this.userAnswerList = userAnswerList;
         this.questionsList = questionsList;
         this.intermediateDistanceMatrix = new Float[userAnswerList.size()][userAnswerList.size()][questionsList.size()];
@@ -72,6 +73,14 @@ public class ComputeDistance implements IComputeDistance {
 
                         if (questionLogic.equals(ConstantStringUtil.GROUP_DISIMILAR.toString())) {
                             distance = 1.0f - distance;
+                        }
+                    } else if (questionType.equals(QuestionType.FREE_TEXT.toString())) {
+                        Double cosineDistanceOfText = new CosineDistance().apply((String) otherUserAnswer.get(0),
+                                (String) currentUserAnswer.get(0));
+                        if (questionLogic.equals(ConstantStringUtil.GROUP_SIMILAR.toString())) {
+                            distance = 1.0f - cosineDistanceOfText.floatValue();
+                        } else if (questionLogic.equals(ConstantStringUtil.GROUP_DISIMILAR.toString())) {
+                            distance = cosineDistanceOfText.floatValue();
                         }
                     }
                     intermediateDistanceMatrix[currentUserIterator][otherUserIterator][questionsIterator] = (11
