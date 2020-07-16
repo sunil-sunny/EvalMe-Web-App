@@ -31,10 +31,12 @@ public class RegisterServiceImpl implements RegisterService {
 				if (9 != userDetails.getBannerid().length()) {
 					isError = Boolean.TRUE;
 					resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_LENGTH);
+					log.log(Level.WARNING, "BannerId invalid");
 				}
 			} else {
 				isError = Boolean.TRUE;
 				resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_PATTERN);
+				log.log(Level.WARNING, "BannerId does not follow the specified pattern");
 			}
 			if (userDetails.getEmailid().matches(ConstantStringUtil.EMAIL_PATTERN_CHECK.toString())) {
 
@@ -49,9 +51,11 @@ public class RegisterServiceImpl implements RegisterService {
 				boolean isBannerIdExists = registerDao.checkUserWithEmail(userDetails.getBannerid());
 				if (isBannerIdExists) {
 					resultObj.put("STATUS", RegistrationStatus.EXISTING_BANNER_ID);
+					log.log(Level.WARNING, "BannerId already registered");
 				}
 				if (isEmailExits) {
 					resultObj.put("STATUS", RegistrationStatus.EXISTING_EMAIL_ID);
+					log.log(Level.WARNING, "Email is already registered");
 				}
 				boolean registerResult = Boolean.FALSE;
 				if (isBannerIdExists && isEmailExits) {
@@ -64,6 +68,7 @@ public class RegisterServiceImpl implements RegisterService {
 			} else {
 				isError = Boolean.TRUE;
 				resultObj.put("STATUS", RegistrationStatus.INVALID_EMAIL_PATTERN);
+				log.log(Level.WARNING, "EmailId does not follow the correct pattern");
 			}
 
 		} catch (PasswordPolicyException e) {

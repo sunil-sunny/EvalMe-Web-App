@@ -66,4 +66,9 @@ public class DaoAbstractFactoryImpl implements DaoAbstractFactory {
 	public IPasswordPolicyDB getPasswordPolicyDB() {
 		return new PasswordPolicyDB();
 	}
+
+	@Override
+	public SurveyAnswerDao getSurveyAnswerDao() {
+		return new SurveyAnswerDaoImpl();
+	}
 }

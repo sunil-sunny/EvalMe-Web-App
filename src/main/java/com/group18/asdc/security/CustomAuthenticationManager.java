@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class CustomAuthenticationManager implements AuthenticationManager {
 
 	private static final String ADMIN_BANNER_ID = "B-000000";
+	private static final String ADMIN_USER_ROLE = "ADMIN";
 	private Logger logger = Logger.getLogger(CustomAuthenticationManager.class.getName());
 
 	private Authentication checkAdmin(String password, User u, Authentication authentication)
@@ -31,7 +32,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 		if (password.equals(u.getPassword())) {
 			logger.log(Level.INFO, "Admin user authenticated user=" + u.getBannerId());
 			List<GrantedAuthority> rights = new ArrayList<GrantedAuthority>();
-			rights.add(new SimpleGrantedAuthority("ADMIN"));
+			rights.add(new SimpleGrantedAuthority(ADMIN_USER_ROLE));
 			UsernamePasswordAuthenticationToken token;
 			token = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(),
 					authentication.getCredentials(), rights);

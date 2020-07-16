@@ -2,6 +2,7 @@ package com.group18.asdc.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import com.group18.asdc.dao.PasswordHistoryDao;
 import com.group18.asdc.dao.PasswordHistoryDaoImpl;
 import com.group18.asdc.entities.PasswordHistory;
@@ -12,6 +13,7 @@ public class PasswordHistoryServiceImpl implements PasswordHistoryService {
 
 	private IQueryVariableToArrayList queryVariableToArrayList;
 	private PasswordHistoryDao passwordHistoryDao;
+	private final String BANNER_ID = "bannerid", PASSWORD = "password";
 
 	public PasswordHistoryServiceImpl(IQueryVariableToArrayList queryVariableToArrayList) {
 		passwordHistoryDao = new PasswordHistoryDaoImpl();
@@ -31,8 +33,8 @@ public class PasswordHistoryServiceImpl implements PasswordHistoryService {
 		ArrayList<PasswordHistory> resultList = new ArrayList<PasswordHistory>();
 		for (HashMap<String, Object> eachRow : passwordHistoryDao.getPasswordHistory(criteriaList)) {
 			PasswordHistory passwordHistory = new PasswordHistory();
-			passwordHistory.setBannerID((String) eachRow.get("bannerid"));
-			passwordHistory.setPassword((String) eachRow.get("password"));
+			passwordHistory.setBannerID((String) eachRow.get(BANNER_ID));
+			passwordHistory.setPassword((String) eachRow.get(PASSWORD));
 			resultList.add(passwordHistory);
 		}
 		return resultList;

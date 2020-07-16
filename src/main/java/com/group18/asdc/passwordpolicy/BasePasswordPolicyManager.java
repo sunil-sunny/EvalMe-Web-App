@@ -15,6 +15,7 @@ public class BasePasswordPolicyManager extends BasePasswordPolicyFactory {
 	private ArrayList<HashMap> enabledPasswordPolicies = null;
 	private IPasswordPolicyDB passwordPolicyDB = null;
 	private Logger logger = Logger.getLogger(BasePasswordPolicyManager.class.getName());
+	private final String POLICY_NAME = "POLICY_NAME", POLICY_VALUE = "POLICY_VALUE";
 
 	private enum DatabasePolicyName {
 		MIN_LENGTH_POLICY("MinLength"), MAX_LENGTH_POLICY("MaxLength"), MIN_LOWERCASE_POLICY("MinLowercase"),
@@ -50,10 +51,10 @@ public class BasePasswordPolicyManager extends BasePasswordPolicyFactory {
 		IBasePasswordPolicy passwordPolicy = null;
 		ICustomStringUtils customStringUtils = SystemConfig.getSingletonInstance().getUtilAbstractFactory()
 				.getCustomStringUtils();
-
+		logger.log(Level.INFO, "Validating password against all the enabled password policies");
 		for (HashMap eachEnabledPolicy : enabledPasswordPolicies) {
-			String policyName = (String) eachEnabledPolicy.get("POLICY_NAME");
-			String policyValue = (String) eachEnabledPolicy.get("POLICY_VALUE");
+			String policyName = (String) eachEnabledPolicy.get(POLICY_NAME);
+			String policyValue = (String) eachEnabledPolicy.get(POLICY_VALUE);
 			if (policyName.equals(DatabasePolicyName.MIN_LENGTH_POLICY.toString())) {
 				passwordPolicy = new MinlengthPolicy(policyValue);
 			} else if (policyName.equals(DatabasePolicyName.MAX_LENGTH_POLICY.toString())) {
