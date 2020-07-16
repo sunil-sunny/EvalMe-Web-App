@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.SurveyConfig;
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.entities.Course;
@@ -42,8 +41,8 @@ public class GroupFormationController {
 
 		SurveyAnswersService surveyAnswersService = SurveyConfig.getSingletonInstance().getSurveyAnswersService();
 		SurveyService surveyService = SurveyConfig.getSingletonInstance().getTheSurveyService();
-		IQueryVariableToArrayList queryVariableToArraylist = ProfileManagementConfig.getSingletonInstance()
-				.getQueryVariableToArrayList();
+		IQueryVariableToArrayList queryVariableToArraylist = SystemConfig.getSingletonInstance()
+				.getUtilAbstractFactory().getQueryVariableToArrayList();
 		HashMap resultMap = theGroupFormationService.formGroupsForSurvey(course, surveyAnswersService, surveyService,
 				queryVariableToArraylist);
 		theModel.addAttribute("userDataMap", resultMap.get("userDataMap"));

@@ -34,4 +34,6 @@ public interface ServiceAbstractFactory {
 
 	public SurveyAnswersService getSurveyAnswersService();
 
+	public ResetPasswordService getResetPasswordService();
+
 }

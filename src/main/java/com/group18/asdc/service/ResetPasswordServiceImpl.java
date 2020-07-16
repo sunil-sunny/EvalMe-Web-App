@@ -7,7 +7,8 @@ import java.util.logging.Logger;
 import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
-import com.group18.asdc.passwordpolicy.IPasswordPolicyManager;
+import com.group18.asdc.passwordpolicy.BasePasswordPolicyFactory;
+import com.group18.asdc.passwordpolicy.PasswordPolicyFactory;
 import com.group18.asdc.security.IPasswordEncryption;
 
 public class ResetPasswordServiceImpl implements ResetPasswordService {
@@ -16,8 +17,8 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
 
     @Override
     public HashMap resetPassword(UserService userService, String bannerId, String password,
-            PasswordHistoryService passwordHistoryService, IPasswordPolicyManager passwordPolicyManager,
-            IPasswordEncryption passwordEncryption) {
+            PasswordHistoryService passwordHistoryService, BasePasswordPolicyFactory basePasswordPolicyManager,
+            PasswordPolicyFactory passwordPolicyManager, IPasswordEncryption passwordEncryption) {
 
         HashMap<String, Object> resultMap = new HashMap<>();
         boolean isError = false;
@@ -27,6 +28,7 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
             try {
                 resultMap.put("USER_EMAIL", userObj.getEmail());
                 userObj.setPassword(password);
+                User.validatePassword(password, basePasswordPolicyManager);
                 userObj.validatePassword(passwordPolicyManager);
                 logger.log(Level.INFO, "Updating the password for the user=" + userObj.getBannerId());
                 if (userService.updatePassword(userObj, passwordEncryption)) {

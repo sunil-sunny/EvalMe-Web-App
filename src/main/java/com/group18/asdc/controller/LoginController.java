@@ -4,14 +4,10 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
-import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.SystemConfig;
-import com.group18.asdc.dao.IPasswordPolicyDB;
 import com.group18.asdc.entities.Role;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.handlingformsubmission.ResetPassword;
-import com.group18.asdc.passwordpolicy.BasePasswordPolicyManager;
-import com.group18.asdc.passwordpolicy.PasswordPolicyManager;
 import com.group18.asdc.service.EmailService;
 import com.group18.asdc.service.ResetPasswordService;
 import com.group18.asdc.service.UserService;
@@ -70,7 +66,7 @@ public class LoginController {
 			model.addAttribute("BANNER_ID_NOT_EXIST", Boolean.TRUE);
 			return "forgot-password.html";
 		} else {
-			String genPassword = ProfileManagementConfig.getSingletonInstance().getRandomStringGenerator()
+			String genPassword = SystemConfig.getSingletonInstance().getUtilAbstractFactory().getRandomStringGenerator()
 					.generateRandomString();
 			session.setAttribute("RESET_PASSWORD", genPassword);
 			model.addAttribute("resetForm", new ResetPassword(bannerId));
@@ -91,13 +87,16 @@ public class LoginController {
 		if (resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD"))) {
 			if (resetForm.getnewPassword().equals(resetForm.getconfirmNewPassword())) {
 
-				ResetPasswordService resetPasswordService = ProfileManagementConfig.getSingletonInstance()
-						.getResetPasswordService();
+				ResetPasswordService resetPasswordService = SystemConfig.getSingletonInstance()
+						.getServiceAbstractFactory().getResetPasswordService();
 				resultMap = resetPasswordService.resetPassword(userService, resetForm.getbannerId(),
 						resetForm.getconfirmNewPassword(),
-						ProfileManagementConfig.getSingletonInstance().getPasswordHistoryService(),
-						ProfileManagementConfig.getSingletonInstance().getPasswordPolicyManager(),
-						ProfileManagementConfig.getSingletonInstance().getPasswordEncryption());
+						SystemConfig.getSingletonInstance().getServiceAbstractFactory()
+								.getPasswordHistoryService(SystemConfig.getSingletonInstance().getUtilAbstractFactory()
+										.getQueryVariableToArrayList()),
+						SystemConfig.getSingletonInstance().getBasePasswordPolicyManager(),
+						SystemConfig.getSingletonInstance().getPasswordPolicyFactory(),
+						SystemConfig.getSingletonInstance().getSecurityAbstractFactory().getPasswordEncryption());
 				isError = (Boolean) resultMap.get("IS_ERROR");
 				reason = (String) resultMap.get("REASON");
 			} else {
@@ -124,13 +123,4 @@ public class LoginController {
 		return "error";
 	}
 
-	@GetMapping("/resetPasswordPolicies")
-	public String resetPasswordPolicies() {
-		IPasswordPolicyDB passwordPolicyDB = ProfileManagementConfig.getSingletonInstance().getPasswordPolicyDB();
-		ProfileManagementConfig.getSingletonInstance()
-				.setBasePasswordPolicyManager(new BasePasswordPolicyManager(passwordPolicyDB));
-		ProfileManagementConfig.getSingletonInstance()
-				.setPasswordPolicyManager(new PasswordPolicyManager(passwordPolicyDB));
-		return "policyReset";
-	}
 }

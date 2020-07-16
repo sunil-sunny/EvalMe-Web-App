@@ -8,6 +8,7 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Repository;
 import com.group18.asdc.ProfileManagementConfig;
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.entities.UserRegistartionDetails;
@@ -38,7 +39,7 @@ public class RegisterServiceImpl implements RegisterService {
 			if (userDetails.getEmailid().matches(ConstantStringUtil.EMAIL_PATTERN_CHECK.toString())) {
 
 				User.validatePassword(userDetails.getPassword(),
-						ProfileManagementConfig.getSingletonInstance().getBasePasswordPolicyManager());
+						SystemConfig.getSingletonInstance().getBasePasswordPolicyManager());
 
 				if (isError) {
 					return resultObj;
@@ -83,7 +84,8 @@ public class RegisterServiceImpl implements RegisterService {
 
 	@Override
 	public boolean registerStudents(List<User> studentList) {
-		UserService userService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
+		UserService userService = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getUserService(
+				SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 		EmailService emailService = null;
 		boolean isAllStudentsRegistered = Boolean.FALSE;
 		for (User user : studentList) {
@@ -93,7 +95,7 @@ public class RegisterServiceImpl implements RegisterService {
 				JSONObject resultObject = this.registeruser(new UserRegistartionDetails(user));
 				if (resultObject.optInt("STATUS") == RegistrationStatus.SUCCESS) {
 					isAllStudentsRegistered = Boolean.TRUE;
-					emailService = ProfileManagementConfig.getSingletonInstance().getTheEmailService();
+					emailService = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getEmailService();
 					String messageText = ConstantStringUtil.EMAIL_MESSAGE_HEADER.toString() + user.getBannerId() + " "
 							+ user.getBannerId().concat(ConstantStringUtil.PASSWORD_TAG.toString());
 					emailService.sendSimpleMessage(user.getEmail(), ConstantStringUtil.EMAIL_SUBJECT.toString(),

@@ -1,8 +1,8 @@
 package com.group18.asdc.entities;
 
 import com.group18.asdc.errorhandling.PasswordPolicyException;
-import com.group18.asdc.passwordpolicy.IBasePasswordPolicyManager;
-import com.group18.asdc.passwordpolicy.IPasswordPolicyManager;
+import com.group18.asdc.passwordpolicy.BasePasswordPolicyFactory;
+import com.group18.asdc.passwordpolicy.PasswordPolicyFactory;
 	
 public class User implements IUser {
 
@@ -85,13 +85,13 @@ public class User implements IUser {
 		this.password = password;
 	}
 
-	public static void validatePassword(String password, IBasePasswordPolicyManager passwordPolicyManager)
+	public static void validatePassword(String password, BasePasswordPolicyFactory passwordPolicyManager)
 			throws PasswordPolicyException {
 		passwordPolicyManager.validatePassword(password);
 	}
 
 	@Override
-	public void validatePassword(IPasswordPolicyManager passwordPolicyManager) throws PasswordPolicyException {
+	public void validatePassword(PasswordPolicyFactory passwordPolicyManager) throws PasswordPolicyException {
 		passwordPolicyManager.validatePassword(bannerId, password);
 	}
 	

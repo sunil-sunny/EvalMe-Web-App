@@ -25,4 +25,6 @@ public interface DaoAbstractFactory {
 	public UserDao getUserDao();
 
 	public ViewQuestionsDao getViewQuestionsDao();
+
+	public IPasswordPolicyDB getPasswordPolicyDB();
 }

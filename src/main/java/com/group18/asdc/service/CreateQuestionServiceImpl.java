@@ -1,6 +1,5 @@
 package com.group18.asdc.service;
 
-import com.group18.asdc.ProfileManagementConfig;
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.CreateQuestionDao;
 import com.group18.asdc.entities.BasicQuestionData;
@@ -14,8 +13,9 @@ public class CreateQuestionServiceImpl implements CreateQuestionService {
 
 	@Override
 	public boolean createNumericOrTextQuestion(BasicQuestionData theBasicQuestionData) {
-		
-		UserService theUserService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
+
+		UserService theUserService = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getUserService(
+				SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 		User theUser = theUserService.getCurrentUser();
 		boolean isQuestionExist = theCreateQuestionDao.isQuestionExists(theBasicQuestionData);
 		if (isQuestionExist) {
@@ -27,8 +27,9 @@ public class CreateQuestionServiceImpl implements CreateQuestionService {
 
 	@Override
 	public boolean createMultipleQuestion(MultipleChoiceQuestion theMultipleChoiceChoose) {
-	
-		UserService theUserService = ProfileManagementConfig.getSingletonInstance().getTheUserService();
+
+		UserService theUserService = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getUserService(
+				SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 		User theUser = theUserService.getCurrentUser();
 		BasicQuestionData theBasicQuestionData = new BasicQuestionData();
 		theBasicQuestionData.setQuestionTitle(theMultipleChoiceChoose.getQuestionTitle());

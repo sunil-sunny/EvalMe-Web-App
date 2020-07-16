@@ -78,4 +78,11 @@ public class ServiceAbstractFactoryImpl implements ServiceAbstractFactory {
 	public SurveyAnswersService getSurveyAnswersService() {
 		return new SurveyAnswerServiceImpl();
 	}
+
+	@Override
+	public ResetPasswordService getResetPasswordService() {
+		return new ResetPasswordServiceImpl();
+	}
+
+	
 }
