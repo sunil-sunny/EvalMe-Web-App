@@ -120,7 +120,7 @@ public class CourseDaoImplMock implements CourseDetailsDao {
 
 	@Override
 	public boolean isCourseExists(Course course) {
-		Course newCourse = new Course();
+		Course newCourse = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getCourseTest();
 		CourseDaoImplMock.coursesDetails.add(newCourse);
 		return Boolean.TRUE;
 	}

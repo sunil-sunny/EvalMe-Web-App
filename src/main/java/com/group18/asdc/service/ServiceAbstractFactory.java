@@ -22,8 +22,6 @@ public interface ServiceAbstractFactory {
 
 	public RegisterService getRegisterService();
 
-	public SubmitAnswerService getSubmitAnswerService();
-
 	public UserService getUserService(IQueryVariableToArrayList queryVariableToArrayList);
 
 	public ViewQuestionsService getViewQuestionsService();

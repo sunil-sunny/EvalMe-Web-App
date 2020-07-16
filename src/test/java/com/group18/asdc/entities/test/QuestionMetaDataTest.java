@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.junit.Test;
 
+import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.QuestionMetaData;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,38 +14,44 @@ public class QuestionMetaDataTest {
 
 	@Test
 	public void getQuestionId() {
-		QuestionMetaData getQuestionIdData = new QuestionMetaData();
+		QuestionMetaData getQuestionIdData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getQuestionMetaDataTest();
 		getQuestionIdData.setQuestionId(256);
-		assertTrue(getQuestionIdData.getQuestionId()==256);
+		assertTrue(getQuestionIdData.getQuestionId() == 256);
 	}
-	
+
 	@Test
 	public void setQuestionId() {
-		QuestionMetaData getQuestionIdData = new QuestionMetaData();
+		QuestionMetaData getQuestionIdData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getQuestionMetaDataTest();
 		getQuestionIdData.setQuestionId(256);
-		assertTrue(getQuestionIdData.getQuestionId()==256);
+		assertTrue(getQuestionIdData.getQuestionId() == 256);
 	}
-	
+
 	@Test
 	public void getBasicQuestionData() {
-		BasicQuestionData getBasicQuestionData = new BasicQuestionData();
+		BasicQuestionData getBasicQuestionData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getBasicQuestionDataTest();
 		getBasicQuestionData.setQuestionText("Describe an experience you had when working with Java.");
 		getBasicQuestionData.setQuestionTitle("Java and Data Structures");
 		getBasicQuestionData.setQuestionType("freetext");
-		QuestionMetaData getQuestionMetaData = new QuestionMetaData();
-		getQuestionMetaData.setBasicQuestionData(getBasicQuestionData);
-		assertTrue(getQuestionMetaData.getBasicQuestionData().equals(getBasicQuestionData));
+		QuestionMetaData questionMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getQuestionMetaDataTest();
+		questionMetaData.setBasicQuestionData(getBasicQuestionData);
+		assertTrue(questionMetaData.getBasicQuestionData().equals(getBasicQuestionData));
 	}
 
 	@Test
 	public void setBasicQuestionData() {
-		BasicQuestionData setBasicQuestionData = new BasicQuestionData();
+		BasicQuestionData setBasicQuestionData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getBasicQuestionDataTest();
 		setBasicQuestionData.setQuestionText("Describe an experience you had when working with Java.");
 		setBasicQuestionData.setQuestionTitle("Java and Data Structures");
 		setBasicQuestionData.setQuestionType("freetext");
-		QuestionMetaData setQuestionMetaData = new QuestionMetaData();
-		setQuestionMetaData.setBasicQuestionData(setBasicQuestionData);
-		assertTrue(setQuestionMetaData.getBasicQuestionData().equals(setBasicQuestionData));
+		QuestionMetaData questionMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getQuestionMetaDataTest();
+		questionMetaData.setBasicQuestionData(setBasicQuestionData);
+		assertTrue(questionMetaData.getBasicQuestionData().equals(setBasicQuestionData));
 	}
 
 	@Test
@@ -52,7 +59,8 @@ public class QuestionMetaDataTest {
 		Date date = new Date();
 		long datetime = date.getTime();
 		Timestamp timestamp = new Timestamp(datetime);
-		QuestionMetaData questionMetaData = new QuestionMetaData();
+		QuestionMetaData questionMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getQuestionMetaDataTest();
 		questionMetaData.setCreationDateTime(timestamp);
 	}
 
@@ -61,7 +69,8 @@ public class QuestionMetaDataTest {
 		Date date = new Date();
 		long datetime = date.getTime();
 		Timestamp timestamp = new Timestamp(datetime);
-		QuestionMetaData questionMetaData = new QuestionMetaData();
+		QuestionMetaData questionMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getQuestionMetaDataTest();
 		questionMetaData.setCreationDateTime(timestamp);
 	}
 

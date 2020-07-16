@@ -11,8 +11,6 @@ import com.group18.asdc.entities.ISurveyList;
 import com.group18.asdc.entities.ISurveyMetaData;
 import com.group18.asdc.entities.ModelAbstractFactory;
 import com.group18.asdc.entities.ModelAbstractFactoryImpl;
-import com.group18.asdc.errorhandling.ExceptionAbstractFactory;
-import com.group18.asdc.errorhandling.ExceptionAbstractFactoryImpl;
 import com.group18.asdc.groupformation.BaseGroupFormationBuilder;
 import com.group18.asdc.groupformation.GroupFormationDirector;
 import com.group18.asdc.groupformation.IGroupFormationBuilder;
@@ -37,7 +35,6 @@ public class SystemConfig {
 	private BasePasswordPolicyFactory basePasswordPolicyFactory;
 	private SecurityAbstractFactory securityAbstractFactory;
 	private PasswordPolicyFactory passwordPolicyFactory;
-	private ExceptionAbstractFactory exceptionAbstractFactory;
 	private DataBaseAbstractFactory dataBaseAbstractFactory;
 
 	private SystemConfig() {
@@ -49,7 +46,6 @@ public class SystemConfig {
 		this.basePasswordPolicyFactory = BasePasswordPolicyFactory.instance(daoAbstractFactory.getPasswordPolicyDB());
 		this.securityAbstractFactory = new SecurityAbstractFactoryImpl();
 		this.passwordPolicyFactory = PasswordPolicyFactory.instance(daoAbstractFactory.getPasswordPolicyDB());
-		this.exceptionAbstractFactory = new ExceptionAbstractFactoryImpl();
 		this.dataBaseAbstractFactory = new DataBaseAbstractFactoryImpl();
 	}
 
@@ -72,10 +68,6 @@ public class SystemConfig {
 
 	public DaoAbstractFactory getDaoAbstractFactory() {
 		return daoAbstractFactory;
-	}
-
-	public ExceptionAbstractFactory getExceptionAbstractFactory() {
-		return exceptionAbstractFactory;
 	}
 
 	public UtilAbstractFactory getUtilAbstractFactory() {

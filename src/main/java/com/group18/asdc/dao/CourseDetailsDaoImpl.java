@@ -41,7 +41,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			getCourseRoles = con.prepareStatement(CourseDataBaseQueriesUtil.GET_COURSE_DETAILS.toString());
 			Course course = null;
 			while (resultSetAllCourses.next()) {
-				course = new Course();
+				course =  SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
 				List<User> students = new ArrayList<User>();
 				List<User> taList = new ArrayList<User>();
 				course.setCourseId(resultSetAllCourses.getInt("courseid"));
@@ -108,7 +108,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			resultset = preparedStatement.executeQuery();
 			Course course = null;
 			while (resultset.next()) {
-				course = new Course();
+				course = SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
@@ -154,7 +154,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			resultset = preparedStatement.executeQuery();
 			Course course = null;
 			while (resultset.next()) {
-				course = new Course();
+				course = SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
@@ -199,7 +199,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			resultset = preparedStatement.executeQuery();
 			Course course = null;
 			while (resultset.next()) {
-				course = new Course();
+				course =SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
@@ -362,7 +362,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			getCourseRoles = con.prepareStatement(CourseDataBaseQueriesUtil.GET_COURSE_DETAILS.toString());
 			course = null;
 			while (resultSet.next()) {
-				course = new Course();
+				course = SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
 				List<User> students = new ArrayList<User>();
 				List<User> taList = new ArrayList<User>();
 				course.setCourseId(resultSet.getInt("courseid"));
