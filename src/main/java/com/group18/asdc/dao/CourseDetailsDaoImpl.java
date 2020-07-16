@@ -12,11 +12,10 @@ import java.util.logging.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.group18.asdc.SystemConfig;
-import com.group18.asdc.database.ConnectionManager;
+import com.group18.asdc.database.CourseDataBaseQueriesUtil;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.Role;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.CourseDataBaseQueriesUtil;
 
 @Repository
 public class CourseDetailsDaoImpl implements CourseDetailsDao {
@@ -26,20 +25,19 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getAllCourses() {
-		
+
 		List<Course> allCourses = new ArrayList<Course>();
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement getCourses = connection
 						.prepareStatement(CourseDataBaseQueriesUtil.GET_ALL_COURSES.toString());
 				PreparedStatement getCourseRoles = connection
-						.prepareStatement(CourseDataBaseQueriesUtil.GET_COURSE_DETAILS.toString());){
-			
+						.prepareStatement(CourseDataBaseQueriesUtil.GET_COURSE_DETAILS.toString());) {
 			ResultSet resultSetAllCourses = getCourses.executeQuery();
 			ResultSet resultSetAllCourseRoles = null;
-			
 			Course course = null;
 			while (resultSetAllCourses.next()) {
-				course =  SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
+				course = SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
 				List<User> students = new ArrayList<User>();
 				List<User> taList = new ArrayList<User>();
 				course.setCourseId(resultSetAllCourses.getInt("courseid"));
@@ -66,19 +64,20 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception while getting all the courses and the number of courses is ",
 					allCourses.size());
-		} 
+		}
 		return allCourses;
 	}
 
 	@Override
 	public List<Course> getCoursesWhereUserIsStudent(User user) {
-	
+
 		List<Course> getCoursesAsStudent = new ArrayList<Course>();
-		
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement preparedStatement = connection
 						.prepareStatement(CourseDataBaseQueriesUtil.GET_COURSES_WHERE_USER_IS_STUDENT.toString());) {
-			
+
 			preparedStatement.setString(1, user.getBannerId());
 			ResultSet resultset = preparedStatement.executeQuery();
 			Course course = null;
@@ -101,13 +100,14 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCoursesWhereUserIsInstrcutor(User user) {
-		
+
 		List<Course> getCoursesAsInstructor = new ArrayList<Course>();
-		
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement preparedStatement = connection
 						.prepareStatement(CourseDataBaseQueriesUtil.GET_COURSES_WHERE_USER_IS_INSTRUCTOR.toString());) {
-			
+
 			preparedStatement.setString(1, user.getBannerId());
 			ResultSet resultset = preparedStatement.executeQuery();
 			Course course = null;
@@ -130,18 +130,19 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<Course> getCoursesWhereUserIsTA(User user) {
-		
+
 		List<Course> getCoursesAsTA = new ArrayList<Course>();
-		
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement preparedStatement = connection
-						.prepareStatement(CourseDataBaseQueriesUtil.GET_COURSES_WHERE_USER_IS_TA.toString());){
-			
+						.prepareStatement(CourseDataBaseQueriesUtil.GET_COURSES_WHERE_USER_IS_TA.toString());) {
+
 			preparedStatement.setString(1, user.getBannerId());
 			ResultSet resultset = preparedStatement.executeQuery();
 			Course course = null;
 			while (resultset.next()) {
-				course =SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
+				course = SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
 				int courseid = resultset.getInt("courseid");
 				course.setCourseId(courseid);
 				course.setCourseName(resultset.getString("coursename"));
@@ -153,34 +154,36 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id " + user.getBannerId()
 					+ " as TA and received count is " + getCoursesAsTA.size());
-		} 
+		}
 		return getCoursesAsTA;
 	}
 
 	@Override
 	public boolean isCourseExists(Course course) {
-		
+
 		boolean courseIdExists = Boolean.FALSE;
 		boolean courseNameExists = Boolean.FALSE;
 		boolean returnValue = Boolean.FALSE;
 		int courseId = course.getCourseId();
 
-		try(Connection connection = ConnectionManager.getInstance().getDBConnection();
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement statementID = connection
 						.prepareStatement(CourseDataBaseQueriesUtil.IS_COURSE_ID_EXISTS.toString());
 				PreparedStatement statementName = connection
-						.prepareStatement(CourseDataBaseQueriesUtil.IS_COURSE_NAME_EXISTS.toString());){
-			
+						.prepareStatement(CourseDataBaseQueriesUtil.IS_COURSE_NAME_EXISTS.toString());) {
+
 			statementID.setInt(1, courseId);
 			ResultSet resultset = statementID.executeQuery();
 			if (resultset.next()) {
 				courseIdExists = Boolean.TRUE;
 				returnValue = Boolean.TRUE;
 			}
-			
-			if (null != course.getCourseName()) {
+
+			if (null == course.getCourseName()) {
+				returnValue = Boolean.FALSE;
+			} else {
 				String courseName = course.getCourseName();
-				
 				statementName.setString(1, courseName);
 				resultset = statementName.executeQuery();
 				if (resultset.next()) {
@@ -192,30 +195,29 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception while checking if Course exists or not");
-		} 
+		}
 		return returnValue;
 	}
 
 	@Override
 	public User getInstructorForCourse(int courseId) {
-	
+
 		User instructor = null;
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement preparedStatement = connection
-						.prepareStatement(CourseDataBaseQueriesUtil.GET_INSTRUCTOR_FOR_COURSE.toString());){
-			
+						.prepareStatement(CourseDataBaseQueriesUtil.GET_INSTRUCTOR_FOR_COURSE.toString());) {
+
 			preparedStatement.setInt(1, courseId);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			String bannerId = null;
-			while (resultSet.next()) {
+			if (resultSet.next()) {
 				bannerId = resultSet.getString("bannerid");
-			}
-			if (null != bannerId) {
 				instructor = userDao.getUserById(bannerId);
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception while getting the instructor for course for courseid " + courseId);
-		} 
+		}
 		return instructor;
 	}
 
@@ -245,23 +247,21 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	public Course getCourseById(int courseId) {
 
 		Course course = null;
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement getCourseById = connection
 						.prepareStatement(CourseDataBaseQueriesUtil.GET_COURSE_BY_ID.toString());
 				PreparedStatement getCourseRoles = connection
 						.prepareStatement(CourseDataBaseQueriesUtil.GET_COURSE_DETAILS.toString());) {
-			
+
 			getCourseById.setInt(1, courseId);
 			ResultSet resultSet = getCourseById.executeQuery();
-			
-			course = null;
 			while (resultSet.next()) {
 				course = SystemConfig.getSingletonInstance().getModelAbstractFactory().getCourse();
 				List<User> students = new ArrayList<User>();
 				List<User> taList = new ArrayList<User>();
 				course.setCourseId(resultSet.getInt("courseid"));
 				course.setCourseName(resultSet.getString("coursename"));
-				
 				getCourseRoles.setInt(1, resultSet.getInt("courseid"));
 				ResultSet resultSetCourseRoles = getCourseRoles.executeQuery();
 				while (resultSetCourseRoles.next()) {
@@ -281,7 +281,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception occured while getting course for id ", courseId);
-		} 
+		}
 		return course;
 	}
 }

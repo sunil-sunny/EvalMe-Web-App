@@ -42,8 +42,7 @@ public class UserServiceImplMock implements UserService {
 	@Override
 	public int loadUserWithBannerId(String bannerId, User userObj) {
 		ArrayList valueList = new ArrayList<>();
-		if( bannerId.equals("B00838575"))
-		{
+		if (bannerId.equals("B00838575")) {
 			getDefaultUserObj(userObj);
 		}
 		return theDaoImplMock.loadUserWithBannerId(valueList, userObj);
@@ -64,13 +63,14 @@ public class UserServiceImplMock implements UserService {
 
 	@Override
 	public User getCurrentUser() {
-		User current = new User();
+		User current = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		return current;
 	}
 
 	@Override
 	public boolean isUserInstructor(Course course) {
-		UserDao theUserDao = new UserDaoImplMock();
-		return theUserDao.isUserInstructor(new Course());
+		UserDao theUserDao = TestConfig.getTestSingletonIntance().getDaoTestAbstractFactory().getUserDaoTest();
+		return theUserDao
+				.isUserInstructor(TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getCourseTest());
 	}
 }

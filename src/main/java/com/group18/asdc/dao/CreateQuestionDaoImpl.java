@@ -10,14 +10,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.group18.asdc.SystemConfig;
-import com.group18.asdc.database.ConnectionManager;
+import com.group18.asdc.database.QuestionManagerDataBaseQueries;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
 import com.group18.asdc.entities.Option;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.UserService;
-import com.group18.asdc.util.CourseDataBaseQueriesUtil;
-import com.group18.asdc.util.QuestionManagerDataBaseQueries;
 
 public class CreateQuestionDaoImpl implements CreateQuestionDao {
 
@@ -27,11 +25,12 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 	public boolean createNumericOrTextQuestion(BasicQuestionData theBasicQuestionData, User theUser) {
 
 		boolean isQuestionCreated = Boolean.FALSE;
-		
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement thePreparedStatement = connection
 						.prepareStatement(QuestionManagerDataBaseQueries.CREATE_QUESTION.toString());) {
-			
+
 			thePreparedStatement.setString(1, theUser.getBannerId());
 			int questionTypeId = this.getIdForQuestionType(theBasicQuestionData.getQuestionType());
 			if (0 == questionTypeId) {
@@ -45,16 +44,16 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				int createQuestionResult = thePreparedStatement.executeUpdate();
 				if (createQuestionResult > 0) {
 					isQuestionCreated = Boolean.TRUE;
+					log.log(Level.INFO, "Created " + theBasicQuestionData.getQuestionType() + " question with text "
+							+ theBasicQuestionData.getQuestionText() + " for the user " + theUser.getBannerId());
 				} else {
 					isQuestionCreated = Boolean.FALSE;
 				}
-				log.log(Level.INFO,"Created " + theBasicQuestionData.getQuestionType() + " question with text "
-						+ theBasicQuestionData.getQuestionText() + " for the user " + theUser.getBannerId());
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception while creating the Numeric or Text Question for the user with id ",
 					theUser.getBannerId());
-		} 
+		}
 		return isQuestionCreated;
 	}
 
@@ -62,15 +61,16 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 	public boolean createMultipleChoiceQuestion(MultipleChoiceQuestion theMultipleChoiceQuestion, User theUser) {
 
 		boolean isQuestionCreated = Boolean.FALSE;
-		
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
-				PreparedStatement preparedStatementForQuestionCreation = connection
-						.prepareStatement(QuestionManagerDataBaseQueries.CREATE_QUESTION.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
-				PreparedStatement preparedStatementForOptionCreation = connection
-						.prepareStatement(QuestionManagerDataBaseQueries.CREATE_OPTIONS.toString());){
-			
-			connection.setAutoCommit(false);
 
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
+				PreparedStatement preparedStatementForQuestionCreation = connection.prepareStatement(
+						QuestionManagerDataBaseQueries.CREATE_QUESTION.toString(),
+						PreparedStatement.RETURN_GENERATED_KEYS);
+				PreparedStatement preparedStatementForOptionCreation = connection
+						.prepareStatement(QuestionManagerDataBaseQueries.CREATE_OPTIONS.toString());) {
+
+			connection.setAutoCommit(false);
 			preparedStatementForQuestionCreation.setString(1, theUser.getBannerId());
 			int questionTypeId = this.getIdForQuestionType(theMultipleChoiceQuestion.getQuestionType());
 			if (0 == questionTypeId) {
@@ -89,7 +89,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 					long id = theResultSet.getLong(1);
 					int questionId = (int) id;
 					for (Option theOption : theMultipleChoiceQuestion.getOptionList()) {
-						
+
 						preparedStatementForOptionCreation.setInt(1, questionId);
 						preparedStatementForOptionCreation.setString(2, theOption.getDisplayText());
 						preparedStatementForOptionCreation.setInt(3, theOption.getStoredData());
@@ -105,7 +105,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 			}
 			if (isQuestionCreated) {
 				connection.commit();
-				log.log(Level.INFO,"Created " + theMultipleChoiceQuestion.getQuestionType() + " question with text "
+				log.log(Level.INFO, "Created " + theMultipleChoiceQuestion.getQuestionType() + " question with text "
 						+ theMultipleChoiceQuestion.getQuestionText() + " for the user " + theUser.getBannerId());
 			} else {
 				log.log(Level.WARNING,
@@ -114,7 +114,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception while creating Multiple choice question for user id ",
 					theUser.getBannerId());
-		} 
+		}
 		return isQuestionCreated;
 	}
 
@@ -122,42 +122,44 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 	public int getIdForQuestionType(String questionType) {
 
 		int typeId = 0;
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement thePreparedStatement = connection
 						.prepareStatement(QuestionManagerDataBaseQueries.GET_QUESTION_TYPE_ID.toString());) {
-			
+
 			thePreparedStatement.setString(1, questionType);
-			
 			ResultSet theResultSet = thePreparedStatement.executeQuery();
 			if (theResultSet.next()) {
 				typeId = theResultSet.getInt("questiontypeid");
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception while getting ID for question type ", questionType);
-		} 
+		}
 		return typeId;
 	}
 
 	@Override
 	public boolean isQuestionExists(BasicQuestionData theBasicQuestionData) {
-	
+
 		UserService theUserService = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getUserService(
-			SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
+				SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 		boolean isQuestionExists = Boolean.FALSE;
-		
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement thePreparedStatement = connection
-						.prepareStatement(QuestionManagerDataBaseQueries.GET_QUESTION_ID.toString());){
-			
+						.prepareStatement(QuestionManagerDataBaseQueries.GET_QUESTION_ID.toString());) {
+
 			thePreparedStatement.setString(1, theUserService.getCurrentUser().getBannerId());
 			thePreparedStatement.setInt(2, this.getIdForQuestionType(theBasicQuestionData.getQuestionType()));
 			thePreparedStatement.setString(3, theBasicQuestionData.getQuestionTitle().toLowerCase());
 			thePreparedStatement.setString(4, theBasicQuestionData.getQuestionText().toLowerCase());
-			
+
 			ResultSet theResultSet = thePreparedStatement.executeQuery();
 			if (theResultSet.next()) {
 				isQuestionExists = Boolean.TRUE;
-				log.log(Level.INFO,"Question with text " + theBasicQuestionData.getQuestionText() + " is already exists");
+				log.log(Level.INFO,
+						"Question with text " + theBasicQuestionData.getQuestionText() + " is already exists");
 			} else {
 				log.log(Level.FINE,
 						"Question with text " + theBasicQuestionData.getQuestionText() + " is doesn't exists");

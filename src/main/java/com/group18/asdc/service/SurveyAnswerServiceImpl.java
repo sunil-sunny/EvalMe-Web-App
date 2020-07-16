@@ -12,22 +12,22 @@ import com.group18.asdc.util.IQueryVariableToArrayList;
 
 public class SurveyAnswerServiceImpl implements SurveyAnswersService {
 
-    private Logger logger = Logger.getLogger(SurveyAnswersService.class.getName());
+	private Logger logger = Logger.getLogger(SurveyAnswersService.class.getName());
 
-    @Override
-    public ArrayList fetchAnswersForSurvey(int surveyId, IQueryVariableToArrayList queryVariableToArrayList) {
-        logger.log(Level.INFO, "Fetching answers for the survey=" + surveyId);
-        ArrayList<Answer> answersList = new ArrayList();
-        SurveyAnswerDao surveyAnswerDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory()
-                .getSurveyAnswerDao();
-        ArrayList<Object> valuesList = queryVariableToArrayList.convertQueryVariablesToArrayList(surveyId);
-        ArrayList<HashMap> resultList = surveyAnswerDao.fetchAnswersForSurvey(valuesList);
-        for (HashMap eachAnswer : resultList) {
-            Answer answer = new Answer((String) eachAnswer.get("answer"), (String) eachAnswer.get("bannerid"),
-                    (Integer) eachAnswer.get("surveyquestionid"));
-            answersList.add(answer);
-        }
-        return answersList;
-    }
-
+	@Override
+	public ArrayList fetchAnswersForSurvey(int surveyId, IQueryVariableToArrayList queryVariableToArrayList) {
+		logger.log(Level.INFO, "Fetching answers for the survey=" + surveyId);
+		ArrayList<Answer> answersList = new ArrayList();
+		SurveyAnswerDao surveyAnswerDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory()
+				.getSurveyAnswerDao();
+		ArrayList<Object> valuesList = queryVariableToArrayList.convertQueryVariablesToArrayList(surveyId);
+		ArrayList<HashMap> resultList = surveyAnswerDao.fetchAnswersForSurvey(valuesList);
+		for (HashMap eachAnswer : resultList) {
+			Answer answer = SystemConfig.getSingletonInstance().getModelAbstractFactory().getAnswer(
+					(String) eachAnswer.get("answer"), (String) eachAnswer.get("bannerid"),
+					(Integer) eachAnswer.get("surveyquestionid"));
+			answersList.add(answer);
+		}
+		return answersList;
+	}
 }

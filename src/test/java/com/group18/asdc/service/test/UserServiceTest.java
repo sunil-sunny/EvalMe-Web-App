@@ -3,18 +3,19 @@ package com.group18.asdc.service.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.group18.asdc.TestConfig;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.security.IPasswordEncryption;
@@ -28,7 +29,7 @@ public class UserServiceTest {
 	IQueryVariableToArrayList queryVariableToArraylist;
 
 	@InjectMocks
-	UserService userService = new UserServiceImplMock();
+	UserService userService = TestConfig.getTestSingletonIntance().getServiceTestAbstractFactory().getUserService();
 
 	@Mock
 	UserDao userDao;
@@ -42,7 +43,7 @@ public class UserServiceTest {
 	}
 
 	private User getDefaultUserObj() {
-		User userObj = new User();
+		User userObj = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		userObj.setBannerId("B00838575");
 		userObj.setEmail("kr630601@dal.ca");
 		userObj.setFirstName("Karthikk");
@@ -53,7 +54,7 @@ public class UserServiceTest {
 
 	@Test
 	public void loadUserWithBannerIdTest() {
-		User userObj = new User();
+		User userObj = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		ArrayList valuesList = new ArrayList<>();
 		valuesList.add("B00838575");
 		when(queryVariableToArraylist.convertQueryVariablesToArrayList(isA(String.class))).thenReturn(valuesList);
@@ -73,7 +74,7 @@ public class UserServiceTest {
 
 	@Test
 	public void loadUserWithBannerIdUnavailableTest() {
-		User userObj = new User();
+		User userObj = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		ArrayList valuesList = new ArrayList<>();
 		valuesList.add("B00838575");
 		when(queryVariableToArraylist.convertQueryVariablesToArrayList(isA(String.class))).thenReturn(valuesList);

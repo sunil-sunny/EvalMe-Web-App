@@ -6,17 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.group18.asdc.SystemConfig;
-import com.group18.asdc.database.ConnectionManager;
+import com.group18.asdc.database.GroupFormationDataBaseQueries;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.Group;
 import com.group18.asdc.entities.SurveyGroups;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.GroupFormationDataBaseQueries;
-import com.group18.asdc.util.QuestionManagerDataBaseQueries;
 
 public class GroupFormationDaoImpl implements GroupFormationDao {
 
@@ -27,7 +24,8 @@ public class GroupFormationDaoImpl implements GroupFormationDao {
 
 		SurveyGroups theSurveyGroup = null;
 
-		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
 				PreparedStatement thePreparedStatementGetSurvey = connection
 						.prepareStatement(GroupFormationDataBaseQueries.GET_SURVEY_GROUPS.toString());
 				PreparedStatement thePreparedStatementGetGroup = connection

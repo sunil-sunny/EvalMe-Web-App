@@ -5,8 +5,5 @@ public class SecurityAbstractFactoryImpl implements SecurityAbstractFactory{
     @Override
     public IPasswordEncryption getPasswordEncryption() {
         return new BCryptPasswordEncryption();
-    }
-
-
-    
+    }  
 }

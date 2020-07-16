@@ -14,4 +14,9 @@ public class DataBaseAbstractFactoryImpl implements DataBaseAbstractFactory {
 		return new SQLMethods(connection);
 	}
 
+	@Override
+	public ConnectionManager getConnectionManager() {
+		return ConnectionManager.getInstance();
+	}
+
 }

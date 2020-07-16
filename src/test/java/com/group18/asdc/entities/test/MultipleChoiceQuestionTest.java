@@ -16,7 +16,7 @@ public class MultipleChoiceQuestionTest {
 		Option option = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getOptionTest();
 		option.setStoredData(1);
 		option.setDisplayText("Beginner");
-		Option anotherOption = new Option();
+		Option anotherOption = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getOptionTest();
 		anotherOption.setStoredData(2);
 		anotherOption.setDisplayText("Proficient");
 		List<Option> optionList = new ArrayList<Option>();
@@ -33,7 +33,7 @@ public class MultipleChoiceQuestionTest {
 		Option option = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getOptionTest();
 		option.setStoredData(1);
 		option.setDisplayText("Beginner");
-		Option anotherOption = new Option();
+		Option anotherOption = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getOptionTest();
 		anotherOption.setStoredData(2);
 		anotherOption.setDisplayText("Proficient");
 		List<Option> anotherOptionList = new ArrayList<Option>();

@@ -24,10 +24,11 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public boolean isCourseIdValid(Course course) {
 		int courseId = course.getCourseId();
-		if (0 >= courseId || 4 != String.valueOf(courseId).length()) {
+		if (0 <= courseId || 4 == String.valueOf(courseId).length()) {
+			return Boolean.TRUE;
+		} else {
 			return Boolean.FALSE;
 		}
-		return Boolean.TRUE;
 	}
 
 	@Override

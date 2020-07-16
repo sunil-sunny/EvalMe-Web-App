@@ -18,14 +18,18 @@ public interface ModelAbstractFactory {
 
 	public UserRegistartionDetails getIUserRegistartionDetails();
 
+	public UserRegistartionDetails getIUserRegistartionDetails(User user);
+
 	public User getUser();
 
 	public SurveyQuestion getSurveyQuestion();
 
 	public SurveyList getSurveyList();
-	
+
 	public SurveyGroups getSurveyGroups();
-	
+
 	public Group getGroup();
+	
+	public Answer getAnswer(String answer, String bannerId, Integer surveyQuestionId);
 
 }
