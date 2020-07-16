@@ -4,14 +4,6 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
-import com.group18.asdc.SystemConfig;
-import com.group18.asdc.entities.Role;
-import com.group18.asdc.entities.User;
-import com.group18.asdc.handlingformsubmission.ResetPassword;
-import com.group18.asdc.service.EmailService;
-import com.group18.asdc.service.ResetPasswordService;
-import com.group18.asdc.service.UserService;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.group18.asdc.SystemConfig;
+import com.group18.asdc.entities.Role;
+import com.group18.asdc.entities.User;
+import com.group18.asdc.handlingformsubmission.ResetPassword;
+import com.group18.asdc.service.EmailService;
+import com.group18.asdc.service.ResetPasswordService;
+import com.group18.asdc.service.UserService;
+
 @Controller
 public class LoginController {
 
@@ -29,6 +29,8 @@ public class LoginController {
 			.getUserService(SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 	private static final EmailService emailService = SystemConfig.getSingletonInstance().getServiceAbstractFactory()
 			.getEmailService();
+	private static final ResetPasswordService resetPasswordService = SystemConfig.getSingletonInstance()
+			.getServiceAbstractFactory().getResetPasswordService();
 
 	@RequestMapping("/")
 	public RedirectView redirectPage() {
@@ -60,9 +62,9 @@ public class LoginController {
 	@GetMapping("/resetPassword")
 	public String sendResetRequest(@RequestParam(name = "username", required = true) String bannerId, Model model,
 			HttpSession session) {
-		User userObj = new User();
+		User userObj = SystemConfig.getSingletonInstance().getModelAbstractFactory().getUser();
 		userService.loadUserWithBannerId(bannerId, userObj);
-		if (userObj.getEmail() == null || userObj.getEmail().isEmpty()) {
+		if (null == userObj.getEmail() || userObj.getEmail().isEmpty()) {
 			model.addAttribute("BANNER_ID_NOT_EXIST", Boolean.TRUE);
 			return "forgot-password.html";
 		} else {
@@ -87,8 +89,6 @@ public class LoginController {
 		if (resetForm.getgeneratedPassword().equals(session.getAttribute("RESET_PASSWORD"))) {
 			if (resetForm.getnewPassword().equals(resetForm.getconfirmNewPassword())) {
 
-				ResetPasswordService resetPasswordService = SystemConfig.getSingletonInstance()
-						.getServiceAbstractFactory().getResetPasswordService();
 				resultMap = resetPasswordService.resetPassword(userService, resetForm.getbannerId(),
 						resetForm.getconfirmNewPassword(),
 						SystemConfig.getSingletonInstance().getServiceAbstractFactory()

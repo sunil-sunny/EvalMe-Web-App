@@ -5,6 +5,7 @@ import com.group18.asdc.service.CourseDetailsService;
 import com.group18.asdc.service.CourseRolesService;
 import com.group18.asdc.service.CreateQuestionService;
 import com.group18.asdc.service.DeleteQuestionService;
+import com.group18.asdc.service.RegisterService;
 import com.group18.asdc.service.SurveyService;
 import com.group18.asdc.service.UserService;
 
@@ -23,5 +24,7 @@ public interface ServiceTestAbstractFactory {
 	public SurveyService getSurveyServiceTest();
 	
 	public UserService getUserService();
+	
+	public RegisterService getRegisterService();
 
 }

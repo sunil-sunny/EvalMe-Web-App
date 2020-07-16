@@ -2,24 +2,24 @@ package com.group18.asdc.entities;
 
 public interface ModelAbstractFactory {
 
-	public IBasicQuestionData getBasicQuestionData();
+	public BasicQuestionData getBasicQuestionData();
 	
-	public IOption getOption();
+	public Option getOption();
 	
-	public ICourse getCourse();
+	public Course getCourse();
 	
-	public IMultipleChoiceQuestion getMultipleChoiceQuestion();
+	public MultipleChoiceQuestion getMultipleChoiceQuestion();
 	
-	public IPasswordHistory getPasswordHistory();
+	public PasswordHistory getPasswordHistory();
 	
-	public IQuestionMetaData getQuestionMetaData();
+	public QuestionMetaData getQuestionMetaData();
 	
-	public ISurveyMetaData getSurveyMetaData();
+	public SurveyMetaData getSurveyMetaData();
 	
-	public IUserRegistartionDetails getIUserRegistartionDetails();
+	public UserRegistartionDetails getIUserRegistartionDetails();
 	
-	public IUser getUser();
+	public User getUser();
 	
-	public ISurveyQuestion getSurveyQuestion();
+	public SurveyQuestion getSurveyQuestion();
 	
 }
