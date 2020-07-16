@@ -1,7 +1,5 @@
 package com.group18.asdc.entities;
 
-import java.util.List;
-
 public class Answer {
 
     private String answer;
@@ -37,6 +35,10 @@ public class Answer {
 
     public void setAnswerId(Integer answerId) {
         this.answerId = answerId;
+    }
+    
+    public int getAnswerId() {
+    	return this.answerId;
     }
 
     public void setSurveyQuestionId(Integer surveyQuestionId) {
