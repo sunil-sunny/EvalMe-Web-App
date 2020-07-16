@@ -57,7 +57,7 @@ public class ResetPaswordTest {
 	}
 
 	@Test
-	public void setbannerId(String bannerId) {
+	public void setbannerId() {
 		ResetPassword resetPassword = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getResetPasswordTest();
 		resetPassword.setbannerId("B00842470");
 		assertTrue(resetPassword.getbannerId().equals("B00842470"));
