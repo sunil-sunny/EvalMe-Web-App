@@ -12,6 +12,10 @@ public class ResetPassword {
 		this.bannerId = bannerId;
 	}
 
+	public ResetPassword() {
+		super();
+	}
+
 	public String getgeneratedPassword() {
 		return generatedPassword;
 	}
