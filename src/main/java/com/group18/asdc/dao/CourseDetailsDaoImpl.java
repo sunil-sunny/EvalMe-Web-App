@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 import org.springframework.stereotype.Repository;
 
-import com.group18.asdc.ProfileManagementConfig;
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.Role;
@@ -23,11 +23,11 @@ import com.group18.asdc.util.CourseDataBaseQueriesUtil;
 public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	private Logger log = Logger.getLogger(CourseDetailsDaoImpl.class.getName());
+	private static final UserDao userDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory().getUserDao();
 
 	@Override
 	public List<Course> getAllCourses() {
 
-		UserDao userDao = ProfileManagementConfig.getSingletonInstance().getTheUserDao();
 		Connection con = null;
 		Statement getCourses = null;
 		PreparedStatement getCourseRoles = null;
@@ -284,7 +284,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public User getInstructorForCourse(int courseId) {
-		UserDao theUserDao = ProfileManagementConfig.getSingletonInstance().getTheUserDao();
+		
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -300,7 +300,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				bannerId = resultSet.getString("bannerid");
 			}
 			if (null != bannerId) {
-				instructor = theUserDao.getUserById(bannerId);
+				instructor = userDao.getUserById(bannerId);
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception while getting the instructor for course for courseid " + courseId);
@@ -325,9 +325,8 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 
 	@Override
 	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
-		UserDao theUserDao = ProfileManagementConfig.getSingletonInstance().getTheUserDao();
 		List<User> eligibleStudents = new ArrayList<User>();
-		List<User> existingStudentsOfCourse = theUserDao.getAllUsersByCourse(courseId);
+		List<User> existingStudentsOfCourse = userDao.getAllUsersByCourse(courseId);
 		log.log(Level.INFO, "Filtering the Eligible for the course id " + courseId);
 		for (User student : studentList) {
 			boolean isExists = Boolean.FALSE;
@@ -349,7 +348,6 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 	@Override
 	public Course getCourseById(int courseId) {
 
-		UserDao userDao = ProfileManagementConfig.getSingletonInstance().getTheUserDao();
 		Connection con = null;
 		PreparedStatement getCourseById = null;
 		PreparedStatement getCourseRoles = null;

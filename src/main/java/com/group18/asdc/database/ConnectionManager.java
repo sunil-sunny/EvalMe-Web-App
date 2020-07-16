@@ -3,8 +3,7 @@ package com.group18.asdc.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
-import com.group18.asdc.ProfileManagementConfig;
+import com.group18.asdc.SystemConfig;
 
 public class ConnectionManager {
 
@@ -14,7 +13,9 @@ public class ConnectionManager {
 	private String dbPassword;
 
 	public ConnectionManager() {
-		IDatabaseConfiguration config = ProfileManagementConfig.getSingletonInstance().getDatabaseConfiguration();
+		IDatabaseConfiguration config = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getDatabaseConfiguration();
+
 		dbURL = config.getDatabaseURL();
 		dbUserName = config.getDatabaseUserName();
 		dbPassword = config.getDatabasePassword();

@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Repository;
-import com.group18.asdc.ProfileManagementConfig;
+
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.entities.User;
@@ -20,6 +20,8 @@ import com.group18.asdc.util.RegistrationStatus;
 public class RegisterServiceImpl implements RegisterService {
 
 	private Logger log = Logger.getLogger(RegisterServiceImpl.class.getName());
+	private static final RegisterDao registerDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory()
+			.getRegisterDao();
 
 	@Override
 	public JSONObject registeruser(UserRegistartionDetails userDetails) {
@@ -46,7 +48,6 @@ public class RegisterServiceImpl implements RegisterService {
 				if (isError) {
 					return resultObj;
 				}
-				RegisterDao registerDao = ProfileManagementConfig.getSingletonInstance().getTheRegisterDao();
 				boolean isEmailExits = registerDao.checkUserWithEmail(userDetails.getEmailid());
 				boolean isBannerIdExists = registerDao.checkUserWithEmail(userDetails.getBannerid());
 				if (isBannerIdExists) {
