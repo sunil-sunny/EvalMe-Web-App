@@ -2,6 +2,7 @@ package com.group18.asdc.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,17 +10,14 @@ import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.GroupFormationDao;
 import com.group18.asdc.entities.Answer;
 import com.group18.asdc.entities.Course;
+import com.group18.asdc.entities.ISurveyList;
 import com.group18.asdc.entities.Option;
 import com.group18.asdc.entities.SurveyGroups;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.groupformation.ComputeDistance;
-import com.group18.asdc.groupformation.GroupFormation;
-import com.group18.asdc.groupformation.GroupFormationAdapter;
-import com.group18.asdc.groupformation.GroupFormationAdapterImpl;
-import com.group18.asdc.groupformation.IComputeDistance;
-import com.group18.asdc.groupformation.IGroupFormation;
+import com.group18.asdc.groupformation.IGroupFormationBuilder;
+import com.group18.asdc.groupformation.IGroupFormationDirector;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 
 public class GroupFormationServiceImpl implements GroupFormationService {
@@ -41,20 +39,19 @@ public class GroupFormationServiceImpl implements GroupFormationService {
 		SurveyMetaData surveyQuestionData = surveyService.getSavedSurvey(course);
 		ArrayList<Answer> answerList = surveyAnswersService.fetchAnswersForSurvey(surveyQuestionData.getSurveyId(),
 				queryVariableToArraylist);
-		GroupFormationAdapter adapter = new GroupFormationAdapterImpl(surveyQuestionData, answerList);
-		ArrayList questionList = adapter.getQuestionList();
-		ArrayList userList = adapter.getUserList();
-		ArrayList userAnswersList = adapter.getUserAnswersList();
-		IComputeDistance computeDistance = new ComputeDistance(userAnswersList, questionList);
-		IGroupFormation groupFormation = new GroupFormation(computeDistance.compute(), userList,
-				surveyQuestionData.getGroupSize());
-		resultMap.put(USER_DATA_MAP, fetchGroupDetails(userList, surveyQuestionData, answerList));
-		resultMap.put(GROUP_LIST, groupFormation.formGroups());
+		ISurveyList survey = SystemConfig.getSingletonInstance().createSurveyAdapter(surveyQuestionData, answerList);
+		IGroupFormationBuilder groupBuilder = SystemConfig.getSingletonInstance().createGroupFormationBuilder();
+		IGroupFormationDirector director = SystemConfig.getSingletonInstance()
+				.createGroupFormationDirector(groupBuilder);
+		director.createGroup(survey, surveyQuestionData.getGroupSize());
+		List clusteredGroups = groupBuilder.getGroups();
+		resultMap.put(USER_DATA_MAP, fetchGroupDetails(survey.getUserList(), surveyQuestionData, answerList));
+		resultMap.put(GROUP_LIST, clusteredGroups);
 		return resultMap;
 	}
 
 	@Override
-	public HashMap<String, HashMap> fetchGroupDetails(ArrayList<String> userIdList, SurveyMetaData surveyMetaData,
+	public HashMap<String, HashMap> fetchGroupDetails(List<String> userIdList, SurveyMetaData surveyMetaData,
 			ArrayList<Answer> answerList) {
 		logger.log(Level.INFO,
 				"Fetch user information for displaying survey results userList=" + userIdList.toString());
@@ -97,7 +94,7 @@ public class GroupFormationServiceImpl implements GroupFormationService {
 			}
 			userSurveyMap.put(bannerId, userMap);
 		}
-		logger.log(Level.INFO, "Fetched user details for group formation" + userSurveyMap.toString());
+		logger.log(Level.INFO, "Fetched user details for group formation");
 		return userSurveyMap;
 	}
 

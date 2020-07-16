@@ -4,31 +4,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.group18.asdc.entities.Answer;
-import com.group18.asdc.entities.SurveyMetaData;
+import com.group18.asdc.entities.ISurveyList;
+import com.group18.asdc.entities.ISurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
 
-public class GroupFormationAdapterImpl implements GroupFormationAdapter {
+public class SurveyAdapter implements ISurveyList {
+    private List questionList;
+    private List userAnswerList;
+    private List usersList;
+    private Set<String> userSet;
 
-    private SurveyMetaData surveyMetaData = null;
-    private ArrayList<Answer> answersList = null;
-    private ArrayList<HashMap> userAnswerList = null;
-    private ArrayList<HashMap> questionList = null;
-    private Set<String> userSet = null;
-    private ArrayList<String> usersList = null;
-    private Logger logger = Logger.getLogger(GroupFormationAdapter.class.getName());
+    private Logger logger = Logger.getLogger(SurveyAdapter.class.getName());
 
-    public GroupFormationAdapterImpl(SurveyMetaData surveyMetaData, ArrayList<Answer> answersList) {
-        this.surveyMetaData = surveyMetaData;
-        this.answersList = answersList;
-        processData();
-    }
+    public SurveyAdapter(ISurveyMetaData surveyMetaData, List<Answer> answersList) {
 
-    private void processData() {
         logger.log(Level.INFO, "Adapter - Tranforming model objects to list");
         ArrayList<SurveyQuestion> surveyQuestionList = (ArrayList) surveyMetaData.getSurveyQuestions();
         HashMap<String, Object> questionMap = null;
@@ -60,7 +55,6 @@ public class GroupFormationAdapterImpl implements GroupFormationAdapter {
                     String userAnswers = eachAnswer.getAnswers();
                     userAnswerOptionsList = new ArrayList(Arrays.asList(userAnswers.split(",")));
                     userAnswerMap.put(eachAnswer.getSurveyQuestionId(), userAnswerOptionsList);
-
                 }
             }
             userAnswerList.add(userAnswerMap);
@@ -69,20 +63,17 @@ public class GroupFormationAdapterImpl implements GroupFormationAdapter {
     }
 
     @Override
-    public ArrayList getQuestionList() {
-
+    public List getQuestionList() {
         return this.questionList;
     }
 
     @Override
-    public ArrayList getUserAnswersList() {
-
+    public List getAnswerList() {
         return this.userAnswerList;
     }
 
     @Override
-    public ArrayList<String> getUserList() {
-
+    public List getUserList() {
         return this.usersList;
     }
 

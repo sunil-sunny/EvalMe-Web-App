@@ -3,18 +3,19 @@ package com.group18.asdc.groupformation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GroupFormation implements IGroupFormation {
 
     private Float[][] distanceMatrix = null;
-    private ArrayList<String> usersList = null;
+    private List<String> usersList = null;
     private Integer groupSize = null;
-    private ArrayList<Integer> globalUserList = null;
+    private List<Integer> globalUserList = null;
     private Logger logger = Logger.getLogger(IGroupFormation.class.getName());
 
-    public GroupFormation(Float[][] distanceMatrix, ArrayList usersList, Integer groupSize) {
+    public GroupFormation(Float[][] distanceMatrix, List usersList, Integer groupSize) {
         this.distanceMatrix = distanceMatrix;
         this.usersList = usersList;
         this.groupSize = groupSize;
