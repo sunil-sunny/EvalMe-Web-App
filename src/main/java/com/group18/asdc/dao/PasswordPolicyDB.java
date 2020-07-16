@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
+import com.group18.asdc.database.ISQLMethods;
 import com.group18.asdc.database.SQLMethods;
 import com.group18.asdc.database.SQLQueries;
 
@@ -18,7 +19,7 @@ public class PasswordPolicyDB implements IPasswordPolicyDB {
 	@Override
 	public ArrayList loadBasePoliciesFromDB() {
 		logger.log(Level.INFO, "Loading base password policies from DB");
-		SQLMethods sqlImplementation = null;
+		ISQLMethods sqlImplementation = null;
 		ArrayList policiesList = new ArrayList<>();
 		try {
 			Connection connection = ConnectionManager.getInstance().getDBConnection();
@@ -43,7 +44,7 @@ public class PasswordPolicyDB implements IPasswordPolicyDB {
 	@Override
 	public ArrayList loadPoliciesFromDB() {
 		logger.log(Level.INFO, "Loading history password policies from DB");
-		SQLMethods sqlImplementation = null;
+		ISQLMethods sqlImplementation = null;
 		ArrayList policiesList = new ArrayList<>();
 		try {
 			Connection connection = ConnectionManager.getInstance().getDBConnection();

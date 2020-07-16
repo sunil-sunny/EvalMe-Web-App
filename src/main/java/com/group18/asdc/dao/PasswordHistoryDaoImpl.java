@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
+import com.group18.asdc.database.ISQLMethods;
 import com.group18.asdc.database.SQLMethods;
 import com.group18.asdc.util.UserManagementDataBaseQueriesUtil;
 
@@ -19,7 +20,7 @@ public class PasswordHistoryDaoImpl implements PasswordHistoryDao {
 	@Override
 	public Object insertPasswordHistory(ArrayList valuesList) {
 		logger.log(Level.INFO, "Inserting password history for user=" + valuesList.get(0));
-		SQLMethods sqlImplementation = null;
+		ISQLMethods sqlImplementation = null;
 		try {
 			Connection connection = ConnectionManager.getInstance().getDBConnection();
 			sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
@@ -44,7 +45,7 @@ public class PasswordHistoryDaoImpl implements PasswordHistoryDao {
 	@Override
 	public ArrayList<HashMap> getPasswordHistory(ArrayList criteriaList) {
 		logger.log(Level.INFO, "Fetching password history for user=" + criteriaList.get(0));
-		SQLMethods sqlImplementation = null;
+		ISQLMethods sqlImplementation = null;
 		try {
 			Connection connection = ConnectionManager.getInstance().getDBConnection();
 			sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()

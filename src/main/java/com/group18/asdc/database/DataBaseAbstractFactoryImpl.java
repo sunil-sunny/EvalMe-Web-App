@@ -2,7 +2,7 @@ package com.group18.asdc.database;
 
 import java.sql.Connection;
 
-public class DataBaseAbstractFactoryImpl implements DataBaseAbstractFactory{
+public class DataBaseAbstractFactoryImpl implements DataBaseAbstractFactory {
 
 	@Override
 	public IDatabaseConfiguration getDatabaseConfiguration() {
@@ -10,7 +10,7 @@ public class DataBaseAbstractFactoryImpl implements DataBaseAbstractFactory{
 	}
 
 	@Override
-	public SQLMethods getSqlMethods(Connection connection) {
+	public ISQLMethods getSqlMethods(Connection connection) {
 		return new SQLMethods(connection);
 	}
 

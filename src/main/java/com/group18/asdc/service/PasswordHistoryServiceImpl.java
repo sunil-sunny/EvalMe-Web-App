@@ -12,11 +12,11 @@ import com.group18.asdc.util.IQueryVariableToArrayList;
 public class PasswordHistoryServiceImpl implements PasswordHistoryService {
 
 	private IQueryVariableToArrayList queryVariableToArrayList;
-	private static final PasswordHistoryDao passwordHistoryDao = SystemConfig.getSingletonInstance()
-			.getDaoAbstractFactory().getPasswordHistoryDao();
+	private PasswordHistoryDao passwordHistoryDao;
 	private final String BANNER_ID = "bannerid", PASSWORD = "password";
 
 	public PasswordHistoryServiceImpl(IQueryVariableToArrayList queryVariableToArrayList) {
+		passwordHistoryDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory().getPasswordHistoryDao();
 		this.queryVariableToArrayList = queryVariableToArrayList;
 	}
 
