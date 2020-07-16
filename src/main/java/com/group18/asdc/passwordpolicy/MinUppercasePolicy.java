@@ -19,7 +19,7 @@ public class MinUppercasePolicy implements IBasePasswordPolicy {
 
 	@Override
 	public void validate(String password) throws PasswordPolicyException {
-		logger.log(Level.INFO, "Validating minimum uppercase length policy for the password=" + password);
+		logger.log(Level.INFO, "Validating minimum uppercase length policy for the password");
 		Integer upperCaseCharsCount = customStringUtils.getUpperCaseCharactersCount(password);
 		if (upperCaseCharsCount < this.minUpperCase) {
 			throw new PasswordPolicyException(

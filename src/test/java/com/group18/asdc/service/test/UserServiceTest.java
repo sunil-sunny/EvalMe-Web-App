@@ -8,19 +8,19 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.dao.UserDao;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.service.UserService;
 import com.group18.asdc.util.IQueryVariableToArrayList;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class UserServiceTest {

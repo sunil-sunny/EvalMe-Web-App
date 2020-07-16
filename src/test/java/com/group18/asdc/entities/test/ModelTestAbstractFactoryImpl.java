@@ -16,6 +16,7 @@ import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.entities.UserRegistartionDetails;
+import com.group18.asdc.handlingformsubmission.ResetPassword;
 
 public class ModelTestAbstractFactoryImpl implements ModelTestAbstractFactory {
 
@@ -104,7 +105,12 @@ public class ModelTestAbstractFactoryImpl implements ModelTestAbstractFactory {
 
 	@Override
 	public UserRegistartionDetails getUserRegistartionDetailsTest() {
-		
+
 		return new UserRegistartionDetails();
+	}
+
+	@Override
+	public ResetPassword getResetPasswordTest() {
+		return new ResetPassword();
 	}
 }

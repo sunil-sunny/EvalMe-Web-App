@@ -19,12 +19,11 @@ public class RegisterDaoImpl implements RegisterDao {
 
 	@Override
 	public boolean registeruser(UserRegistartionDetails registerDetails) {
-
 		boolean isUserRegisterd = Boolean.FALSE;
 		boolean isGuestRoleAssigned = Boolean.FALSE;
-		
+		log.log(Level.INFO,"Registering new user into the database user="+registerDetails.getBannerid());
 		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
-				.getConnectionManager().getDBConnection();
+		.getConnectionManager().getDBConnection();
 				PreparedStatement registerUserStatement = connection
 						.prepareStatement(UserManagementDataBaseQueriesUtil.INSERT_USER.toString());
 				PreparedStatement assignRoleStatement = connection
@@ -81,7 +80,7 @@ public class RegisterDaoImpl implements RegisterDao {
 				isUserExists = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while checking the user with email " + email);
+			log.log(Level.SEVERE, "SQL Exception while checking the user with email=" + email);
 		} 
 		return isUserExists;
 	}
@@ -104,7 +103,7 @@ public class RegisterDaoImpl implements RegisterDao {
 				isUserExists = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occured while checking the user with banner id " + bannerId);
+			log.log(Level.SEVERE, "SQL Exception occured while checking the user with bannerid=" + bannerId);
 		}
 		return isUserExists;
 	}
