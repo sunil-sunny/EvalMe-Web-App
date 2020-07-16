@@ -19,7 +19,7 @@ public class RegisterDaoImpl implements RegisterDao {
 
 	@Override
 	public boolean registeruser(UserRegistartionDetails registerDetails) {
-
+		log.log(Level.INFO,"Registering new user into the database user="+registerDetails.getBannerid());
 		Connection connection = null;
 		PreparedStatement registerUserStatement = null;
 		PreparedStatement assignRoleStatement = null;

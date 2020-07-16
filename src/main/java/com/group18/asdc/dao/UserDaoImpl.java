@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.database.SQLMethods;
-import com.group18.asdc.database.SQLQueries;
 import com.group18.asdc.database.SQLStatus;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
