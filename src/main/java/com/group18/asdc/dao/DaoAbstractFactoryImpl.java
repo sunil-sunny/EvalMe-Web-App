@@ -43,11 +43,6 @@ public class DaoAbstractFactoryImpl implements DaoAbstractFactory {
 	}
 
 	@Override
-	public SubmitAnswerDao getSubmitAnswerDao() {
-		return new SubmitAnswerDaoImpl();
-	}
-
-	@Override
 	public SurveyDao getSurveyDao() {
 		return new SurveyDaoImpl();
 	}

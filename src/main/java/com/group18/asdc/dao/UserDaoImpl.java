@@ -18,6 +18,7 @@ import com.group18.asdc.database.SQLQueries;
 import com.group18.asdc.database.SQLStatus;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
+import com.group18.asdc.util.QuestionManagerDataBaseQueries;
 import com.group18.asdc.util.UserManagementDataBaseQueriesUtil;
 
 @Repository
@@ -27,15 +28,14 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public boolean isUserExists(User user) {
-		Connection connection = null;
-		ResultSet resultSet = null;
-		PreparedStatement checkUser = null;
+
 		boolean isUserExits = Boolean.FALSE;
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			checkUser = connection.prepareStatement(UserManagementDataBaseQueriesUtil.IS_USER_EXISTS.toString());
+		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+				PreparedStatement checkUser = connection
+						.prepareStatement(UserManagementDataBaseQueriesUtil.IS_USER_EXISTS.toString());){
+			
 			checkUser.setString(1, user.getBannerId());
-			resultSet = checkUser.executeQuery();
+			ResultSet resultSet = checkUser.executeQuery();
 			if (resultSet.next()) {
 				isUserExits = Boolean.TRUE;
 				logger.log(Level.INFO, "User with id " + user.getBannerId() + " is exists");
@@ -46,37 +46,20 @@ public class UserDaoImpl implements UserDao {
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE,
 					"SQL Exception occurred while checking if user exists or not for user id " + user.getBannerId());
-		} finally {
-			try {
-				if (null != resultSet) {
-					resultSet.close();
-				}
-				if (null != connection) {
-					connection.close();
-				}
-				if (null != checkUser) {
-					checkUser.close();
-				}
-			} catch (SQLException e) {
-				logger.log(Level.SEVERE,
-						"SQL Exception occurred while closing the connections and statements after checking if user exists or not");
-			}
-		}
+		} 
 		return isUserExits;
 	}
 
 	@Override
 	public User getUserById(String bannerId) {
-		Connection connection = null;
-		ResultSet resultSet = null;
-		PreparedStatement getUser = null;
+
 		User user = null;
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			String userSql = UserManagementDataBaseQueriesUtil.GET_USER_BY_ID.toString();
-			getUser = connection.prepareStatement(userSql);
+		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+				PreparedStatement getUser = connection
+						.prepareStatement(UserManagementDataBaseQueriesUtil.GET_USER_BY_ID.toString());){
+			
 			getUser.setString(1, bannerId);
-			resultSet = getUser.executeQuery();
+			ResultSet resultSet = getUser.executeQuery();
 			while (resultSet.next()) {
 				user = new User();
 				user.setBannerId(resultSet.getString("bannerid"));
@@ -87,39 +70,22 @@ public class UserDaoImpl implements UserDao {
 
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE, "SQL Exception while getting user with banner id " + bannerId);
-		} finally {
-			try {
-				if (null != resultSet) {
-					resultSet.close();
-				}
-				if (null != connection) {
-					connection.close();
-				}
-				if (null != getUser) {
-					getUser.close();
-				}
-			} catch (SQLException e) {
-				logger.log(Level.SEVERE,
-						"SQL Exception while closing the connections and statements after getting user with banner id "
-								+ bannerId);
-			}
-		}
+		} 
 		return user;
 	}
 
 	@Override
 	public List<User> getAllUsersByCourse(int courseId) {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSetForStudentList = null;
+
 		List<User> studentList = new ArrayList<User>();
 		User user = null;
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			preparedStatement = connection
-					.prepareStatement(UserManagementDataBaseQueriesUtil.GET_ALL_USERS_RELATED_TO_COURSE.toString());
+		
+		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+				PreparedStatement preparedStatement = connection
+						.prepareStatement(UserManagementDataBaseQueriesUtil.GET_ALL_USERS_RELATED_TO_COURSE.toString());){
+			
 			preparedStatement.setInt(1, courseId);
-			resultSetForStudentList = preparedStatement.executeQuery();
+			ResultSet resultSetForStudentList = preparedStatement.executeQuery();
 			while (resultSetForStudentList.next()) {
 				user = new User();
 				user.setBannerId(resultSetForStudentList.getString("bannerid"));
@@ -130,23 +96,7 @@ public class UserDaoImpl implements UserDao {
 			}
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE, "SQL Exception while getting all the users realted to course with id " + courseId);
-		} finally {
-			try {
-				if (null != connection) {
-					connection.close();
-				}
-				if (null != resultSetForStudentList) {
-					resultSetForStudentList.close();
-				}
-				if (null != preparedStatement) {
-					preparedStatement.close();
-				}
-			} catch (SQLException e) {
-				logger.log(Level.SEVERE,
-						"SQL Exception while closing the connections and statements after getting all the users related to course with id "
-								+ courseId);
-			}
-		}
+		} 
 		return studentList;
 	}
 
@@ -240,27 +190,26 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public boolean isUserInstructor(Course course) {
+		
 		boolean returnValue = Boolean.TRUE;
 		String instructorId = course.getInstructorName().getBannerId();
 		int courseId = course.getCourseId();
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultset = null;
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			statement = connection.prepareStatement(UserManagementDataBaseQueriesUtil.IS_USER_EXISTS.toString());
+		
+		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+				PreparedStatement statement = connection
+						.prepareStatement(UserManagementDataBaseQueriesUtil.IS_USER_EXISTS.toString());
+				PreparedStatement statementInstructorStudent = connection
+						.prepareStatement(UserManagementDataBaseQueriesUtil.IS_INSTRUCTOR_A_STUDENT.toString());){
+			
 			statement.setString(1, instructorId);
-			resultset = statement.executeQuery();
-			statement.close();
+			ResultSet resultset = statement.executeQuery();
+			
 			if (null == resultset) {
 				returnValue = Boolean.FALSE;
 			} else {
-				resultset.close();
-				statement = connection
-						.prepareStatement(UserManagementDataBaseQueriesUtil.IS_INSTRUCTOR_A_STUDENT.toString());
-				statement.setString(1, instructorId);
-				statement.setInt(2, courseId);
-				resultset = statement.executeQuery();
+				statementInstructorStudent.setString(1, instructorId);
+				statementInstructorStudent.setInt(2, courseId);
+				resultset = statementInstructorStudent.executeQuery();
 				if (null != resultset) {
 					returnValue = Boolean.FALSE;
 				}
@@ -268,23 +217,7 @@ public class UserDaoImpl implements UserDao {
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE,
 					"SQL Exception while Checking the user as instructor or not for course " + course.getCourseId());
-		} finally {
-			try {
-				if (null != statement) {
-					statement.close();
-				}
-				if (null != resultset) {
-					resultset.close();
-				}
-				if (null != connection) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				logger.log(Level.SEVERE,
-						"SQL Exception while closing connections Checking the user as instructor or not for course "
-								+ course.getCourseId());
-			}
-		}
+		} 
 		return returnValue;
 	}
 }
