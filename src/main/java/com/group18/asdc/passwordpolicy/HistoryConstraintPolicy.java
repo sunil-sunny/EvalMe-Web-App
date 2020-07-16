@@ -26,7 +26,7 @@ public class HistoryConstraintPolicy implements IPasswordPolicy {
 	@Override
 	public void validate(String bannerId, String password) throws PasswordPolicyException {
 		logger.log(Level.INFO,
-				"Validating password history constraint policy for the password=" + password + " user=" + bannerId);
+				"Validating password history constraint policy for the user=" + bannerId);
 		ArrayList<PasswordHistory> passwordHistoryList = passwordHistoryService.getPasswordHistory(bannerId,
 				numberOfHistoryRecords);
 		for (PasswordHistory eachPasswordHistory : passwordHistoryList) {

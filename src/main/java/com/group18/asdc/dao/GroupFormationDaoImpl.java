@@ -16,7 +16,6 @@ import com.group18.asdc.entities.Group;
 import com.group18.asdc.entities.SurveyGroups;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.util.GroupFormationDataBaseQueries;
-import com.group18.asdc.util.QuestionManagerDataBaseQueries;
 
 public class GroupFormationDaoImpl implements GroupFormationDao {
 
