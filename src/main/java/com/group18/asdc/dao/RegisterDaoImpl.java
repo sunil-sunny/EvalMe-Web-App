@@ -50,7 +50,8 @@ public class RegisterDaoImpl implements RegisterDao {
 				isGuestRoleAssigned = Boolean.TRUE;
 			}
 			if (isGuestRoleAssigned && isUserRegisterd) {
-				log.log(Level.INFO,"User with id " + registerDetails.getBannerid() + " has been successfully registered");
+				log.log(Level.INFO,
+						"User with id " + registerDetails.getBannerid() + " has been successfully registered");
 				connection.commit();
 			} else {
 				log.log(Level.WARNING, "User with id " + registerDetails.getBannerid() + " has not been registered");
