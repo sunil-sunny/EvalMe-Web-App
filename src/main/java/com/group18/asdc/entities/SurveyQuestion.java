@@ -3,7 +3,7 @@ package com.group18.asdc.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SurveyQuestion implements ISurveyQuestion{
+public class SurveyQuestion implements ISurveyQuestion {
 
 	private int surveyQuestionId;
 	private String logicDetail;

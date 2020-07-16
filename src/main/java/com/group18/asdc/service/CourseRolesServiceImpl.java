@@ -47,8 +47,7 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 		if (isStudentsRegistered) {
 			List<User> eligibleStudents = theCourseDetailsService.filterEligibleUsersForCourse(studentList, courseId);
 			if (0 == eligibleStudents.size()) {
-				throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory().getEnrollingStudentException(
-						"All the Students are already part of the course with " + courseId);
+				throw new EnrollingStudentException("All the Students are already part of the course with " + courseId);
 			} else {
 				return courseRolesDao.enrollStudentsIntoCourse(eligibleStudents, courseId);
 			}
@@ -62,8 +61,7 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 		List<User> validUsers = new ArrayList<User>();
 		List<User> inValidUsers = new ArrayList<User>();
 		if (file.isEmpty()) {
-			throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
-					.getFileProcessingException("uploaded file is empty, Kindly upload valid file");
+			throw new FileProcessingException("uploaded file is empty, Kindly upload valid file");
 		} else {
 			try {
 				byte[] bytes = file.getBytes();
@@ -91,15 +89,13 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 							inValidUsers.add(user);
 						}
 					} else {
-						throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
-								.getFileProcessingException(
-										"Content in the file doesnt match the format kinldy rectify it ang upload again");
+						throw new FileProcessingException(
+								"Content in the file doesnt match the format kinldy rectify it ang upload again");
 					}
 				}
 				br.close();
 			} catch (IOException e) {
-				throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
-						.getFileProcessingException("File doesnt exist or it is invalid, Kinldy try again");
+				throw new FileProcessingException("File doesnt exist or it is invalid, Kinldy try again");
 			}
 		}
 		return validUsers;
