@@ -1,12 +1,5 @@
 package com.group18.asdc.controller;
 
-import com.group18.asdc.SystemConfig;
-import com.group18.asdc.entities.PasswordHistory;
-import com.group18.asdc.entities.UserRegistartionDetails;
-import com.group18.asdc.service.PasswordHistoryService;
-import com.group18.asdc.service.RegisterService;
-import com.group18.asdc.util.RegistrationStatus;
-
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.group18.asdc.SystemConfig;
+import com.group18.asdc.entities.PasswordHistory;
+import com.group18.asdc.entities.UserRegistartionDetails;
+import com.group18.asdc.service.PasswordHistoryService;
+import com.group18.asdc.service.RegisterService;
+import com.group18.asdc.util.RegistrationStatus;
 
 @Controller
 @RequestMapping("/registration")
@@ -41,17 +41,17 @@ public class RegisterController {
 		}
 		JSONObject resultObject = theRegisterService.registeruser(bean);
 		Integer registrationStatus = resultObject.optInt("STATUS");
-		if (registrationStatus == RegistrationStatus.INVALID_BANNER_PATTERN) {
+		if (registrationStatus == RegistrationStatus.INVALID_BANNER_PATTERN.value()) {
 			return "redirect:/registration?invalidbannerid";
-		} else if (registrationStatus == RegistrationStatus.INVALID_BANNER_LENGTH) {
+		} else if (registrationStatus == RegistrationStatus.INVALID_BANNER_LENGTH.value()) {
 			return "redirect:/registration?invalidbannerid2";
-		} else if (registrationStatus == RegistrationStatus.EXISTING_EMAIL_ID) {
+		} else if (registrationStatus == RegistrationStatus.EXISTING_EMAIL_ID.value()) {
 			return "redirect:/registration?alreadycreatedemail";
-		} else if (registrationStatus == RegistrationStatus.INVALID_EMAIL_PATTERN) {
+		} else if (registrationStatus == RegistrationStatus.INVALID_EMAIL_PATTERN.value()) {
 			return "redirect:/registration?invalidemailid";
-		} else if (registrationStatus == RegistrationStatus.PASSWORD_POLICY_ERROR) {
+		} else if (registrationStatus == RegistrationStatus.PASSWORD_POLICY_ERROR.value()) {
 			return "redirect:/registration?passwordPolicyException=" + resultObject.optString("MESSAGE");
-		} else if (registrationStatus == RegistrationStatus.SUCCESS) {
+		} else if (registrationStatus == RegistrationStatus.SUCCESS.value()) {
 			PasswordHistory passwordHistory = SystemConfig.getSingletonInstance().getModelAbstractFactory()
 					.getPasswordHistory();
 			passwordHistory.setBannerID(bean.getBannerid());

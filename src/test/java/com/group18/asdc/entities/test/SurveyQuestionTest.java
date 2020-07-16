@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.BasicQuestionData;
@@ -13,6 +14,7 @@ import com.group18.asdc.entities.Option;
 import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
 
+@SpringBootTest
 public class SurveyQuestionTest {
 
 	@Test
@@ -71,7 +73,8 @@ public class SurveyQuestionTest {
 				.getQuestionMetaDataTest();
 		questionMetaData.setQuestionId(24);
 		surveyQuestion.setQuestionData(questionMetaData);
-		BasicQuestionData basicQuestionData = new BasicQuestionData();
+		BasicQuestionData basicQuestionData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getBasicQuestionDataTest();
 		basicQuestionData.setQuestionText("Describe an experience you had with Java");
 		basicQuestionData.setQuestionTitle("Java and Data Structures");
 		basicQuestionData.setQuestionType("freetext");
@@ -89,7 +92,8 @@ public class SurveyQuestionTest {
 				.getQuestionMetaDataTest();
 		questionMetaData.setQuestionId(24);
 		surveyQuestion.setQuestionData(questionMetaData);
-		BasicQuestionData basicQuestionData = new BasicQuestionData();
+		BasicQuestionData basicQuestionData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getBasicQuestionDataTest();
 		basicQuestionData.setQuestionText("Describe an experience you had with Java");
 		basicQuestionData.setQuestionTitle("Java and Data Structures");
 		basicQuestionData.setQuestionType("freetext");

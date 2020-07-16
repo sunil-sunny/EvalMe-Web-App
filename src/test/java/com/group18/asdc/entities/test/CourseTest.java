@@ -1,13 +1,18 @@
 package com.group18.asdc.entities.test;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
 
+import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
 public class CourseTest {
 
 	@Test
@@ -62,7 +67,7 @@ public class CourseTest {
 		List<User> taList = new ArrayList<User>();
 		User user = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		user.setBannerId("B00737373");
-		User anotherUser = new User();
+		User anotherUser = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		anotherUser.setBannerId("B00842470");
 		taList.add(user);
 		taList.add(anotherUser);
@@ -92,7 +97,7 @@ public class CourseTest {
 		user.setFirstName("Han");
 		user.setLastName("Solo");
 		user.setEmail("hansolo@dal.ca");
-		User anotherUser = new User();
+		User anotherUser = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		anotherUser.setBannerId("B00222222");
 		anotherUser.setFirstName("Kylo");
 		anotherUser.setLastName("Ren");
@@ -112,7 +117,7 @@ public class CourseTest {
 		user.setFirstName("Han");
 		user.setLastName("Solo");
 		user.setEmail("hansolo@dal.ca");
-		User anotherUser = new User();
+		User anotherUser = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		anotherUser.setBannerId("B00222222");
 		anotherUser.setFirstName("Kylo");
 		anotherUser.setLastName("Ren");
@@ -132,7 +137,7 @@ public class CourseTest {
 		user.setFirstName("Luke");
 		user.setLastName("Skywalker");
 		user.setEmail("lukeskywalker@dal.ca");
-		User anotherUser = new User();
+		User anotherUser = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		anotherUser.setBannerId("B00454545");
 		anotherUser.setFirstName("Alice");
 		anotherUser.setLastName("McMaster");
@@ -152,7 +157,7 @@ public class CourseTest {
 		user.setFirstName("Luke");
 		user.setLastName("Skywalker");
 		user.setEmail("lukeskywalker@dal.ca");
-		User anotherUser = new User();
+		User anotherUser = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		anotherUser.setBannerId("B00454545");
 		anotherUser.setFirstName("Alice");
 		anotherUser.setLastName("McMaster");

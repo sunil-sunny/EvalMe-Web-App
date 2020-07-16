@@ -1,5 +1,7 @@
 package com.group18.asdc.entities.test;
 
+import java.util.List;
+
 import com.group18.asdc.entities.Answer;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.Course;
@@ -87,6 +89,24 @@ public class ModelTestAbstractFactoryImpl implements ModelTestAbstractFactory {
 	@Override
 	public SurveyGroups getSurveyGroupsTest() {
 		return new SurveyGroups();
+	}
+
+	@Override
+	public Course getCourseTest(int courseId, String courseName, User instructorName, List<User> taList,
+			List<User> studentList) {
+
+		return new Course(courseId, courseName, instructorName, taList, studentList);
+	}
+
+	@Override
+	public User getUserTest(String firstName, String lastName, String bannerId, String email) {
+		return new User(firstName, lastName, bannerId, email);
+	}
+
+	@Override
+	public UserRegistartionDetails getUserRegistartionDetailsTest() {
+
+		return new UserRegistartionDetails();
 	}
 
 	@Override
