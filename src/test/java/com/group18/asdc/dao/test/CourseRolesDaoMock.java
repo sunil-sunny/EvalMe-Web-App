@@ -3,6 +3,8 @@ package com.group18.asdc.dao.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.group18.asdc.TestConfig;
 import com.group18.asdc.dao.CourseRolesDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
@@ -72,7 +74,7 @@ public class CourseRolesDaoMock implements CourseRolesDao {
 
 	@Override
 	public boolean enrollStudentsIntoCourse(List<User> studentList, int courseId) {
-		Course theCourse = new Course();
+		Course theCourse = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getCourseTest();
 		theCourse.setCourseId(courseId);
 		theCourse.setStudentList(studentList);
 		if (theCourse.getStudentList().size() > 0) {

@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
+import com.group18.asdc.database.ISQLMethods;
 import com.group18.asdc.database.SQLMethods;
 import com.group18.asdc.util.SurveyDataBaseQueries;
 
@@ -17,11 +19,12 @@ public class SurveyAnswerDaoImpl implements SurveyAnswerDao {
     @Override
     public ArrayList fetchAnswersForSurvey(ArrayList valueList) {
         logger.log(Level.INFO, "Fetching answers for survey from Database survey=" + valueList.get(0));
-        SQLMethods sqlImplementation = null;
+        ISQLMethods sqlImplementation = null;
         ArrayList answerList = new ArrayList<>();
         try {
             Connection connection = ConnectionManager.getInstance().getDBConnection();
-            sqlImplementation = new SQLMethods(connection);
+            sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+					.getSqlMethods(connection);
             answerList = sqlImplementation.selectQuery(SurveyDataBaseQueries.GET_SURVEY_ANSWERS_DATA.toString(),
                     valueList);
         } catch (SQLException e) {

@@ -56,5 +56,4 @@ public class DaoTestAbstractFactoryImpl implements DaoTestAbstractFactory {
 	public RegisterDao getRegisterDaoTest() {
 		return new RegisterDaoMock();
 	}
-
 }

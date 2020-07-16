@@ -10,7 +10,7 @@ public class DataBaseAbstractFactoryImpl implements DataBaseAbstractFactory {
 	}
 
 	@Override
-	public ISQLMethods getSQLMethods(Connection connection) {
+	public ISQLMethods getSqlMethods(Connection connection) {
 		return new SQLMethods(connection);
 	}
 

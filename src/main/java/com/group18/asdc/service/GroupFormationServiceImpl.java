@@ -63,7 +63,7 @@ public class GroupFormationServiceImpl implements GroupFormationService {
 		ArrayList<SurveyQuestion> surveyQuestionList = (ArrayList) surveyMetaData.getSurveyQuestions();
 		for (String bannerId : userIdList) {
 			userMap = new HashMap<>();
-			user = new User();
+			user = SystemConfig.getSingletonInstance().getModelAbstractFactory().getUser();
 			userService.loadUserWithBannerId(bannerId, user);
 			if (user.isValidUser()) {
 				userMap.put(FIRST_NAME, user.getFirstName());

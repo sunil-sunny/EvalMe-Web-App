@@ -62,17 +62,17 @@ public class SurveyAdapter implements ISurveyList {
         }
     }
 
-    @Override
+   
     public List getQuestionList() {
         return this.questionList;
     }
 
-    @Override
+   
     public List getAnswerList() {
         return this.userAnswerList;
     }
 
-    @Override
+   
     public List getUserList() {
         return this.usersList;
     }

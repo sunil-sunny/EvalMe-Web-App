@@ -6,5 +6,5 @@ public interface DataBaseAbstractFactory {
 
 	public IDatabaseConfiguration getDatabaseConfiguration();
 
-	public ISQLMethods getSQLMethods(Connection connection);
+	public ISQLMethods getSqlMethods(Connection connection);
 }
