@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,20 +26,30 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 			.getCourseRolesDao();
 	private static final RegisterService theRegisterService = SystemConfig.getSingletonInstance()
 			.getServiceAbstractFactory().getRegisterService();
+	private Logger log = Logger.getLogger(CourseRolesServiceImpl.class.getName());
 
 	@Override
 	public boolean allocateTa(int courseId, User user) {
 
 		List<User> taAsList = new ArrayList<User>();
 		List<User> eligibleUser = null;
-		if (null != user) {
+		if (null == user) {
+			return Boolean.FALSE;
+		} else {
 			taAsList.add(user);
 			eligibleUser = theCourseDetailsService.filterEligibleUsersForCourse(taAsList, courseId);
 		}
-		if (null != eligibleUser && 0 != eligibleUser.size()) {
-			return courseRolesDao.allocateTa(courseId, user);
+		if (null == eligibleUser) {
+			return Boolean.FALSE;
+		} else {
+			if (0 == eligibleUser.size()) {
+				log.log(Level.WARNING, "User with id " + user.getBannerId()
+						+ " is not eligible to be as TA for this course with id " + courseId);
+				return Boolean.FALSE;
+			} else {
+				return courseRolesDao.allocateTa(courseId, user);
+			}
 		}
-		return Boolean.FALSE;
 	}
 
 	@Override
@@ -71,7 +83,7 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 				br.readLine();
 				User user = null;
 				while (null != (line = br.readLine())) {
-					user = new User();
+					user = SystemConfig.getSingletonInstance().getModelAbstractFactory().getUser();
 					String userDetails[] = line.split(",");
 					if (4 == userDetails.length) {
 						String firstName = userDetails[0];
@@ -94,6 +106,7 @@ public class CourseRolesServiceImpl implements CourseRolesService {
 					}
 				}
 				br.close();
+				log.log(Level.INFO, "File is processed and the count of eligible students is " + validUsers.size());
 			} catch (IOException e) {
 				throw new FileProcessingException("File doesnt exist or it is invalid, Kinldy try again");
 			}

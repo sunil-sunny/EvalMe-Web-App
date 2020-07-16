@@ -48,11 +48,6 @@ public class ServiceAbstractFactoryImpl implements ServiceAbstractFactory {
 	public RegisterService getRegisterService() {
 		return new RegisterServiceImpl();
 	}
-
-	@Override
-	public SubmitAnswerService getSubmitAnswerService() {
-		return new SubmitAnswerServiceImpl();
-	}
 	
 	@Override
 	public UserService getUserService(IQueryVariableToArrayList queryVariableToArrayList) {

@@ -42,28 +42,28 @@ public class SurveyDaoImpl implements SurveyDao {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat(ConstantStringUtil.DATE_FORMAT.toString());
 		List<SurveyQuestion> allSavedQuestions = new ArrayList<SurveyQuestion>();
-		SurveyMetaData theSurvey = new SurveyMetaData();
-		
+		SurveyMetaData theSurvey = SystemConfig.getSingletonInstance().getModelAbstractFactory().getSurveyMetaData();
+
 		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
 				PreparedStatement thePreparedStatement = connection
 						.prepareStatement(SurveyDataBaseQueries.GET_ALL_SAVED_QUESTIONS.toString());
 				PreparedStatement thePreparedStatementGetOptions = connection
 						.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_OPTIONS.toString());
 				PreparedStatement thePreparedStatementGetData = connection
-						.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_DATA.toString());){
+						.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_DATA.toString());) {
 
 			thePreparedStatement.setInt(1, course.getCourseId());
-			
+
 			ResultSet theResultSet = thePreparedStatement.executeQuery();
 			SurveyQuestion theSurveyQuestion = null;
 			theSurvey.setTheCourse(course);
 			QuestionMetaData theQuestionMetaData = null;
-			
+
 			while (theResultSet.next()) {
-				theSurveyQuestion = new SurveyQuestion();
+				theSurveyQuestion = SystemConfig.getSingletonInstance().getModelAbstractFactory().getSurveyQuestion();
 				int questionId = theResultSet.getInt("questionid");
 				theQuestionMetaData = theViewQuestionsService.getQuestionById(questionId);
-				
+
 				if (null == theQuestionMetaData) {
 					break;
 				} else {
@@ -79,7 +79,7 @@ public class SurveyDaoImpl implements SurveyDao {
 				}
 			}
 			theSurvey.setSurveyQuestions(allSavedQuestions);
-			
+
 			for (int i = 0; i < allSavedQuestions.size(); i++) {
 
 				int surveyQuestionId = allSavedQuestions.get(i).getSurveyQuestionId();
@@ -89,15 +89,17 @@ public class SurveyDaoImpl implements SurveyDao {
 				List<Option> options = new ArrayList<Option>();
 				Option option = null;
 				while (theResultSet.next()) {
-					option = new Option();
+					option = SystemConfig.getSingletonInstance().getModelAbstractFactory().getOption();
 					option.setDisplayText(theResultSet.getString(3));
 					option.setStoredData(theResultSet.getInt(4));
 					options.add(option);
 				}
 				theSurvey.getSurveyQuestions().get(i).setOptions(options);
-				
-				QuestionMetaData questionMetaData = new QuestionMetaData();
-				BasicQuestionData basicQuestionData = new BasicQuestionData();
+
+				QuestionMetaData questionMetaData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getQuestionMetaData();
+				BasicQuestionData basicQuestionData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getBasicQuestionData();
 
 				thePreparedStatementGetData.setInt(1, surveyQuestionId);
 				theResultSet = thePreparedStatementGetData.executeQuery();
@@ -123,7 +125,7 @@ public class SurveyDaoImpl implements SurveyDao {
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception and Can not able to get the survey data for the course is = "
 					+ course.getCourseId());
-		} 
+		}
 		return theSurvey;
 	}
 

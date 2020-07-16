@@ -7,9 +7,10 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
+import com.group18.asdc.database.ISQLMethods;
 import com.group18.asdc.database.SQLMethods;
-import com.group18.asdc.database.SQLQueries;
 import com.group18.asdc.util.UserManagementDataBaseQueriesUtil;
 
 public class PasswordHistoryDaoImpl implements PasswordHistoryDao {
@@ -19,12 +20,13 @@ public class PasswordHistoryDaoImpl implements PasswordHistoryDao {
 	@Override
 	public Object insertPasswordHistory(ArrayList valuesList) {
 		logger.log(Level.INFO, "Inserting password history for user=" + valuesList.get(0));
-		SQLMethods sqlImplementation = null;
+		ISQLMethods sqlImplementation = null;
 		try {
 			Connection connection = ConnectionManager.getInstance().getDBConnection();
-			sqlImplementation = new SQLMethods(connection);
-			Object primaryKey = sqlImplementation.insertQuery(UserManagementDataBaseQueriesUtil.INSERT_PASSWORD_HISTORY.toString(),
-					valuesList);
+			sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+					.getSqlMethods(connection);
+			Object primaryKey = sqlImplementation
+					.insertQuery(UserManagementDataBaseQueriesUtil.INSERT_PASSWORD_HISTORY.toString(), valuesList);
 			return primaryKey;
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE, "SQL Exception while inserting password history", e);
@@ -43,12 +45,13 @@ public class PasswordHistoryDaoImpl implements PasswordHistoryDao {
 	@Override
 	public ArrayList<HashMap> getPasswordHistory(ArrayList criteriaList) {
 		logger.log(Level.INFO, "Fetching password history for user=" + criteriaList.get(0));
-		SQLMethods sqlImplementation = null;
+		ISQLMethods sqlImplementation = null;
 		try {
 			Connection connection = ConnectionManager.getInstance().getDBConnection();
-			sqlImplementation = new SQLMethods(connection);
-			ArrayList resultList = sqlImplementation.selectQuery(UserManagementDataBaseQueriesUtil.GET_PASSWORD_HISTORY.toString(),
-					criteriaList);
+			sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+					.getSqlMethods(connection);
+			ArrayList resultList = sqlImplementation
+					.selectQuery(UserManagementDataBaseQueriesUtil.GET_PASSWORD_HISTORY.toString(), criteriaList);
 			return resultList;
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE, "SQL Exception while fetching password history", e);

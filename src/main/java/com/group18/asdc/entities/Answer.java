@@ -36,10 +36,6 @@ public class Answer {
     public void setAnswerId(Integer answerId) {
         this.answerId = answerId;
     }
-    
-    public int getAnswerId() {
-    	return this.answerId;
-    }
 
     public void setSurveyQuestionId(Integer surveyQuestionId) {
         this.surveyQuestionId = surveyQuestionId;
@@ -56,4 +52,12 @@ public class Answer {
     public Integer getSurveyQuestionId() {
         return this.surveyQuestionId;
     }
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public Integer getAnswerId() {
+		return answerId;
+	}
 }

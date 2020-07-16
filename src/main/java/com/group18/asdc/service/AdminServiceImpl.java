@@ -1,5 +1,8 @@
 package com.group18.asdc.service;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.springframework.stereotype.Service;
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.AdminDao;
@@ -16,6 +19,7 @@ public class AdminServiceImpl implements AdminService {
 			.getUserService(SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
 	private static final CourseDetailsService theCourseDetailsService = SystemConfig.getSingletonInstance()
 			.getServiceAbstractFactory().getCourseDetailsService();
+	private static final Logger log = Logger.getLogger(AdminServiceImpl.class.getName());
 
 	@Override
 	public boolean isCourseIdValid(Course course) {
@@ -58,8 +62,10 @@ public class AdminServiceImpl implements AdminService {
 	public boolean createCourse(Course course) {
 		if (iscreateCourseParametersValid(course)) {
 			return adminDao.addCourse(course);
+		} else {
+			log.log(Level.INFO, "Course with id " + course.getCourseId() + " has not been created");
+			return Boolean.FALSE;
 		}
-		return Boolean.FALSE;
 	}
 
 	@Override
@@ -67,7 +73,9 @@ public class AdminServiceImpl implements AdminService {
 
 		if (isCourseIdValid(course)) {
 			return adminDao.deleteCourse(course);
+		} else {
+			log.log(Level.INFO, "Course with id " + course.getCourseId() + " has not been deleted");
+			return Boolean.FALSE;
 		}
-		return Boolean.FALSE;
 	}
 }

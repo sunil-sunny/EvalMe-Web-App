@@ -19,7 +19,7 @@ import com.group18.asdc.util.RegistrationStatus;
 @Repository
 public class RegisterServiceImpl implements RegisterService {
 
-	private Logger log = Logger.getLogger(RegisterServiceImpl.class.getName());
+	private static final Logger log = Logger.getLogger(RegisterServiceImpl.class.getName());
 	private static final RegisterDao registerDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory()
 			.getRegisterDao();
 
@@ -30,7 +30,9 @@ public class RegisterServiceImpl implements RegisterService {
 			resultObj.put("STATUS", RegistrationStatus.UNSUCCESSFUL);
 			boolean isError = Boolean.FALSE;
 			if (userDetails.getBannerid().matches(ConstantStringUtil.BANNER_ID_CHECK.toString())) {
-				if (9 != userDetails.getBannerid().length()) {
+				if (9 == userDetails.getBannerid().length()) {
+					isError = Boolean.FALSE;
+				} else {
 					isError = Boolean.TRUE;
 					resultObj.put("STATUS", RegistrationStatus.INVALID_BANNER_LENGTH);
 					log.log(Level.WARNING, "BannerId invalid");

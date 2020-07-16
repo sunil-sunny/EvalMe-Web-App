@@ -3,8 +3,8 @@ package com.group18.asdc.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.PasswordHistoryDao;
-import com.group18.asdc.dao.PasswordHistoryDaoImpl;
 import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.security.IPasswordEncryption;
 import com.group18.asdc.util.IQueryVariableToArrayList;
@@ -16,7 +16,7 @@ public class PasswordHistoryServiceImpl implements PasswordHistoryService {
 	private final String BANNER_ID = "bannerid", PASSWORD = "password";
 
 	public PasswordHistoryServiceImpl(IQueryVariableToArrayList queryVariableToArrayList) {
-		passwordHistoryDao = new PasswordHistoryDaoImpl();
+		passwordHistoryDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory().getPasswordHistoryDao();
 		this.queryVariableToArrayList = queryVariableToArrayList;
 	}
 
@@ -32,7 +32,8 @@ public class PasswordHistoryServiceImpl implements PasswordHistoryService {
 		ArrayList criteriaList = queryVariableToArrayList.convertQueryVariablesToArrayList(bannerId, numberOfRecords);
 		ArrayList<PasswordHistory> resultList = new ArrayList<PasswordHistory>();
 		for (HashMap<String, Object> eachRow : passwordHistoryDao.getPasswordHistory(criteriaList)) {
-			PasswordHistory passwordHistory = new PasswordHistory();
+			PasswordHistory passwordHistory = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+					.getPasswordHistory();
 			passwordHistory.setBannerID((String) eachRow.get(BANNER_ID));
 			passwordHistory.setPassword((String) eachRow.get(PASSWORD));
 			resultList.add(passwordHistory);
