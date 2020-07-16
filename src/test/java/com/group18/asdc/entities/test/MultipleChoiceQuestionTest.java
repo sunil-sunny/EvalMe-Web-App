@@ -3,11 +3,14 @@ package com.group18.asdc.entities.test;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.MultipleChoiceQuestion;
 import com.group18.asdc.entities.Option;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SpringBootTest
 public class MultipleChoiceQuestionTest {
 
 	@Test

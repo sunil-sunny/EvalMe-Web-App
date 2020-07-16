@@ -112,7 +112,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 						"Not able to create multiple choice questionid for user with id " + theUser.getBannerId());
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while creating Multiple choice question for user id ",
+			log.log(Level.SEVERE, "SQL Exception while creating Multiple choice question for user id "+
 					theUser.getBannerId());
 		} 
 		return isQuestionCreated;
@@ -133,7 +133,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 				typeId = theResultSet.getInt("questiontypeid");
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while getting ID for question type ", questionType);
+			log.log(Level.SEVERE, "SQL Exception while getting ID for question type "+ questionType);
 		} 
 		return typeId;
 	}
@@ -163,7 +163,7 @@ public class CreateQuestionDaoImpl implements CreateQuestionDao {
 						"Question with text " + theBasicQuestionData.getQuestionText() + " is doesn't exists");
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while checking whether the question exists or not for text ",
+			log.log(Level.SEVERE, "SQL Exception while checking whether the question exists or not for text "+
 					theBasicQuestionData.getQuestionText());
 		}
 		return isQuestionExists;

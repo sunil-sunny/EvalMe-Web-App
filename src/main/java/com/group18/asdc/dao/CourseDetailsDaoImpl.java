@@ -64,7 +64,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 			}
 			log.log(Level.INFO, "Number of courses rereived is " + allCourses.size());
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while getting all the courses and the number of courses is ",
+			log.log(Level.SEVERE, "SQL Exception while getting all the courses and the number of courses is "+
 					allCourses.size());
 		} 
 		return allCourses;
@@ -94,7 +94,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 					+ getCoursesAsStudent.size());
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id " + user.getBannerId()
-					+ " as student and received count is ", getCoursesAsStudent.size());
+					+ " as student and received count is "+ getCoursesAsStudent.size());
 		}
 		return getCoursesAsStudent;
 	}
@@ -123,7 +123,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 					+ getCoursesAsInstructor.size());
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception occured while getting courses where user with id " + user.getBannerId()
-					+ " as instructor and received count is", getCoursesAsInstructor.size());
+					+ " as instructor and received count is "+ getCoursesAsInstructor.size());
 		}
 		return getCoursesAsInstructor;
 	}
@@ -280,7 +280,7 @@ public class CourseDetailsDaoImpl implements CourseDetailsDao {
 				resultSetCourseRoles.close();
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occured while getting course for id ", courseId);
+			log.log(Level.SEVERE, "SQL Exception occured while getting course for id "+ courseId);
 		} 
 		return course;
 	}

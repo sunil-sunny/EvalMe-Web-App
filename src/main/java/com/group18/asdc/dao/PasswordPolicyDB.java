@@ -28,7 +28,7 @@ public class PasswordPolicyDB implements IPasswordPolicyDB {
 			policiesList = sqlImplementation.selectQuery(SQLQueries.GET_BASEPASSWORD_POLICIES.toString(),
 					new ArrayList<>());
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception while fetching base password policies", e);
+			logger.log(Level.SEVERE, "SQL Exception while fetching base password policies "+ e);
 		} finally {
 			/*
 			 * Had a discussion with Professor Rob and this cannot be avoided without
@@ -53,7 +53,7 @@ public class PasswordPolicyDB implements IPasswordPolicyDB {
 			policiesList = sqlImplementation.selectQuery(SQLQueries.GET_HISTORYPASSWORD_POLICIES.toString(),
 					new ArrayList<>());
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception while loading history password policies", e);
+			logger.log(Level.SEVERE, "SQL Exception while loading history password policies "+ e);
 		} finally {
 			/*
 			 * Had a discussion with Professor Rob and this cannot be avoided without

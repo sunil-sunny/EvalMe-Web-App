@@ -3,6 +3,8 @@ package com.group18.asdc.entities.test;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.Group;
 import com.group18.asdc.entities.SurveyGroups;
@@ -10,6 +12,7 @@ import com.group18.asdc.entities.User;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SpringBootTest
 public class SurveyGroupsTest {
 
 	@Test

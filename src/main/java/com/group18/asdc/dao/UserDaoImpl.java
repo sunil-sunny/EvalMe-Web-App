@@ -120,7 +120,7 @@ public class UserDaoImpl implements UserDao {
 				sqlCodes = SQLStatus.SUCCESSFUL;
 			}
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception while loading user object", e);
+			logger.log(Level.SEVERE, "SQL Exception while loading user object "+ e);
 			sqlCodes = SQLStatus.SQL_ERROR;
 		} finally {
 			/*
@@ -146,7 +146,7 @@ public class UserDaoImpl implements UserDao {
 					criteriaList);
 			isUpdateSuccessful = rowCount > 0;
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception while updating password", e);
+			logger.log(Level.SEVERE, "SQL Exception while updating password"+ e);
 		} finally {
 			/*
 			 * Had a discussion with Professor Rob and this cannot be avoided without
@@ -175,7 +175,7 @@ public class UserDaoImpl implements UserDao {
 				}
 			}
 		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "SQL Exception", e);
+			logger.log(Level.SEVERE, "SQL Exception"+ e);
 		} finally {
 			/*
 			 * Had a discussion with Professor Rob and this cannot be avoided without

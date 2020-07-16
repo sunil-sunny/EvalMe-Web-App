@@ -3,11 +3,14 @@ package com.group18.asdc.entities.test;
 import java.sql.Timestamp;
 import java.util.Date;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.QuestionMetaData;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SpringBootTest
 public class QuestionMetaDataTest {
 
 	@Test

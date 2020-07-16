@@ -1,11 +1,14 @@
 package com.group18.asdc.entities.test;
 
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.BasicQuestionData;
 
+@SpringBootTest
 public class BasicQuestionDataTest {
 
 	@Test

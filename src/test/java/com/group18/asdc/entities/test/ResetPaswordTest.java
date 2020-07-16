@@ -2,9 +2,12 @@ package com.group18.asdc.entities.test;
 
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.handlingformsubmission.ResetPassword;
 
+@SpringBootTest
 public class ResetPaswordTest {
 
 	@Test

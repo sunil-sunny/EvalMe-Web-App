@@ -32,7 +32,7 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 				isAllocated = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while allocating " + user.getBannerId() + " as TA for course",
+			log.log(Level.SEVERE, "SQL Exception while allocating " + user.getBannerId() + " as TA for course "+
 					courseId);
 		} 
 		return isAllocated;
@@ -59,7 +59,7 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 			}
 			log.log(Level.INFO,"Enrolled a total of " + studentList.size() + " students into course id " + courseId);
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occuered while enrolling the students into course id ", courseId);
+			log.log(Level.SEVERE, "SQL Exception occuered while enrolling the students into course id "+ courseId);
 		} 
 		return enrollStatus;
 	}
