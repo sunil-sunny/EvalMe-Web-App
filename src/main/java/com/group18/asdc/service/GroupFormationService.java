@@ -6,13 +6,10 @@ import java.util.List;
 
 import com.group18.asdc.entities.Answer;
 import com.group18.asdc.entities.Course;
-import com.group18.asdc.entities.SurveyGroups;
 import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.util.IQueryVariableToArrayList;
 
 public interface GroupFormationService {
-
-	public SurveyGroups getGroupFormationResults(Course course);
 
 	public HashMap formGroupsForSurvey(Course course, SurveyAnswersService surveyAnswersService,
 			SurveyService surveyService, IQueryVariableToArrayList queryVariableToArraylist);

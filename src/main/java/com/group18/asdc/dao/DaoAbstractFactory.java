@@ -12,8 +12,6 @@ public interface DaoAbstractFactory {
 
 	public DeleteQuestionDao getDeleteQuestionDao();
 
-	public GroupFormationDao getGroupFormationDao();
-
 	public PasswordHistoryDao getPasswordHistoryDao();
 
 	public RegisterDao getRegisterDao();
