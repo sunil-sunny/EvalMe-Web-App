@@ -18,5 +18,4 @@ public class SurveyList implements ISurveyList {
     public List getUserList() {
         return this.userList;
     }
-
 }
