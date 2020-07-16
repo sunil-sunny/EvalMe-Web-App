@@ -14,6 +14,7 @@ import com.group18.asdc.entities.SurveyMetaData;
 import com.group18.asdc.entities.SurveyQuestion;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.entities.UserRegistartionDetails;
+import com.group18.asdc.handlingformsubmission.ResetPassword;
 
 public interface ModelTestAbstractFactory {
 
@@ -44,4 +45,6 @@ public interface ModelTestAbstractFactory {
 	public Group getGroupTest();
 
 	public SurveyGroups getSurveyGroupsTest();
+	
+	public ResetPassword getResetPasswordTest();
 }

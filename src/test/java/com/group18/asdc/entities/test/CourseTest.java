@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
