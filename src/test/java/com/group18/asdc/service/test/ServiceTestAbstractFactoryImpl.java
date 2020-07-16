@@ -8,6 +8,7 @@ import com.group18.asdc.service.DeleteQuestionService;
 import com.group18.asdc.service.RegisterService;
 import com.group18.asdc.service.SurveyService;
 import com.group18.asdc.service.UserService;
+import com.group18.asdc.service.ViewQuestionsService;
 
 public class ServiceTestAbstractFactoryImpl implements ServiceTestAbstractFactory {
 
@@ -49,5 +50,10 @@ public class ServiceTestAbstractFactoryImpl implements ServiceTestAbstractFactor
 	@Override
 	public RegisterService getRegisterService() {
 		return new RegisterServiceMock();
+	}
+
+	@Override
+	public ViewQuestionsService getViewQuestionsService() {
+		return new ViewQuestionsServiceImplMock();
 	}
 }
