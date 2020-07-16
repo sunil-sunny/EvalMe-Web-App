@@ -76,7 +76,7 @@ public class RegisterDaoImpl implements RegisterDao {
 				isUserExists = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception while checking the user with email " + email);
+			log.log(Level.SEVERE, "SQL Exception while checking the user with email=" + email);
 		} 
 		return isUserExists;
 	}
@@ -98,7 +98,7 @@ public class RegisterDaoImpl implements RegisterDao {
 				isUserExists = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Exception occured while checking the user with banner id " + bannerId);
+			log.log(Level.SEVERE, "SQL Exception occured while checking the user with bannerid=" + bannerId);
 		}
 		return isUserExists;
 	}
