@@ -1,6 +1,5 @@
 package com.group18.asdc.groupformation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BaseGroupFormationBuilder implements IGroupFormationBuilder {

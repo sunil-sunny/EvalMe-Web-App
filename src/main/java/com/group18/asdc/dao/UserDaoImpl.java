@@ -10,15 +10,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.springframework.stereotype.Repository;
-
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.database.SQLMethods;
 import com.group18.asdc.database.SQLStatus;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.QuestionManagerDataBaseQueries;
 import com.group18.asdc.util.UserManagementDataBaseQueriesUtil;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -168,7 +167,10 @@ public class UserDaoImpl implements UserDao {
 			sqlImplementation = new SQLMethods(connection);
 			ArrayList<HashMap<String, Object>> valuesList = sqlImplementation
 					.selectQuery(UserManagementDataBaseQueriesUtil.GET_USER_ROLES.toString(), criteriaList);
-			if (valuesList != null && valuesList.size() > 0) {
+			if (valuesList == null || valuesList.size() == 0) {
+				rolesList = new ArrayList<>();
+			}
+			else{
 				for (HashMap valueMap : valuesList) {
 					rolesList.add(valueMap.get("rolename"));
 				}

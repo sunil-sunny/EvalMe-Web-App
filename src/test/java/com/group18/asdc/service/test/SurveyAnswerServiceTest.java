@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 
 import com.group18.asdc.dao.SurveyAnswerDao;
+import com.group18.asdc.dao.test.SurveyAnswerDaoMock;
 import com.group18.asdc.service.SurveyAnswerServiceImpl;
 import com.group18.asdc.service.SurveyAnswersService;
 import com.group18.asdc.util.IQueryVariableToArrayList;
@@ -46,6 +47,19 @@ public class SurveyAnswerServiceTest {
         ArrayList resultList = surveyAnswerService.fetchAnswersForSurvey(surveyId,queryVariableToArrayList);
 
         assertEquals( 0 , resultList.size());
+    }
+
+    @Test
+    public void testFetchAnswers()
+    {
+        SurveyAnswerDao surveyAnswerDaoTest = new SurveyAnswerDaoMock();
+        Integer surveyId = 1;
+        ArrayList valueList = new ArrayList<>();
+        valueList.add(1);
+        when(queryVariableToArrayList.convertQueryVariablesToArrayList(isA(Integer.class))).thenReturn(valueList);
+        when(surveyAnswerDao.fetchAnswersForSurvey(isA(ArrayList.class))).thenReturn(surveyAnswerDaoTest.fetchAnswersForSurvey(valueList));
+        ArrayList resultList = surveyAnswerService.fetchAnswersForSurvey(surveyId,queryVariableToArrayList);
+        assertEquals( 3 , resultList.size());
     }
     
 }
