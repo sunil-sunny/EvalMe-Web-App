@@ -42,27 +42,27 @@ public class AnswerTest {
 	public void setAnswerId() {
 		Answer answer = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getAnswerTest();
 		answer.setAnswerId(4);
-		assertTrue(answer.getAnswerId()==4);
+		assertTrue(answer.getAnswerId() == 4);
 	}
 
 	@Test
 	public void getAnswerId() {
 		Answer answer = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getAnswerTest();
 		answer.setAnswerId(4);
-		assertTrue(answer.getAnswerId()==4);
+		assertTrue(answer.getAnswerId() == 4);
 	}
 
 	@Test
 	public void setSurveyQuestionId() {
 		Answer answer = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getAnswerTest();
 		answer.setSurveyQuestionId(4);
-		assertTrue(answer.getSurveyQuestionId()==4);
+		assertTrue(answer.getSurveyQuestionId() == 4);
 	}
 
 	@Test
 	public void getSurveyQuestionId() {
 		Answer answer = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getAnswerTest();
 		answer.setSurveyQuestionId(4);
-		assertTrue(answer.getSurveyQuestionId()==4);
+		assertTrue(answer.getSurveyQuestionId() == 4);
 	}
 }

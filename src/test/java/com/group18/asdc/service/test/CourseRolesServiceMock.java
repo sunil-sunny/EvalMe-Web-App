@@ -32,7 +32,7 @@ public class CourseRolesServiceMock implements CourseRolesService {
 		if (file.isEmpty()) {
 			throw new FileProcessingException("File is empty");
 		} else {
-			validUsers.add(new User());
+			validUsers.add(TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest());
 		}
 		return validUsers;
 	}

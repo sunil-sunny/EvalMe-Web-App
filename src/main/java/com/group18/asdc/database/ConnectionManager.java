@@ -24,7 +24,7 @@ public class ConnectionManager {
 	public static ConnectionManager getInstance() {
 		if (null == uniqueInstance) {
 			uniqueInstance = new ConnectionManager();
-		}
+		} 
 		return uniqueInstance;
 	}
 

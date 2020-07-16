@@ -1,5 +1,7 @@
 package com.group18.asdc.entities.test;
 
+import java.util.List;
+
 import com.group18.asdc.entities.Answer;
 import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.Course;
@@ -45,6 +47,13 @@ public interface ModelTestAbstractFactory {
 	public Group getGroupTest();
 
 	public SurveyGroups getSurveyGroupsTest();
+
+	public Course getCourseTest(int courseId, String courseName, User instructorName, List<User> taList,
+			List<User> studentList);
+
+	public User getUserTest(String firstName, String lastName, String bannerId, String email);
+	
+	public UserRegistartionDetails getUserRegistartionDetailsTest();
 	
 	public ResetPassword getResetPasswordTest();
 }

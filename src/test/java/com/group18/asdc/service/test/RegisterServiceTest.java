@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.entities.UserRegistartionDetails;
 import com.group18.asdc.service.RegisterService;
 
 @SpringBootTest
@@ -23,7 +22,8 @@ public class RegisterServiceTest {
 	@Test
 	public void registeruserTest() {
 
-		JSONObject json = registerServiceMock.registeruser(new UserRegistartionDetails());
+		JSONObject json = registerServiceMock.registeruser(
+				TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getIUserRegistartionDetailsTest());
 		assertNotNull(json);
 	}
 

@@ -27,7 +27,7 @@ public class RegisterServiceImpl implements RegisterService {
 	public JSONObject registeruser(UserRegistartionDetails userDetails) {
 		JSONObject resultObj = new JSONObject();
 		try {
-			resultObj.put("STATUS", RegistrationStatus.UNSUCCESSFUL);
+			resultObj.put("STATUS", RegistrationStatus.UNSUCCESSFUL.value());
 			boolean isError = Boolean.FALSE;
 			if (userDetails.getBannerid().matches(ConstantStringUtil.BANNER_ID_CHECK.toString())) {
 				if (9 == userDetails.getBannerid().length()) {
@@ -101,8 +101,9 @@ public class RegisterServiceImpl implements RegisterService {
 			if (userService.isUserExists(user)) {
 				isAllStudentsRegistered = Boolean.FALSE;
 			} else {
-				JSONObject resultObject = this.registeruser(new UserRegistartionDetails(user));
-				if (resultObject.optInt("STATUS") == RegistrationStatus.SUCCESS) {
+				JSONObject resultObject = this.registeruser(SystemConfig.getSingletonInstance()
+						.getModelAbstractFactory().getIUserRegistartionDetails(user));
+				if (resultObject.optInt("STATUS") == RegistrationStatus.SUCCESS.value()) {
 					isAllStudentsRegistered = Boolean.TRUE;
 					emailService = SystemConfig.getSingletonInstance().getServiceAbstractFactory().getEmailService();
 					String messageText = ConstantStringUtil.EMAIL_MESSAGE_HEADER.toString() + user.getBannerId() + " "

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 
+import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.passwordpolicy.BasePasswordPolicyManagerMock;
@@ -127,10 +128,10 @@ public class UserTest {
 		PasswordHistory passwordHistory = new PasswordHistory();
 		passwordHistory.setPassword("encrypted");
 		resulList.add(passwordHistory);
-		passwordHistory = new PasswordHistory();
+		passwordHistory = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getPasswordHistoryTest();
 		passwordHistory.setPassword("encrypted");
 		resulList.add(passwordHistory);
-		passwordHistory = new PasswordHistory();
+		passwordHistory = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getPasswordHistoryTest();
 		passwordHistory.setPassword("encrypted");
 		resulList.add(passwordHistory);
 		return resulList;
@@ -139,7 +140,7 @@ public class UserTest {
 	@Test
 	public void validateHistoricalPasswordTest() throws PasswordPolicyException {
 		when(passwordHistoryService.getPasswordHistory(isA(String.class), isA(Integer.class)))
-		.thenReturn(returnPasswordHistoryList());
+				.thenReturn(returnPasswordHistoryList());
 		when(passwordEncryption.matches(isA(String.class), isA(String.class))).thenReturn(Boolean.FALSE);
 		HistoryConstraintPolicy policyObj = new HistoryConstraintPolicy("5", passwordHistoryService,
 				passwordEncryption);
@@ -151,7 +152,7 @@ public class UserTest {
 	@Test(expected = PasswordPolicyException.class)
 	public void validateHistoricalPasswordErrorTest() throws PasswordPolicyException {
 		when(passwordHistoryService.getPasswordHistory(isA(String.class), isA(Integer.class)))
-		.thenReturn(returnPasswordHistoryList());
+				.thenReturn(returnPasswordHistoryList());
 		when(passwordEncryption.matches(isA(String.class), isA(String.class))).thenReturn(Boolean.TRUE);
 		HistoryConstraintPolicy policyObj = new HistoryConstraintPolicy("5", passwordHistoryService,
 				passwordEncryption);

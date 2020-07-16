@@ -73,7 +73,8 @@ public class SurveyQuestionTest {
 				.getQuestionMetaDataTest();
 		questionMetaData.setQuestionId(24);
 		surveyQuestion.setQuestionData(questionMetaData);
-		BasicQuestionData basicQuestionData = new BasicQuestionData();
+		BasicQuestionData basicQuestionData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getBasicQuestionDataTest();
 		basicQuestionData.setQuestionText("Describe an experience you had with Java");
 		basicQuestionData.setQuestionTitle("Java and Data Structures");
 		basicQuestionData.setQuestionType("freetext");
@@ -91,7 +92,8 @@ public class SurveyQuestionTest {
 				.getQuestionMetaDataTest();
 		questionMetaData.setQuestionId(24);
 		surveyQuestion.setQuestionData(questionMetaData);
-		BasicQuestionData basicQuestionData = new BasicQuestionData();
+		BasicQuestionData basicQuestionData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getBasicQuestionDataTest();
 		basicQuestionData.setQuestionText("Describe an experience you had with Java");
 		basicQuestionData.setQuestionTitle("Java and Data Structures");
 		basicQuestionData.setQuestionType("freetext");
