@@ -30,8 +30,8 @@ public class PasswordHistoryDaoImpl implements PasswordHistoryDao {
 			logger.log(Level.SEVERE, "SQL Exception while inserting password history", e);
 		} finally {
 			/*
-			 * Had a discussion with Professor Rob and this cannot be avoided without complicating the
-			 * code
+			 * Had a discussion with Professor Rob and this cannot be avoided without
+			 * complicating the code
 			 */
 			if (sqlImplementation != null) {
 				sqlImplementation.cleanup();
@@ -54,8 +54,8 @@ public class PasswordHistoryDaoImpl implements PasswordHistoryDao {
 			logger.log(Level.SEVERE, "SQL Exception while fetching password history", e);
 		} finally {
 			/*
-			 * Had a discussion with Professor Rob and this cannot be avoided without complicating the
-			 * code
+			 * Had a discussion with Professor Rob and this cannot be avoided without
+			 * complicating the code
 			 */
 			if (sqlImplementation != null) {
 				sqlImplementation.cleanup();

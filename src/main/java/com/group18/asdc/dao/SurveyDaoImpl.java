@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.BasicQuestionData;
@@ -41,27 +40,30 @@ public class SurveyDaoImpl implements SurveyDao {
 	@Override
 	public SurveyMetaData getSavedSurvey(Course course) {
 
-		Connection connection = null;
-		PreparedStatement thePreparedStatement = null;
-		ResultSet theResultSet = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat(ConstantStringUtil.DATE_FORMAT.toString());
 		List<SurveyQuestion> allSavedQuestions = new ArrayList<SurveyQuestion>();
 		SurveyMetaData theSurvey = new SurveyMetaData();
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
+		
+		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+				PreparedStatement thePreparedStatement = connection
+						.prepareStatement(SurveyDataBaseQueries.GET_ALL_SAVED_QUESTIONS.toString());
+				PreparedStatement thePreparedStatementGetOptions = connection
+						.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_OPTIONS.toString());
+				PreparedStatement thePreparedStatementGetData = connection
+						.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_DATA.toString());){
 
-			thePreparedStatement = connection
-					.prepareStatement(SurveyDataBaseQueries.GET_ALL_SAVED_QUESTIONS.toString());
 			thePreparedStatement.setInt(1, course.getCourseId());
-
-			theResultSet = thePreparedStatement.executeQuery();
+			
+			ResultSet theResultSet = thePreparedStatement.executeQuery();
 			SurveyQuestion theSurveyQuestion = null;
 			theSurvey.setTheCourse(course);
 			QuestionMetaData theQuestionMetaData = null;
+			
 			while (theResultSet.next()) {
 				theSurveyQuestion = new SurveyQuestion();
 				int questionId = theResultSet.getInt("questionid");
 				theQuestionMetaData = theViewQuestionsService.getQuestionById(questionId);
+				
 				if (null == theQuestionMetaData) {
 					break;
 				} else {
@@ -77,19 +79,13 @@ public class SurveyDaoImpl implements SurveyDao {
 				}
 			}
 			theSurvey.setSurveyQuestions(allSavedQuestions);
-			if (null != thePreparedStatement) {
-				thePreparedStatement.close();
-			}
-			if (null != theResultSet) {
-				theResultSet.close();
-			}
+			
 			for (int i = 0; i < allSavedQuestions.size(); i++) {
 
 				int surveyQuestionId = allSavedQuestions.get(i).getSurveyQuestionId();
-				thePreparedStatement = connection
-						.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_OPTIONS.toString());
-				thePreparedStatement.setInt(1, surveyQuestionId);
-				theResultSet = thePreparedStatement.executeQuery();
+
+				thePreparedStatementGetOptions.setInt(1, surveyQuestionId);
+				theResultSet = thePreparedStatementGetOptions.executeQuery();
 				List<Option> options = new ArrayList<Option>();
 				Option option = null;
 				while (theResultSet.next()) {
@@ -99,18 +95,12 @@ public class SurveyDaoImpl implements SurveyDao {
 					options.add(option);
 				}
 				theSurvey.getSurveyQuestions().get(i).setOptions(options);
-				if (null != thePreparedStatement) {
-					thePreparedStatement.close();
-				}
-				if (null != theResultSet) {
-					theResultSet.close();
-				}
+				
 				QuestionMetaData questionMetaData = new QuestionMetaData();
 				BasicQuestionData basicQuestionData = new BasicQuestionData();
-				thePreparedStatement = connection
-						.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_DATA.toString());
-				thePreparedStatement.setInt(1, surveyQuestionId);
-				theResultSet = thePreparedStatement.executeQuery();
+
+				thePreparedStatementGetData.setInt(1, surveyQuestionId);
+				theResultSet = thePreparedStatementGetData.executeQuery();
 				while (theResultSet.next()) {
 					try {
 						Date date = new Date();
@@ -133,22 +123,7 @@ public class SurveyDaoImpl implements SurveyDao {
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception and Can not able to get the survey data for the course is = "
 					+ course.getCourseId());
-		} finally {
-			try {
-				if (null != theResultSet) {
-					theResultSet.close();
-				}
-				if (null != thePreparedStatement) {
-					thePreparedStatement.close();
-				}
-				if (null != connection) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				log.log(Level.SEVERE,
-						"SQL Exception while closing the connection and statement after getting all the question");
-			}
-		}
+		} 
 		return theSurvey;
 	}
 

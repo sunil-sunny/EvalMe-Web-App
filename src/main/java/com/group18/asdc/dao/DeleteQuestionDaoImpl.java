@@ -15,13 +15,13 @@ public class DeleteQuestionDaoImpl implements DeleteQuestionDao {
 
 	@Override
 	public boolean deleteQuestion(int questionId) {
-		Connection connection = null;
-		PreparedStatement thePreparedStatement = null;
+		
 		boolean isQuestionDeleted = Boolean.FALSE;
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			thePreparedStatement = connection
-					.prepareStatement(QuestionManagerDataBaseQueries.DELETE_QUESTION.toString());
+		
+		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+				PreparedStatement thePreparedStatement = connection
+						.prepareStatement(QuestionManagerDataBaseQueries.DELETE_QUESTION.toString());) {
+
 			thePreparedStatement.setInt(1, questionId);
 			int deleteQuestionStatus = thePreparedStatement.executeUpdate();
 			if (deleteQuestionStatus > 0) {
@@ -33,19 +33,7 @@ public class DeleteQuestionDaoImpl implements DeleteQuestionDao {
 			}
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception while deleting the question with id " + questionId);
-		} finally {
-			try {
-				if (null != connection) {
-					connection.close();
-				}
-				if (null != thePreparedStatement) {
-					thePreparedStatement.close();
-				}
-			} catch (SQLException e) {
-				log.log(Level.SEVERE,
-						"SQL Exception while closing the connection and statements after deleting the question");
-			}
-		}
+		} 
 		return isQuestionDeleted;
 	}
 }

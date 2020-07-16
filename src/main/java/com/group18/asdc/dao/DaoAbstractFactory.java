@@ -18,8 +18,6 @@ public interface DaoAbstractFactory {
 
 	public RegisterDao getRegisterDao();
 
-	public SubmitAnswerDao getSubmitAnswerDao();
-
 	public SurveyDao getSurveyDao();
 
 	public UserDao getUserDao();
