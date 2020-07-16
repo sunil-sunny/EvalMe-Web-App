@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.Group;
@@ -30,7 +31,7 @@ public class GroupFormationDaoImpl implements GroupFormationDao {
 
 		try {
 
-			theSurveyGroup = new SurveyGroups();
+			theSurveyGroup = SystemConfig.getSingletonInstance().getModelAbstractFactory().getSurveyGroups();
 			Group group = null;
 			User user = null;
 			List<Group> surveyGroups = new ArrayList<Group>();
@@ -45,7 +46,7 @@ public class GroupFormationDaoImpl implements GroupFormationDao {
 
 			while (theResultSet.next()) {
 				theSurveyGroup.setSurveyId(theResultSet.getInt(1));
-				group = new Group();
+				group = SystemConfig.getSingletonInstance().getModelAbstractFactory().getGroup();
 				group.setGroupId(theResultSet.getInt(3));
 				group.setGroupName(theResultSet.getString(4));
 				surveyGroups.add(group);
@@ -62,7 +63,7 @@ public class GroupFormationDaoImpl implements GroupFormationDao {
 				theResultSet = thePreparedStatement.executeQuery();
 
 				while (theResultSet.next()) {
-					user = new User();
+					user = SystemConfig.getSingletonInstance().getModelAbstractFactory().getUser();
 					user.setBannerId(theResultSet.getString(2));
 					user.setFirstName(theResultSet.getString(3));
 					user.setLastName(theResultSet.getString(4));
@@ -86,7 +87,7 @@ public class GroupFormationDaoImpl implements GroupFormationDao {
 				if (null != thePreparedStatement) {
 					thePreparedStatement.close();
 				}
-				log.log(Level.INFO,"Closing connection after fetching Group Formation Results");
+				log.log(Level.INFO, "Closing connection after fetching Group Formation Results");
 			} catch (SQLException e) {
 				log.severe(
 						"SQL Exception while closing the connection and statement after fetching Group Formation Results");

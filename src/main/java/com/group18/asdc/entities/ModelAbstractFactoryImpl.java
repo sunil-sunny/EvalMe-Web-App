@@ -51,4 +51,21 @@ public class ModelAbstractFactoryImpl implements ModelAbstractFactory {
 	public SurveyQuestion getSurveyQuestion() {
 		return new SurveyQuestion();
 	}
+
+	@Override
+	public SurveyList getSurveyList() {
+
+		return new SurveyList();
+	}
+
+	@Override
+	public SurveyGroups getSurveyGroups() {
+
+		return new SurveyGroups();
+	}
+
+	@Override
+	public Group getGroup() {
+		return new Group();
+	}
 }

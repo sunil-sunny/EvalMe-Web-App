@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.SurveyMetaData;
@@ -17,98 +18,112 @@ public class SurveyMetaDataTest {
 
 	@Test
 	public void getSurveyId() {
-		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		SurveyMetaData surveyMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyMetaDataTest();
 		surveyMetaData.setSurveyId(1);
-		assertTrue(surveyMetaData.getSurveyId()==1);
+		assertTrue(surveyMetaData.getSurveyId() == 1);
 	}
-	
+
 	@Test
 	public void setSurveyId() {
-		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		SurveyMetaData surveyMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyMetaDataTest();
 		surveyMetaData.setSurveyId(1);
-		assertTrue(surveyMetaData.getSurveyId()==1);
+		assertTrue(surveyMetaData.getSurveyId() == 1);
 	}
-	
+
 	@Test
 	public void getSurveyQuestions() {
-		SurveyQuestion surveyQuestion = new SurveyQuestion();
+		SurveyQuestion surveyQuestion = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyQuestionTest();
 		surveyQuestion.setSurveyQuestionId(256);
 		surveyQuestion.setLogicConstraint(1);
 		surveyQuestion.setLogicDetail("group dissimilar");
 		surveyQuestion.setPriority(1);
-		QuestionMetaData questionMetaData = new QuestionMetaData();
+		QuestionMetaData questionMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getQuestionMetaDataTest();
 		questionMetaData.setQuestionId(69);
 		surveyQuestion.setQuestionData(questionMetaData);
-		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		SurveyMetaData surveyMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyMetaDataTest();
 		List<SurveyQuestion> surveyQuestionList = new ArrayList<SurveyQuestion>();
 		surveyQuestionList.add(surveyQuestion);
 		surveyMetaData.setSurveyQuestions(surveyQuestionList);
 	}
-	
+
 	@Test
 	public void setSurveyQuestions() {
-		SurveyQuestion surveyQuestion = new SurveyQuestion();
+		SurveyQuestion surveyQuestion = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyQuestionTest();
 		surveyQuestion.setSurveyQuestionId(256);
 		surveyQuestion.setLogicConstraint(1);
 		surveyQuestion.setLogicDetail("group dissimilar");
 		surveyQuestion.setPriority(1);
-		QuestionMetaData questionMetaData = new QuestionMetaData();
+		QuestionMetaData questionMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getQuestionMetaDataTest();
 		questionMetaData.setQuestionId(69);
 		surveyQuestion.setQuestionData(questionMetaData);
-		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		SurveyMetaData surveyMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyMetaDataTest();
 		List<SurveyQuestion> surveyQuestionList = new ArrayList<SurveyQuestion>();
 		surveyQuestionList.add(surveyQuestion);
 		surveyMetaData.setSurveyQuestions(surveyQuestionList);
 	}
-	
+
 	@Test
 	public void isPublishedStatus() {
-		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		SurveyMetaData surveyMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyMetaDataTest();
 		surveyMetaData.setPublishedStatus(true);
-		assertTrue(surveyMetaData.isPublishedStatus());	
+		assertTrue(surveyMetaData.isPublishedStatus());
 	}
-	
+
 	@Test
 	public void setPublishedStatus() {
-		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		SurveyMetaData surveyMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyMetaDataTest();
 		surveyMetaData.setPublishedStatus(true);
-		assertTrue(surveyMetaData.isPublishedStatus());	
+		assertTrue(surveyMetaData.isPublishedStatus());
 	}
-	
+
 	@Test
 	public void getGroupSize() {
-		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		SurveyMetaData surveyMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyMetaDataTest();
 		surveyMetaData.setGroupSize(4);
-		assertTrue(surveyMetaData.getGroupSize()==4);
+		assertTrue(surveyMetaData.getGroupSize() == 4);
 	}
-	
+
 	@Test
 	public void setGroupSize() {
-		SurveyMetaData surveyMetaData = new SurveyMetaData();
+		SurveyMetaData surveyMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyMetaDataTest();
 		surveyMetaData.setGroupSize(4);
-		assertTrue(surveyMetaData.getGroupSize()==4);
+		assertTrue(surveyMetaData.getGroupSize() == 4);
 	}
-	
+
 	@Test
 	public void getTheCourse() {
-		SurveyMetaData surveyMetaData = new SurveyMetaData();
-		Course course = new Course();
+		SurveyMetaData surveyMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyMetaDataTest();
+		Course course = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getCourseTest();
 		course.setCourseId(1995);
 		course.setCourseName("Java and Data Structures");
-		User user = new User();
+		User user = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		user.setBannerId("B00842470");
 		course.setInstructorName(user);
 		surveyMetaData.setTheCourse(course);
 		assertTrue(surveyMetaData.getTheCourse().equals(course));
 	}
-	
+
 	@Test
 	public void setTheCourse() {
-		SurveyMetaData surveyMetaData = new SurveyMetaData();
-		Course course = new Course();
+		SurveyMetaData surveyMetaData = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
+				.getSurveyMetaDataTest();
+		Course course = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getCourseTest();
 		course.setCourseId(1995);
 		course.setCourseName("Java and Data Structures");
-		User user = new User();
+		User user = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory().getUserTest();
 		user.setBannerId("B00842470");
 		course.setInstructorName(user);
 		surveyMetaData.setTheCourse(course);

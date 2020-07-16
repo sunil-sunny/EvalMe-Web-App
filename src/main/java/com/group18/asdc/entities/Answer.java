@@ -1,7 +1,5 @@
 package com.group18.asdc.entities;
 
-import java.util.List;
-
 public class Answer {
 
     private String answer;
@@ -54,4 +52,12 @@ public class Answer {
     public Integer getSurveyQuestionId() {
         return this.surveyQuestionId;
     }
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public Integer getAnswerId() {
+		return answerId;
+	}
 }

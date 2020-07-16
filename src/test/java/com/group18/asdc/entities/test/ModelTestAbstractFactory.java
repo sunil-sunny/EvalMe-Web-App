@@ -1,5 +1,47 @@
 package com.group18.asdc.entities.test;
 
+import com.group18.asdc.entities.Answer;
+import com.group18.asdc.entities.BasicQuestionData;
+import com.group18.asdc.entities.Course;
+import com.group18.asdc.entities.Group;
+import com.group18.asdc.entities.MultipleChoiceQuestion;
+import com.group18.asdc.entities.Option;
+import com.group18.asdc.entities.PasswordHistory;
+import com.group18.asdc.entities.QuestionMetaData;
+import com.group18.asdc.entities.SurveyGroups;
+import com.group18.asdc.entities.SurveyList;
+import com.group18.asdc.entities.SurveyMetaData;
+import com.group18.asdc.entities.SurveyQuestion;
+import com.group18.asdc.entities.User;
+import com.group18.asdc.entities.UserRegistartionDetails;
+
 public interface ModelTestAbstractFactory {
 
+	public BasicQuestionData getBasicQuestionDataTest();
+
+	public Option getOptionTest();
+
+	public Course getCourseTest();
+
+	public MultipleChoiceQuestion getMultipleChoiceQuestionTest();
+
+	public PasswordHistory getPasswordHistoryTest();
+
+	public QuestionMetaData getQuestionMetaDataTest();
+
+	public SurveyMetaData getSurveyMetaDataTest();
+
+	public UserRegistartionDetails getIUserRegistartionDetailsTest();
+
+	public User getUserTest();
+
+	public SurveyQuestion getSurveyQuestionTest();
+
+	public SurveyList getSurveyListTest();
+
+	public Answer getAnswerTest();
+
+	public Group getGroupTest();
+
+	public SurveyGroups getSurveyGroupsTest();
 }

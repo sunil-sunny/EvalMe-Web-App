@@ -13,13 +13,14 @@ public class RegisterDaoMock implements RegisterDao {
 
 	@Override
 	public boolean checkUserWithEmail(String email) {
-
+		email.trim();
 		return Boolean.TRUE;
 	}
 
 	@Override
 	public boolean checkUserWithBannerId(String bannerId) {
 
+		bannerId.trim();
 		return Boolean.TRUE;
 	}
 

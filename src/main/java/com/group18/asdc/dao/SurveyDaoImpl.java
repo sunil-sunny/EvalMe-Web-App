@@ -46,7 +46,7 @@ public class SurveyDaoImpl implements SurveyDao {
 		ResultSet theResultSet = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat(ConstantStringUtil.DATE_FORMAT.toString());
 		List<SurveyQuestion> allSavedQuestions = new ArrayList<SurveyQuestion>();
-		SurveyMetaData theSurvey = new SurveyMetaData();
+		SurveyMetaData theSurvey = SystemConfig.getSingletonInstance().getModelAbstractFactory().getSurveyMetaData();
 		try {
 			connection = ConnectionManager.getInstance().getDBConnection();
 
@@ -59,7 +59,7 @@ public class SurveyDaoImpl implements SurveyDao {
 			theSurvey.setTheCourse(course);
 			QuestionMetaData theQuestionMetaData = null;
 			while (theResultSet.next()) {
-				theSurveyQuestion = new SurveyQuestion();
+				theSurveyQuestion = SystemConfig.getSingletonInstance().getModelAbstractFactory().getSurveyQuestion();
 				int questionId = theResultSet.getInt("questionid");
 				theQuestionMetaData = theViewQuestionsService.getQuestionById(questionId);
 				if (null == theQuestionMetaData) {
@@ -93,7 +93,7 @@ public class SurveyDaoImpl implements SurveyDao {
 				List<Option> options = new ArrayList<Option>();
 				Option option = null;
 				while (theResultSet.next()) {
-					option = new Option();
+					option = SystemConfig.getSingletonInstance().getModelAbstractFactory().getOption();
 					option.setDisplayText(theResultSet.getString(3));
 					option.setStoredData(theResultSet.getInt(4));
 					options.add(option);
@@ -105,8 +105,10 @@ public class SurveyDaoImpl implements SurveyDao {
 				if (null != theResultSet) {
 					theResultSet.close();
 				}
-				QuestionMetaData questionMetaData = new QuestionMetaData();
-				BasicQuestionData basicQuestionData = new BasicQuestionData();
+				QuestionMetaData questionMetaData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getQuestionMetaData();
+				BasicQuestionData basicQuestionData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getBasicQuestionData();
 				thePreparedStatement = connection
 						.prepareStatement(SurveyDataBaseQueries.GET_SURVEYQUESTION_DATA.toString());
 				thePreparedStatement.setInt(1, surveyQuestionId);
