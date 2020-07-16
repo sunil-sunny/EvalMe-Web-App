@@ -192,8 +192,7 @@ public class SurveyDaoImpl implements SurveyDao {
 			} catch (SQLException e) {
 				log.log(Level.SEVERE, "SQL Exception occured while saving group size of survey with id value"
 						+ surveyData.getSurveyId());
-				throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
-						.getSavingSurveyException("Failure while saving survey!! Try again");
+				throw new SavingSurveyException("Failure while saving survey!! Try again");
 
 			} finally {
 				if (null != thePreparedStatement) {
@@ -236,8 +235,7 @@ public class SurveyDaoImpl implements SurveyDao {
 					} catch (BatchUpdateException e) {
 						log.log(Level.SEVERE, "Batch exception which saving survey questions for survey id "
 								+ surveyData.getSurveyId());
-						throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
-								.getSavingSurveyException("An error occured while saving survey!! Please try again.");
+						throw new SavingSurveyException("An error occured while saving survey!! Please try again.");
 					}
 				}
 			}
@@ -245,7 +243,7 @@ public class SurveyDaoImpl implements SurveyDao {
 				connection.commit();
 			} else {
 				log.log(Level.WARNING, "Survey with id " + surveyData.getSurveyId() + " has not bee saved");
-				throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory().getSavingSurveyException("");
+				throw new SavingSurveyException("An error occured while saving survey!! Please try again");
 			}
 
 		} catch (SQLException e) {
@@ -417,8 +415,7 @@ public class SurveyDaoImpl implements SurveyDao {
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, "SQL Exception occuered while publish survey for the course with id "
 					+ surveyMetaData.getTheCourse().getCourseId());
-			throw SystemConfig.getSingletonInstance().getExceptionAbstractFactory()
-					.getPublishSurveyException("Survey is not published ! Try again");
+			throw new PublishSurveyException("Survey is not published ! Try again");
 		} finally {
 			try {
 				if (null != theResultSet) {

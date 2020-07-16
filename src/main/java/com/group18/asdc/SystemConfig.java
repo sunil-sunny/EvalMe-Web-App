@@ -16,15 +16,12 @@ import com.group18.asdc.service.ServiceAbstractFactoryImpl;
 import com.group18.asdc.util.UtilAbstractFactory;
 import com.group18.asdc.util.UtilAbstractFactoryImpl;
 
-import org.springframework.web.util.UriBuilder;
-
 public class SystemConfig {
 
 	private static SystemConfig singleinstance = null;
 	private ModelAbstractFactory modelAbstractFactory;
 	private ServiceAbstractFactory serviceAbstractFactory;
 	private DaoAbstractFactory daoAbstractFactory;
-	private ExceptionAbstractFactory exceptionAbstractFactory;
 	private UtilAbstractFactory utilAbstractFactory;
 	private BasePasswordPolicyFactory basePasswordPolicyFactory;
 	private SecurityAbstractFactory securityAbstractFactory;
@@ -35,7 +32,6 @@ public class SystemConfig {
 		this.modelAbstractFactory = new ModelAbstractFactoryImpl();
 		this.daoAbstractFactory = new DaoAbstractFactoryImpl();
 		this.serviceAbstractFactory = new ServiceAbstractFactoryImpl();
-		this.exceptionAbstractFactory = new ExceptionAbstractionFactoryImpl();
 		this.utilAbstractFactory = new UtilAbstractFactoryImpl();
 		this.basePasswordPolicyFactory = BasePasswordPolicyFactory.instance(daoAbstractFactory.getPasswordPolicyDB());
 		this.securityAbstractFactory = new SecurityAbstractFactoryImpl();
