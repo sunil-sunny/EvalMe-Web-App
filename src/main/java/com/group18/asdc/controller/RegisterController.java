@@ -1,5 +1,6 @@
 package com.group18.asdc.controller;
 
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,14 +14,18 @@ import com.group18.asdc.entities.PasswordHistory;
 import com.group18.asdc.entities.UserRegistartionDetails;
 import com.group18.asdc.service.PasswordHistoryService;
 import com.group18.asdc.service.RegisterService;
+import com.group18.asdc.util.RegistrationStatus;
 
 @Controller
 @RequestMapping("/registration")
 public class RegisterController {
 
+	private final static RegisterService theRegisterService = SystemConfig.getSingletonInstance()
+			.getServiceAbstractFactory().getRegisterService();
+
 	@ModelAttribute("user")
 	public UserRegistartionDetails bean() {
-		return new UserRegistartionDetails();
+		return SystemConfig.getSingletonInstance().getModelAbstractFactory().getIUserRegistartionDetails();
 	}
 
 	@GetMapping
@@ -30,30 +35,36 @@ public class RegisterController {
 
 	@PostMapping
 	public String registerUserAccount(@ModelAttribute("user") UserRegistartionDetails bean, BindingResult result) {
-		RegisterService theRegisterService = SystemConfig.getSingletonInstance().getTheRegisterservice();
+
 		if (result.hasErrors()) {
 			return "registration";
 		}
-		String registrationStatus = theRegisterService.registeruser(bean);
-		if (registrationStatus.equals("alreadycreated")) {
-			System.out.println("already exists");
-			return "redirect:/registration?alreadyregistered";
-		} else if (registrationStatus.equals("passwordmismatch")) {
-			return "redirect:/registration?passwordmismatch";
-		} else if (registrationStatus.equals("invalidbannerid")) {
+		JSONObject resultObject = theRegisterService.registeruser(bean);
+		Integer registrationStatus = resultObject.optInt("STATUS");
+		if (registrationStatus == RegistrationStatus.INVALID_BANNER_PATTERN.value()) {
 			return "redirect:/registration?invalidbannerid";
-		} else if (registrationStatus.equals("invalidbannerid2")) {
+		} else if (registrationStatus == RegistrationStatus.INVALID_BANNER_LENGTH.value()) {
 			return "redirect:/registration?invalidbannerid2";
-		} else if (registrationStatus.equals("alreadycreatedemail")) {
+		} else if (registrationStatus == RegistrationStatus.EXISTING_EMAIL_ID.value()) {
 			return "redirect:/registration?alreadycreatedemail";
-		} else if (registrationStatus.equals("invalidemailid")) {
+		} else if (registrationStatus == RegistrationStatus.INVALID_EMAIL_PATTERN.value()) {
 			return "redirect:/registration?invalidemailid";
-		} else if (registrationStatus.equals("shortpassword")) {
-			return "redirect:/registration?shortpassword";
-		} else if (registrationStatus.contains("passwordPolicyException")) {
-			return "redirect:/registration?" + registrationStatus;
-		} else {
+		} else if (registrationStatus == RegistrationStatus.PASSWORD_POLICY_ERROR.value()) {
+			return "redirect:/registration?passwordPolicyException=" + resultObject.optString("MESSAGE");
+		} else if (registrationStatus == RegistrationStatus.SUCCESS.value()) {
+			PasswordHistory passwordHistory = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+					.getPasswordHistory();
+			passwordHistory.setBannerID(bean.getBannerid());
+			passwordHistory.setPassword(bean.getPassword());
+			passwordHistory.setDate(System.currentTimeMillis());
+			PasswordHistoryService passwordHistoryService = SystemConfig.getSingletonInstance()
+					.getServiceAbstractFactory().getPasswordHistoryService(
+							SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
+			passwordHistoryService.insertPassword(passwordHistory,
+					SystemConfig.getSingletonInstance().getSecurityAbstractFactory().getPasswordEncryption());
 			return "redirect:/login?accountcreatedsuccessfully";
+		} else {
+			return "registration";
 		}
 	}
 }

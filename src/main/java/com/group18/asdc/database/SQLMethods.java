@@ -8,161 +8,117 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class SQLMethods {
+public class SQLMethods implements ISQLMethods {
 
-    private Connection connection;
-    private ResultSet rs;
+	private Connection connection;
+	private ResultSet rs;
 
-    public SQLMethods() throws SQLException {
-        rs = null;
-        openConnection();
-    }
+	private Logger logger = Logger.getLogger(SQLMethods.class.getName());
 
-    private void openConnection() throws SQLException {
-        this.connection = ConnectionManager.getInstance().getDBConnection();
-    }
+	public SQLMethods(Connection connection) {
+		rs = null;
+		this.connection = connection;
+	}
 
-    private void replaceValuesInPreparedStmt(PreparedStatement preparedStmt, ArrayList values) throws SQLException {
-        int iterator = 1;
-        for (Object eachValue : values) {
-            preparedStmt.setObject(iterator, eachValue);
-            iterator++;
-        }
-    }
+	private void replaceValuesInPreparedStmt(PreparedStatement preparedStmt, ArrayList values) throws SQLException {
+		int iterator = 1;
+		for (Object eachValue : values) {
+			preparedStmt.setObject(iterator, eachValue);
+			iterator++;
+		}
+	}
 
-    private PreparedStatement constructPreparedStmt(String sqlQuery, ArrayList values) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
-        replaceValuesInPreparedStmt(preparedStatement, values);
-        return preparedStatement;
-    }
+	private PreparedStatement constructPreparedStmt(String sqlQuery, ArrayList values) throws SQLException {
+		PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+		replaceValuesInPreparedStmt(preparedStatement, values);
+		return preparedStatement;
+	}
 
-    private ArrayList<String> getColumnNames(ResultSetMetaData metaData) throws SQLException {
-        int columnIter = 1, columnCount = metaData.getColumnCount();
-        ArrayList<String> columnNameList = new ArrayList<>();
-        for (columnIter = 1; columnIter <= columnCount; columnIter++) {
-            columnNameList.add(metaData.getColumnName(columnIter));
-        }
+	private ArrayList<String> getColumnNames(ResultSetMetaData metaData) throws SQLException {
+		int columnIter = 1, columnCount = metaData.getColumnCount();
+		ArrayList<String> columnNameList = new ArrayList<>();
+		for (columnIter = 1; columnIter <= columnCount; columnIter++) {
+			columnNameList.add(metaData.getColumnName(columnIter));
+		}
+		return columnNameList;
+	}
 
-        return columnNameList;
-    }
+	private void constructBatchInsertQuery(PreparedStatement preparedStmt, ArrayList<ArrayList> valuesList)
+			throws SQLException {
+		for (ArrayList values : valuesList) {
+			replaceValuesInPreparedStmt(preparedStmt, values);
+			preparedStmt.addBatch();
+		}
+	}
 
-    private void constructBatchInsertQuery(PreparedStatement preparedStmt, ArrayList<ArrayList> valuesList)
-            throws SQLException {
-        for (ArrayList values : valuesList) {
-            replaceValuesInPreparedStmt(preparedStmt, values);
-            preparedStmt.addBatch();
-        }
-    }
+	public void cleanup() {
+		logger.log(Level.INFO, "Cleaning up the db connections");
+		try {
+			connection.close();
+			if (null == rs) {
+				return;
+			} else {
+				rs.close();
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Error while cleaning up the connections", e);
+		}
+	}
 
-    public void cleanup() {
-        try {
-            if (null != connection) {
-                if (!connection.isClosed()) {
-                    connection.close();
-                }
-            }
-            if (null != rs) {
-                rs.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public Object insertQuery(String sqlQuery, ArrayList<Object> values) throws SQLException {
+		Object resultObj = null;
+		PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, values);
+		int rowAffected = preparedStatement.executeUpdate();
+		if (rowAffected == 1) {
+			rs = preparedStatement.getGeneratedKeys();
+			if (rs.next()) {
+				resultObj = rs.getObject(1);
+			}
+		}
+		return resultObj;
+	}
 
-    /**
-     * 
-     * @param sqlQuery
-     * @param values
-     * @return
-     * @throws SQLException
-     */
-    public Object insertQuery(String sqlQuery, ArrayList<Object> values) throws SQLException {
-        Object resultObj = null;
-        PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, values);
-        int rowAffected = preparedStatement.executeUpdate();
-        if (rowAffected == 1) {
-            
-            rs = preparedStatement.getGeneratedKeys();
-            if (rs.next())
-            {
-                resultObj = rs.getObject(1);
-            }
+	public ArrayList<HashMap<String, Object>> selectQuery(String sqlQuery, ArrayList<Object> values)
+			throws SQLException {
+		PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, values);
+		rs = preparedStatement.executeQuery();
+		ResultSetMetaData metaData = rs.getMetaData();
+		ArrayList<String> columnNamesList = getColumnNames(metaData);
+		ArrayList<HashMap<String, Object>> resultRowList = new ArrayList<HashMap<String, Object>>();
+		HashMap<String, Object> rowObjectMap = null;
+		int columnCount = columnNamesList.size();
+		while (rs.next()) {
+			rowObjectMap = new HashMap<String, Object>();
+			int columnIter = 1;
+			for (columnIter = 1; columnIter <= columnCount; columnIter++) {
+				rowObjectMap.put(columnNamesList.get(columnIter - 1), rs.getObject(columnIter));
+			}
+			resultRowList.add(rowObjectMap);
+		}
+		return resultRowList;
+	}
 
-        }
-        return resultObj;
-    }
+	public Integer updateQuery(String sqlQuery, ArrayList updateValueList, ArrayList criteriaValueList)
+			throws SQLException {
+		updateValueList.addAll(criteriaValueList);
+		PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, updateValueList);
+		Integer rowCount = preparedStatement.executeUpdate();
+		return rowCount;
+	}
 
-    /**
-     * 
-     * @param sqlQuery
-     * @param values
-     * @return
-     * @throws SQLException
-     */
-    public ArrayList<HashMap<String, Object>> selectQuery(String sqlQuery, ArrayList<Object> values)
-            throws SQLException {
+	public Integer deleteQuery(String sqlQuery, ArrayList criteriaList) throws SQLException {
+		PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, criteriaList);
+		Integer rowCount = preparedStatement.executeUpdate();
+		return rowCount;
+	}
 
-        PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, values);
-        rs = preparedStatement.executeQuery();
-        ResultSetMetaData metaData = rs.getMetaData();
-        ArrayList<String> columnNamesList = getColumnNames(metaData);
-        ArrayList<HashMap<String, Object>> resultRowList = new ArrayList<HashMap<String, Object>>();
-        HashMap<String, Object> rowObjectMap = null;
-        int columnCount = columnNamesList.size();
-        while (rs.next()) {
-            rowObjectMap = new HashMap<String, Object>();
-            int columnIter = 1;
-            for (columnIter = 1; columnIter <= columnCount; columnIter++) {
-                rowObjectMap.put(columnNamesList.get(columnIter - 1), rs.getObject(columnIter));
-            }
-            resultRowList.add(rowObjectMap);
-        }
-        return resultRowList;
-    }
-
-    /**
-     * 
-     * @param sqlQuery
-     * @param updateValueList
-     * @param criteriaValueList
-     * @return
-     * @throws SQLException
-     */
-    public Integer updateQuery(String sqlQuery, ArrayList updateValueList, ArrayList criteriaValueList)
-            throws SQLException {
-
-        updateValueList.addAll(criteriaValueList);
-        PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, updateValueList);
-        Integer rowCount = preparedStatement.executeUpdate();
-        return rowCount;
-    }
-
-    /**
-     * 
-     * @param sqlQuery
-     * @param criteriaList
-     * @return
-     * @throws SQLException
-     */
-    public Integer deleteQuery(String sqlQuery, ArrayList criteriaList) throws SQLException {
-        PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, criteriaList);
-        Integer rowCount = preparedStatement.executeUpdate();
-        return rowCount;
-    }
-
-    /**
-     * 
-     * @param sqlQuery
-     * @param valuesList
-     * @return
-     * @throws SQLException
-     */
-    public Integer multipleInsertQuery(String sqlQuery, ArrayList<ArrayList> valuesList) throws SQLException {
-        PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, new ArrayList<>());
-        constructBatchInsertQuery(preparedStatement, valuesList);
-        Integer rowCount = preparedStatement.executeBatch().length;
-        return rowCount;
-    }
-
+	public Integer multipleInsertQuery(String sqlQuery, ArrayList<ArrayList> valuesList) throws SQLException {
+		PreparedStatement preparedStatement = constructPreparedStmt(sqlQuery, new ArrayList<>());
+		constructBatchInsertQuery(preparedStatement, valuesList);
+		Integer rowCount = preparedStatement.executeBatch().length;
+		return rowCount;
+	}
 }

@@ -1,5 +1,6 @@
 package com.group18.asdc.service;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
@@ -7,71 +8,75 @@ import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.AdminDao;
 import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
+import com.group18.asdc.util.ConstantStringUtil;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
-	private AdminDao admindao;
-	private Logger log = Logger.getLogger(AdminServiceImpl.class.getName());
+	private static final AdminDao adminDao = SystemConfig.getSingletonInstance().getDaoAbstractFactory().getAdminDao();
 
-	public AdminServiceImpl() {
-		super();
-	}
+	private static final UserService theUserService = SystemConfig.getSingletonInstance().getServiceAbstractFactory()
+			.getUserService(SystemConfig.getSingletonInstance().getUtilAbstractFactory().getQueryVariableToArrayList());
+	private static final CourseDetailsService theCourseDetailsService = SystemConfig.getSingletonInstance()
+			.getServiceAbstractFactory().getCourseDetailsService();
+	private static final Logger log = Logger.getLogger(AdminServiceImpl.class.getName());
 
 	@Override
 	public boolean isCourseIdValid(Course course) {
-		log.info("Acceesing admin service impl");
-		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
 		int courseId = course.getCourseId();
-		if (0 >= courseId || 4 != String.valueOf(courseId).length()) {
-			return false;
+		if (0 <= courseId || 4 == String.valueOf(courseId).length()) {
+			return Boolean.TRUE;
+		} else {
+			return Boolean.FALSE;
 		}
-		return true;
 	}
 
 	@Override
 	public boolean iscreateCourseParametersValid(Course course) {
 
-		UserService theUserService=SystemConfig.getSingletonInstance().getTheUserService();
-		log.info("Acceesing admin service impl");
-		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
-		if (!isCourseIdValid(course)) {
-			return false;
+		if (isCourseIdValid(course)) {
+			if (theCourseDetailsService.isCourseExists(course)) {
+				return Boolean.FALSE;
+			} else {
+				String instructorId = course.getInstructorName().getBannerId();
+				User instructor = theUserService.getUserById(instructorId);
+				if (null == instructor) {
+					return Boolean.FALSE;
+				} else {
+					if (9 == instructorId.length()
+							|| instructorId.matches(ConstantStringUtil.BANNER_ID_CHECK.toString())) {
+						if (theUserService.isUserInstructor(course)) {
+							return Boolean.TRUE;
+						}
+					} else {
+						return Boolean.FALSE;
+					}
+				}
+			}
+		} else {
+			return Boolean.FALSE;
 		}
-		if (admindao.isCourseExists(course)) {
-			return false;
-		}
-		String instructorId = course.getInstructorName().getBannerId();
-		User instructor=theUserService.getUserById(instructorId);
-		if(instructor==null) {
-			return false;
-		}
-		if (instructorId.length() != 9 || !instructorId.matches("B00(.*)")) {
-			return false;
-		}
-		if (true == admindao.isUserInstructor(course)) {
-			return false;
-		}
-		return true;
+		return Boolean.TRUE;
 	}
 
 	@Override
 	public boolean createCourse(Course course) {
-
-		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
 		if (iscreateCourseParametersValid(course)) {
-			return admindao.addCourse(course);
+			return adminDao.addCourse(course);
+		} else {
+			log.log(Level.INFO, "Course with id " + course.getCourseId() + " has not been created");
+			return Boolean.FALSE;
 		}
-		return false;
 	}
 
 	@Override
 	public boolean deleteCourse(Course course) {
 
-		admindao = SystemConfig.getSingletonInstance().getTheAdminDao();
 		if (isCourseIdValid(course)) {
-			return admindao.deleteCourse(course);
+			return adminDao.deleteCourse(course);
+		} else {
+			log.log(Level.INFO, "Course with id " + course.getCourseId() + " has not been deleted");
+			return Boolean.FALSE;
 		}
-		return false;
 	}
 }

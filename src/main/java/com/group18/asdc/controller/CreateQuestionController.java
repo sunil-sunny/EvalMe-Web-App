@@ -2,7 +2,6 @@ package com.group18.asdc.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,17 +25,17 @@ import com.group18.asdc.service.CreateQuestionService;
 @Controller
 public class CreateQuestionController {
 
-	private Logger log = Logger.getLogger(CreateQuestionController.class.getName());
+	private static final CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
+			.getServiceAbstractFactory().getCreateQuestionService();
 
 	@ModelAttribute("question")
 	public BasicQuestionData setBasicQuestionBean() {
-		return new BasicQuestionData();
+		return SystemConfig.getSingletonInstance().getModelAbstractFactory().getBasicQuestionData();
 	}
 
 	@ModelAttribute("multiplequestion")
 	public MultipleChoiceQuestion setMultipleChoiceQuestion() {
-
-		return new MultipleChoiceQuestion();
+		return SystemConfig.getSingletonInstance().getModelAbstractFactory().getMultipleChoiceQuestion();
 	}
 
 	@GetMapping("/getCreateQuestionHome")
@@ -46,35 +45,25 @@ public class CreateQuestionController {
 
 	@PostMapping("/getQuestionConfirm")
 	public String getQuestionConfirmPage(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model) {
-
-		log.info("confirming questions based on type");
 		model.addAttribute("BasicQuestion", basicQuestionData);
-		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.numericType)
-				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.freeText)) {
+		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.NUMERIC_TYPE.toString())
+				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.FREE_TEXT.toString())) {
 			return "NumericOrTextQuestion";
 		}
-		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.multipleChooseMore)
-				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.multipleChooseOne)) {
+		if (basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.MULTIPLE_CHOOSE_ONE.toString())
+				|| basicQuestionData.getQuestionType().equalsIgnoreCase(QuestionType.MULTIPLE_CHOOSE_MORE.toString())) {
 			return "MultipleChoiceQuestion";
 		}
-
 		return "error";
 	}
 
 	@RequestMapping(value = "/createNumericOrTextQuestion", method = RequestMethod.POST)
 	public String createNumericOrQuestion(@ModelAttribute("question") BasicQuestionData basicQuestionData, Model model,
 			RedirectAttributes theRedirectAttributes) {
-		log.info("creating Numeric question");
-		CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
-				.getTheCreateQuestionService();
 		boolean isQuestionCreated = theCreateQuestionService.createNumericOrTextQuestion(basicQuestionData);
 		if (isQuestionCreated) {
-			log.info("Numeric or text question created");
-
 			return "QuestionCreateSuccess";
 		} else {
-			log.info("Error creating numeric or text question");
-
 			return "error";
 		}
 	}
@@ -82,9 +71,9 @@ public class CreateQuestionController {
 	@RequestMapping(value = "/createMultipleChoiceQuestion", method = RequestMethod.POST)
 	public String createMultipleChoiceQuestion(@ModelAttribute("question") BasicQuestionData theBasicQuestionData,
 			HttpServletRequest request, Model model, RedirectAttributes theRedirectAttributes) {
-		CreateQuestionService theCreateQuestionService = SystemConfig.getSingletonInstance()
-				.getTheCreateQuestionService();
-		MultipleChoiceQuestion theMultipleChoiceQuestion = new MultipleChoiceQuestion();
+
+		MultipleChoiceQuestion theMultipleChoiceQuestion = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+				.getMultipleChoiceQuestion();
 		theMultipleChoiceQuestion.setQuestionTitle(theBasicQuestionData.getQuestionTitle());
 		theMultipleChoiceQuestion.setQuestionText(theBasicQuestionData.getQuestionText());
 		theMultipleChoiceQuestion.setQuestionType(theBasicQuestionData.getQuestionType());
@@ -94,10 +83,10 @@ public class CreateQuestionController {
 		Option theOption = null;
 		int iterativeNumber = 1;
 		while (true) {
-			theOption = new Option();
+			theOption = SystemConfig.getSingletonInstance().getModelAbstractFactory().getOption();
 			displayOption = request.getParameter("optiontext-" + iterativeNumber + "");
 			storedOption = request.getParameter("optionstored-" + iterativeNumber + "");
-			if ((displayOption == null) || (storedOption == null)) {
+			if ((null == displayOption) || (null == storedOption)) {
 				break;
 			}
 			if (displayOption.length() > 0) {
@@ -107,24 +96,18 @@ public class CreateQuestionController {
 			}
 			iterativeNumber++;
 		}
-		if (optionList.size() == 0) {
-
+		if (0 == optionList.size()) {
 			model.addAttribute("BasicQuestion", theBasicQuestionData);
 			model.addAttribute("error", "Enter Options to proceed");
-
 			return "MultipleChoiceQuestion";
 		} else {
-
 			theMultipleChoiceQuestion.setOptionList(optionList);
 		}
 		boolean isQuestionCreated = theCreateQuestionService.createMultipleQuestion(theMultipleChoiceQuestion);
 		if (isQuestionCreated) {
-			log.info("Created multiple choice questions success");
 			return "QuestionCreateSuccess";
 		} else {
-			log.info("Error in Created multiple choice questions success");
 			return "error";
 		}
 	}
-
 }

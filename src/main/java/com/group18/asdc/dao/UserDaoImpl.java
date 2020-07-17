@@ -7,303 +7,229 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ConnectionManager;
-import com.group18.asdc.database.SQLMethods;
-import com.group18.asdc.database.SQLQueries;
+import com.group18.asdc.database.ISQLMethods;
+import com.group18.asdc.database.SQLStatus;
+import com.group18.asdc.database.UserManagementDataBaseQueriesUtil;
+import com.group18.asdc.entities.Course;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.DataBaseQueriesUtil;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserDaoImpl implements UserDao {
 
-	private Logger log = Logger.getLogger(UserDaoImpl.class.getName());
+	private Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
 
 	@Override
 	public boolean isUserExists(User user) {
-		Connection connection = null;
-		ResultSet resultSet = null;
-		PreparedStatement checkUser = null;
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			checkUser = connection.prepareStatement(DataBaseQueriesUtil.isUserExists);
+
+		boolean isUserExits = Boolean.FALSE;
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
+				PreparedStatement checkUser = connection
+						.prepareStatement(UserManagementDataBaseQueriesUtil.IS_USER_EXISTS.toString());) {
+
 			checkUser.setString(1, user.getBannerId());
-			resultSet = checkUser.executeQuery();
-			log.info("In User Dao to check if user exists or not");
+			ResultSet resultSet = checkUser.executeQuery();
 			if (resultSet.next()) {
-				return true;
+				isUserExits = Boolean.TRUE;
+				logger.log(Level.INFO, "User with id=" + user.getBannerId() + " exists");
 			} else {
-
-				return false;
+				isUserExits = Boolean.FALSE;
+				logger.log(Level.FINE, "User with id=" + user.getBannerId() + " does not exist");
 			}
-
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-				if (checkUser != null) {
-					checkUser.close();
-				}
-				log.info("closing connection after having a check if user exists or not");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return false;
-
+			logger.log(Level.SEVERE,
+					"SQL Exception occurred while checking if user exists or not for user id=" + user.getBannerId());
+		} 
+		return isUserExits;
 	}
 
 	@Override
 	public User getUserById(String bannerId) {
 
-		Connection connection = null;
-		ResultSet resultSet = null;
-		PreparedStatement getUser = null;
 		User user = null;
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			String userSql = DataBaseQueriesUtil.getUserById;
-			getUser = connection.prepareStatement(userSql);
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
+				PreparedStatement getUser = connection
+						.prepareStatement(UserManagementDataBaseQueriesUtil.GET_USER_BY_ID.toString());) {
+
 			getUser.setString(1, bannerId);
-			log.info("In User Dao to get the user for given banner id");
-			resultSet = getUser.executeQuery();
-
+			ResultSet resultSet = getUser.executeQuery();
 			while (resultSet.next()) {
-
-				user = new User();
+				user = SystemConfig.getSingletonInstance().getModelAbstractFactory().getUser();
 				user.setBannerId(resultSet.getString("bannerid"));
 				user.setEmail(resultSet.getString("emailid"));
 				user.setFirstName(resultSet.getString("firstname"));
 				user.setLastName(resultSet.getString("lastname"));
-
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-				if (getUser != null) {
-					getUser.close();
-				}
-				log.info("closing the connection after getting user by banner id");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
+			logger.log(Level.SEVERE, "SQL Exception while getting user with banner id=" + bannerId);
+		} 
 		return user;
-	}
-
-	@Override
-	public List<User> filterEligibleUsersForCourse(List<User> studentList, int courseId) {
-
-		// Returns the list of eligible users to get enrolled in the course.
-
-		List<User> eligibleStudents = new ArrayList<User>();
-		List<User> existingStudentsOfCourse = this.getAllUsersByCourse(courseId);
-
-		log.info("In User Dao to get filterEligible ");
-		for (User student : studentList) {
-
-			boolean isExists = false;
-			for (User existingStudent : existingStudentsOfCourse) {
-
-				if (student.getBannerId().equalsIgnoreCase(existingStudent.getBannerId())) {
-					isExists = true;
-					break;
-				}
-			}
-			if (!isExists) {
-				eligibleStudents.add(student);
-			}
-		}
-
-		return eligibleStudents;
 	}
 
 	@Override
 	public List<User> getAllUsersByCourse(int courseId) {
 
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSetForStudentList = null;
 		List<User> studentList = new ArrayList<User>();
 		User user = null;
 
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			preparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getAlluserRelatedToCourse);
-			log.info("In users dao getting all users based on course id");
-			preparedStatement.setInt(1, courseId);
-			resultSetForStudentList = preparedStatement.executeQuery();
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(
+						UserManagementDataBaseQueriesUtil.GET_ALL_USERS_RELATED_TO_COURSE.toString());) {
 
+			preparedStatement.setInt(1, courseId);
+			ResultSet resultSetForStudentList = preparedStatement.executeQuery();
 			while (resultSetForStudentList.next()) {
-				user = new User();
+				user = SystemConfig.getSingletonInstance().getModelAbstractFactory().getUser();
 				user.setBannerId(resultSetForStudentList.getString("bannerid"));
 				user.setEmail(resultSetForStudentList.getString("emailid"));
 				user.setFirstName(resultSetForStudentList.getString("firstname"));
 				user.setLastName(resultSetForStudentList.getString("lastname"));
 				studentList.add(user);
 			}
-
 		} catch (SQLException e) {
-
-			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-				if (resultSetForStudentList != null) {
-					resultSetForStudentList.close();
-				}
-				if (preparedStatement != null) {
-					preparedStatement.close();
-				}
-				log.info("Closing connections after getting users based on course");
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
+			logger.log(Level.SEVERE, "SQL Exception while getting all the users realted to course with id=" + courseId);
+		} 
 		return studentList;
 	}
 
 	@Override
-	public User getInstructorForCourse(int courseId) {
-
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		User instructor = null;
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			preparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getInstructorForCourse);
-			preparedStatement.setInt(1, courseId);
-			resultSet = preparedStatement.executeQuery();
-			String bannerId = null;
-			log.info("In user dao for getting Instructor for course id");
-			while (resultSet.next()) {
-				bannerId = resultSet.getString("bannerid");
-			}
-			if (bannerId != null) {
-				instructor = this.getUserById(bannerId);
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-
-				if (preparedStatement != null) {
-					preparedStatement.close();
-				}
-
-				if (resultSet != null) {
-					preparedStatement.close();
-				}
-				log.info("closing connection after getting instructor for a course");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
-
-		return instructor;
-	}
-
-	@Override
-	public void loadUserWithBannerId(ArrayList<Object> valueList, User userObj) {
-		SQLMethods sqlImplementation = null;
-		try {
-			sqlImplementation = new SQLMethods();
+	public int loadUserWithBannerId(ArrayList<Object> valueList, User userObj) {
+		logger.log(Level.INFO, "Loading user object values from db for user=" + valueList.get(0));
+		ISQLMethods sqlImplementation = null;
+		int sqlCodes = SQLStatus.NO_DATA_AVAILABLE;
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();) {
+			sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+					.getSqlMethods(connection);
 			ArrayList<HashMap<String, Object>> rowsList = sqlImplementation
-					.selectQuery(SQLQueries.GET_USER_WITH_BANNER_ID.toString(), valueList);
-			//
+					.selectQuery(UserManagementDataBaseQueriesUtil.GET_USER_WITH_BANNER_ID.toString(), valueList);
 			if (rowsList.size() > 0) {
 				HashMap<String, Object> valuesMap = rowsList.get(0);
-				//
 				userObj.setBannerId((String) valuesMap.get("bannerid"));
 				userObj.setEmail((String) valuesMap.get("emailid"));
 				userObj.setFirstName((String) valuesMap.get("firstname"));
 				userObj.setLastName((String) valuesMap.get("lastname"));
 				userObj.setPassword((String) valuesMap.get("password"));
+				sqlCodes = SQLStatus.SUCCESSFUL;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "SQL Exception while loading user object ",e);
+			sqlCodes = SQLStatus.SQL_ERROR;
 		} finally {
-			if (sqlImplementation != null) {
+			/*
+			 * Had a discussion with Professor Rob and this cannot be avoided without
+			 * complicating the code
+			 */
+			if (null != sqlImplementation) {
 				sqlImplementation.cleanup();
 			}
 		}
+		return sqlCodes;
 	}
 
 	@Override
 	public Boolean updatePassword(ArrayList<Object> criteriaList, ArrayList<Object> valueList) {
-		SQLMethods sqlImplementation = null;
-		try {
-			sqlImplementation = new SQLMethods();
-			Integer rowCount = sqlImplementation.updateQuery(SQLQueries.UPDATE_PASSWORD_FOR_USER.toString(), valueList,
-					criteriaList);
-			return rowCount > 0;
+		logger.log(Level.INFO, "Updating password in the database for user=" + criteriaList.get(0));
+		ISQLMethods sqlImplementation = null;
+		boolean isUpdateSuccessful = Boolean.FALSE;
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();) {
+
+			sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+					.getSqlMethods(connection);
+			Integer rowCount = sqlImplementation.updateQuery(
+					UserManagementDataBaseQueriesUtil.UPDATE_PASSWORD_FOR_USER.toString(), valueList, criteriaList);
+			isUpdateSuccessful = rowCount > 0;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "SQL Exception while updating password", e);
 		} finally {
-			if (sqlImplementation != null) {
+			/*
+			 * Had a discussion with Professor Rob and this cannot be avoided without
+			 * complicating the code
+			 */
+			if (null != sqlImplementation) {
 				sqlImplementation.cleanup();
 			}
 		}
-		return Boolean.FALSE;
+		return isUpdateSuccessful;
 	}
 
 	@Override
 	public ArrayList getUserRoles(ArrayList<Object> criteriaList) {
+		logger.log(Level.INFO, "Fetching user roles from the database for user=" + criteriaList.get(0));
 		ArrayList rolesList = new ArrayList<>();
-		SQLMethods sqlImplementation = null;
-		try {
-			sqlImplementation = new SQLMethods();
+		ISQLMethods sqlImplementation = null;
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();) {
+
+			sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+					.getSqlMethods(connection);
 			ArrayList<HashMap<String, Object>> valuesList = sqlImplementation
-					.selectQuery(SQLQueries.GET_USER_ROLES.toString(), criteriaList);
-			//
-			if (valuesList != null && valuesList.size() > 0) {
+					.selectQuery(UserManagementDataBaseQueriesUtil.GET_USER_ROLES.toString(), criteriaList);
+			if (valuesList == null || valuesList.size() == 0) {
+				rolesList = new ArrayList<>();
+			}
+			else{
 				for (HashMap valueMap : valuesList) {
 					rolesList.add(valueMap.get("rolename"));
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "SQL Exception", e);
 		} finally {
-			if (sqlImplementation != null) {
+			/*
+			 * Had a discussion with Professor Rob and this cannot be avoided without
+			 * complicating the code
+			 */
+			if (null != sqlImplementation) {
 				sqlImplementation.cleanup();
 			}
 		}
-		//
 		return rolesList;
 	}
 
+	@Override
+	public boolean isUserInstructor(Course course) {
+
+		boolean returnValue = Boolean.TRUE;
+		String instructorId = course.getInstructorName().getBannerId();
+		int courseId = course.getCourseId();
+
+		try (Connection connection = ConnectionManager.getInstance().getDBConnection();
+				PreparedStatement statement = connection
+						.prepareStatement(UserManagementDataBaseQueriesUtil.IS_USER_EXISTS.toString());
+				PreparedStatement statementInstructorStudent = connection
+						.prepareStatement(UserManagementDataBaseQueriesUtil.IS_INSTRUCTOR_A_STUDENT.toString());) {
+
+			statement.setString(1, instructorId);
+			ResultSet resultset = statement.executeQuery();
+			if (resultset.next()) {
+				statementInstructorStudent.setString(1, instructorId);
+				statementInstructorStudent.setInt(2, courseId);
+				resultset = statementInstructorStudent.executeQuery();
+				if (resultset.next()) {
+					returnValue = Boolean.FALSE;
+				} else {
+					returnValue = Boolean.TRUE;
+				}
+			} else {
+				returnValue = Boolean.FALSE;
+			}
+
+		} catch (SQLException e) {
+			logger.log(Level.SEVERE,
+					"SQL Exception while Checking the user as instructor or not for course=" + course.getCourseId());
+		} 
+		return returnValue;
+	}
 }

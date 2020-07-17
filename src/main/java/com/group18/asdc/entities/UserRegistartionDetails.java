@@ -1,6 +1,6 @@
 package com.group18.asdc.entities;
 
-import com.group18.asdc.util.DataBaseQueriesUtil;
+import com.group18.asdc.util.ConstantStringUtil;
 
 public class UserRegistartionDetails {
 
@@ -12,13 +12,12 @@ public class UserRegistartionDetails {
 	private String confirmpassword;
 
 	public UserRegistartionDetails() {
-
+		super();
 	}
 
 	public UserRegistartionDetails(String firstname, String lastname, String bannerid, String emailid, String password,
 			String confirmpassword) {
 		super();
-
 		this.bannerid = bannerid;
 		this.emailid = emailid;
 		this.password = password;
@@ -76,14 +75,12 @@ public class UserRegistartionDetails {
 	}
 
 	public UserRegistartionDetails(User user) {
-
 		super();
 		this.bannerid = user.getBannerId();
 		this.firstname = user.getFirstName();
 		this.lastname = user.getLastName();
 		this.emailid = user.getEmail();
-		this.password = user.getBannerId() + DataBaseQueriesUtil.passwordTag;
+		this.password = user.getBannerId() + ConstantStringUtil.PASSWORD_TAG.toString();
 
 	}
-
 }

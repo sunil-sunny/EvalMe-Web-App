@@ -3,7 +3,7 @@ package com.group18.asdc.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Course {
+public class Course{
 
 	private int courseId;
 	private String CourseName;
@@ -72,4 +72,9 @@ public class Course {
 		this.studentList = studentList;
 	}
 
+	@Override
+	public String toString() {
+		return "Course [courseId=" + courseId + ", CourseName=" + CourseName + ", instructorName=" + instructorName
+				+ ", taList=" + taList + ", studentList=" + studentList + "]";
+	}
 }

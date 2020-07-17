@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.group18.asdc.database.ConnectionManager;
+import com.group18.asdc.SystemConfig;
+import com.group18.asdc.database.CourseDataBaseQueriesUtil;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.DataBaseQueriesUtil;
 
 public class CourseRolesDaoImpl implements CourseRolesDao {
 
@@ -17,82 +18,49 @@ public class CourseRolesDaoImpl implements CourseRolesDao {
 	@Override
 	public boolean allocateTa(int courseId, User user) {
 
-		Connection connection = null;
-		PreparedStatement statement = null;
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			log.info("In Course Dao allocating TA");
-			statement = connection.prepareStatement(DataBaseQueriesUtil.allocateTa);
+		boolean isAllocated = Boolean.FALSE;
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
+				PreparedStatement statement = connection
+						.prepareStatement(CourseDataBaseQueriesUtil.ALLOCATE_TA_FOR_COURSE.toString());) {
 			statement.setInt(1, courseId);
 			statement.setString(2, user.getBannerId());
 			int taAllocated = statement.executeUpdate();
 			if (taAllocated > 0) {
-				return true;
+				isAllocated = Boolean.TRUE;
 			} else {
-				return false;
+				isAllocated = Boolean.FALSE;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-				if (statement != null) {
-					statement.close();
-				}
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			log.info("Closing the connections after allocating TA");
+			log.log(Level.SEVERE, "SQL Exception while allocating user=" + user.getBannerId() + " as TA for course="+
+					courseId);
 		}
-
-		return false;
+		return isAllocated;
 	}
 
 	@Override
 	public boolean enrollStudentsIntoCourse(List<User> studentList, int courseId) {
 
-		Connection connection = null;
-		PreparedStatement queryToEnrollStudent = null;
-		boolean enrollStatus = false;
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
+		boolean enrollStatus = Boolean.FALSE;
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
+				PreparedStatement queryToEnrollStudent = connection
+						.prepareStatement(CourseDataBaseQueriesUtil.ENROLL_STUDENTS_INTO_COURSE.toString());) {
+
 			for (User user : studentList) {
-				queryToEnrollStudent = connection.prepareStatement(DataBaseQueriesUtil.enrollStudentIntoCourse);
-				log.info("In Course Controller for enrolling students into course");
 				queryToEnrollStudent.setInt(1, courseId);
 				queryToEnrollStudent.setString(2, user.getBannerId());
 				int isEnrolled = queryToEnrollStudent.executeUpdate();
 				if (isEnrolled == 1) {
-					enrollStatus = true;
+					enrollStatus = Boolean.TRUE;
 				}
-				queryToEnrollStudent.close();
 			}
-
+			log.log(Level.INFO,"Enrolled number of students=" + studentList.size() + " into course id=" + courseId);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-				if (queryToEnrollStudent != null) {
-					queryToEnrollStudent.close();
-				}
-				log.info("Closed after enrolling students into course");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
+			log.log(Level.SEVERE, "SQL Exception occuered while enrolling the students into course id="+ courseId);
+		} 
 		return enrollStatus;
 	}
 }

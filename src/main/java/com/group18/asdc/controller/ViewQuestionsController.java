@@ -15,27 +15,41 @@ import com.group18.asdc.service.ViewQuestionsService;
 @Controller
 public class ViewQuestionsController {
 
+	private final static ViewQuestionsService theViewQuestionsService = SystemConfig.getSingletonInstance()
+			.getServiceAbstractFactory().getViewQuestionsService();
+
 	@GetMapping("/getHome")
 	public String getAllQuestions(Model theModel) {
-		ViewQuestionsService theViewQuestionsService = SystemConfig.getSingletonInstance().getTheViewQuestionsService();
 		List<QuestionMetaData> allQuestions = theViewQuestionsService.getAllQuestions();
-		theModel.addAttribute("allquestions", allQuestions);
-		return "QuestionPageHome";
+		if (null == allQuestions) {
+			return "error";
+		} else {
+			theModel.addAttribute("allquestions", allQuestions);
+			return "QuestionPageHome";
+		}
 	}
 
 	@GetMapping("/sortByTitle")
 	public String getAllQuestionSortedByTitle(Model theModel) {
-		ViewQuestionsService theViewQuestionsService = SystemConfig.getSingletonInstance().getTheViewQuestionsService();
+		
 		List<QuestionMetaData> allQuestionsSortByTitle = theViewQuestionsService.getAllQuestionsSortByTitle();
-		theModel.addAttribute("allquestions", allQuestionsSortByTitle);
-		return "QuestionPageHome";
+		if (null == allQuestionsSortByTitle) {
+			return "error";
+		} else {
+			theModel.addAttribute("allquestions", allQuestionsSortByTitle);
+			return "QuestionPageHome";
+		}
 	}
 
 	@GetMapping("/sortByDate")
 	public String getAllQuestionsSortedByDate(Model theModel) {
-		ViewQuestionsService theViewQuestionsService = SystemConfig.getSingletonInstance().getTheViewQuestionsService();
+		
 		List<QuestionMetaData> allQuestionsSortByDate = theViewQuestionsService.getAllQuestionsSortByDate();
-		theModel.addAttribute("allquestions", allQuestionsSortByDate);
-		return "QuestionPageHome";
+		if (null == allQuestionsSortByDate) {
+			return "error";
+		} else {
+			theModel.addAttribute("allquestions", allQuestionsSortByDate);
+			return "QuestionPageHome";
+		}
 	}
 }

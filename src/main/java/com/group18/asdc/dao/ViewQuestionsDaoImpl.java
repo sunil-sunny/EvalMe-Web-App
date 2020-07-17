@@ -6,12 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.group18.asdc.database.ConnectionManager;
+import com.group18.asdc.SystemConfig;
+import com.group18.asdc.database.QuestionManagerDataBaseQueries;
+import com.group18.asdc.entities.BasicQuestionData;
 import com.group18.asdc.entities.QuestionMetaData;
 import com.group18.asdc.entities.User;
-import com.group18.asdc.util.DataBaseQueriesUtil;
 
 public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 
@@ -19,132 +21,134 @@ public class ViewQuestionsDaoImpl implements ViewQuestionsDao {
 
 	@Override
 	public List<QuestionMetaData> getAllQuestions(User currentUser) {
-		Connection connection = null;
-		PreparedStatement thePreparedStatement = null;
-		ResultSet theResultSet = null;
+
 		List<QuestionMetaData> allQuestions = new ArrayList<QuestionMetaData>();
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getAllQuestions);
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
+				PreparedStatement thePreparedStatement = connection
+						.prepareStatement(QuestionManagerDataBaseQueries.GET_ALL_QUESTIONS.toString());) {
+
 			thePreparedStatement.setString(1, currentUser.getBannerId());
-			theResultSet = thePreparedStatement.executeQuery();
+			ResultSet theResultSet = thePreparedStatement.executeQuery();
 			QuestionMetaData theQuestionMetaData = null;
+			BasicQuestionData theBasicQuestionData = null;
 			while (theResultSet.next()) {
-				theQuestionMetaData = new QuestionMetaData();
+				theQuestionMetaData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getQuestionMetaData();
+				theBasicQuestionData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getBasicQuestionData();
 				theQuestionMetaData.setQuestionId(theResultSet.getInt(1));
-				theQuestionMetaData.setQuestionTitle(theResultSet.getString(2));
-				theQuestionMetaData.setQuestionText(theResultSet.getString(3));
+				theBasicQuestionData.setQuestionTitle(theResultSet.getString(2));
+				theBasicQuestionData.setQuestionText(theResultSet.getString(3));
 				theQuestionMetaData.setCreationDateTime(theResultSet.getTimestamp(4));
+				theBasicQuestionData.setQuestionType(theResultSet.getString(5));
+				theQuestionMetaData.setBasicQuestionData(theBasicQuestionData);
 				allQuestions.add(theQuestionMetaData);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-
-			try {
-				if (theResultSet != null) {
-					theResultSet.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-				if (thePreparedStatement != null) {
-					thePreparedStatement.close();
-				}
-				log.info("closing connection after getting all questions");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
+			log.log(Level.SEVERE,
+					"SQL Exception while getting all the question for user with id=" + currentUser.getBannerId());
+		} 
 		return allQuestions;
 	}
 
 	@Override
 	public List<QuestionMetaData> getAllQuestionsSortByDate(User currentUser) {
-		Connection connection = null;
-		PreparedStatement thePreparedStatement = null;
-		ResultSet theResultSet = null;
-		List<QuestionMetaData> allQuestionsSortByDate = new ArrayList<QuestionMetaData>();
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getAllQuestionsSortByDate);
+
+		List<QuestionMetaData> allQuestions = new ArrayList<QuestionMetaData>();
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
+				PreparedStatement thePreparedStatement = connection
+						.prepareStatement(QuestionManagerDataBaseQueries.GET_ALL_QUESTIONS_SORTEDBY_DATE.toString());) {
+
 			thePreparedStatement.setString(1, currentUser.getBannerId());
-			theResultSet = thePreparedStatement.executeQuery();
+			ResultSet theResultSet = thePreparedStatement.executeQuery();
 			QuestionMetaData theQuestionMetaData = null;
+			BasicQuestionData theBasicQuestionData = null;
 			while (theResultSet.next()) {
-				theQuestionMetaData = new QuestionMetaData();
+				theQuestionMetaData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getQuestionMetaData();
+				theBasicQuestionData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getBasicQuestionData();
 				theQuestionMetaData.setQuestionId(theResultSet.getInt(1));
-				theQuestionMetaData.setQuestionTitle(theResultSet.getString(2));
-				theQuestionMetaData.setQuestionText(theResultSet.getString(3));
+				theBasicQuestionData.setQuestionTitle(theResultSet.getString(2));
+				theBasicQuestionData.setQuestionText(theResultSet.getString(3));
 				theQuestionMetaData.setCreationDateTime(theResultSet.getTimestamp(4));
-				allQuestionsSortByDate.add(theQuestionMetaData);
+				theBasicQuestionData.setQuestionType(theResultSet.getString(5));
+				theQuestionMetaData.setBasicQuestionData(theBasicQuestionData);
+				allQuestions.add(theQuestionMetaData);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (theResultSet != null) {
-					theResultSet.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-				if (thePreparedStatement != null) {
-					thePreparedStatement.close();
-				}
-				log.info("closing connection after getting all questions sort by date");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			log.log(Level.SEVERE, "SQL Exception while getting all the questions sorted by date for user with id="
+					+ currentUser.getBannerId());
 		}
-
-		return allQuestionsSortByDate;
+		return allQuestions;
 	}
 
 	@Override
 	public List<QuestionMetaData> getAllQuestionsSortByTitle(User currentUser) {
-		Connection connection = null;
-		PreparedStatement thePreparedStatement = null;
-		ResultSet theResultSet = null;
+
 		List<QuestionMetaData> allQuestionsSortByTitle = new ArrayList<QuestionMetaData>();
-		try {
-			connection = ConnectionManager.getInstance().getDBConnection();
-			thePreparedStatement = connection.prepareStatement(DataBaseQueriesUtil.getAllQuestionsSortByTitle);
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
+				PreparedStatement thePreparedStatement = connection.prepareStatement(
+						QuestionManagerDataBaseQueries.GET_ALL_QUESTIONS_SORTEDBY_TITLE.toString());) {
+
 			thePreparedStatement.setString(1, currentUser.getBannerId());
-			theResultSet = thePreparedStatement.executeQuery();
+			ResultSet theResultSet = thePreparedStatement.executeQuery();
 			QuestionMetaData theQuestionMetaData = null;
+			BasicQuestionData theBasicQuestionData = null;
 			while (theResultSet.next()) {
-				theQuestionMetaData = new QuestionMetaData();
+				theQuestionMetaData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getQuestionMetaData();
+				theBasicQuestionData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getBasicQuestionData();
 				theQuestionMetaData.setQuestionId(theResultSet.getInt(1));
-				theQuestionMetaData.setQuestionTitle(theResultSet.getString(2));
-				theQuestionMetaData.setQuestionText(theResultSet.getString(3));
+				theBasicQuestionData.setQuestionTitle(theResultSet.getString(2));
+				theBasicQuestionData.setQuestionText(theResultSet.getString(3));
 				theQuestionMetaData.setCreationDateTime(theResultSet.getTimestamp(4));
+				theBasicQuestionData.setQuestionType(theResultSet.getString(5));
+				theQuestionMetaData.setBasicQuestionData(theBasicQuestionData);
 				allQuestionsSortByTitle.add(theQuestionMetaData);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-
-			try {
-				if (theResultSet != null) {
-					theResultSet.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-				if (thePreparedStatement != null) {
-					thePreparedStatement.close();
-				}
-				log.info("closing connection after getting all questions sort by title");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			log.log(Level.SEVERE, "SQL Exception while getting all the question sorted by title for user with id="
+					+ currentUser.getBannerId());
 		}
-
 		return allQuestionsSortByTitle;
+	}
+
+	@Override
+	public QuestionMetaData getQuestionById(int questionId) {
+
+		QuestionMetaData theQuestionMetaData = null;
+		BasicQuestionData theBasicQuestionData = null;
+
+		try (Connection connection = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
+				.getConnectionManager().getDBConnection();
+				PreparedStatement thePreparedStatement = connection
+						.prepareStatement(QuestionManagerDataBaseQueries.GET_QUESTION_BY_ID.toString());) {
+
+			thePreparedStatement.setInt(1, questionId);
+			ResultSet theResultSet = thePreparedStatement.executeQuery();
+			while (theResultSet.next()) {
+				theQuestionMetaData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getQuestionMetaData();
+				theBasicQuestionData = SystemConfig.getSingletonInstance().getModelAbstractFactory()
+						.getBasicQuestionData();
+				theQuestionMetaData.setQuestionId(theResultSet.getInt(1));
+				theBasicQuestionData.setQuestionTitle(theResultSet.getString(2));
+				theBasicQuestionData.setQuestionText(theResultSet.getString(3));
+				theQuestionMetaData.setCreationDateTime(theResultSet.getTimestamp(4));
+				theBasicQuestionData.setQuestionType(theResultSet.getString(5));
+				theQuestionMetaData.setBasicQuestionData(theBasicQuestionData);
+			}
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, "SQL Exception while getting the question with id=" + questionId);
+		} 
+		return theQuestionMetaData;
 	}
 }

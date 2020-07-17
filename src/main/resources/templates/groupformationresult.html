@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>EvalMe</title>
+    <link th:href="@{/public/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="fragments/courseheader :: header"></div>
+    <br>
+
+    <div class="col-4" th:class="${'container justify-content-center alert alert-primary'}" style="width: 100%; text-align: center; font-variant: small-caps;">
+        <h1>Group Formation Results</h1>
+
+    </div>
+
+    <div class="container" style="text-align: center; font-variant: small-caps;">
+        <p>
+            <h3 th:text="${coursename}"></h3>
+            <h3 th:text="${courseid}"></h3>
+        </p>
+    </div>
+
+    <div th:class="${'container justify-content-center alert'}">
+        <table border="1">
+            <thead>
+                <th> Group Number</th>
+                <th> Banner</th>
+                <th> First Name</th>
+                <th> Last Name</th>
+                <th> Survey response</th>
+            </thead>
+            <tbody>
+                <div th:each="groupMembers, stats: ${groupList}">
+
+                    <tr th:each="eachMember, eachIter: ${groupMembers}">
+
+                        <td>
+                            <h2 th:text="${stats.index+1}"></h2>
+                        </td>
+                        <td>
+                            <h4 th:text="${eachMember}" style="font-variant: small-caps"></h4>
+                        </td>
+                        <td>
+                            <h4 th:text="${userDataMap.get(eachMember).get('FIRST_NAME')}" style="font-variant: small-caps"></h4>
+                        </td>
+                        <td>
+                            <h4 th:text="${userDataMap.get(eachMember).get('LAST_NAME')}" style="font-variant: small-caps"></h4>
+                        </td>
+                        <td>
+                            <h4 th:text="${userDataMap.get(eachMember).get('ANSWERS')}"></h4>
+                        </td>
+
+                    </tr>
+                </div>
+            </tbody>
+
+        </table>
+    </div>
+</body>
+
+</html>
