@@ -43,7 +43,7 @@ public class RegisterServiceImpl implements RegisterService {
 				log.log(Level.WARNING, "BannerId does not follow the specified pattern");
 			}
 			if (userDetails.getEmailid().matches(ConstantStringUtil.EMAIL_PATTERN_CHECK.toString())) {
-
+				log.log(Level.INFO, "Validating password for the user="+userDetails.getBannerid());
 				User.validatePassword(userDetails.getPassword(),
 						SystemConfig.getSingletonInstance().getBasePasswordPolicyManager());
 
@@ -67,6 +67,7 @@ public class RegisterServiceImpl implements RegisterService {
 					}
 				} else {
 					registerResult = registerDao.registeruser(userDetails);
+					resultObj.put("STATUS", RegistrationStatus.SUCCESS);
 				}
 			} else {
 				isError = Boolean.TRUE;

@@ -15,6 +15,7 @@ import com.group18.asdc.entities.Group;
 import com.group18.asdc.entities.SurveyGroups;
 import com.group18.asdc.entities.User;
 
+
 public class GroupFormationDaoImpl implements GroupFormationDao {
 
 	private final Logger log = Logger.getLogger(GroupFormationDaoImpl.class.getName());

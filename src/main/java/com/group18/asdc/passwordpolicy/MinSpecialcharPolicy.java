@@ -19,7 +19,7 @@ public class MinSpecialcharPolicy implements IBasePasswordPolicy {
 
 	@Override
 	public void validate(String password) throws PasswordPolicyException {
-		logger.log(Level.INFO, "Validating minimum special characters policy for the password="+password);
+		logger.log(Level.INFO, "Validating minimum special characters policy for the password");
 		Integer numberSpecialCharacters = customStringUtils.getSpecialCharactersCount(password);
 		if (numberSpecialCharacters < minSpecialChars) {
 			throw new PasswordPolicyException(

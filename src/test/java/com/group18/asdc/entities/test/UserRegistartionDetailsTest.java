@@ -2,7 +2,6 @@ package com.group18.asdc.entities.test;
 
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-
 import com.group18.asdc.TestConfig;
 import com.group18.asdc.entities.UserRegistartionDetails;
 
@@ -10,6 +9,7 @@ public class UserRegistartionDetailsTest {
 
 	@Test
 	public void getFirstname() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getUserRegistartionDetailsTest();
 		userDetails.setFirstname("Luke");
@@ -18,6 +18,7 @@ public class UserRegistartionDetailsTest {
 
 	@Test
 	public void setFirstname() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getIUserRegistartionDetailsTest();
 		userDetails.setFirstname("Luke");
@@ -26,6 +27,7 @@ public class UserRegistartionDetailsTest {
 
 	@Test
 	public void getLastname() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getIUserRegistartionDetailsTest();
 		userDetails.setLastname("Skywalker");
@@ -34,6 +36,7 @@ public class UserRegistartionDetailsTest {
 
 	@Test
 	public void setLastname() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getIUserRegistartionDetailsTest();
 		userDetails.setLastname("Skywalker");
@@ -42,14 +45,17 @@ public class UserRegistartionDetailsTest {
 
 	@Test
 	public void getBannerid() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getIUserRegistartionDetailsTest();
+
 		userDetails.setBannerid("B00842470");
 		assertTrue(userDetails.getBannerid().equals("B00842470"));
 	}
 
 	@Test
 	public void setBannerid() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getIUserRegistartionDetailsTest();
 		userDetails.setBannerid("B00842470");
@@ -58,6 +64,7 @@ public class UserRegistartionDetailsTest {
 
 	@Test
 	public void getEmailid() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getIUserRegistartionDetailsTest();
 		userDetails.setEmailid("lukeskywalker@dal.ca");
@@ -66,6 +73,7 @@ public class UserRegistartionDetailsTest {
 
 	@Test
 	public void setEmailid() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getIUserRegistartionDetailsTest();
 		userDetails.setEmailid("lukeskywalker@dal.ca");
@@ -74,6 +82,7 @@ public class UserRegistartionDetailsTest {
 
 	@Test
 	public void getPassword() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getIUserRegistartionDetailsTest();
 		userDetails.setPassword("passwordLuke123");
@@ -82,6 +91,7 @@ public class UserRegistartionDetailsTest {
 
 	@Test
 	public void setPassword() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getIUserRegistartionDetailsTest();
 		userDetails.setPassword("passwordLuke123");
@@ -98,6 +108,7 @@ public class UserRegistartionDetailsTest {
 
 	@Test
 	public void setConfirmpassword() {
+
 		UserRegistartionDetails userDetails = TestConfig.getTestSingletonIntance().getModelTestAbstractFactory()
 				.getIUserRegistartionDetailsTest();
 		userDetails.setConfirmpassword("passwordLuke123");

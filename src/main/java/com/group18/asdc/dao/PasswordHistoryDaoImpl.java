@@ -11,6 +11,7 @@ import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ISQLMethods;
 import com.group18.asdc.database.UserManagementDataBaseQueriesUtil;
 
+
 public class PasswordHistoryDaoImpl implements PasswordHistoryDao {
 
 	private Logger logger = Logger.getLogger(PasswordHistoryDao.class.getName());

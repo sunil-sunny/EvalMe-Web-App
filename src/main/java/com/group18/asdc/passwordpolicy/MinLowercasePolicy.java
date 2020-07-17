@@ -19,7 +19,7 @@ public class MinLowercasePolicy implements IBasePasswordPolicy {
 
 	@Override
 	public void validate(String password) throws PasswordPolicyException {
-		logger.log(Level.INFO, "Validating minimum lower case policy for the password="+password);
+		logger.log(Level.INFO, "Validating minimum lower case policy for the password");
 		Integer lowerCaseCharsCount = customStringUtils.getLowerCaseCharactersCount(password);
 		if (lowerCaseCharsCount < this.minLowerCase) {
 			throw new PasswordPolicyException(

@@ -17,6 +17,7 @@ import com.group18.asdc.entities.Option;
 import com.group18.asdc.entities.User;
 import com.group18.asdc.service.UserService;
 
+
 public class CreateQuestionDaoImpl implements CreateQuestionDao {
 
 	Logger log = Logger.getLogger(CreateQuestionDaoImpl.class.getName());

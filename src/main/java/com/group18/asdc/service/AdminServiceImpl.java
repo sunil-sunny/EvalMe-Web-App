@@ -24,7 +24,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public boolean isCourseIdValid(Course course) {
 		int courseId = course.getCourseId();
-		if (0 <= courseId || 4 == String.valueOf(courseId).length()) {
+		if (0 >= courseId || 4 == String.valueOf(courseId).length()) {
 			return Boolean.TRUE;
 		} else {
 			return Boolean.FALSE;
@@ -46,7 +46,7 @@ public class AdminServiceImpl implements AdminService {
 					if (9 == instructorId.length()
 							|| instructorId.matches(ConstantStringUtil.BANNER_ID_CHECK.toString())) {
 						if (theUserService.isUserInstructor(course)) {
-							return Boolean.FALSE;
+							return Boolean.TRUE;
 						}
 					} else {
 						return Boolean.FALSE;

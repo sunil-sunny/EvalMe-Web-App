@@ -5,10 +5,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.database.ISQLMethods;
-import com.group18.asdc.database.SQLQueries;
+import com.group18.asdc.util.PasswordPolicyQueries;
+
 
 public class PasswordPolicyDB implements IPasswordPolicyDB {
 
@@ -23,7 +23,7 @@ public class PasswordPolicyDB implements IPasswordPolicyDB {
 				.getConnectionManager().getDBConnection();) {
 			sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
 					.getSqlMethods(connection);
-			policiesList = sqlImplementation.selectQuery(SQLQueries.GET_BASEPASSWORD_POLICIES.toString(),
+			policiesList = sqlImplementation.selectQuery(PasswordPolicyQueries.GET_BASEPASSWORD_POLICIES.toString(),
 					new ArrayList<>());
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE, "SQL Exception while fetching base password policies", e);
@@ -49,7 +49,7 @@ public class PasswordPolicyDB implements IPasswordPolicyDB {
 			
 			sqlImplementation = SystemConfig.getSingletonInstance().getDataBaseAbstractFactory()
 					.getSqlMethods(connection);
-			policiesList = sqlImplementation.selectQuery(SQLQueries.GET_HISTORYPASSWORD_POLICIES.toString(),
+			policiesList = sqlImplementation.selectQuery(PasswordPolicyQueries.GET_HISTORYPASSWORD_POLICIES.toString(),
 					new ArrayList<>());
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE, "SQL Exception while loading history password policies", e);
