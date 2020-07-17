@@ -7,7 +7,6 @@ import com.group18.asdc.errorhandling.PasswordPolicyException;
 
 public class MinlengthPolicy implements IBasePasswordPolicy {
 
-	private static final Integer DEFAULT_MIN_LENGTH = 8;
 	private Integer minLength;
 	private Logger logger = Logger.getLogger(MinlengthPolicy.class.getName());
 

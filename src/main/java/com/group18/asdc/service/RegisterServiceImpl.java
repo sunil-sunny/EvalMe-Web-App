@@ -4,10 +4,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.stereotype.Repository;
-
 import com.group18.asdc.SystemConfig;
 import com.group18.asdc.dao.RegisterDao;
 import com.group18.asdc.entities.User;
@@ -15,6 +11,10 @@ import com.group18.asdc.entities.UserRegistartionDetails;
 import com.group18.asdc.errorhandling.PasswordPolicyException;
 import com.group18.asdc.util.ConstantStringUtil;
 import com.group18.asdc.util.RegistrationStatus;
+
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class RegisterServiceImpl implements RegisterService {
