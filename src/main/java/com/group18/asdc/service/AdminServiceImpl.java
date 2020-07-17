@@ -46,7 +46,7 @@ public class AdminServiceImpl implements AdminService {
 					if (9 == instructorId.length()
 							|| instructorId.matches(ConstantStringUtil.BANNER_ID_CHECK.toString())) {
 						if (theUserService.isUserInstructor(course)) {
-							return Boolean.FALSE;
+							return Boolean.TRUE;
 						}
 					} else {
 						return Boolean.FALSE;

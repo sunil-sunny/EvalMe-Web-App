@@ -73,7 +73,11 @@ public class ComputeDistance implements IComputeDistance {
 
                         if (questionLogic.equals(ConstantStringUtil.GROUP_DISIMILAR.toString())) {
                             distance = 1.0f - distance;
+                        } else if (questionLogic.equals(ConstantStringUtil.GREATER_THAN.toString())
+                                || questionLogic.equals(ConstantStringUtil.LESS_THAN.toString())) {
+                            distance = 0f;
                         }
+
                     } else if (questionType.equals(QuestionType.FREE_TEXT.toString())) {
                         Double cosineDistanceOfText = new CosineDistance().apply((String) otherUserAnswer.get(0),
                                 (String) currentUserAnswer.get(0));

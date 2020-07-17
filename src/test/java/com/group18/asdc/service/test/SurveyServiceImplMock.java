@@ -69,7 +69,9 @@ public class SurveyServiceImplMock implements SurveyService {
 
 	@Override
 	public SurveyMetaData getSavedSurvey(Course course) {
-		return theSurveyDao.getSavedSurvey(course);
+		SurveyMetaData surveyMetaData = theSurveyDao.getSavedSurvey(course);
+		surveyMetaData.setSurveyId(1);
+		return surveyMetaData;
 	}
 
 	@Override
